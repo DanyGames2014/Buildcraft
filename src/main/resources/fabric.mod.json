@@ -18,10 +18,11 @@
     "stationapi:event_bus": [
       "net.danygames2014.buildcraft.Buildcraft",
       "net.danygames2014.buildcraft.init.FluidListener",
-      "net.danygames2014.buildcraft.init.BlockEntityListener",
-      "net.danygames2014.buildcraft.init.BlockEntityRendererListener"
+      "net.danygames2014.buildcraft.init.BlockEntityListener"
     ],
     "stationapi:event_bus_client": [
+      "net.danygames2014.buildcraft.init.ScreenHandlerListener",
+      "net.danygames2014.buildcraft.init.BlockEntityRendererListener"
     ],
     "stationapi:event_bus_server": [
     ]
