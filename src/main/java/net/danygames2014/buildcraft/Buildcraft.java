@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft;
 
+import net.danygames2014.buildcraft.item.BuildcraftWrenchItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
@@ -15,6 +16,7 @@ public class Buildcraft {
     @Entrypoint.Logger
     public static Logger LOGGER;
     
+    public static Item wrench;
     public static Item woodenGear;
     public static Item stoneGear;
     public static Item ironGear;
@@ -23,6 +25,7 @@ public class Buildcraft {
     
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
+        wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");
         woodenGear = new TemplateItem(NAMESPACE.id("wooden_gear")).setTranslationKey(NAMESPACE, "wooden_gear");
         stoneGear = new TemplateItem(NAMESPACE.id("stone_gear")).setTranslationKey(NAMESPACE, "stone_gear");
         ironGear = new TemplateItem(NAMESPACE.id("iron_gear")).setTranslationKey(NAMESPACE, "iron_gear");
