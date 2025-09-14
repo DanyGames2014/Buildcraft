@@ -1,20 +1,22 @@
 {
   "schemaVersion": 1,
-  "id": "template",
+  "id": "buildcraft",
   "version": "${version}",
 
-  "name": "Template",
+  "name": "Buildcraft",
   "description": "",
   "authors": [
-    "DanyGames2014"
+    "DanyGames2014",
+    "ralf2oo2"
   ],
 
   "license": "MIT",
-  "icon": "assets/template/icon.png",
+  "icon": "assets/buildcraft/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
+      "net.danygames2014.buildcraft.Buildcraft"
     ],
     "stationapi:event_bus_client": [
     ],
@@ -22,7 +24,7 @@
     ]
   },
   "mixins": [
-    "template.mixins.json"
+    "buildcraft.mixins.json"
   ],
 
   "depends": {
