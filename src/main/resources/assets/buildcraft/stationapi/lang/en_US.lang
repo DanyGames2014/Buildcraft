@@ -3,3 +3,6 @@ item.buildcraft.stone_gear.name=Stone Gear
 item.buildcraft.iron_gear.name=Iron Gear
 item.buildcraft.golden_gear.name=Golden Gear
 item.buildcraft.diamond_gear.name=Diamond Gear
+
+fluid.buildcraft.oil.name=Oil
+fluid.buildcraft.fuel.name=Fuel

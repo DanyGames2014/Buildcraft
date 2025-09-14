@@ -16,7 +16,8 @@
   "environment": "*",
   "entrypoints": {
     "stationapi:event_bus": [
-      "net.danygames2014.buildcraft.Buildcraft"
+      "net.danygames2014.buildcraft.Buildcraft",
+      "net.danygames2014.buildcraft.init.FluidListener"
     ],
     "stationapi:event_bus_client": [
     ],
