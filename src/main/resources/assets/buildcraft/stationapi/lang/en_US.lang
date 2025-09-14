@@ -5,5 +5,7 @@ item.buildcraft.iron_gear.name=Iron Gear
 item.buildcraft.golden_gear.name=Golden Gear
 item.buildcraft.diamond_gear.name=Diamond Gear
 
+tile.buildcraft.chute.name=Chute
+
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel

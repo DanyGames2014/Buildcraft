@@ -1,8 +1,12 @@
 package net.danygames2014.buildcraft;
 
+import net.danygames2014.buildcraft.block.ChuteBlock;
+import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.item.BuildcraftWrenchItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
@@ -15,13 +19,15 @@ public class Buildcraft {
 
     @Entrypoint.Logger
     public static Logger LOGGER;
-    
+
     public static Item wrench;
     public static Item woodenGear;
     public static Item stoneGear;
     public static Item ironGear;
     public static Item goldGear;
     public static Item diamondGear;
+
+    public static Block chuteBlock;
     
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
@@ -31,5 +37,10 @@ public class Buildcraft {
         ironGear = new TemplateItem(NAMESPACE.id("iron_gear")).setTranslationKey(NAMESPACE, "iron_gear");
         goldGear = new TemplateItem(NAMESPACE.id("golden_gear")).setTranslationKey(NAMESPACE, "golden_gear");
         diamondGear = new TemplateItem(NAMESPACE.id("diamond_gear")).setTranslationKey(NAMESPACE, "diamond_gear");
+    }
+
+    @EventListener
+    public void registerBlocks(BlockRegistryEvent event){
+        chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute");
     }
 }
