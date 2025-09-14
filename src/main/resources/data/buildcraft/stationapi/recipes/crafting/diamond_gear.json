@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " d ",
+    "dgd",
+    " d "
+  ],
+  "key": {
+    "d": {
+      "item": "minecraft:diamond"
+    },
+    "g": {
+      "item": "buildcraft:golden_gear"
+    }
+  },
+  "result": {
+    "item": "buildcraft:diamond_gear"
+  }
+}

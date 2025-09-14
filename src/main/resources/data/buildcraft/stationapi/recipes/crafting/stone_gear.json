@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " c ",
+    "cgc",
+    " c "
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:cobblestone"
+    },
+    "g": {
+      "item": "buildcraft:wooden_gear"
+    }
+  },
+  "result": {
+    "item": "buildcraft:stone_gear"
+  }
+}
