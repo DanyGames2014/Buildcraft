@@ -34,9 +34,10 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public float progress = 0;
     public double energy = 0;
     public float heat = MIN_HEAT;
+    public EnergyStage energyStage = EnergyStage.BLUE;
+    public Direction facing = Direction.UP;
     protected int progressPart = 0;
     private boolean checkOrienation = false;
-    protected Direction facing = Direction.UP;
 
     public BaseEngineBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.ENGINE);
@@ -87,7 +88,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         }
 
         updateHeatLevel();
-        getEnergyStage();
+        energyStage = getEnergyStage();
         engineUpdate();
 
         BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
@@ -137,6 +138,10 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     // Burn Fuel
     public void burnFuel() {
 
+    }
+
+    public String getBaseTexturePath(){
+        return "";
     }
 
     public abstract boolean isBurning();

@@ -29,6 +29,11 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity {
     }
 
     @Override
+    public int getRenderType() {
+        return -1;
+    }
+
+    @Override
     public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(ENERGY_STAGE_PROPERTY);

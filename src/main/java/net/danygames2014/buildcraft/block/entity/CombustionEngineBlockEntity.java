@@ -110,6 +110,11 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     }
 
     @Override
+    public String getBaseTexturePath() {
+        return "/assets/buildcraft/stationapi/textures/block/engine_base_combustion.png";
+    }
+
+    @Override
     public boolean isBurning() {
         FluidStack fuel = fluidInventory[1];
         return fuel != null && fuel.amount > 0 && penaltyCooling == 0 && isRedstonePowered;
