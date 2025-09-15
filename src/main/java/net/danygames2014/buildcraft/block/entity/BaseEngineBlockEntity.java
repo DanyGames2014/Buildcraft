@@ -46,16 +46,23 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         powerHandler.configurePowerPerdition(1, 100);
     }
 
+    private boolean hasInit = false;
     public void init() {
         if (!world.isRemote) {
+            if (hasInit) {
+                return;
+            }
+            
             powerHandler.configure(getMinEnergyReceived(), getMaxEnergyReceived(), 1, getMaxEnergy());
             checkRedstonePower();
+            hasInit = true;
         }
     }
 
     // Engine Logic
     @Override
     public void tick() {
+        init();
         super.tick();
 
         facing = getFacing();
