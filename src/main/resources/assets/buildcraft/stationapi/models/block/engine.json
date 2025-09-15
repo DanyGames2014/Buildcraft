@@ -1,11 +1,6 @@
 {
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
-	"textures": {
-		"base": "buildcraft:block/base_wood",
-		"trunk": "buildcraft:block/trunk_blue",
-		"particle": "buildcraft:block/base_wood"
-	},
 	"elements": [
 		{
 			"name": "base",
