@@ -13,6 +13,7 @@ import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
+import net.danygames2014.buildcraft.api.transport.IPipeTile;
 import net.danygames2014.buildcraft.block.BaseEngineBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -34,11 +35,12 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public double energy = 0;
     public float heat = MIN_HEAT;
     protected int progressPart = 0;
+    private boolean checkOrienation = false;
+    protected Direction facing = Direction.UP;
 
     public BaseEngineBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.ENGINE);
         powerHandler.configurePowerPerdition(1, 100);
-        init();
     }
 
     public void init() {
@@ -52,6 +54,8 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     @Override
     public void tick() {
         super.tick();
+
+        facing = getFacing();
 
         if (world.isRemote) {
             if (progressPart != 0) {
@@ -68,13 +72,13 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             return;
         }
 
-//        if (checkOrienation) {
-//            checkOrienation = false;
-//
-//            if (!isOrientationValid()) {
-//                switchOrientation(true);
-//            }
-//        }
+        if (checkOrienation) {
+            checkOrienation = false;
+
+            if (!isOrientationValid()) {
+                switchOrientation(true);
+            }
+        }
 
         if (!isRedstonePowered) {
             if (energy > 1) {
@@ -86,7 +90,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         getEnergyStage();
         engineUpdate();
 
-        //TileEntity tile = getTileBuffer(orientation).getTile();
+        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
 
         if (progressPart != 0) {
             progress += getPistonSpeed();
@@ -99,24 +103,19 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
                 progressPart = 0;
             }
         } else if (isRedstonePowered && isActive()) {
-//            if (isPoweredTile(tile, orientation)) {
-//                if (getPowerToExtract() > 0) {
-//                    progressPart = 1;
-//                    setPumping(true);
-//                } else {
-//                    setPumping(false);
-//                }
-//            } else {
-//                setPumping(false);
-//            }
+            if (isPoweredTile(tile, facing)) {
+                if (getPowerToExtract() > 0) {
+                    progressPart = 1;
+                    setPumping(true);
+                } else {
+                    setPumping(false);
+                }
+            } else {
+                setPumping(false);
+            }
         } else {
             setPumping(false);
         }
-
-        // Uncomment for constant power
-//		if (isRedstonePowered && isActive()) {
-//			sendPower();
-//		} else currentOutput = 0;
 
         burnFuel();
     }
@@ -135,8 +134,23 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         return true;
     }
 
+    // Burn Fuel
     public void burnFuel() {
 
+    }
+
+    public abstract boolean isBurning();
+
+    public abstract int getBurnTime();
+
+    public abstract int getMaxBurnTime();
+
+    public int getScaledBurnTime(int scale) {
+        if (getMaxBurnTime() <= 0) {
+            return 0;
+        }
+
+        return (int) (((float) getBurnTime() / (float) getMaxBurnTime()) * scale);
     }
 
     // Blockstate Wrappers
@@ -151,9 +165,45 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
         world.setBlockStateWithNotify(x, y, z, world.getBlockState(x, y, z).with(BaseEngineBlock.PUMPING_PROPERTY, pumping));
     }
-    
+
     public Direction getFacing() {
         return world.getBlockState(x, y, z).get(Properties.FACING);
+    }
+
+    public void setFacing(Direction facing) {
+        world.setBlockStateWithNotify(x, y, z, world.getBlockState(x, y, z).with(Properties.FACING, facing));
+        this.facing = facing;
+    }
+
+    // Orientation
+    public boolean isOrientationValid() {
+        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+
+        return isPoweredTile(tile, facing);
+    }
+
+    public boolean switchOrientation(boolean preferPipe) {
+        if (preferPipe && switchOrientation_do(true)) {
+            return true;
+        } else {
+            return switchOrientation_do(false);
+        }
+    }
+
+    private boolean switchOrientation_do(boolean pipesOnly) {
+        for (Direction direction : Direction.values()) {
+            BlockEntity tile = world.getBlockEntity(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
+
+            if ((!pipesOnly || tile instanceof IPipeTile) && isPoweredTile(tile, direction)) {
+                setFacing(direction);
+                //world.setBlockDirty(x,y,z);
+                //world.notifyNeighbors(x, y, z, world.getBlockId(x, y, z));
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Heat Level
@@ -282,30 +332,47 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public abstract double getCurrentEnergyOutput();
 
     private double getPowerToExtract() {
-        // TODO: Figure out the tile buffer bs
-//        BlockEntity tile = getTileBuffer(getFacing()).getTile();
-//        PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
-//        return extractEnergy(receptor.getMinEnergyReceived(), receptor.getMaxEnergyReceived(), false);
-        // TODO: do
-        return 0;
+        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+        PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
+        return extractEnergy(receptor.getMinEnergyReceived(), receptor.getMaxEnergyReceived(), false);
     }
 
     private void sendPower() {
-        // TODO: do
-//        BlockEntity tile = getTileBuffer(getFacing()).getTile();
-//        if (isPoweredTile(tile, getFacing())) {
-//            PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
-//
-//            double extracted = getPowerToExtract();
-//            if (extracted > 0) {
-//                double needed = receptor.receiveEnergy(PowerHandler.Type.ENGINE, extracted, getFacing().getOpposite());
-//                extractEnergy(receptor.getMinEnergyReceived(), needed, true);
-//            }
-//        }
+        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+        if (isPoweredTile(tile, getFacing())) {
+            PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
+
+            double extracted = getPowerToExtract();
+            if (extracted > 0) {
+                double needed = receptor.receiveEnergy(PowerHandler.Type.ENGINE, extracted, getFacing().getOpposite());
+                extractEnergy(receptor.getMinEnergyReceived(), needed, true);
+            }
+        }
+    }
+
+    public boolean isPoweredTile(BlockEntity tile, Direction side) {
+        if (tile instanceof IPowerReceptor powerReceptor) {
+            return powerReceptor.getPowerReceiver(side.getOpposite()) != null;
+        } else {
+            return false;
+        }
     }
 
     // Other Properties
     public abstract float getExplosionRange();
+
+    // Removal
+    @Override
+    public void markRemoved() {
+        super.markRemoved();
+        checkOrienation = true;
+    }
+
+    @Override
+    public void cancelRemoval() {
+        super.cancelRemoval();
+        checkOrienation = true;
+    }
 
     // Redstone
     public void checkRedstonePower() {
@@ -337,7 +404,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public boolean canEmitPowerFrom(Direction side) {
         return world.getBlockState(x, y, z).get(Properties.FACING) == side;
     }
-    
+
     // NBT
     @Override
     public void writeNbt(NbtCompound nbt) {

@@ -6,6 +6,9 @@ item.buildcraft.golden_gear.name=Golden Gear
 item.buildcraft.diamond_gear.name=Diamond Gear
 
 tile.buildcraft.chute.name=Chute
+tile.buildcraft.redstone_engine.name=Redstone Engine
+tile.buildcraft.stirling_engine.name=Stirling Engine
+tile.buildcraft.combustion_engine.name=Combustion Engine
 
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel

@@ -1,6 +1,9 @@
 package net.danygames2014.buildcraft;
 
 import net.danygames2014.buildcraft.block.ChuteBlock;
+import net.danygames2014.buildcraft.block.CombustionEngineBlock;
+import net.danygames2014.buildcraft.block.RedstoneEngineBlock;
+import net.danygames2014.buildcraft.block.StirlingEngineBlock;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.item.BuildcraftWrenchItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -28,6 +31,9 @@ public class Buildcraft {
     public static Item diamondGear;
 
     public static Block chuteBlock;
+    public static Block redstoneEngine;
+    public static Block stirlingEngine;
+    public static Block combustionEngine;
     
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
@@ -42,5 +48,8 @@ public class Buildcraft {
     @EventListener
     public void registerBlocks(BlockRegistryEvent event){
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute");
+        redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine");
+        stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine");
+        combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine");
     }
 }
