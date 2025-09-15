@@ -23,6 +23,11 @@ public class CombustionEngineBlock extends BaseEngineBlock implements DropInvent
     }
 
     @Override
+    public String getBaseTexturePath() {
+        return "/assets/buildcraft/stationapi/textures/block/engine_base_combustion.png";
+    }
+
+    @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (world.getBlockEntity(x, y, z) instanceof CombustionEngineBlockEntity engine) {
             GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("combustion_engine"), engine, new CombustionEngineScreenHandler(player, engine));

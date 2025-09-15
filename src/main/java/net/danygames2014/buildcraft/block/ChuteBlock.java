@@ -2,12 +2,9 @@ package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
-import net.danygames2014.buildcraft.client.render.block.ChuteModel;
+import net.danygames2014.buildcraft.client.render.block.ChuteRenderer;
 import net.danygames2014.buildcraft.screen.ChuteScreenHandler;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -26,12 +23,12 @@ import org.lwjgl.opengl.GL11;
 import java.util.Random;
 
 public class ChuteBlock extends TemplateBlockWithEntity implements BlockWithWorldRenderer, BlockWithInventoryRenderer {
-    private final ChuteModel chuteModel;
+    private final ChuteRenderer chuteRenderer;
     private final Random random;
 
     public ChuteBlock(Identifier identifier) {
         super(identifier, Material.METAL);
-        chuteModel = new ChuteModel();
+        chuteRenderer = new ChuteRenderer();
         random = new Random();
     }
 
@@ -53,7 +50,7 @@ public class ChuteBlock extends TemplateBlockWithEntity implements BlockWithWorl
     @Override
     public void renderInventory(BlockRenderManager blockRenderManager, int i) {
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-        chuteModel.render(Minecraft.INSTANCE.textureManager, 0, 0, 0);
+        chuteRenderer.render(Minecraft.INSTANCE.textureManager, 0, 0, 0);
     }
 
     @Override

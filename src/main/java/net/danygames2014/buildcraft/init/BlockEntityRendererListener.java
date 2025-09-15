@@ -1,5 +1,7 @@
 package net.danygames2014.buildcraft.init;
 
+import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.block.BaseEngineBlock;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
 import net.danygames2014.buildcraft.block.entity.RedstoneEngineBlockEntity;
@@ -13,8 +15,8 @@ public class BlockEntityRendererListener {
     @EventListener
     public void registerBlockEntityRenderers(BlockEntityRendererRegisterEvent event){
         event.renderers.put(ChuteBlockEntity.class, new ChuteBlockEntityRenderer());
-        event.renderers.put(RedstoneEngineBlockEntity.class, new EngineBlockEntityRenderer());
-        event.renderers.put(StirlingEngineBlockEntity.class, new EngineBlockEntityRenderer());
-        event.renderers.put(CombustionEngineBlockEntity.class, new EngineBlockEntityRenderer());
+        event.renderers.put(RedstoneEngineBlockEntity.class, new EngineBlockEntityRenderer(((BaseEngineBlock)Buildcraft.redstoneEngine).getBaseTexturePath()));
+        event.renderers.put(StirlingEngineBlockEntity.class, new EngineBlockEntityRenderer(((BaseEngineBlock)Buildcraft.stirlingEngine).getBaseTexturePath()));
+        event.renderers.put(CombustionEngineBlockEntity.class, new EngineBlockEntityRenderer(((BaseEngineBlock)Buildcraft.combustionEngine).getBaseTexturePath()));
     }
 }

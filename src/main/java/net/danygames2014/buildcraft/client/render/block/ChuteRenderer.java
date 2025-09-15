@@ -5,13 +5,13 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.texture.TextureManager;
 import org.lwjgl.opengl.GL11;
 
-public class ChuteModel {
+public class ChuteRenderer {
 
     private final ModelPart top;
     private final ModelFrustum middle;
     private final ModelPart bottom;
 
-    public ChuteModel(){
+    public ChuteRenderer(){
         top = new ModelPart(0, 0);
         top.addCuboid(-8F, 1F, -8F, 16, 7, 16);
         top.pivotX = 8F;

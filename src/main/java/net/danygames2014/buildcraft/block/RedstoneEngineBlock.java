@@ -10,6 +10,11 @@ public class RedstoneEngineBlock extends BaseEngineBlock{
     }
 
     @Override
+    public String getBaseTexturePath() {
+        return "/assets/buildcraft/stationapi/textures/block/engine_base_redstone.png";
+    }
+
+    @Override
     protected BlockEntity createBlockEntity() {
         return new RedstoneEngineBlockEntity();
     }

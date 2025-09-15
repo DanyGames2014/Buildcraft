@@ -16,9 +16,11 @@ import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.api.transport.IPipeTile;
 import net.danygames2014.buildcraft.block.BaseEngineBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.States;
+import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -138,10 +140,6 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     // Burn Fuel
     public void burnFuel() {
 
-    }
-
-    public String getBaseTexturePath(){
-        return "";
     }
 
     public abstract boolean isBurning();

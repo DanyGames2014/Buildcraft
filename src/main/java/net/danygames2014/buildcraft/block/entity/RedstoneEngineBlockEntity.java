@@ -44,11 +44,6 @@ public class RedstoneEngineBlockEntity extends BaseEngineBlockEntity {
     }
 
     @Override
-    public String getBaseTexturePath() {
-        return "/assets/buildcraft/stationapi/textures/block/engine_base_redstone.png";
-    }
-
-    @Override
     public double getMaxEnergy() {
         return 100;
     }

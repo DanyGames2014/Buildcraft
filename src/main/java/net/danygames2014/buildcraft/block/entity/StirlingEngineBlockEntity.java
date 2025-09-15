@@ -52,11 +52,6 @@ public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntit
     }
 
     @Override
-    public String getBaseTexturePath() {
-        return "/assets/buildcraft/stationapi/textures/block/engine_base_stirling.png";
-    }
-
-    @Override
     public boolean isBurning() {
         return burnTime > 0;
     }
