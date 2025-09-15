@@ -1,28 +1,93 @@
 package net.danygames2014.buildcraft.block.entity;
 
+import net.danygames2014.nyalib.capability.Capability;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.math.Direction;
+
+import java.util.List;
 
 // TODO: gold hopper
 public class ChuteBlockEntity extends BlockEntity implements Inventory {
     private ItemStack[] inventory = new ItemStack[4];
+    private Box itemBox;
 
     @Override
     public void tick() {
         super.tick();
         if(world.isRemote || world.getTime() % 5 != 0) return;
-
-        extractStack();
+        if(itemBox == null){
+            itemBox = Box.create(x, y + 1, z, x + 1, y + 1.6D, z + 1);
+        }
+        ItemHandlerBlockCapability capability = CapabilityHelper.getCapability(world, x, y + 1, z, ItemHandlerBlockCapability.class);
+        if(capability != null){
+            extractFromAbove(capability);
+        } else {
+            extractItemsFromWorld();
+        }
+        insertIntoBelow();
     }
 
-    private void extractStack(){
+    private void extractFromAbove(ItemHandlerBlockCapability capability){
+        if(capability.canExtractItem(Direction.DOWN)){
+            for(int i = 0; i < size(); i++){
+                if(inventory[i] == null){
+                    ItemStack stack = capability.extractItem(1, Direction.DOWN);
+                    if(stack != null){
+                        inventory[i] = stack.copy();
+                        break;
+                    }
+                }
+                else if(inventory[i].count < getMaxCountPerStack()){
+                    ItemStack stack = capability.extractItem(inventory[i].getItem(), 1, Direction.DOWN);
+                    if(stack != null){
+                        inventory[i].count++;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void extractItemsFromWorld(){
+        List<ItemEntity> itemEntities = world.collectEntitiesByClass(ItemEntity.class, itemBox);
+        for(int i = 0; i < size(); i++){
+            for(ItemEntity itemEntity : itemEntities){
+                if(!itemEntity.isAlive()) continue;
+                if(inventory[i] == null){
+                    inventory[i] = itemEntity.stack.copy();
+                    itemEntity.stack.count -= inventory[i].count;
+                }
+                else if(inventory[i].count < getMaxCountPerStack()){
+                    if(inventory[i].itemId == itemEntity.stack.itemId){
+                        int spaceInStack = getMaxCountPerStack() - inventory[i].count;
+                        if(spaceInStack >= itemEntity.stack.count){
+                            inventory[i].count += itemEntity.stack.count;
+                            itemEntity.stack.count = 0;
+                        }
+                        else {
+                            inventory[i].count = getMaxCountPerStack();
+                            itemEntity.stack.count -= spaceInStack;
+                        }
+                    }
+                }
+                if(itemEntity.stack.count <= 0){
+                    itemEntity.markDead();
+                }
+            }
+        }
+    }
+
+    private void insertIntoBelow(){
         ItemHandlerBlockCapability capability = CapabilityHelper.getCapability(world, x, y - 1, z, ItemHandlerBlockCapability.class);
         if(capability != null){
             if(capability.canInsertItem(Direction.UP)){
