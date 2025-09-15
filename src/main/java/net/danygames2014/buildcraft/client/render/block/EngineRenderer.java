@@ -52,12 +52,10 @@ public class EngineRenderer {
     public void render(TextureManager textureManager, EnergyStage energy, float progress, Direction facing, String baseTexture, double x, double y, double z){
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glEnable(GL11.GL_CULL_FACE);
 
         GL11.glTranslatef((float) x, (float) y, (float) z);
 
-        Direction danyFacing = facing.rotateCounterclockwise(Direction.Axis.Y);
+        Direction renderFacing = facing.rotateCounterclockwise(Direction.Axis.Y);
 
         float step;
 
@@ -70,17 +68,17 @@ public class EngineRenderer {
         float translatefact = step / 16;
 
         float[] angle = {0, 0, 0};
-        float[] translate = {danyFacing.getOffsetX(), danyFacing.getOffsetY(), -danyFacing.getOffsetZ()};
+        float[] translate = {renderFacing.getOffsetX(), renderFacing.getOffsetY(), -renderFacing.getOffsetZ()};
 
-        switch (danyFacing) {
+        switch (renderFacing) {
             case EAST:
             case WEST:
             case DOWN:
-                angle[2] = angleMap[danyFacing.ordinal()];
+                angle[2] = angleMap[renderFacing.ordinal()];
                 break;
             case SOUTH:
             case NORTH:
-                angle[0] = angleMap[danyFacing.ordinal()];
+                angle[0] = angleMap[renderFacing.ordinal()];
             default:
 
                 break;

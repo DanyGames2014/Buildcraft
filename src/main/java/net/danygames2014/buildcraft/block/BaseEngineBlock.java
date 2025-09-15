@@ -3,7 +3,6 @@ package net.danygames2014.buildcraft.block;
 import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.client.render.block.EngineRenderer;
-import net.danygames2014.buildcraft.client.render.block.entity.EngineBlockEntityRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -23,7 +22,7 @@ import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
-import net.modificationstation.stationapi.api.world.BlockStateView;
+import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
@@ -43,6 +42,7 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
 
     @Override
     public void renderInventory(BlockRenderManager blockRenderManager, int i) {
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
         engineRenderer.render(Minecraft.INSTANCE.textureManager, EnergyStage.BLUE, 0.25F, Direction.UP, this.getBaseTexturePath(), -0.5D, -0.5D, -0.5D);
     }
 
