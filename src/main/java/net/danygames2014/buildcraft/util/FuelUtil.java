@@ -6,7 +6,7 @@ import net.modificationstation.stationapi.api.recipe.FuelRegistry;
 
 public class FuelUtil {
     public static int getEngineFuelTime(ItemStack stack) {
-        if (stack.getItem() != null && !(stack.getItem() instanceof BucketItem)) {
+        if (stack != null && !(stack.getItem() instanceof BucketItem)) {
             return FuelRegistry.getFuelTime(stack);
         }
         return 0;
