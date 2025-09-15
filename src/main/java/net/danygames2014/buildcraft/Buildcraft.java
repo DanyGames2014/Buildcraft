@@ -1,13 +1,11 @@
 package net.danygames2014.buildcraft;
 
-import net.danygames2014.buildcraft.block.ChuteBlock;
-import net.danygames2014.buildcraft.block.CombustionEngineBlock;
-import net.danygames2014.buildcraft.block.RedstoneEngineBlock;
-import net.danygames2014.buildcraft.block.StirlingEngineBlock;
+import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.item.BuildcraftWrenchItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
@@ -34,6 +32,7 @@ public class Buildcraft {
     public static Block redstoneEngine;
     public static Block stirlingEngine;
     public static Block combustionEngine;
+    public static Block frame;
     
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
@@ -51,5 +50,6 @@ public class Buildcraft {
         redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine");
         stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine");
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine");
+        frame = new FrameBlock(NAMESPACE.id("frame"), Material.METAL).setTranslationKey(NAMESPACE, "frame");
     }
 }

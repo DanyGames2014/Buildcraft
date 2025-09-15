@@ -1,0 +1,7 @@
+{
+  "parent": "buildcraft:block/template/pipe_side",
+  "textures": {
+    "texture": "buildcraft:block/frame",
+    "particle": "buildcraft:block/frame"
+  }
+}

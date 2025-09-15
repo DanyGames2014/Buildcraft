@@ -9,6 +9,7 @@ tile.buildcraft.chute.name=Chute
 tile.buildcraft.redstone_engine.name=Redstone Engine
 tile.buildcraft.stirling_engine.name=Stirling Engine
 tile.buildcraft.combustion_engine.name=Combustion Engine
+tile.buildcraft.frame.name=Frame
 
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel
