@@ -62,7 +62,7 @@ public class CombustionEngineScreenHandler extends ScreenHandler {
                         engine,
                         0,
                         104,
-                        61
+                        0
                 )
         );
 
@@ -71,7 +71,7 @@ public class CombustionEngineScreenHandler extends ScreenHandler {
                         engine,
                         1,
                         122,
-                        61
+                        0
                 )
         );
     }

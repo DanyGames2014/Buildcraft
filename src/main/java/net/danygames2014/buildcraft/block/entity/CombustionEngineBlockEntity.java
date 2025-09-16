@@ -109,6 +109,15 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         }
     }
 
+    public int getScaledCoolant(int i) {
+        return fluidInventory[0] != null ? (int) (((float) fluidInventory[0].amount / (float) (FLUID_CAPACITY)) * i) : 0;
+    }
+
+    @Override
+    public int getScaledBurnTime(int i) {
+        return fluidInventory[1] != null ? (int) (((float) fluidInventory[1].amount / (float) (FLUID_CAPACITY)) * i) : 0;
+    }
+
     @Override
     public boolean isBurning() {
         FluidStack fuel = fluidInventory[1];
