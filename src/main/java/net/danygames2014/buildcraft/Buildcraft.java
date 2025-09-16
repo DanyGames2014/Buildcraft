@@ -50,6 +50,6 @@ public class Buildcraft {
         redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine");
         stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine");
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine");
-        frame = new FrameBlock(NAMESPACE.id("frame"), Material.METAL).setTranslationKey(NAMESPACE, "frame");
+        frame = new FrameBlock(NAMESPACE.id("frame"), Material.METAL).setTranslationKey(NAMESPACE, "frame").setHardness(0.5F);
     }
 }

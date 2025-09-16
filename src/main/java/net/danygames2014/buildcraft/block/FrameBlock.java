@@ -6,6 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.item.ItemPlacementContext;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.state.property.BooleanProperty;
@@ -16,9 +17,11 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class FrameBlock extends TemplateBlock {
     public static final HashMap<Direction, BooleanProperty> PROPERTY_LOOKUP = new HashMap<>();
+    private final Random random = new Random();
 
     static {
         PROPERTY_LOOKUP.put(Direction.UP, Properties.UP);
@@ -28,11 +31,13 @@ public class FrameBlock extends TemplateBlock {
         PROPERTY_LOOKUP.put(Direction.EAST, Properties.EAST);
         PROPERTY_LOOKUP.put(Direction.WEST, Properties.WEST);
     }
-    
+
     public FrameBlock(Identifier identifier, Material material) {
         super(identifier, material);
+        this.setTickRandomly(true);
     }
 
+    // Properties
     @Override
     public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
@@ -50,10 +55,27 @@ public class FrameBlock extends TemplateBlock {
                 .with(Properties.WEST, false);
     }
 
+    // Dropped Item
+    @Override
+    public int getDroppedItemId(int blockMeta, Random random) {
+        return 0;
+    }
+
+    @Override
+    protected int getDroppedItemMeta(int blockMeta) {
+        return 0;
+    }
+
+    // Connecting Logic
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
         super.neighborUpdate(world, x, y, z, id);
         updateConnections(world, x, y, z);
+
+        // Check for decay
+        if (world.getBlockMeta(x, y, z) == 1 && random.nextInt(2) == 0) {
+            world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+        }
     }
 
     @Override
@@ -71,11 +93,12 @@ public class FrameBlock extends TemplateBlock {
 
         world.setBlockState(x, y, z, state);
     }
-    
+
     public boolean canConnectTo(World world, int x, int y, int z) {
         return world.getBlockState(x, y, z).isOf(Buildcraft.frame);
     }
 
+    // Bounding Box
     @Override
     public Box getBoundingBox(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
@@ -152,6 +175,7 @@ public class FrameBlock extends TemplateBlock {
         this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
+    // Rendering
     @Override
     public boolean isFullCube() {
         return false;
