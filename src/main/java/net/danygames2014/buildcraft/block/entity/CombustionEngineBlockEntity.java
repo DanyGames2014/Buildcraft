@@ -140,7 +140,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     // Energy
     @Override
     public double getMaxEnergy() {
-        return 10000;
+        return 100000;
     }
 
     @Override
