@@ -12,11 +12,11 @@ import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
 
-public class CombustionEngineScreen extends HandledScreen {
+public class CombustionEngineScreen extends EngineScreen {
     CombustionEngineBlockEntity engine;
     
     public CombustionEngineScreen(PlayerEntity player, CombustionEngineBlockEntity engine) {
-        super(new CombustionEngineScreenHandler(player, engine));
+        super(new CombustionEngineScreenHandler(player, engine), engine);
         this.engine = engine;
     }
 

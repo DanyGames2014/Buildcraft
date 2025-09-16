@@ -6,11 +6,11 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.opengl.GL11;
 
-public class StirlingEngineScreen extends HandledScreen {
+public class StirlingEngineScreen extends EngineScreen {
     StirlingEngineBlockEntity engine;
     
     public StirlingEngineScreen(PlayerEntity player, StirlingEngineBlockEntity engine) {
-        super(new StirlingEngineScreenHandler(player, engine));
+        super(new StirlingEngineScreenHandler(player, engine), engine);
         this.engine = engine;
     }
 
