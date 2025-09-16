@@ -77,10 +77,12 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
             coolEngine(IDEAL_HEAT);
         }
 
+        // Penalty cooling
         if (heat <= MIN_HEAT && penaltyCooling > 0) {
             penaltyCooling--;
         }
 
+        // Clamp the heat to minimum
         if (heat <= MIN_HEAT) {
             heat = MIN_HEAT;
         }
@@ -107,6 +109,16 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
                 heat -= coolantAmount * cooling;
             }
         }
+    }
+
+    @Override
+    public void updateHeatLevel() {
+        // Do nothing. Heat is handled differently for the combustion engine.
+    }
+
+    @Override
+    public boolean isActive() {
+        return penaltyCooling <= 0;
     }
 
     // Fuel & Coolant

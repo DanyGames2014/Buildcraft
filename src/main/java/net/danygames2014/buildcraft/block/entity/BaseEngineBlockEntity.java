@@ -38,7 +38,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public float heat = MIN_HEAT;
     public EnergyStage energyStage = EnergyStage.BLUE;
     public Direction facing = Direction.UP;
-    protected int progressPart = 0;
+    protected EngineStage stage = EngineStage.RETRACTED;
     public boolean checkOrienation = false;
 
     public BaseEngineBlockEntity() {
@@ -62,26 +62,27 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     // Engine Logic
     @Override
     public void tick() {
-        init();
         super.tick();
 
-        facing = getFacing();
-
+        // Client side
         if (world.isRemote) {
-            if (progressPart != 0) {
+            if (stage != EngineStage.RETRACTED) {
                 progress += getPistonSpeed();
 
                 if (progress > 1) {
-                    progressPart = 0;
+                    stage = EngineStage.RETRACTED;
                     progress = 0;
                 }
             } else if (this.isPumping()) {
-                progressPart = 1;
+                stage = EngineStage.EXTENDING;
             }
 
             return;
         }
 
+        facing = getFacing();
+        init();
+        
         if (checkOrienation) {
             checkOrienation = false;
 
@@ -102,20 +103,20 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
         BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
 
-        if (progressPart != 0) {
+        if (stage != EngineStage.RETRACTED) {
             progress += getPistonSpeed();
 
-            if (progress > 0.5 && progressPart == 1) {
-                progressPart = 2;
+            if (progress > 0.5 && stage == EngineStage.EXTENDING) {
+                stage = EngineStage.RETRACTING;
                 sendPower(); // Comment out for constant power
             } else if (progress >= 1) {
                 progress = 0;
-                progressPart = 0;
+                stage = EngineStage.RETRACTED;
             }
         } else if (isRedstonePowered && isActive()) {
             if (isPoweredTile(tile, facing)) {
                 if (getPowerToExtract() > 0) {
-                    progressPart = 1;
+                    stage = EngineStage.EXTENDING;
                     setPumping(true);
                 } else {
                     setPumping(false);
@@ -206,9 +207,6 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
             if ((!pipesOnly || tile instanceof IPipeTile) && isPoweredTile(tile, direction)) {
                 setFacing(direction);
-                //world.setBlockDirty(x,y,z);
-                //world.notifyNeighbors(x, y, z, world.getBlockId(x, y, z));
-
                 return true;
             }
         }
