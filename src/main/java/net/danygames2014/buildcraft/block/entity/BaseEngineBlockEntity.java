@@ -39,7 +39,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public EnergyStage energyStage = EnergyStage.BLUE;
     public Direction facing = Direction.UP;
     protected int progressPart = 0;
-    private boolean checkOrienation = false;
+    public boolean checkOrienation = false;
 
     public BaseEngineBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.ENGINE);

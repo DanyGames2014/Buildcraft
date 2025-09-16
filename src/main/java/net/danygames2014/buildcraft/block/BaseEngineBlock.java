@@ -3,15 +3,19 @@ package net.danygames2014.buildcraft.block;
 import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.client.render.block.EngineRenderer;
+import net.danygames2014.uniwrench.api.WrenchMode;
+import net.danygames2014.uniwrench.api.Wrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.item.ItemPlacementContext;
@@ -26,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
-public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements BlockWithInventoryRenderer, BlockWithWorldRenderer {
+public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements BlockWithInventoryRenderer, BlockWithWorldRenderer, Wrenchable {
     public static final EnumProperty<EnergyStage> ENERGY_STAGE_PROPERTY = EnumProperty.of("energy_stage", EnergyStage.class);
     public static final BooleanProperty PUMPING_PROPERTY = BooleanProperty.of("pumping");
     private final EngineRenderer engineRenderer;
@@ -34,21 +38,6 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
     public BaseEngineBlock(Identifier identifier) {
         super(identifier, Material.METAL);
         engineRenderer = new EngineRenderer();
-    }
-
-    public String getBaseTexturePath(){
-        return "";
-    }
-
-    @Override
-    public void renderInventory(BlockRenderManager blockRenderManager, int i) {
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        engineRenderer.render(Minecraft.INSTANCE.textureManager, EnergyStage.BLUE, 0.25F, Direction.UP, this.getBaseTexturePath(), -0.5D, -0.5D, -0.5D);
-    }
-
-    @Override
-    public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int i, int i1, int i2) {
-        return true;
     }
 
     @Override
@@ -67,9 +56,38 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
                 .with(PUMPING_PROPERTY, false);
     }
 
+    // Wrenching
+    @Override
+    public boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+        // Wrench + Sneaking = Disassemble
+        if (wrenchMode == WrenchMode.MODE_WRENCH) {
+            if (isSneaking) {
+                int meta = world.getBlockMeta(x, y, z);
+                world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+                this.dropStacks(world, x, y, z, meta);
+                return true;
+            }
+        }
+        
+        // Rotate/Wrench = Rotate
+        if (wrenchMode == WrenchMode.MODE_ROTATE || wrenchMode == WrenchMode.MODE_WRENCH) {
+            if (world.getBlockState(x, y, z).isOf(this)) {
+                if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
+                    world.setBlockStateWithNotify(x, y, z, world.getBlockState(x, y, z).cycle(Properties.FACING));
+                    engine.checkOrienation = true;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    // Block Entity
     @Override
     protected abstract BlockEntity createBlockEntity();
 
+    // Logic
     @Override
     public void onPlaced(World world, int x, int y, int z) {
         super.onPlaced(world, x, y, z);
@@ -90,7 +108,7 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
         if (blockView.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
             return engine.getFacing().getOpposite().getId() == face;
         }
-        
+
         return super.isSolidFace(blockView, x, y, z, face);
     }
 
@@ -99,7 +117,7 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
         if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
             player.sendMessage("Energy:" + engine.energy + ", Heat: " + engine.heat + ", RS:" + engine.isRedstonePowered + ", Prog:" + engine.progress);
         }
-        
+
         return super.onUse(world, x, y, z, player);
     }
 
@@ -132,5 +150,20 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
             world.addParticle("reddust", particleX + randomOffset, particleY, particleZ - particleOffset, 0.0D, 0.0D, 0.0D);
             world.addParticle("reddust", particleX + randomOffset, particleY, particleZ + particleOffset, 0.0D, 0.0D, 0.0D);
         }
+    }
+
+    public String getBaseTexturePath() {
+        return "";
+    }
+
+    @Override
+    public void renderInventory(BlockRenderManager blockRenderManager, int i) {
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        engineRenderer.render(Minecraft.INSTANCE.textureManager, EnergyStage.BLUE, 0.25F, Direction.UP, this.getBaseTexturePath(), -0.5D, -0.5D, -0.5D);
+    }
+
+    @Override
+    public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int i, int i1, int i2) {
+        return true;
     }
 }
