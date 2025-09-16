@@ -99,17 +99,20 @@ public class FrameBlock extends TemplateBlock {
     }
 
     // Bounding Box
+    private final float minOffset = 0.25F;
+    private final float maxOffset = 0.75F;
+    
     @Override
     public Box getBoundingBox(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
 
-        float minX = 0.34375F;
-        float minY = 0.34375F;
-        float minZ = 0.34375F;
+        float minX = minOffset;
+        float minY = minOffset;
+        float minZ = minOffset;
 
-        float maxX = 0.65625F;
-        float maxY = 0.65625F;
-        float maxZ = 0.65625F;
+        float maxX = maxOffset;
+        float maxY = maxOffset;
+        float maxZ = maxOffset;
 
         if (state.get(Properties.UP)) {
             maxY = 1.0F;
@@ -143,32 +146,32 @@ public class FrameBlock extends TemplateBlock {
         BlockState state = world.getBlockState(x, y, z);
 
         if (state.get(Properties.UP)) {
-            this.setBoundingBox(0.34375F, 0.34375F, 0.34375F, 0.65625F, 1.0F, 0.65625F);
+            this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, 1.0F, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
         if (state.get(Properties.DOWN)) {
-            this.setBoundingBox(0.34375F, 0.0F, 0.34375F, 0.65625F, 0.65625F, 0.65625F);
+            this.setBoundingBox(minOffset, 0.0F, minOffset, maxOffset, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
         if (state.get(Properties.WEST)) {
-            this.setBoundingBox(0.34375F, 0.34375F, 0.34375F, 0.65625F, 0.65625F, 1.0F);
+            this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, 1.0F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
         if (state.get(Properties.EAST)) {
-            this.setBoundingBox(0.34375F, 0.34375F, 0.0F, 0.65625F, 0.65625F, 0.65625F);
+            this.setBoundingBox(minOffset, minOffset, 0.0F, maxOffset, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
         if (state.get(Properties.SOUTH)) {
-            this.setBoundingBox(0.34375F, 0.34375F, 0.34375F, 1.0F, 0.65625F, 0.65625F);
+            this.setBoundingBox(minOffset, minOffset, minOffset, 1.0F, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
         if (state.get(Properties.NORTH)) {
-            this.setBoundingBox(0.0F, 0.34375F, 0.34375F, 0.65625F, 0.65625F, 0.65625F);
+            this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
