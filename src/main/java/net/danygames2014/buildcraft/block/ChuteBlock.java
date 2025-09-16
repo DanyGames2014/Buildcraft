@@ -3,7 +3,7 @@ package net.danygames2014.buildcraft.block;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.client.render.block.ChuteRenderer;
-import net.danygames2014.buildcraft.screen.ChuteScreenHandler;
+import net.danygames2014.buildcraft.screen.handler.ChuteScreenHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;

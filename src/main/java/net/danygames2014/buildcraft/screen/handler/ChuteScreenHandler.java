@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.screen;
+package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;

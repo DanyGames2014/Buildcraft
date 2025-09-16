@@ -1,10 +1,9 @@
-package net.danygames2014.buildcraft.client.gui.screen;
+package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
-import net.danygames2014.buildcraft.screen.ChuteScreenHandler;
+import net.danygames2014.buildcraft.screen.handler.ChuteScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import org.lwjgl.opengl.GL11;
 
 public class ChuteScreen extends HandledScreen {

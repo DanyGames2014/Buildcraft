@@ -3,7 +3,7 @@ package net.danygames2014.buildcraft.init;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
 import net.danygames2014.buildcraft.block.entity.StirlingEngineBlockEntity;
-import net.danygames2014.buildcraft.client.gui.screen.ChuteScreen;
+import net.danygames2014.buildcraft.screen.ChuteScreen;
 import net.danygames2014.buildcraft.screen.CombustionEngineScreen;
 import net.danygames2014.buildcraft.screen.StirlingEngineScreen;
 import net.mine_diver.unsafeevents.listener.EventListener;
