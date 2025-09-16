@@ -1,0 +1,8 @@
+{
+  "values": [
+    "buildcraft:chute",
+    "buildcraft:redstone_engine",
+    "buildcraft:stirling_engine",
+    "buildcraft:combustion_engine"
+  ]
+}
