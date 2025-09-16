@@ -1,6 +1,8 @@
 package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.energy.EngineCoolant;
+import net.danygames2014.buildcraft.api.energy.EngineCoolantRegistry;
 import net.danygames2014.buildcraft.api.energy.EngineFuel;
 import net.danygames2014.buildcraft.api.energy.EngineFuelRegistry;
 import net.danygames2014.buildcraft.init.FluidListener;
@@ -39,6 +41,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     protected void engineUpdate() {
         super.engineUpdate();
 
+        // Inserting Fluid into tanks
         ItemStack fuelStack = getStack(0);
         if (fuelStack != null && fuelStack.getItem() instanceof FluidBucket bucketItem) {
             Fluid fluid = bucketItem.getFluid();
@@ -62,6 +65,46 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
                 } else {
                     Buildcraft.LOGGER.warn("Remainder of fuel in a Combustion Engine was not zero!");
                 }
+            }
+        }
+
+        // Cooling the engine
+        if (heat > MIN_HEAT && (penaltyCooling > 0 || !isRedstonePowered)) {
+            heat -= COOLDOWN_RATE;
+            coolEngine(MIN_HEAT);
+            getEnergyStage();
+        } else if (heat > IDEAL_HEAT) {
+            coolEngine(IDEAL_HEAT);
+        }
+
+        if (heat <= MIN_HEAT && penaltyCooling > 0) {
+            penaltyCooling--;
+        }
+
+        if (heat <= MIN_HEAT) {
+            heat = MIN_HEAT;
+        }
+    }
+
+    private void coolEngine(float idealHeat) {
+        float extraHeat = heat - idealHeat;
+
+        FluidStack coolant = fluidInventory[0];
+        if (coolant == null) {
+            return;
+        }
+
+        int coolantAmount = Math.min(MAX_COOLANT_PER_TICK, coolant.amount);
+        EngineCoolant currentCoolant = EngineCoolantRegistry.get(coolant.fluid);
+        if (currentCoolant != null) {
+            float cooling = currentCoolant.getDegreesCooledPerMb(heat);
+            cooling /= getBiomeTempScalar();
+            if (coolantAmount * cooling > extraHeat) {
+                this.extractFluid(0, Math.round(extraHeat / cooling), null);
+                heat -= extraHeat;
+            } else {
+                this.extractFluid(0, coolantAmount, null);
+                heat -= coolantAmount * cooling;
             }
         }
     }
@@ -103,8 +146,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         } else if (penaltyCooling <= 0) {
             if (lastPowered) {
                 lastPowered = false;
-                penaltyCooling = 10;
-                // 10 tick of penalty on top of the cooling
+                penaltyCooling = 30 * 20; // 30 second penalty cooling
             }
         }
     }

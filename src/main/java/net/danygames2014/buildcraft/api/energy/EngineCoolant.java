@@ -7,7 +7,7 @@ public class EngineCoolant {
         this.degreesCooledPerMb = degreesCooledPerMb;
     }
 
-    public float getDegreesCooledPerMb() {
+    public float getDegreesCooledPerMb(float currentHeat) {
         return degreesCooledPerMb;
     }
 }
