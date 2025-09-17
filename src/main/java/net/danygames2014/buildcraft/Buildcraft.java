@@ -36,15 +36,16 @@ public class Buildcraft {
     
     public static WoodenPipeBehavior woodenPipeBehavior;
     public static StonePipeBehavior stonePipeBehavior;
-    
+
     public static Block chuteBlock;
     public static Block redstoneEngine;
     public static Block stirlingEngine;
     public static Block combustionEngine;
     public static Block frame;
+    public static Block tank;
     public static Block woodenPipe;
     public static Block stonePipe;
-    
+
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");
@@ -61,13 +62,14 @@ public class Buildcraft {
         
         woodenPipeBehavior = new WoodenPipeBehavior(Buildcraft.NAMESPACE.id("wooden_item_behavior"));
         stonePipeBehavior = new StonePipeBehavior(Buildcraft.NAMESPACE.id("stone_item_behavior"));
-        
+
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine").setHardness(0.7F).setSoundGroup(Block.WOOD_SOUND_GROUP);
         stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine").setHardness(1.0F).setSoundGroup(Block.STONE_SOUND_GROUP);
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
         frame = new FrameBlock(NAMESPACE.id("frame"), pipeMaterial).setTranslationKey(NAMESPACE, "frame").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
-        
+        tank = new TankBlock(NAMESPACE.id("tank")).setTranslationKey(NAMESPACE, "tank").setHardness(0.5F);
+
         woodenPipe = new PipeBlock(NAMESPACE.id("wooden_pipe"), pipeMaterial, Buildcraft.NAMESPACE.id("block/pipe/wooden_item_pipe"), woodenPipeBehavior).setTranslationKey(NAMESPACE, "wooden_pipe").setHardness(0.1F).setSoundGroup(Block.WOOD_SOUND_GROUP);
         stonePipe = new PipeBlock(NAMESPACE.id("stone_pipe"), pipeMaterial, Buildcraft.NAMESPACE.id("block/pipe/stone_item_pipe"), stonePipeBehavior).setTranslationKey(NAMESPACE, "stone_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
     }
