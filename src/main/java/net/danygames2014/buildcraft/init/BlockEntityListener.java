@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
 import net.danygames2014.buildcraft.block.entity.RedstoneEngineBlockEntity;
 import net.danygames2014.buildcraft.block.entity.StirlingEngineBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -20,5 +21,6 @@ public class BlockEntityListener {
         event.register(RedstoneEngineBlockEntity.class, NAMESPACE.id("redstone_engine").toString());
         event.register(StirlingEngineBlockEntity.class, NAMESPACE.id("stirling_engine").toString());
         event.register(CombustionEngineBlockEntity.class, NAMESPACE.id("combustion_engine").toString());
+        event.register(PipeBlockEntity.class, NAMESPACE.id("pipe").toString());
     }
 }
