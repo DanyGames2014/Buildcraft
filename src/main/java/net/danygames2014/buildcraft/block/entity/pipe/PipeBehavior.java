@@ -7,11 +7,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
  * T
  */
 public class PipeBehavior {
-    public final Identifier identifier;
-    
-    public PipeBehavior(Identifier identifier) {
-        this.identifier = identifier;
-        PipeBehaviorRegistry.register(identifier, this);
+    public PipeBehavior() {
     }
 
     /**
@@ -21,6 +17,6 @@ public class PipeBehavior {
      * @return If we can connect to the other pipe
      */
     public boolean canConnectTo(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior){
-        return otherPipeBehavior == this;
+        return otherPipeBehavior == this && otherBlockEntity.transporter.getType() == blockEntity.transporter.getType();
     }
 }

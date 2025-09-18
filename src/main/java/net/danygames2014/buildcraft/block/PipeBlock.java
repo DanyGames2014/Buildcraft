@@ -1,8 +1,10 @@
 package net.danygames2014.buildcraft.block;
 
+import net.danygames2014.buildcraft.api.core.Debuggable;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBehavior;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeJsonOverride;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.minecraft.block.Block;
@@ -25,12 +27,14 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable {
-    private final PipeBehavior behavior;
+public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable {
+    public final PipeBehavior behavior;
+    public final PipeTransporter.PipeTransporterFactory transporterFactory;
 
-    public PipeBlock(Identifier identifier, Material material, Identifier texture, PipeBehavior behavior) {
+    public PipeBlock(Identifier identifier, Material material, Identifier texture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter) {
         super(identifier, material);
         this.behavior = behavior;
+        this.transporterFactory = transporter;
         if (texture != null) {
             PipeJsonOverride.registerPipeJsonOverride(identifier, texture);
         }
@@ -105,11 +109,10 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable {
     // Block Entity
     @Override
     protected BlockEntity createBlockEntity() {
-        return new PipeBlockEntity(behavior);
+        return new PipeBlockEntity(this);
     }
     
     // Bounding Box and Collision Shape
-    // Bounding Box
     private final float minOffset = 0.25F;
     private final float maxOffset = 0.75F;
 
