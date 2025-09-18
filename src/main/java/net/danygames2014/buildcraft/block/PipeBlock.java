@@ -3,19 +3,25 @@ package net.danygames2014.buildcraft.block;
 import net.danygames2014.buildcraft.api.core.Debuggable;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBehavior;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeJsonOverride;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
+import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
+import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Box;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
+import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
+import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.item.ItemPlacementContext;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.state.property.BooleanProperty;
@@ -27,17 +33,20 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable {
+public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
+    private final PipeWorldRenderer pipeWorldRenderer;
+    private final PipeItemRenderer pipeItemRenderer;
+    private final Identifier texture;
 
     public PipeBlock(Identifier identifier, Material material, Identifier texture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter) {
         super(identifier, material);
         this.behavior = behavior;
         this.transporterFactory = transporter;
-        if (texture != null) {
-            PipeJsonOverride.registerPipeJsonOverride(identifier, texture);
-        }
+        this.texture = texture;
+        pipeWorldRenderer = new PipeWorldRenderer();
+        pipeItemRenderer = new PipeItemRenderer();
     }
 
     // Properties
@@ -58,11 +67,22 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 .with(Properties.WEST, false);
     }
 
+    @Override
+    public int getTexture(int side) {
+        if(Atlases.getTerrain() == null){
+            return 0;
+        }
+        return Atlases.getTerrain().getTexture(texture).index;
+    }
+
     // Connecting Logic
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
         super.neighborUpdate(world, x, y, z, id);
         updateConnections(world, x, y, z);
+        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+            pipeBlockEntity.scheduleNeighborUpdate();
+        }
     }
 
     @Override
@@ -221,5 +241,18 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         PROPERTY_LOOKUP.put(Direction.SOUTH, Properties.SOUTH);
         PROPERTY_LOOKUP.put(Direction.EAST, Properties.EAST);
         PROPERTY_LOOKUP.put(Direction.WEST, Properties.WEST);
+    }
+
+    @Override
+    public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {
+        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe){
+            pipeWorldRenderer.renderPipe(blockRenderManager, blockView, pipe, x, y, z);
+        }
+        return false;
+    }
+
+    @Override
+    public void renderInventory(BlockRenderManager blockRenderManager, int i) {
+        pipeItemRenderer.renderPipeItem(blockRenderManager, this, i, -0.5F, -0.5F, -0.5F);
     }
 }

@@ -1,6 +1,8 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
 import net.danygames2014.buildcraft.block.PipeBlock;
+import net.danygames2014.buildcraft.client.render.PipeRenderState;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
@@ -11,6 +13,10 @@ public class PipeBlockEntity extends BlockEntity {
     public PipeBlock pipeBlock;
     public PipeBehavior behavior;
     public PipeTransporter transporter;
+    public final PipeRenderState renderState = new PipeRenderState();
+
+    protected boolean neighbourUpdate = false;
+    protected boolean refreshRenderState = false;
 
     // Empty constructor for loading
     public PipeBlockEntity() {
@@ -29,6 +35,7 @@ public class PipeBlockEntity extends BlockEntity {
         behavior = pipeBlock.behavior;
         transporter = pipeBlock.transporterFactory.create(this);
         transporter.init();
+        scheduleRenderUpdate();
         hasInit = true;
     }
 
@@ -39,6 +46,17 @@ public class PipeBlockEntity extends BlockEntity {
 
         if (!hasInit) {
             init();
+        }
+
+        // TODO: This does more, but I only added the render related code for now
+        if(neighbourUpdate){
+            refreshRenderState = true;
+            neighbourUpdate = false;
+        }
+
+        if(refreshRenderState){
+            refreshRenderState();
+            refreshRenderState = false;
         }
         
         transporter.tick();
@@ -98,5 +116,29 @@ public class PipeBlockEntity extends BlockEntity {
                 ", y=" + y +
                 ", z=" + z +
                 '}';
+    }
+
+    public void scheduleNeighborUpdate(){
+        neighbourUpdate = true;
+    }
+
+    public void scheduleRenderUpdate() {
+        refreshRenderState = true;
+    }
+
+    protected void refreshRenderState(){
+        // Pipe connections:
+        for(Direction direction : Direction.values()){
+            renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction));
+        }
+
+        for(int i = 0; i < 7; i++){
+            Direction direction = Direction.byId(i);
+            renderState.textureMatrix.setTextureIndex(direction, pipeBlock.getTexture(i));
+        }
+
+        if(renderState.isDirty()){
+            renderState.clean();
+        }
     }
 }

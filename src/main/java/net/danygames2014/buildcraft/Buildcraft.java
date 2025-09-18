@@ -49,6 +49,9 @@ public class Buildcraft {
     public static Block woodenEnergyPipe;
     public static Block cobblestoneEnergyPipe;
 
+    //TODO: figure out how to avoid registering the renderblock
+    public static RenderBlock renderBlock;
+
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");
@@ -72,6 +75,8 @@ public class Buildcraft {
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
         tank = new TankBlock(NAMESPACE.id("tank")).setTranslationKey(NAMESPACE, "tank").setHardness(0.5F);
         frame = new FrameBlock(NAMESPACE.id("frame"), pipeMaterial).setTranslationKey(NAMESPACE, "frame").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
+
+        renderBlock = new RenderBlock(NAMESPACE.id("render_block"));
 
         // Item Pipes
         woodenItemPipe = new PipeBlock(
