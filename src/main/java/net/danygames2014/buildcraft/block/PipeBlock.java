@@ -86,7 +86,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             return pipe.canConnectTo(x, y, z, side);
         }
         
-        // TODO: Connecting to other things
         return false;
     }
     

@@ -17,6 +17,6 @@ public class PipeBehavior {
      * @return If we can connect to the other pipe
      */
     public boolean canConnectTo(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior){
-        return otherPipeBehavior == this && otherBlockEntity.transporter.getType() == blockEntity.transporter.getType();
+        return otherBlockEntity.transporter.getType() == blockEntity.transporter.getType();
     }
 }
