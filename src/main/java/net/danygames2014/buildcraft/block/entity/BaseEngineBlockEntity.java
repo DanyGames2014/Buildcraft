@@ -429,4 +429,24 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         energy = nbt.getDouble("energy");
         heat = nbt.getFloat("heat");
     }
+
+    @Override
+    public String toString() {
+        return "BaseEngineBlockEntity{" +
+                "powerHandler=" + powerHandler +
+                ", isRedstonePowered=" + isRedstonePowered +
+                ", progress=" + progress +
+                ", energy=" + energy +
+                ", heat=" + heat +
+                ", energyStage=" + energyStage +
+                ", facing=" + facing +
+                ", stage=" + stage +
+                ", checkOrienation=" + checkOrienation +
+                ", hasInit=" + hasInit +
+                ", world=" + world +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
 }

@@ -200,6 +200,15 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable {
         return false;
     }
 
+    // Debug
+    @Override
+    public void debug(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side) {
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+            System.out.println(pipe);
+            player.sendMessage(pipe.toString());
+        }
+    }
+    
     // Property Lookup
     public static final HashMap<Direction, BooleanProperty> PROPERTY_LOOKUP = new HashMap<>();
 

@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.block;
 
+import net.danygames2014.buildcraft.api.core.Debuggable;
 import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.client.render.block.EngineRenderer;
@@ -30,7 +31,8 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
-public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements BlockWithInventoryRenderer, BlockWithWorldRenderer, Wrenchable {
+@SuppressWarnings("deprecation")
+public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements BlockWithInventoryRenderer, BlockWithWorldRenderer, Wrenchable, Debuggable {
     public static final EnumProperty<EnergyStage> ENERGY_STAGE_PROPERTY = EnumProperty.of("energy_stage", EnergyStage.class);
     public static final BooleanProperty PUMPING_PROPERTY = BooleanProperty.of("pumping");
     private final EngineRenderer engineRenderer;
@@ -165,5 +167,13 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
     @Override
     public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int i, int i1, int i2) {
         return true;
+    }
+
+    @Override
+    public void debug(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side) {
+        if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
+            System.out.println(engine);
+            player.sendMessage(engine.toString());
+        }
     }
 }
