@@ -36,6 +36,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
@@ -87,7 +88,15 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         super.onPlaced(world, x, y, z);
         updateConnections(world, x, y, z);
     }
-    
+
+    @Override
+    public void onBreak(World world, int x, int y, int z) {
+        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+            pipeBlockEntity.onBreak();
+        }
+        super.onBreak(world, x, y, z);
+    }
+
     public void updateConnections(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
 
@@ -96,8 +105,12 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
 
         world.setBlockState(x, y, z, state);
+        
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+            pipe.updateValidOutputDirections();
+        }
     }
-
+    
     public boolean canConnectTo(World world, int x, int y, int z, Direction side) {
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             return pipe.canConnectTo(x, y, z, side);
@@ -255,7 +268,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             if (player.getHand() != null && !(player.getHand().getItem() instanceof WrenchBase)) {
                 if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
                     if (pipe.transporter instanceof ItemPipeTransporter pipeTransporter) {
-                        pipeTransporter.addItem(player.getHand());
+                        pipeTransporter.injectItem(player.getHand(), Direction.values()[new Random().nextInt(Direction.values().length)]);
                         player.inventory.main[player.inventory.selectedSlot] = null;
                         player.inventory.markDirty();
                     }

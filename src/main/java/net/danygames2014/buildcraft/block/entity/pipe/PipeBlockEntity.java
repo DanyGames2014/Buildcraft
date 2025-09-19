@@ -1,18 +1,25 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class PipeBlockEntity extends BlockEntity {
     public PipeBlock pipeBlock;
     public PipeBehavior behavior;
     public PipeTransporter transporter;
     public final PipeRenderState renderState = new PipeRenderState();
+    public ObjectArrayList<Direction> validOutputDirections = null;
+    public final Random random = new Random();
 
     protected boolean neighbourUpdate = false;
     protected boolean refreshRenderState = false;
@@ -46,6 +53,10 @@ public class PipeBlockEntity extends BlockEntity {
         if (!hasInit) {
             init();
         }
+        
+        if (validOutputDirections == null) {
+            updateValidOutputDirections();
+        }
 
         // TODO: This does more, but I only added the render related code for now
         if (neighbourUpdate) {
@@ -59,6 +70,20 @@ public class PipeBlockEntity extends BlockEntity {
         }
 
         transporter.tick();
+    }
+    
+    public void updateValidOutputDirections() {
+        if (validOutputDirections == null) {
+            validOutputDirections = new ObjectArrayList<>(6);
+        }
+        
+        validOutputDirections.clear();
+        BlockState state = world.getBlockState(x, y, z);
+        for (Direction side : Direction.values()) {
+            if (state.get(PipeBlock.PROPERTY_LOOKUP.get(side))) {
+                validOutputDirections.add(side);
+            }
+        }
     }
 
     public void neighborUpdate() {
@@ -97,6 +122,12 @@ public class PipeBlockEntity extends BlockEntity {
         return false;
     }
 
+    public void onBreak() {
+        if (transporter != null) {
+            transporter.onBreak();
+        }
+    }
+
     // NBT
     @Override
     public void writeNbt(NbtCompound nbt) {
@@ -117,8 +148,11 @@ public class PipeBlockEntity extends BlockEntity {
                 "pipeBlock=" + pipeBlock +
                 ", behavior=" + behavior +
                 ", transporter=" + transporter +
+                ", renderState=" + renderState +
+                ", validOutputDirections=" + validOutputDirections +
+                ", neighbourUpdate=" + neighbourUpdate +
+                ", refreshRenderState=" + refreshRenderState +
                 ", hasInit=" + hasInit +
-                ", world=" + world +
                 ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +

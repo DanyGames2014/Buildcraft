@@ -22,6 +22,8 @@ public class TextureListener {
     public static Atlas.Sprite woodenItemPipe;
     public static Atlas.Sprite woodenFluidPipe;
     public static Atlas.Sprite woodenEnergyPipe;
+    
+    public static Atlas.Sprite goldenItemPipe;
 
 
     @EventListener
@@ -35,5 +37,7 @@ public class TextureListener {
         woodenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_item_pipe"));
         woodenFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_fluid_pipe"));
         woodenEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_energy_pipe"));
+        
+        goldenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/golden_item_pipe"));
     }
 }

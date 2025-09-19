@@ -27,6 +27,10 @@ public abstract class PipeTransporter {
     // Connecting Logic
     public abstract boolean canConnectTo(BlockEntity other, Direction side);
 
+    // Logic
+    public void onBreak() {
+    }
+    
     // NBT
     public void writeNbt(NbtCompound nbt) {
         
@@ -35,7 +39,7 @@ public abstract class PipeTransporter {
     public void readNbt(NbtCompound nbt) {
         
     }
-    
+
     public interface PipeTransporterFactory {
         PipeTransporter create(PipeBlockEntity blockEntity);
     }

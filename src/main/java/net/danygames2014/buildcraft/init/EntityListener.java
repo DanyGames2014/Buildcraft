@@ -1,6 +1,8 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
@@ -23,6 +25,7 @@ public class EntityListener {
         event.register(NAMESPACE.id("travelling_item"), TravellingItemEntity::new);
     }
 
+    @Environment(EnvType.CLIENT)
     @EventListener
     public void registerEntityRenderers(EntityRendererRegisterEvent event) {
         event.renderers.put(TravellingItemEntity.class, new ItemRenderer());
