@@ -11,6 +11,8 @@ import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.danygames2014.uniwrench.item.WrenchBase;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -42,17 +44,22 @@ import java.util.Random;
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
-    private final PipeWorldRenderer pipeWorldRenderer;
-    private final PipeItemRenderer pipeItemRenderer;
-    private final Identifier texture;
+    @Environment(EnvType.CLIENT)
+    private PipeWorldRenderer pipeWorldRenderer;
+    @Environment(EnvType.CLIENT)
+    private PipeItemRenderer pipeItemRenderer;
+    @Environment(EnvType.CLIENT)
+    private Identifier texture;
 
     public PipeBlock(Identifier identifier, Material material, Identifier texture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter) {
         super(identifier, material);
         this.behavior = behavior;
         this.transporterFactory = transporter;
-        this.texture = texture;
-        this.pipeWorldRenderer = new PipeWorldRenderer();
-        this.pipeItemRenderer = new PipeItemRenderer();
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            this.texture = texture;
+            this.pipeWorldRenderer = new PipeWorldRenderer();
+            this.pipeItemRenderer = new PipeItemRenderer();
+        }
     }
 
     // Properties
@@ -222,6 +229,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     }
     
     // Rendering
+    @Environment(EnvType.CLIENT)
     @Override
     public int getTexture(int side) {
         if(Atlases.getTerrain() == null){
@@ -240,6 +248,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {
         if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe){
@@ -248,6 +257,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInventory(BlockRenderManager blockRenderManager, int i) {
         pipeItemRenderer.renderPipeItem(blockRenderManager, this, i, -0.5F, -0.5F, -0.5F);

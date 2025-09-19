@@ -6,6 +6,9 @@ import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.client.render.block.EngineRenderer;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -35,11 +38,14 @@ import java.util.Random;
 public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements BlockWithInventoryRenderer, BlockWithWorldRenderer, Wrenchable, Debuggable {
     public static final EnumProperty<EnergyStage> ENERGY_STAGE_PROPERTY = EnumProperty.of("energy_stage", EnergyStage.class);
     public static final BooleanProperty PUMPING_PROPERTY = BooleanProperty.of("pumping");
-    private final EngineRenderer engineRenderer;
+    @Environment(EnvType.CLIENT)
+    private EngineRenderer engineRenderer;
 
     public BaseEngineBlock(Identifier identifier) {
         super(identifier, Material.METAL);
-        engineRenderer = new EngineRenderer();
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            engineRenderer = new EngineRenderer();
+        }
     }
 
     @Override
@@ -158,17 +164,20 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
         return "";
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInventory(BlockRenderManager blockRenderManager, int i) {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         engineRenderer.render(Minecraft.INSTANCE.textureManager, EnergyStage.BLUE, 0.25F, Direction.UP, this.getBaseTexturePath(), -0.5D, -0.5D, -0.5D);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int i, int i1, int i2) {
         return true;
     }
 
+    // Debug
     @Override
     public void debug(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side) {
         if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {

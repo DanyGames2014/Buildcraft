@@ -1,11 +1,14 @@
 package net.danygames2014.buildcraft.client.render.block;
 
 import net.danygames2014.buildcraft.api.energy.EnergyStage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.texture.TextureManager;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.lwjgl.opengl.GL11;
 
+@Environment(EnvType.CLIENT)
 public class EngineRenderer {
     private final ModelPart box;
     private final ModelPart trunk;

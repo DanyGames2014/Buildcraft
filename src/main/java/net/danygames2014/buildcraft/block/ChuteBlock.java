@@ -4,6 +4,9 @@ import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.client.render.block.ChuteRenderer;
 import net.danygames2014.buildcraft.screen.handler.ChuteScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -22,14 +25,18 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class ChuteBlock extends TemplateBlockWithEntity implements BlockWithWorldRenderer, BlockWithInventoryRenderer {
-    private final ChuteRenderer chuteRenderer;
+    @Environment(EnvType.CLIENT)
+    private ChuteRenderer chuteRenderer;
     private final Random random;
 
     public ChuteBlock(Identifier identifier) {
         super(identifier, Material.METAL);
-        chuteRenderer = new ChuteRenderer();
         random = new Random();
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            chuteRenderer = new ChuteRenderer();
+        }
     }
 
     @Override
@@ -47,12 +54,14 @@ public class ChuteBlock extends TemplateBlockWithEntity implements BlockWithWorl
         return new ChuteBlockEntity();
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInventory(BlockRenderManager blockRenderManager, int i) {
         GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
         chuteRenderer.render(Minecraft.INSTANCE.textureManager, 0, 0, 0);
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int i, int i1, int i2) {
         return true;
