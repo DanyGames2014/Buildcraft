@@ -2,6 +2,10 @@ package net.danygames2014.buildcraft.util;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class TextureMatrix {
     private final int[] textureIndexes = new int[7];
     private  boolean dirty = false;
@@ -25,12 +29,19 @@ public class TextureMatrix {
         dirty = false;
     }
 
-    // TODO implement this, and make it use a buffer instead. this will be used for networking.
-    public void writeNbt(){
-
+    public void write(DataOutputStream stream) throws IOException {
+        for(int index : textureIndexes){
+            stream.writeByte(index);
+        }
     }
 
-    public void readNbt(){
-
+    public void read(DataInputStream stream) throws IOException {
+        for(int i = 0; i < textureIndexes.length; i++){
+            int index = stream.readByte();
+            if(textureIndexes[i] != index){
+                textureIndexes[i] = index;
+                dirty = true;
+            }
+        }
     }
 }

@@ -4,8 +4,11 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.util.math.BlockPos;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -199,5 +202,10 @@ public class PipeBlockEntity extends BlockEntity {
         if(renderState.isDirty()){
             renderState.clean();
         }
+    }
+
+    @Override
+    public Packet createUpdatePacket() {
+        return new PipeUpdatePacket(renderState, new BlockPos(x ,y, z));
     }
 }

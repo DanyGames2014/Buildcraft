@@ -5,6 +5,10 @@ import net.danygames2014.buildcraft.util.TextureMatrix;
 import net.danygames2014.buildcraft.util.WireMatrix;
 import net.minecraft.nbt.NbtCompound;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 // TODO: update as we add wires, etc
 public class PipeRenderState {
     public final ConnectionMatrix pipeConnectionMatrix = new ConnectionMatrix();
@@ -29,11 +33,13 @@ public class PipeRenderState {
     }
 
     // TODO, make this write to buffer instead, for update packet
-    public void writeNbt(NbtCompound nbt){
-        pipeConnectionMatrix.writeNbt(nbt);
+    public void write(DataOutputStream stream) throws IOException {
+        pipeConnectionMatrix.write(stream);
+        textureMatrix.write(stream);
     }
 
-    public void readNbt(NbtCompound nbt){
-        pipeConnectionMatrix.readNbt(nbt);
+    public void read(DataInputStream stream) throws IOException {
+        pipeConnectionMatrix.read(stream);
+        textureMatrix.read(stream);
     }
 }
