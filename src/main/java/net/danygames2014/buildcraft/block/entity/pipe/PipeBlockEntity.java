@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.block.entity.pipe;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.block.BlockState;
@@ -53,7 +54,7 @@ public class PipeBlockEntity extends BlockEntity {
         if (!hasInit) {
             init();
         }
-        
+
         if (validOutputDirections == null) {
             updateValidOutputDirections();
         }
@@ -71,12 +72,12 @@ public class PipeBlockEntity extends BlockEntity {
 
         transporter.tick();
     }
-    
+
     public void updateValidOutputDirections() {
         if (validOutputDirections == null) {
             validOutputDirections = new ObjectArrayList<>(6);
         }
-        
+
         validOutputDirections.clear();
         BlockState state = world.getBlockState(x, y, z);
         for (Direction side : Direction.values()) {
@@ -170,7 +171,32 @@ public class PipeBlockEntity extends BlockEntity {
             renderState.textureMatrix.setTextureIndex(direction, pipeBlock.getTexture(i));
         }
 
-        if (renderState.isDirty()) {
+        for(PipeWire color : PipeWire.values()){
+            renderState.wireMatrix.setWire(color, false);
+
+            for(Direction direction : Direction.values()){
+                renderState.wireMatrix.setWireConnected(color, direction, false);
+            }
+
+            boolean lit = true;
+
+            switch (color){
+                case RED:
+                    renderState.wireMatrix.setWireTextureIndex(color, lit ? TextureListener.redPipeWireLit.index : TextureListener.redPipeWire.index);
+                    break;
+                case BLUE:
+                    renderState.wireMatrix.setWireTextureIndex(color, lit ? TextureListener.bluePipeWireLit.index : TextureListener.bluePipeWire.index);
+                    break;
+                case GREEN:
+                    renderState.wireMatrix.setWireTextureIndex(color, lit ? TextureListener.greenPipeWireLit.index : TextureListener.greenPipeWire.index);
+                    break;
+                case YELLOW:
+                    renderState.wireMatrix.setWireTextureIndex(color, lit ? TextureListener.yellowPipeWireLit.index : TextureListener.yellowPipeWire.index);
+                    break;
+            }
+        }
+
+        if(renderState.isDirty()){
             renderState.clean();
         }
     }

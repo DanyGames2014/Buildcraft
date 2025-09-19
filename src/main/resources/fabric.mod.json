@@ -24,7 +24,8 @@
     "stationapi:event_bus_client": [
       "net.danygames2014.buildcraft.init.ScreenHandlerListener",
       "net.danygames2014.buildcraft.init.BlockEntityRendererListener",
-      "net.danygames2014.buildcraft.init.TextureListener"
+      "net.danygames2014.buildcraft.init.TextureListener",
+      "net.danygames2014.buildcraft.init.EntityRendererListener"
     ],
     "stationapi:event_bus_server": [
     ]

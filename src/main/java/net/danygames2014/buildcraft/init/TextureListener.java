@@ -22,8 +22,16 @@ public class TextureListener {
     public static Atlas.Sprite woodenItemPipe;
     public static Atlas.Sprite woodenFluidPipe;
     public static Atlas.Sprite woodenEnergyPipe;
-    
     public static Atlas.Sprite goldenItemPipe;
+
+    public static Atlas.Sprite redPipeWire;
+    public static Atlas.Sprite redPipeWireLit;
+    public static Atlas.Sprite bluePipeWire;
+    public static Atlas.Sprite bluePipeWireLit;
+    public static Atlas.Sprite greenPipeWire;
+    public static Atlas.Sprite greenPipeWireLit;
+    public static Atlas.Sprite yellowPipeWire;
+    public static Atlas.Sprite yellowPipeWireLit;
 
 
     @EventListener
@@ -37,7 +45,18 @@ public class TextureListener {
         woodenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_item_pipe"));
         woodenFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_fluid_pipe"));
         woodenEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_energy_pipe"));
-        
         goldenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/golden_item_pipe"));
+
+        redPipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/red_pipe_wire"));
+        redPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/red_pipe_wire_lit"));
+
+        bluePipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/blue_pipe_wire"));
+        bluePipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/blue_pipe_wire_lit"));
+
+        greenPipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/green_pipe_wire"));
+        greenPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/green_pipe_wire_lit"));
+
+        yellowPipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/yellow_pipe_wire"));
+        yellowPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/yellow_pipe_wire_lit"));
     }
 }

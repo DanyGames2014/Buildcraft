@@ -104,7 +104,7 @@ public class PipeWorldRenderer {
 
         stateHost.setRenderMask(mask);
         stateHost.setBoundingBox(dim[2], dim[0], dim[1], dim[5], dim[3], dim[4]);
-        blockRenderManager.renderSmooth(stateHost, x, y, z, r, g, b);
+        blockRenderManager.renderFlat(stateHost, x, y, z, r, g, b);
 
         stateHost.setRenderMask((mask & 0x15) << 1 | (mask & 0x2a) >> 1); // pairwise swapped mask
         stateHost.setBoundingBox(dim[5], dim[3], dim[4], dim[2], dim[0], dim[1]);
