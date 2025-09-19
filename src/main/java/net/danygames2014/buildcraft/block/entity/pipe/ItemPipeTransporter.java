@@ -77,17 +77,21 @@ public class ItemPipeTransporter extends PipeTransporter {
                 } else {
                     item.travelDirection = dir;
                     item.toMiddle = false;
-                    //System.err.println("SET");
-                    //item.setPosition(x + 0.5D, y + 0.25D, z + 0.5D);
                 }
                 continue;
             }
 
             if (reachedEnd(item)) {
-                if (!handOffItem(item)) {
-                    dropItem(item);
+                switch (handOffItem(item)) {
+                    case DROP -> {
+                        dropItem(item);
+                        iterator.remove();
+                    }
+                    
+                    case REMOVE -> {
+                        iterator.remove();
+                    }
                 }
-                iterator.remove();
             }
         }
     }
@@ -98,21 +102,49 @@ public class ItemPipeTransporter extends PipeTransporter {
         item.markDead();
     }
 
-    public boolean handOffItem(TravellingItemEntity item) {
+    public HandOffResult handOffItem(TravellingItemEntity item) {
         Direction side = item.travelDirection;
-        if (world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) instanceof PipeBlockEntity pipe) {
+        BlockEntity sideBlockEntity = world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
+        
+        if (sideBlockEntity instanceof PipeBlockEntity pipe) {
             if (pipe.transporter instanceof ItemPipeTransporter otherTransporter) {
                 otherTransporter.receiveTravellingItem(item, side.getOpposite());
                 System.out.println("Handing off item from " + this.hashCode() + " to " + otherTransporter.hashCode());
-                return true;
+                return HandOffResult.REMOVE;
             }
         }
 
-        return false;
+        ItemHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), ItemHandlerBlockCapability.class);
+        if (cap != null) {
+            if (cap.canInsertItem(side.getOpposite())) {
+                ItemStack returnedStack = cap.insertItem(item.stack, side.getOpposite());
+                if (returnedStack == null) {
+                    item.markDead();
+                } else {
+                    item.stack = returnedStack;
+                    bounceItem(item);
+                }
+            } else {
+                bounceItem(item);
+            }
+            
+            return HandOffResult.BOUNCE;
+        }
+
+        return HandOffResult.DROP;
     }
 
     public Direction routeItem(TravellingItemEntity item) {
         return blockEntity.behavior.routeItem(blockEntity, blockEntity.validOutputDirections, item);
+    }
+    
+    public void bounceItem(TravellingItemEntity item) {
+        item.toMiddle = true;
+        item.input = item.travelDirection;
+        item.travelDirection = routeItem(item);
+        if (item.travelDirection == null) {
+            dropItem(item);
+        }
     }
 
     @Override
@@ -206,5 +238,11 @@ public class ItemPipeTransporter extends PipeTransporter {
                 ", y=" + y +
                 ", z=" + z +
                 '}';
+    }
+
+    public enum HandOffResult {
+        BOUNCE,
+        DROP,
+        REMOVE
     }
 }
