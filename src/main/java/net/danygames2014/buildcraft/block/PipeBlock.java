@@ -1,13 +1,17 @@
 package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.api.core.Debuggable;
+import net.danygames2014.buildcraft.block.entity.pipe.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBehavior;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
+import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
+import net.danygames2014.uniwrench.item.WrenchBase;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -33,6 +37,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+@SuppressWarnings("deprecation")
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
@@ -45,8 +50,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         this.behavior = behavior;
         this.transporterFactory = transporter;
         this.texture = texture;
-        pipeWorldRenderer = new PipeWorldRenderer();
-        pipeItemRenderer = new PipeItemRenderer();
+        this.pipeWorldRenderer = new PipeWorldRenderer();
+        this.pipeItemRenderer = new PipeItemRenderer();
     }
 
     // Properties
@@ -67,21 +72,13 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 .with(Properties.WEST, false);
     }
 
-    @Override
-    public int getTexture(int side) {
-        if(Atlases.getTerrain() == null){
-            return 0;
-        }
-        return Atlases.getTerrain().getTexture(texture).index;
-    }
-
     // Connecting Logic
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
         super.neighborUpdate(world, x, y, z, id);
         updateConnections(world, x, y, z);
         if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
-            pipeBlockEntity.scheduleNeighborUpdate();
+            pipeBlockEntity.neighborUpdate();
         }
     }
 
@@ -213,6 +210,14 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     
     // Rendering
     @Override
+    public int getTexture(int side) {
+        if(Atlases.getTerrain() == null){
+            return 0;
+        }
+        return Atlases.getTerrain().getTexture(texture).index;
+    }
+    
+    @Override
     public boolean isFullCube() {
         return false;
     }
@@ -220,27 +225,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Override
     public boolean isOpaque() {
         return false;
-    }
-
-    // Debug
-    @Override
-    public void debug(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side) {
-        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
-            System.out.println(pipe);
-            player.sendMessage(pipe.toString());
-        }
-    }
-    
-    // Property Lookup
-    public static final HashMap<Direction, BooleanProperty> PROPERTY_LOOKUP = new HashMap<>();
-
-    static {
-        PROPERTY_LOOKUP.put(Direction.UP, Properties.UP);
-        PROPERTY_LOOKUP.put(Direction.DOWN, Properties.DOWN);
-        PROPERTY_LOOKUP.put(Direction.NORTH, Properties.NORTH);
-        PROPERTY_LOOKUP.put(Direction.SOUTH, Properties.SOUTH);
-        PROPERTY_LOOKUP.put(Direction.EAST, Properties.EAST);
-        PROPERTY_LOOKUP.put(Direction.WEST, Properties.WEST);
     }
 
     @Override
@@ -254,5 +238,43 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Override
     public void renderInventory(BlockRenderManager blockRenderManager, int i) {
         pipeItemRenderer.renderPipeItem(blockRenderManager, this, i, -0.5F, -0.5F, -0.5F);
+    }
+
+    // Debug
+    @Override
+    public void debug(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side) {
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+            System.out.println(pipe);
+            player.sendMessage(pipe.toString());
+        }
+    }
+
+    @Override
+    public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+            if (player.getHand() != null && !(player.getHand().getItem() instanceof WrenchBase)) {
+                if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+                    if (pipe.transporter instanceof ItemPipeTransporter pipeTransporter) {
+                        pipeTransporter.addItem(player.getHand());
+                        player.inventory.main[player.inventory.selectedSlot] = null;
+                        player.inventory.markDirty();
+                    }
+                }
+            }
+        }
+        
+        return super.onUse(world, x, y, z, player);
+    }
+
+    // Property Lookup
+    public static final HashMap<Direction, BooleanProperty> PROPERTY_LOOKUP = new HashMap<>();
+
+    static {
+        PROPERTY_LOOKUP.put(Direction.UP, Properties.UP);
+        PROPERTY_LOOKUP.put(Direction.DOWN, Properties.DOWN);
+        PROPERTY_LOOKUP.put(Direction.NORTH, Properties.NORTH);
+        PROPERTY_LOOKUP.put(Direction.SOUTH, Properties.SOUTH);
+        PROPERTY_LOOKUP.put(Direction.EAST, Properties.EAST);
+        PROPERTY_LOOKUP.put(Direction.WEST, Properties.WEST);
     }
 }

@@ -31,7 +31,7 @@ public class Buildcraft {
     public static Item diamondGear;
 
     public static Material pipeMaterial;
-    
+
     public static WoodenPipeBehavior woodenPipeBehavior;
     public static StonePipeBehavior stonePipeBehavior;
 
@@ -41,7 +41,7 @@ public class Buildcraft {
     public static Block combustionEngine;
     public static Block tank;
     public static Block frame;
-    
+
     public static Block woodenItemPipe;
     public static Block cobblestoneItemPipe;
     public static Block woodenFluidPipe;
@@ -63,12 +63,12 @@ public class Buildcraft {
     }
 
     @EventListener
-    public void registerBlocks(BlockRegistryEvent event){
+    public void registerBlocks(BlockRegistryEvent event) {
         pipeMaterial = new PipeMaterial(MapColor.LIGHT_GRAY);
 
         woodenPipeBehavior = new WoodenPipeBehavior();
         stonePipeBehavior = new StonePipeBehavior();
-        
+
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine").setHardness(0.7F).setSoundGroup(Block.WOOD_SOUND_GROUP);
         stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine").setHardness(1.0F).setSoundGroup(Block.STONE_SOUND_GROUP);
@@ -80,21 +80,21 @@ public class Buildcraft {
 
         // Item Pipes
         woodenItemPipe = new PipeBlock(
-                NAMESPACE.id("wooden_item_pipe"), 
-                pipeMaterial, 
-                NAMESPACE.id("block/pipe/wooden_item_pipe"), 
+                NAMESPACE.id("wooden_item_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/wooden_item_pipe"),
                 woodenPipeBehavior,
                 ItemPipeTransporter::new
         ).setTranslationKey(NAMESPACE, "wooden_item_pipe").setHardness(0.1F).setSoundGroup(Block.WOOD_SOUND_GROUP);
-        
+
         cobblestoneItemPipe = new PipeBlock(
-                NAMESPACE.id("cobblestone_item_pipe"), 
-                pipeMaterial, 
-                NAMESPACE.id("block/pipe/cobblestone_item_pipe"), 
+                NAMESPACE.id("cobblestone_item_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/cobblestone_item_pipe"),
                 stonePipeBehavior,
                 ItemPipeTransporter::new
         ).setTranslationKey(NAMESPACE, "cobblestone_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
-        
+
         // Fluid Pipes
         woodenFluidPipe = new PipeBlock(
                 NAMESPACE.id("wooden_fluid_pipe"),
@@ -103,7 +103,7 @@ public class Buildcraft {
                 woodenPipeBehavior,
                 FluidPipeTransporter::new
         ).setTranslationKey(NAMESPACE, "wooden_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.WOOD_SOUND_GROUP);
-        
+
         cobblestoneFluidPipe = new PipeBlock(
                 NAMESPACE.id("cobblestone_fluid_pipe"),
                 pipeMaterial,
@@ -111,7 +111,7 @@ public class Buildcraft {
                 stonePipeBehavior,
                 FluidPipeTransporter::new
         ).setTranslationKey(NAMESPACE, "cobblestone_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
-        
+
         // Energy Pipes
         woodenEnergyPipe = new PipeBlock(
                 NAMESPACE.id("wooden_energy_pipe"),
@@ -120,7 +120,7 @@ public class Buildcraft {
                 woodenPipeBehavior,
                 EnergyPipeTransporter::new
         ).setTranslationKey(NAMESPACE, "wooden_energy_pipe").setHardness(0.1F).setSoundGroup(Block.WOOD_SOUND_GROUP);
-        
+
         cobblestoneEnergyPipe = new PipeBlock(
                 NAMESPACE.id("cobblestone_energy_pipe"),
                 pipeMaterial,
