@@ -281,6 +281,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                         pipeTransporter.injectItem(player.getHand(), Direction.values()[new Random().nextInt(Direction.values().length)]);
                         player.inventory.main[player.inventory.selectedSlot] = null;
                         player.inventory.markDirty();
+                        return true;
                     }
                 }
             }
