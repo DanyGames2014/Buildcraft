@@ -35,14 +35,14 @@ public class ItemPipeTransporter extends PipeTransporter {
 
     // Connecting Logic
     @Override
-    public boolean canConnectTo(BlockEntity other, Direction side) {
+    public PipeConnectionType canConnectTo(BlockEntity other, Direction side) {
         ItemHandlerBlockCapability cap = CapabilityHelper.getCapability(other.world, other.x, other.y, other.z, ItemHandlerBlockCapability.class);
 
         if (cap != null) {
-            return cap.canConnectItem(side.getOpposite());
+            return cap.canConnectItem(side.getOpposite()) ? PipeConnectionType.NORMAL : PipeConnectionType.NONE;
         }
 
-        return false;
+        return PipeConnectionType.NONE;
     }
 
     // Pipe Logic

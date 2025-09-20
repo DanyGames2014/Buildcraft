@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
@@ -24,6 +25,8 @@ public class PipeBlockEntity extends BlockEntity {
     public final PipeRenderState renderState = new PipeRenderState();
     public ObjectArrayList<Direction> validOutputDirections = null;
     public final Random random = new Random();
+    
+    public Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = null;
 
     protected boolean neighbourUpdate = false;
     protected boolean refreshRenderState = false;
@@ -58,7 +61,8 @@ public class PipeBlockEntity extends BlockEntity {
             init();
         }
 
-        if (validOutputDirections == null) {
+        if (connections == null) {
+            updateConnections();
             updateValidOutputDirections();
         }
 
@@ -76,18 +80,31 @@ public class PipeBlockEntity extends BlockEntity {
         transporter.tick();
     }
 
+    public void updateConnections() {
+        if (connections == null) {
+            connections = new Object2ObjectOpenHashMap<>(6);
+        }
+        
+        for (Direction side : Direction.values()) {
+            System.out.println(side + " -> " + world.getBlockState(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) + " -> " + world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
+            connections.put(side, canConnectTo(x, y, z, side));
+        }
+    }
+    
     public void updateValidOutputDirections() {
         if (validOutputDirections == null) {
             validOutputDirections = new ObjectArrayList<>(6);
         }
 
         validOutputDirections.clear();
-        BlockState state = world.getBlockState(x, y, z);
         for (Direction side : Direction.values()) {
-            if (state.get(PipeBlock.PROPERTY_LOOKUP.get(side))) {
+            if (connections.get(side) != PipeConnectionType.NONE) {
                 validOutputDirections.add(side);
             }
         }
+
+        System.out.println(connections);
+        System.out.println(validOutputDirections);
     }
 
     public void neighborUpdate() {
@@ -99,7 +116,6 @@ public class PipeBlockEntity extends BlockEntity {
     }
 
     // Pipe Logic
-
     /**
      * @param x    The x position of this block
      * @param y    The y position of this block
@@ -107,23 +123,24 @@ public class PipeBlockEntity extends BlockEntity {
      * @param side The side on which the target block is located
      * @return Whether this pipe can connect to the target block
      */
-    public boolean canConnectTo(int x, int y, int z, Direction side) {
+    public PipeConnectionType canConnectTo(int x, int y, int z, Direction side) {
         BlockEntity other = world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
 
         if (other == null) {
-            return false;
+            return PipeConnectionType.NONE;
         }
 
         if (other instanceof PipeBlockEntity pipe) {
             return behavior.canConnectTo(this, pipe, pipe.behavior);
         }
 
+        PipeConnectionType transporterConnectType = transporter.canConnectTo(other, side);
         //noinspection RedundantIfStatement
-        if (transporter.canConnectTo(other, side)) {
-            return true;
+        if (transporterConnectType != PipeConnectionType.NONE) {
+            return transporterConnectType;
         }
 
-        return false;
+        return PipeConnectionType.NONE;
     }
 
     public void onBreak() {
@@ -166,7 +183,8 @@ public class PipeBlockEntity extends BlockEntity {
     protected void refreshRenderState() {
         // Pipe connections:
         for (Direction direction : Direction.values()) {
-            renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction));
+            // TODO: Actually use the returned connection type here to swap the texture when neeeded, no fucking idea how to do it, sorry ralf
+            renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction) != PipeConnectionType.NONE);
         }
 
         for (int i = 0; i < 7; i++) {

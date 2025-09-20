@@ -16,13 +16,13 @@ public class FluidPipeTransporter extends PipeTransporter {
     }
 
     @Override
-    public boolean canConnectTo(BlockEntity other, Direction side) {
+    public PipeConnectionType canConnectTo(BlockEntity other, Direction side) {
         FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(other.world, other.x, other.y, other.z, FluidHandlerBlockCapability.class);
         
         if (cap != null) {
-            return cap.canConnectFluid(side.getOpposite());
+            return cap.canConnectFluid(side.getOpposite()) ? PipeConnectionType.NORMAL : PipeConnectionType.NONE;
         }
         
-        return false;
+        return PipeConnectionType.NONE;
     }
 }

@@ -118,15 +118,16 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
 
         world.setBlockState(x, y, z, state);
-        
-        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+
+        if (world.getBlockEntity(x,y,z) instanceof PipeBlockEntity pipe) {
+            pipe.updateConnections();
             pipe.updateValidOutputDirections();
         }
     }
     
     public boolean canConnectTo(World world, int x, int y, int z, Direction side) {
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
-            return pipe.canConnectTo(x, y, z, side);
+            return pipe.canConnectTo(x, y, z, side) != PipeConnectionType.NONE;
         }
         
         return false;

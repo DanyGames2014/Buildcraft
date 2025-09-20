@@ -19,8 +19,12 @@ public class PipeBehavior {
      * @param otherPipeBehavior The behavior of the pipe we want to connect to
      * @return If we can connect to the other pipe
      */
-    public boolean canConnectTo(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior){
-        return otherBlockEntity.transporter.getType() == blockEntity.transporter.getType();
+    public PipeConnectionType canConnectTo(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior){
+        if (otherBlockEntity.transporter.getType() == blockEntity.transporter.getType()) {
+            return PipeConnectionType.NORMAL;
+        }
+        
+        return PipeConnectionType.NONE;
     }
 
     /**

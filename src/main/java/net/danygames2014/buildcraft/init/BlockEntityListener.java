@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.init;
 import net.danygames2014.buildcraft.block.entity.*;
 import net.danygames2014.buildcraft.block.entity.TankBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.block.entity.BlockEntityRegisterEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -21,5 +22,6 @@ public class BlockEntityListener {
         event.register(CombustionEngineBlockEntity.class, NAMESPACE.id("combustion_engine").toString());
         event.register(TankBlockEntity.class, NAMESPACE.id("tank").toString());
         event.register(PipeBlockEntity.class, NAMESPACE.id("pipe").toString());
+        event.register(PoweredPipeBlockEntity.class, NAMESPACE.id("powered_pipe").toString());
     }
 }

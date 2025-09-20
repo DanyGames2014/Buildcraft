@@ -5,8 +5,11 @@ import net.danygames2014.buildcraft.api.energy.PowerHandler;
 
 public class WoodenPipeBehavior extends PipeBehavior {
     @Override
-    public boolean canConnectTo(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior) {
-        return super.canConnectTo(blockEntity, otherBlockEntity, otherPipeBehavior) && otherPipeBehavior != Buildcraft.woodenPipeBehavior;
+    public PipeConnectionType canConnectTo(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior) {
+        if (super.canConnectTo(blockEntity, otherBlockEntity, otherPipeBehavior) != PipeConnectionType.NONE && otherPipeBehavior != Buildcraft.woodenPipeBehavior) {
+            return PipeConnectionType.NORMAL;
+        }
+        return PipeConnectionType.NONE;
     }
 
     @Override
