@@ -14,17 +14,4 @@ public class EnergyPipeTransporter extends PipeTransporter {
     public PipeType getType() {
         return PipeType.ENERGY;
     }
-
-    @Override
-    public PipeConnectionType canConnectTo(BlockEntity other, Direction side) {
-        if (other instanceof IPowerEmitter powerEmitter) {
-            return powerEmitter.canEmitPowerFrom(side.getOpposite()) ? PipeConnectionType.NORMAL : PipeConnectionType.NONE;
-        }
-
-        if (other instanceof IPowerReceptor powerReceptor) {
-            return powerReceptor.getPowerReceiver(side.getOpposite()) != null ? PipeConnectionType.NORMAL : PipeConnectionType.NONE;
-        }
-        
-        return PipeConnectionType.NONE;
-    }
 }

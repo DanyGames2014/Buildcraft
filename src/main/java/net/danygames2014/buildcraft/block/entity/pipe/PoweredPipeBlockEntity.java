@@ -18,13 +18,19 @@ public class PoweredPipeBlockEntity extends PipeBlockEntity implements IPowerRec
         super();
         configurePower();
     }
-    
-    public void configurePower() {
-        powerHandler = new PowerHandler(this, PowerHandler.Type.PIPE);
-        powerHandler.configure(1.0D, 64.0D, 1.0D, 64.0D);
-        powerHandler.configurePowerPerdition(0,0);
+
+    @Override
+    public void tick() {
+        super.tick();
+        powerHandler.update();
     }
 
+    public void configurePower() {
+        powerHandler = new PowerHandler(this, PowerHandler.Type.PIPE);
+        powerHandler.configure(1.0D, 16D, 1.0D, 16D);
+        powerHandler.configurePowerPerdition(0,0);
+    }
+    
     @Override
     public PowerHandler.PowerReceiver getPowerReceiver(Direction side) {
         return powerHandler.getPowerReceiver();

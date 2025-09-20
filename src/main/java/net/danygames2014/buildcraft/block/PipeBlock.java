@@ -256,7 +256,11 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     }
 
     boolean isPipeConnected(PipeBlockEntity pipe, Direction direction) {
-        return pipe.connections.get(direction) != PipeConnectionType.NONE;
+        if (pipe.connections != null) {
+            return pipe.connections.get(direction) != PipeConnectionType.NONE;
+        }
+        
+        return false;
     }
 
     private void setBoundingBox(Box box) {

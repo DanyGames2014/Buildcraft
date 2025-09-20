@@ -8,14 +8,13 @@ import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.util.math.BlockPos;
-import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class PipeBlockEntity extends BlockEntity {
@@ -84,9 +83,17 @@ public class PipeBlockEntity extends BlockEntity {
         if (connections == null) {
             connections = new Object2ObjectOpenHashMap<>(6);
         }
-        
+
+        // Clean out old connections
         for (Direction side : Direction.values()) {
-            System.out.println(side + " -> " + world.getBlockState(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) + " -> " + world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
+            if (connections.get(side) != PipeConnectionType.NONE && canConnectTo(x,y,z, side) == PipeConnectionType.NONE) {
+                connections.put(side, PipeConnectionType.NONE);
+            }
+        }
+        
+        // Update connections
+        for (Direction side : Direction.values()) {
+            //System.out.println(side + " -> " + world.getBlockState(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) + " -> " + world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
             connections.put(side, canConnectTo(x, y, z, side));
         }
     }
@@ -102,9 +109,6 @@ public class PipeBlockEntity extends BlockEntity {
                 validOutputDirections.add(side);
             }
         }
-
-        System.out.println(connections);
-        System.out.println(validOutputDirections);
     }
 
     public void neighborUpdate() {
@@ -131,10 +135,10 @@ public class PipeBlockEntity extends BlockEntity {
         }
 
         if (other instanceof PipeBlockEntity pipe) {
-            return behavior.canConnectTo(this, pipe, pipe.behavior);
+            return behavior.canConnectToPipe(this, pipe, pipe.behavior);
         }
 
-        PipeConnectionType transporterConnectType = transporter.canConnectTo(other, side);
+        PipeConnectionType transporterConnectType = behavior.getConnectionType(transporter.getType(), this, world, x, y, z, side);
         //noinspection RedundantIfStatement
         if (transporterConnectType != PipeConnectionType.NONE) {
             return transporterConnectType;
@@ -154,12 +158,38 @@ public class PipeBlockEntity extends BlockEntity {
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putString("pipeId", String.valueOf(BlockRegistry.INSTANCE.getId(pipeBlock)));
+        
+        // Connections
+        NbtList connections = new NbtList();
+        for (var side : this.connections.entrySet()) {
+            NbtCompound connection = new NbtCompound();
+            connection.putInt("side", side.getKey().ordinal());
+            connection.putInt("type", side.getValue().ordinal());
+            connections.add(connection);
+        }
+        nbt.put("connections", connections);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         this.pipeBlock = (PipeBlock) BlockRegistry.INSTANCE.get(Identifier.of(nbt.getString("pipeId")));
+        
+        // Connections
+        if (connections == null) {
+            connections = new Object2ObjectOpenHashMap<>(6);
+        }
+        
+        NbtList connections = nbt.getList("connections");
+        for (int i = 0; i < connections.size(); i++) {
+            NbtCompound connection = (NbtCompound) connections.get(i);
+            Direction side = Direction.byId(connection.getInt("side"));
+            PipeConnectionType type = PipeConnectionType.values()[connection.getInt("type")];
+            this.connections.put(side, type);
+        }
+        
+        updateValidOutputDirections();
+        
         init();
     }
 
@@ -171,12 +201,15 @@ public class PipeBlockEntity extends BlockEntity {
                 ", transporter=" + transporter +
                 ", renderState=" + renderState +
                 ", validOutputDirections=" + validOutputDirections +
+                ", random=" + random +
+                ", connections=" + connections +
                 ", neighbourUpdate=" + neighbourUpdate +
                 ", refreshRenderState=" + refreshRenderState +
                 ", hasInit=" + hasInit +
                 ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +
+                ", world=" + world +
                 '}';
     }
 

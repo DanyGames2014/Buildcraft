@@ -24,9 +24,6 @@ public abstract class PipeTransporter {
     // Type
     public abstract PipeType getType();
     
-    // Connecting Logic
-    public abstract PipeConnectionType canConnectTo(BlockEntity other, Direction side);
-
     // Logic
     public void onBreak() {
     }
