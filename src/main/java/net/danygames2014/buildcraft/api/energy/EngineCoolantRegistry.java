@@ -6,8 +6,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import java.util.HashMap;
 
 public class EngineCoolantRegistry {
-    public final HashMap<Identifier, EngineCoolant> registry;
-    public final HashMap<Fluid, EngineCoolant> fluidToCoolant;
+    public final HashMap<Fluid, EngineCoolant> registry;
     private static EngineCoolantRegistry INSTANCE;
 
     private static EngineCoolantRegistry getInstance() {
@@ -19,26 +18,21 @@ public class EngineCoolantRegistry {
 
     public EngineCoolantRegistry() {
         this.registry = new HashMap<>();
-        this.fluidToCoolant = new HashMap<>();
     }
 
-    public static void register(Identifier identifier, EngineCoolant engineCoolant) {
-        if (getInstance().registry.containsKey(identifier)) {
+    public static void register(Fluid fluid, EngineCoolant engineCoolant) {
+        if (getInstance().registry.containsKey(fluid)) {
             return;
         }
 
-        getInstance().registry.put(identifier, engineCoolant);
+        getInstance().registry.put(fluid, engineCoolant);
     }
 
-    public static EngineCoolant get(Identifier identifier) {
-        return getInstance().registry.getOrDefault(identifier, null);
-    }
-    
     public static EngineCoolant get(Fluid fluid) {
-        return getInstance().fluidToCoolant.getOrDefault(fluid, null);
+        return getInstance().registry.getOrDefault(fluid, null);
     }
 
-    public static HashMap<Identifier, EngineCoolant> getRegistry() {
+    public static HashMap<Fluid, EngineCoolant> getRegistry() {
         return getInstance().registry;
     }
 }

@@ -193,11 +193,11 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     }
 
     public boolean isValidCoolant(Fluid fluid) {
-        return fluid == Fluids.WATER;
+        return EngineCoolantRegistry.get(fluid) != null;
     }
 
     public boolean isValidFuel(Fluid fluid) {
-        return fluid == FluidListener.fuel;
+        return EngineFuelRegistry.get(fluid) != null;
     }
 
     // Energy
