@@ -29,4 +29,12 @@ public class MatrixTransformation {
             matrix[0][i] = temp;
         }
     }
+
+    public static float[][] deepClone(float[][] source) {
+        float[][] target = source.clone();
+        for (int i = 0; i < target.length; i++) {
+            target[i] = source[i].clone();
+        }
+        return target;
+    }
 }

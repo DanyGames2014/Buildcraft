@@ -161,13 +161,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Override
     public Box getBoundingBox(World world, int x, int y, int z) {
         PlayerEntity player = PlayerHelper.getPlayerFromGame();
-        double distance = 5d;
-        Vec3d positionVector = player.getPosition(tickDelta);
-        Vec3d lookVector = player.getLookVector(tickDelta);
 
-        Vec3d endVector = positionVector.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
-
-        RaycastResult raycastResult = raycastPipe(world, x, y, z, positionVector, endVector);
+        RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
         if(raycastResult == null){
             return Box.createCached(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
         }
@@ -225,6 +220,16 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             return raycastResult.hit;
         }
 
+    }
+
+    public RaycastResult raycastPipe(World world, int x, int y, int z, PlayerEntity player){
+        double distance = 5d;
+        Vec3d positionVector = player.getPosition(tickDelta);
+        Vec3d lookVector = player.getLookVector(tickDelta);
+
+        Vec3d endVector = positionVector.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
+
+        return raycastPipe(world, x, y, z, positionVector, endVector);
     }
 
     private RaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos){
@@ -387,6 +392,10 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
         
         return super.onUse(world, x, y, z, player);
+    }
+
+    private boolean addOrStripPipePluggable(World world, int x, int y, int z, ItemStack stack, PlayerEntity player, Direction side, PipeBlockEntity pipe){
+        return false;
     }
 
     private Box getPipeBoundingBox(@Nullable Direction side){
