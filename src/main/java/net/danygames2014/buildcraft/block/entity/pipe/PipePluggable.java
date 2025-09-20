@@ -4,7 +4,9 @@ import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public abstract class PipePluggable {
@@ -20,6 +22,10 @@ public abstract class PipePluggable {
 
     public void onDetachedFromPipe(PipeBlockEntity pipe, Direction direction){
         invalidate();
+    }
+
+    public void isBlocking(PipeBlockEntity pipe, Direction direction){
+
     }
 
     public void invalidate(){
@@ -47,4 +53,7 @@ public abstract class PipePluggable {
     public boolean requiresRenderUpdate(PipePluggable old){
         return true;
     }
+
+    public abstract void readNbt(NbtCompound nbt);
+    public abstract void writeNbt(NbtCompound nbt);
 }
