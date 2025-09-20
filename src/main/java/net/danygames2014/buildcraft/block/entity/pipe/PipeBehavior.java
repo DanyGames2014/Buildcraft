@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -42,5 +43,15 @@ public class PipeBehavior {
     
     public double modifyItemSpeed(TravellingItemEntity item) {
         return 0.01D;
+    }
+
+    /**
+     * <p> **NOTE: This is only called on pipes which use the {@link PoweredPipeBlockEntity}**
+     * <p> This is called when the pipes energy exceeds the activation energy threshold
+     * @param blockEntity The block entity of the pipe this is called on
+     * @param powerHandler The power handler of the pipe
+     */
+    public void doWork(PoweredPipeBlockEntity blockEntity, PowerHandler powerHandler) {
+        
     }
 }

@@ -32,7 +32,7 @@ public class PoweredPipeBlockEntity extends PipeBlockEntity implements IPowerRec
 
     @Override
     public void doWork(PowerHandler workProvider) {
-
+        behavior.doWork(this, workProvider);
     }
 
     @Override
