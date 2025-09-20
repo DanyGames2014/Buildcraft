@@ -103,10 +103,10 @@ public class TravellingItemEntity extends ItemEntity {
             }
         }
 
-        if (toMiddle && travelDirection != lastTravelDirection && transporter != null) {
-            this.setPosition(transporter.blockEntity.x + 0.5D, transporter.blockEntity.y + 0.25D, transporter.blockEntity.z + 0.5D);
-            toMiddle = false;
-        }
+//        if (toMiddle && travelDirection != lastTravelDirection && transporter != null) {
+//            this.setPosition(transporter.blockEntity.x + 0.5D, transporter.blockEntity.y + 0.25D, transporter.blockEntity.z + 0.5D);
+//            toMiddle = false;
+//        }
         
         if (travelDirection != null) {
             if (travelDirection != lastTravelDirection || speed != lastSpeed) {

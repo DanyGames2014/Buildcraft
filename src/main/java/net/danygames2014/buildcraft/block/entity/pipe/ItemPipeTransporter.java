@@ -77,6 +77,7 @@ public class ItemPipeTransporter extends PipeTransporter {
                 } else {
                     item.travelDirection = dir;
                     item.toMiddle = false;
+                    item.setPosition(x + 0.5D, y + 0.25D, z + 0.5D);
                 }
                 continue;
             }
@@ -165,6 +166,7 @@ public class ItemPipeTransporter extends PipeTransporter {
         TravellingItemEntity itemEntity = new TravellingItemEntity(world, x + 0.5D + (side.getOffsetX() * 0.5D), y + 0.25D + (side.getOffsetY() * 0.25D), z + 0.5D + (side.getOffsetZ() * 0.5D), stack);
         itemEntity.input = side;
         itemEntity.travelDirection = side.getOpposite();
+        itemEntity.lastTravelDirection = itemEntity.travelDirection;
         addItem(itemEntity);
         world.spawnEntity(itemEntity);
     }
@@ -192,14 +194,14 @@ public class ItemPipeTransporter extends PipeTransporter {
     public boolean reachedMiddle(TravellingItemEntity itemEntity) {
         double middleTolerance = itemEntity.speed * 1.01D;
 
-//        boolean xCheck = Math.abs(x + 0.5D - itemEntity.x) < middleTolerance;
-//        boolean yCheck = Math.abs(y + 0.25D - itemEntity.y) < middleTolerance;
-//        boolean zCheck = Math.abs(z + 0.5D - itemEntity.z) < middleTolerance;
-//        System.out.println("---");
-//        System.out.println(x + 0.5D + " " + itemEntity.x + " " + Math.abs(x + 0.5D - itemEntity.x) + " " + middleTolerance + " " + xCheck);
-//        System.out.println(y + 0.25D + " " + itemEntity.y + " " + Math.abs(y + 0.25D - itemEntity.y) + " " + middleTolerance + " " + yCheck);
-//        System.out.println(z + 0.5D + " " + itemEntity.z + " " + Math.abs(z + 0.5D - itemEntity.z) + " " + middleTolerance + " " + zCheck);
-//        
+        boolean xCheck = Math.abs(x + 0.5D - itemEntity.x) < middleTolerance;
+        boolean yCheck = Math.abs(y + 0.25D - itemEntity.y) < middleTolerance;
+        boolean zCheck = Math.abs(z + 0.5D - itemEntity.z) < middleTolerance;
+        System.out.println("---");
+        System.out.println(x + 0.5D + " " + itemEntity.x + " " + Math.abs(x + 0.5D - itemEntity.x) + " " + middleTolerance + " " + xCheck);
+        System.out.println(y + 0.25D + " " + itemEntity.y + " " + Math.abs(y + 0.25D - itemEntity.y) + " " + middleTolerance + " " + yCheck);
+        System.out.println(z + 0.5D + " " + itemEntity.z + " " + Math.abs(z + 0.5D - itemEntity.z) + " " + middleTolerance + " " + zCheck);
+
 //        return xCheck && yCheck && zCheck;
 
         return (
