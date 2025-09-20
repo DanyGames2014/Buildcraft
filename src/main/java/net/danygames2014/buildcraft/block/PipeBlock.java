@@ -7,7 +7,8 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
-import net.danygames2014.buildcraft.entity.TravellingItemEntity;
+import net.danygames2014.buildcraft.util.MatrixTransformation;
+import net.danygames2014.buildcraft.util.RaycastResult;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.danygames2014.uniwrench.item.WrenchBase;
@@ -20,7 +21,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
@@ -28,6 +31,7 @@ import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
+import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
 import net.modificationstation.stationapi.api.item.ItemPlacementContext;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.state.property.BooleanProperty;
@@ -36,6 +40,7 @@ import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEn
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -44,6 +49,8 @@ import java.util.Random;
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
+    @Environment(EnvType.CLIENT)
+    public static float tickDelta;
     @Environment(EnvType.CLIENT)
     private PipeWorldRenderer pipeWorldRenderer;
     @Environment(EnvType.CLIENT)
@@ -149,51 +156,33 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     }
     
     // Bounding Box and Collision Shape
-    private final float minOffset = 0.25F;
-    private final float maxOffset = 0.75F;
+    private final float minOffset = PipeWorldRenderer.PIPE_MIN_POS;
+    private final float maxOffset = PipeWorldRenderer.PIPE_MAX_POS;
 
     @Override
     public Box getBoundingBox(World world, int x, int y, int z) {
-        BlockState state = world.getBlockState(x, y, z);
+        PlayerEntity player = PlayerHelper.getPlayerFromGame();
+        double distance = 5d;
+        Vec3d positionVector = player.getPosition(tickDelta);
+        Vec3d lookVector = player.getLookVector(tickDelta);
 
-        float minX = minOffset;
-        float minY = minOffset;
-        float minZ = minOffset;
+        Vec3d endVector = positionVector.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
 
-        float maxX = maxOffset;
-        float maxY = maxOffset;
-        float maxZ = maxOffset;
-
-        if (state.get(Properties.UP)) {
-            maxY = 1.0F;
+        RaycastResult raycastResult = raycastPipe(world, x, y, z, positionVector, endVector);
+        if(raycastResult == null){
+            return Box.createCached(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
         }
-
-        if (state.get(Properties.DOWN)) {
-            minY = 0.0F;
+        else {
+            return raycastResult.box.translate(x, y, z);
         }
-
-        if (state.get(Properties.WEST)) {
-            maxZ = 1.0F;
-        }
-
-        if (state.get(Properties.EAST)) {
-            minZ = 0.0F;
-        }
-
-        if (state.get(Properties.NORTH)) {
-            minX = 0.0F;
-        }
-
-        if (state.get(Properties.SOUTH)) {
-            maxX = 1.0F;
-        }
-
-        return Box.createCached(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
     }
 
     @Override
     public void addIntersectingBoundingBox(World world, int x, int y, int z, Box box, ArrayList boxes) {
         BlockState state = world.getBlockState(x, y, z);
+
+        this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
+        super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
 
         if (state.get(Properties.UP)) {
             this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, 1.0F, maxOffset);
@@ -227,7 +216,118 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
         this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
-    
+
+    @Override
+    public HitResult raycast(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
+        RaycastResult raycastResult = raycastPipe(world, x, y, z, startPos, endPos);
+        if(raycastResult == null){
+            return null;
+        } else {
+            return raycastResult.hit;
+        }
+
+    }
+
+    private RaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos){
+        HitResult[] hits = new HitResult[31];
+        Box[] boxes = new Box[31];
+        Direction[] sideHit = new Direction[31];
+
+        BlockState blockState = world.getBlockState(x, y, z);
+
+
+        Box box = getPipeBoundingBox(null);
+        setBoundingBox(box);
+        boxes[6] = box;
+        hits[6] = super.raycast(world, x, y, z, startPos, endPos);
+        sideHit[6] = null;
+        for(Direction side : Direction.values()){
+            if(isPipeConnected(blockState, side)){
+                box = getPipeBoundingBox(side);
+                setBoundingBox(box);
+                boxes[side.ordinal()] = box;
+                hits[side.ordinal()] = super.raycast(world, x, y, z, startPos, endPos);
+                sideHit[side.ordinal()] = side;
+            }
+        }
+
+        // get closest hit
+
+        double minLengthSquared = Double.POSITIVE_INFINITY;
+        int minIndex = -1;
+
+        for (int i = 0; i < hits.length; i++) {
+            HitResult hit = hits[i];
+            if (hit == null) {
+                continue;
+            }
+
+            double lengthSquared = hit.pos.squaredDistanceTo(startPos);
+
+            if (lengthSquared < minLengthSquared) {
+                minLengthSquared = lengthSquared;
+                minIndex = i;
+            }
+        }
+
+        setBoundingBox(0, 0, 0, 1, 1, 1);
+
+        // TODO: handling which part gets hit, will be fixed later
+        if (minIndex == -1) {
+            return null;
+        } else {
+            //Part hitPart;
+
+            if (minIndex < 7) {
+                //hitPart = Part.Pipe;
+            } else {
+                //hitPart = Part.Pluggable;
+            }
+
+            return new RaycastResult(hits[minIndex], boxes[minIndex], sideHit[minIndex]);
+        }
+    }
+
+    boolean isPipeConnected(BlockState blockState, Direction direction){
+        switch (direction){
+            case UP:
+                if(blockState.contains(Properties.UP)){
+                    return blockState.get(Properties.UP);
+                }
+                break;
+            case DOWN:
+                if(blockState.contains(Properties.DOWN)){
+                    return blockState.get(Properties.DOWN);
+                }
+                break;
+            case WEST:
+                if(blockState.contains(Properties.WEST)){
+                    return blockState.get(Properties.WEST);
+                }
+                break;
+            case EAST:
+                if(blockState.contains(Properties.EAST)){
+                    return blockState.get(Properties.EAST);
+                }
+                break;
+            case NORTH:
+                if(blockState.contains(Properties.NORTH)){
+                    return blockState.get(Properties.NORTH);
+                }
+                break;
+            case SOUTH:
+                if(blockState.contains(Properties.SOUTH)){
+                    return blockState.get(Properties.SOUTH);
+                }
+                break;
+        }
+        return false;
+    }
+
+    private void setBoundingBox(Box box){
+        setBoundingBox((float) box.minX, (float)box.minY, (float)box.minZ, (float)box.maxX, (float)box.maxY, (float)box.maxZ);
+    }
+
     // Rendering
     @Environment(EnvType.CLIENT)
     @Override
@@ -288,6 +388,26 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
         
         return super.onUse(world, x, y, z, player);
+    }
+
+    private Box getPipeBoundingBox(@Nullable Direction side){
+        if(side == null){
+            return Box.createCached(minOffset, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
+        }
+
+        float[][] bounds = new float[3][2];
+
+        bounds[0][0] = minOffset;
+        bounds[0][1] = maxOffset;
+
+        bounds[1][0] = 0;
+        bounds[1][1] = minOffset;
+
+        bounds[2][0] = minOffset;
+        bounds[2][1] = maxOffset;
+
+        MatrixTransformation.transform(bounds, side);
+        return Box.createCached(bounds[0][0], bounds[1][0], bounds[2][0], bounds[0][1], bounds[1][1], bounds[2][1]);
     }
 
     // Property Lookup
