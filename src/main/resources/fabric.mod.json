@@ -20,7 +20,8 @@
       "net.danygames2014.buildcraft.init.FluidListener",
       "net.danygames2014.buildcraft.init.BlockEntityListener",
       "net.danygames2014.buildcraft.init.EntityListener",
-      "net.danygames2014.buildcraft.init.PacketTypeListener"
+      "net.danygames2014.buildcraft.init.PacketTypeListener",
+      "net.danygames2014.buildcraft.init.PluggableListener"
     ],
     "stationapi:event_bus_client": [
       "net.danygames2014.buildcraft.init.ScreenHandlerListener",

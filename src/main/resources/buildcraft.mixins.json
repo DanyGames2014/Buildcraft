@@ -4,6 +4,7 @@
   "package": "net.danygames2014.buildcraft.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockMixin"
   ],
   "server": [
   ],
