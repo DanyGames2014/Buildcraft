@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.block;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.api.core.Debuggable;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
@@ -12,7 +13,6 @@ import net.danygames2014.uniwrench.item.WrenchBase;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -29,9 +29,6 @@ import net.modificationstation.stationapi.api.client.model.block.BlockWithInvent
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
-import net.modificationstation.stationapi.api.item.ItemPlacementContext;
-import net.modificationstation.stationapi.api.state.StateManager;
-import net.modificationstation.stationapi.api.state.property.BooleanProperty;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -39,7 +36,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
@@ -68,30 +64,12 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
     }
 
-    // Properties
-    @Override
-    public void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        super.appendProperties(builder);
-        builder.add(Properties.UP, Properties.DOWN, Properties.NORTH, Properties.SOUTH, Properties.EAST, Properties.WEST);
-    }
-
-    @Override
-    public BlockState getPlacementState(ItemPlacementContext context) {
-        return getDefaultState()
-                .with(Properties.UP, false)
-                .with(Properties.DOWN, false)
-                .with(Properties.NORTH, false)
-                .with(Properties.SOUTH, false)
-                .with(Properties.EAST, false)
-                .with(Properties.WEST, false);
-    }
-
     // Connecting Logic
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
         super.neighborUpdate(world, x, y, z, id);
         updateConnections(world, x, y, z);
-        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
             pipeBlockEntity.neighborUpdate();
         }
     }
@@ -104,35 +82,19 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public void onBreak(World world, int x, int y, int z) {
-        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
             pipeBlockEntity.onBreak();
         }
         super.onBreak(world, x, y, z);
     }
 
     public void updateConnections(World world, int x, int y, int z) {
-        BlockState state = world.getBlockState(x, y, z);
-
-        for (Direction side : Direction.values()) {
-            state = state.with(PROPERTY_LOOKUP.get(side), this.canConnectTo(world, x, y, z, side));
-        }
-
-        world.setBlockState(x, y, z, state);
-
-        if (world.getBlockEntity(x,y,z) instanceof PipeBlockEntity pipe) {
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipe.updateConnections();
             pipe.updateValidOutputDirections();
         }
     }
-    
-    public boolean canConnectTo(World world, int x, int y, int z, Direction side) {
-        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
-            return pipe.canConnectTo(x, y, z, side) != PipeConnectionType.NONE;
-        }
-        
-        return false;
-    }
-    
+
     // Wrenching
     @Override
     public boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
@@ -154,7 +116,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     protected BlockEntity createBlockEntity() {
         return blockEntityFactory.create(this);
     }
-    
+
     // Bounding Box and Collision Shape
     private final float minOffset = PipeWorldRenderer.PIPE_MIN_POS;
     private final float maxOffset = PipeWorldRenderer.PIPE_MAX_POS;
@@ -164,58 +126,59 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         PlayerEntity player = PlayerHelper.getPlayerFromGame();
 
         RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
-        if(raycastResult == null){
+        if (raycastResult == null) {
             return Box.createCached(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
-        }
-        else {
+        } else {
             return raycastResult.box.translate(x, y, z);
         }
     }
 
     @Override
     public void addIntersectingBoundingBox(World world, int x, int y, int z, Box box, ArrayList boxes) {
-        BlockState state = world.getBlockState(x, y, z);
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+            Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = pipe.connections;
 
-        this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
-        super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
-
-        if (state.get(Properties.UP)) {
-            this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, 1.0F, maxOffset);
+            this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
-        }
 
-        if (state.get(Properties.DOWN)) {
-            this.setBoundingBox(minOffset, 0.0F, minOffset, maxOffset, maxOffset, maxOffset);
-            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
-        }
+            if (connections.get(Direction.UP) != PipeConnectionType.NONE) {
+                this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, 1.0F, maxOffset);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
 
-        if (state.get(Properties.WEST)) {
-            this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, 1.0F);
-            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
-        }
+            if (connections.get(Direction.DOWN) != PipeConnectionType.NONE) {
+                this.setBoundingBox(minOffset, 0.0F, minOffset, maxOffset, maxOffset, maxOffset);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
 
-        if (state.get(Properties.EAST)) {
-            this.setBoundingBox(minOffset, minOffset, 0.0F, maxOffset, maxOffset, maxOffset);
-            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
-        }
+            if (connections.get(Direction.WEST) != PipeConnectionType.NONE) {
+                this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, 1.0F);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
 
-        if (state.get(Properties.SOUTH)) {
-            this.setBoundingBox(minOffset, minOffset, minOffset, 1.0F, maxOffset, maxOffset);
-            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
-        }
+            if (connections.get(Direction.EAST) != PipeConnectionType.NONE) {
+                this.setBoundingBox(minOffset, minOffset, 0.0F, maxOffset, maxOffset, maxOffset);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
 
-        if (state.get(Properties.NORTH)) {
-            this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
-            super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
-        }
+            if (connections.get(Direction.SOUTH) != PipeConnectionType.NONE) {
+                this.setBoundingBox(minOffset, minOffset, minOffset, 1.0F, maxOffset, maxOffset);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
 
-        this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+            if (connections.get(Direction.NORTH) != PipeConnectionType.NONE) {
+                this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
+
+            this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        }
     }
 
     @Override
     public HitResult raycast(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
         RaycastResult raycastResult = raycastPipe(world, x, y, z, startPos, endPos);
-        if(raycastResult == null){
+        if (raycastResult == null) {
             return null;
         } else {
             return raycastResult.hit;
@@ -223,7 +186,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     }
 
-    public RaycastResult raycastPipe(World world, int x, int y, int z, PlayerEntity player){
+    public RaycastResult raycastPipe(World world, int x, int y, int z, PlayerEntity player) {
         double distance = 5d;
         Vec3d positionVector = player.getPosition(tickDelta);
         Vec3d lookVector = player.getLookVector(tickDelta);
@@ -233,26 +196,25 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return raycastPipe(world, x, y, z, positionVector, endVector);
     }
 
-    private RaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos){
+    private RaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
         HitResult[] hits = new HitResult[31];
         Box[] boxes = new Box[31];
         Direction[] sideHit = new Direction[31];
-
-        BlockState blockState = world.getBlockState(x, y, z);
-
 
         Box box = getPipeBoundingBox(null);
         setBoundingBox(box);
         boxes[6] = box;
         hits[6] = super.raycast(world, x, y, z, startPos, endPos);
         sideHit[6] = null;
-        for(Direction side : Direction.values()){
-            if(isPipeConnected(blockState, side)){
-                box = getPipeBoundingBox(side);
-                setBoundingBox(box);
-                boxes[side.ordinal()] = box;
-                hits[side.ordinal()] = super.raycast(world, x, y, z, startPos, endPos);
-                sideHit[side.ordinal()] = side;
+        if (world.getBlockEntity(x,y,z) instanceof PipeBlockEntity pipe) {
+            for (Direction side : Direction.values()) {
+                if (isPipeConnected(pipe, side)) {
+                    box = getPipeBoundingBox(side);
+                    setBoundingBox(box);
+                    boxes[side.ordinal()] = box;
+                    hits[side.ordinal()] = super.raycast(world, x, y, z, startPos, endPos);
+                    sideHit[side.ordinal()] = side;
+                }
             }
         }
 
@@ -293,56 +255,24 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
     }
 
-    boolean isPipeConnected(BlockState blockState, Direction direction){
-        switch (direction){
-            case UP:
-                if(blockState.contains(Properties.UP)){
-                    return blockState.get(Properties.UP);
-                }
-                break;
-            case DOWN:
-                if(blockState.contains(Properties.DOWN)){
-                    return blockState.get(Properties.DOWN);
-                }
-                break;
-            case WEST:
-                if(blockState.contains(Properties.WEST)){
-                    return blockState.get(Properties.WEST);
-                }
-                break;
-            case EAST:
-                if(blockState.contains(Properties.EAST)){
-                    return blockState.get(Properties.EAST);
-                }
-                break;
-            case NORTH:
-                if(blockState.contains(Properties.NORTH)){
-                    return blockState.get(Properties.NORTH);
-                }
-                break;
-            case SOUTH:
-                if(blockState.contains(Properties.SOUTH)){
-                    return blockState.get(Properties.SOUTH);
-                }
-                break;
-        }
-        return false;
+    boolean isPipeConnected(PipeBlockEntity pipe, Direction direction) {
+        return pipe.connections.get(direction) != PipeConnectionType.NONE;
     }
 
-    private void setBoundingBox(Box box){
-        setBoundingBox((float) box.minX, (float)box.minY, (float)box.minZ, (float)box.maxX, (float)box.maxY, (float)box.maxZ);
+    private void setBoundingBox(Box box) {
+        setBoundingBox((float) box.minX, (float) box.minY, (float) box.minZ, (float) box.maxX, (float) box.maxY, (float) box.maxZ);
     }
 
     // Rendering
     @Environment(EnvType.CLIENT)
     @Override
     public int getTexture(int side) {
-        if(Atlases.getTerrain() == null){
+        if (Atlases.getTerrain() == null) {
             return 0;
         }
         return Atlases.getTerrain().getTexture(texture).index;
     }
-    
+
     @Override
     public boolean isFullCube() {
         return false;
@@ -356,7 +286,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Environment(EnvType.CLIENT)
     @Override
     public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {
-        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe){
+        if (blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipeWorldRenderer.renderPipe(blockRenderManager, blockView, pipe, x, y, z);
         }
         return false;
@@ -391,16 +321,16 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 }
             }
         }
-        
+
         return super.onUse(world, x, y, z, player);
     }
 
-    private boolean addOrStripPipePluggable(World world, int x, int y, int z, ItemStack stack, PlayerEntity player, Direction side, PipeBlockEntity pipe){
+    private boolean addOrStripPipePluggable(World world, int x, int y, int z, ItemStack stack, PlayerEntity player, Direction side, PipeBlockEntity pipe) {
         return false;
     }
 
-    private Box getPipeBoundingBox(@Nullable Direction side){
-        if(side == null){
+    private Box getPipeBoundingBox(@Nullable Direction side) {
+        if (side == null) {
             return Box.createCached(minOffset, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
         }
 
@@ -417,17 +347,5 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
         MatrixTransformation.transform(bounds, side);
         return Box.createCached(bounds[0][0], bounds[1][0], bounds[2][0], bounds[0][1], bounds[1][1], bounds[2][1]);
-    }
-
-    // Property Lookup
-    public static final HashMap<Direction, BooleanProperty> PROPERTY_LOOKUP = new HashMap<>();
-
-    static {
-        PROPERTY_LOOKUP.put(Direction.UP, Properties.UP);
-        PROPERTY_LOOKUP.put(Direction.DOWN, Properties.DOWN);
-        PROPERTY_LOOKUP.put(Direction.NORTH, Properties.NORTH);
-        PROPERTY_LOOKUP.put(Direction.SOUTH, Properties.SOUTH);
-        PROPERTY_LOOKUP.put(Direction.EAST, Properties.EAST);
-        PROPERTY_LOOKUP.put(Direction.WEST, Properties.WEST);
     }
 }
