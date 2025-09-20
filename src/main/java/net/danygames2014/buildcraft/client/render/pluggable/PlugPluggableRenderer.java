@@ -5,6 +5,7 @@ import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -29,7 +30,7 @@ public class PlugPluggableRenderer implements PipePluggableRenderer {
         zeroState[2][0] = 0.25F + zFightOffset;
         zeroState[2][1] = 0.75F - zFightOffset;
 
-        renderBlock.setTextureOffset(RenderBlock.DIAMOND_BLOCK.getTexture(0));
+        renderBlock.setTextureOffset(TextureListener.plug.index);
 
         float[][] rotated = MatrixTransformation.deepClone(zeroState);
         MatrixTransformation.transform(rotated, side);

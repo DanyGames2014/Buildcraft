@@ -4,9 +4,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
+import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.Packet;
@@ -14,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Random;
 
@@ -22,10 +25,14 @@ public class PipeBlockEntity extends BlockEntity {
     public PipeBehavior behavior;
     public PipeTransporter transporter;
     public final PipeRenderState renderState = new PipeRenderState();
+    public final PipePluggableState pluggableState = new PipePluggableState();
     public ObjectArrayList<Direction> validOutputDirections = null;
     public final Random random = new Random();
     
     public Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = null;
+
+    protected PipeSideProperties sideProperties = new PipeSideProperties();
+    protected boolean attachPluggables = false;
 
     protected boolean neighbourUpdate = false;
     protected boolean refreshRenderState = false;
@@ -76,6 +83,18 @@ public class PipeBlockEntity extends BlockEntity {
             refreshRenderState = false;
         }
 
+        if(attachPluggables){
+            attachPluggables = false;
+            for(int i = 0; i < Direction.values().length; i++){
+                if(sideProperties.pluggables[i] != null){
+                    // TODO: figure out what this does
+                    //pipe.eventBus.registerHandler(sideProperties.pluggables[i]);
+                    sideProperties.pluggables[i].onAttachedToPipe(this, Direction.byId(i));
+                }
+            }
+            markDirty();
+        }
+
         transporter.tick();
     }
 
@@ -90,7 +109,7 @@ public class PipeBlockEntity extends BlockEntity {
                 connections.put(side, PipeConnectionType.NONE);
             }
         }
-        
+
         // Update connections
         for (Direction side : Direction.values()) {
             //System.out.println(side + " -> " + world.getBlockState(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) + " -> " + world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
@@ -153,12 +172,69 @@ public class PipeBlockEntity extends BlockEntity {
         }
     }
 
+    public boolean hasFacade(Direction direction){
+        throw new NotImplementedException();
+    }
+
+    public boolean hasGate(Direction direction){
+        throw new NotImplementedException();
+    }
+
+    public boolean setPluggable(Direction direction, PipePluggable pluggable) {
+        return setPluggable(direction, pluggable, null);
+    }
+
+    public boolean setPluggable(Direction direction, PipePluggable pluggable, PlayerEntity player){
+        if(world != null && world.isRemote){
+            return false;
+        }
+
+        if(direction == null){
+            return false;
+        }
+
+        if(sideProperties.pluggables[direction.ordinal()] != null){
+            sideProperties.dropItem(this, direction, player);
+            // TODO: implement this later
+            //pipe.eventBus.unregisterHandler(sideProperties.pluggables[direction.ordinal()]);
+        }
+
+        sideProperties.pluggables[direction.ordinal()] = pluggable;
+        if(pluggable != null){
+            //pipe.eventBus.registerHandler(pluggable);
+            pluggable.onAttachedToPipe(this, direction);
+        }
+        markDirty();
+        return true;
+    }
+
+    public PipePluggable getPipePluggable(Direction side){
+        if(side == null){
+            return null;
+        }
+        return sideProperties.pluggables[side.ordinal()];
+    }
+
+    public boolean hasPipePluggable(Direction side){
+        if (side == null) {
+            return false;
+        }
+
+        return sideProperties.pluggables[side.ordinal()] != null;
+    }
+
+    @Override
+    public void markDirty() {
+        scheduleRenderUpdate();
+        super.markDirty();
+    }
+
     // NBT
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putString("pipeId", String.valueOf(BlockRegistry.INSTANCE.getId(pipeBlock)));
-        
+
         // Connections
         NbtList connections = new NbtList();
         for (var side : this.connections.entrySet()) {
@@ -168,18 +244,18 @@ public class PipeBlockEntity extends BlockEntity {
             connections.add(connection);
         }
         nbt.put("connections", connections);
+        sideProperties.writeNbt(nbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         this.pipeBlock = (PipeBlock) BlockRegistry.INSTANCE.get(Identifier.of(nbt.getString("pipeId")));
-        
         // Connections
         if (connections == null) {
             connections = new Object2ObjectOpenHashMap<>(6);
         }
-        
+
         NbtList connections = nbt.getList("connections");
         for (int i = 0; i < connections.size(); i++) {
             NbtCompound connection = (NbtCompound) connections.get(i);
@@ -187,10 +263,12 @@ public class PipeBlockEntity extends BlockEntity {
             PipeConnectionType type = PipeConnectionType.values()[connection.getInt("type")];
             this.connections.put(side, type);
         }
-        
+
         updateValidOutputDirections();
-        
+
+        sideProperties.readNbt(nbt);
         init();
+        attachPluggables = true;
     }
 
     @Override
@@ -249,6 +327,8 @@ public class PipeBlockEntity extends BlockEntity {
                     break;
             }
         }
+
+        pluggableState.setPluggables(sideProperties.pluggables);
 
         if(renderState.isDirty()){
             renderState.clean();

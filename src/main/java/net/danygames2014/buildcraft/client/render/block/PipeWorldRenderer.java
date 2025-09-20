@@ -4,6 +4,8 @@ import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -85,6 +87,16 @@ public class PipeWorldRenderer {
         }
         renderBlock.setColor(0xFFFFFF);
         renderBlock.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+
+        for(Direction direction : Direction.values()){
+            if(pipeBlockEntity.hasPipePluggable(direction)){
+                PipePluggable p = pipeBlockEntity.getPipePluggable(direction);
+                PipePluggableRenderer r = p.getRenderer();
+                if(r != null){
+                    r.renderPluggable(blockRenderManager, pipeBlockEntity, direction, p, x, y, z);
+                }
+            }
+        }
     }
 
     private void resetToCenterDimensions(float[] dim){

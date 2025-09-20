@@ -5,11 +5,18 @@ import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class RaycastResult {
+    public final Part hitPart;
     public final HitResult hit;
     public final Box box;
     public final Direction sideHit;
 
-    public RaycastResult(HitResult hit, Box box, Direction sideHit){
+    public enum Part {
+        Pipe,
+        Pluggable
+    }
+
+    public RaycastResult(Part hitPart, HitResult hit, Box box, Direction sideHit){
+        this.hitPart = hitPart;
         this.hit = hit;
         this.box = box;
         this.sideHit = sideHit;
