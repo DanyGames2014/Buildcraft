@@ -98,7 +98,8 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_item_pipe"),
                 woodenPipeBehavior,
-                ItemPipeTransporter::new
+                ItemPipeTransporter::new,
+                PoweredPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "wooden_item_pipe").setHardness(0.1F).setSoundGroup(Block.WOOD_SOUND_GROUP);
 
         cobblestoneItemPipe = new PipeBlock(
@@ -106,7 +107,8 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_item_pipe"),
                 stonePipeBehavior,
-                ItemPipeTransporter::new
+                ItemPipeTransporter::new,
+                PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "cobblestone_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
         
         goldenItemPipe = new PipeBlock(
@@ -114,7 +116,8 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/golden_item_pipe"),
                 goldenPipeBehavior,
-                ItemPipeTransporter::new
+                ItemPipeTransporter::new,
+                PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "golden_item_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
         // Fluid Pipes
@@ -123,7 +126,8 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_fluid_pipe"),
                 woodenPipeBehavior,
-                FluidPipeTransporter::new
+                FluidPipeTransporter::new,
+                PoweredPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "wooden_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.WOOD_SOUND_GROUP);
 
         cobblestoneFluidPipe = new PipeBlock(
@@ -131,7 +135,8 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_fluid_pipe"),
                 stonePipeBehavior,
-                FluidPipeTransporter::new
+                FluidPipeTransporter::new,
+                PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "cobblestone_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
 
         // Energy Pipes
@@ -140,7 +145,8 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_energy_pipe"),
                 woodenPipeBehavior,
-                EnergyPipeTransporter::new
+                EnergyPipeTransporter::new,
+                PoweredPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "wooden_energy_pipe").setHardness(0.1F).setSoundGroup(Block.WOOD_SOUND_GROUP);
 
         cobblestoneEnergyPipe = new PipeBlock(
@@ -148,7 +154,8 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_energy_pipe"),
                 stonePipeBehavior,
-                EnergyPipeTransporter::new
+                EnergyPipeTransporter::new,
+                PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "cobblestone_energy_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
     }
 }

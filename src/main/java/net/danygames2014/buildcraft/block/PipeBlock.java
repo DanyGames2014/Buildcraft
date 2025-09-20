@@ -1,10 +1,7 @@
 package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.api.core.Debuggable;
-import net.danygames2014.buildcraft.block.entity.pipe.ItemPipeTransporter;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeBehavior;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
+import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
@@ -49,6 +46,7 @@ import java.util.Random;
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
+    public final PipeBlockEntityFactory blockEntityFactory;
     @Environment(EnvType.CLIENT)
     public static float tickDelta;
     @Environment(EnvType.CLIENT)
@@ -58,8 +56,9 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Environment(EnvType.CLIENT)
     private Identifier texture;
 
-    public PipeBlock(Identifier identifier, Material material, Identifier texture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter) {
+    public PipeBlock(Identifier identifier, Material material, Identifier texture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter, PipeBlockEntityFactory blockEntityFactory) {
         super(identifier, material);
+        this.blockEntityFactory = blockEntityFactory;
         this.behavior = behavior;
         this.transporterFactory = transporter;
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
@@ -152,7 +151,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     // Block Entity
     @Override
     protected BlockEntity createBlockEntity() {
-        return new PipeBlockEntity(this);
+        return blockEntityFactory.create(this);
     }
     
     // Bounding Box and Collision Shape
