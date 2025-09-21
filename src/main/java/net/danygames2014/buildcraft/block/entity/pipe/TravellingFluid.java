@@ -13,14 +13,18 @@ public class TravellingFluid {
     public static final double DECCELERATION_MODIFIER = 1.1D;
     
     public FluidPipeTransporter transporter;
-    public Direction input = null;
-    public Direction travelDirection = null;
-    public Direction lastTravelDirection = null;
     public double transferDelay = DEFAULT_TRANSFER_DELAY;
-    public double lastTransferDelay = 0;
-    public int invalidTimer = 0;
     public boolean invalid = false;
-    public TravelStage stage = TravelStage.ENTER;
+
+
+    /**
+     * The direction the fluid is coming from. If this is null, its coming from the middle
+     */
+    public Direction input = null;
+    /**
+     * The direction this fluid is traveling to. If this is null, its going to the middle
+     */
+    public Direction travelDirection = null;
     
     public FluidStack stack;
     public World world;
@@ -31,35 +35,22 @@ public class TravellingFluid {
     }
     
     public void tick() {
-        // Last
-        lastTravelDirection = travelDirection;
-        lastTransferDelay = transferDelay;
-        
         // Transfer delay
-        double transferDelay = transporter.blockEntity.behavior.modifyFluidTransferDelay(this);
-        
-        if (this.transferDelay != transferDelay) {
-            if (transferDelay < this.transferDelay) {
-                this.transferDelay = Math.min(transferDelay, transferDelay * ACCELERATION_MODIFIER);
-            } else if (transferDelay > this.transferDelay) {
-                this.transferDelay *= DECCELERATION_MODIFIER;
-            }
-            
-            if (this.transferDelay < MINIMUM_TRANSFER_DELAY) {
-                this.transferDelay = MINIMUM_TRANSFER_DELAY;
-            } else if (this.transferDelay > MAXIMUM_TRANSFER_DELAY) {
-                this.transferDelay = MAXIMUM_TRANSFER_DELAY;
-            }
-        }
-        
-        // Invalid timer
-        if (travelDirection == null) {
-            invalidTimer++;
-        }
-        
-        if (invalidTimer >= 50) {
-            invalid = true;
-        }
+//        double transferDelay = transporter.blockEntity.behavior.modifyFluidTransferDelay(this);
+//        
+//        if (this.transferDelay != transferDelay) {
+//            if (transferDelay < this.transferDelay) {
+//                this.transferDelay = Math.min(transferDelay, transferDelay * ACCELERATION_MODIFIER);
+//            } else if (transferDelay > this.transferDelay) {
+//                this.transferDelay *= DECCELERATION_MODIFIER;
+//            }
+//            
+//            if (this.transferDelay < MINIMUM_TRANSFER_DELAY) {
+//                this.transferDelay = MINIMUM_TRANSFER_DELAY;
+//            } else if (this.transferDelay > MAXIMUM_TRANSFER_DELAY) {
+//                this.transferDelay = MAXIMUM_TRANSFER_DELAY;
+//            }
+//        }
     }
     
     public TravellingFluid split(int amount) {
@@ -80,14 +71,12 @@ public class TravellingFluid {
         nbt.putInt("input", input.getId());
         nbt.putInt("travelDirection", travelDirection.getId());
         nbt.putDouble("transferDelay", transferDelay);
-        nbt.putDouble("lastTransferDelay", lastTransferDelay);
     }
 
     public void read(NbtCompound nbt) {
         input = Direction.byId(nbt.getInt("input"));
         travelDirection = Direction.byId(nbt.getInt("travelDirection"));
         transferDelay = nbt.getDouble("transferDelay");
-        lastTransferDelay = nbt.getDouble("lastTransferDelay");
     }
     
     public enum TravelStage {

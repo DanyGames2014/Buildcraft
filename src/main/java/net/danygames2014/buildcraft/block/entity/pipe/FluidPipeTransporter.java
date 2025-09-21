@@ -47,19 +47,25 @@ public class FluidPipeTransporter extends PipeTransporter {
             fluid.tick();
 
             if (fluid.transferDelay <= 0) {
-                switch (fluid.stage) {
-                    case ENTER, MIDDLE -> {
-                        flowInternally(fluid);
+                if (fluid.travelDirection == null && fluid.input != null) {
+                    // Side -> Middle
+                    flowInternally(fluid);
+                    fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+
+                } else if (fluid.travelDirection != null && fluid.input == null) {
+                    // Middle -> Side
+                    flowInternally(fluid);
+                    fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+
+                } else if (fluid.travelDirection != null && fluid.input != null) {
+                    // Side -> Out
+                    if (handOffFluid(fluid)) {
+                        iterator.remove();
+                    } else {
                         fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
                     }
-
-                    case EXIT -> {
-                        if (handOffFluid(fluid)) {
-                            iterator.remove();
-                        } else {
-                            fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
-                        }
-                    }
+                } else {
+                    System.err.println("WHAT");
                 }
             }
 
@@ -70,13 +76,12 @@ public class FluidPipeTransporter extends PipeTransporter {
     public int injectFluid(FluidStack stack, Direction side) {
         TravellingFluid travellingFluid = new TravellingFluid(world, this);
         travellingFluid.stack = stack;
-        travellingFluid.travelDirection = side.getOpposite();
-        travellingFluid.lastTravelDirection = travellingFluid.travelDirection;
-        travellingFluid.stage = TravellingFluid.TravelStage.ENTER;
+        travellingFluid.input = side;
+        travellingFluid.travelDirection = null;
         travellingFluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
         return injectFluid(travellingFluid, side);
     }
-    
+
     /**
      * Inject a fluid into the pipe
      *
@@ -113,22 +118,8 @@ public class FluidPipeTransporter extends PipeTransporter {
      * @param fluid The fluid to flow internally
      */
     public void flowInternally(TravellingFluid fluid) {
-        int inputSide;
-        int outputSide;
-
-        switch (fluid.stage) {
-            case ENTER -> {
-                inputSide = fluid.input.ordinal();
-                outputSide = 6;
-            }
-            case MIDDLE -> {
-                inputSide = 6;
-                outputSide = fluid.travelDirection.ordinal();
-            }
-            default -> {
-                throw new IllegalStateException("flowInternally called with invalid stage: " + fluid.stage);
-            }
-        }
+        int inputSide = fluid.input != null ? fluid.input.ordinal() : 6;
+        int outputSide = fluid.travelDirection != null ? fluid.travelDirection.ordinal() : 6;
 
         int outputCapacity = getSideCapacity(outputSide);
         if (outputCapacity > 0) {
@@ -136,32 +127,32 @@ public class FluidPipeTransporter extends PipeTransporter {
                 // We are moving the entire fluid stack
                 fillLevel[outputSide] += fluid.stack.amount;
                 fillLevel[inputSide] -= fluid.stack.amount;
-                
-                if (fluid.stage == TravellingFluid.TravelStage.ENTER) {
-                    fluid.stage = TravellingFluid.TravelStage.MIDDLE;
+
+                if (fluid.travelDirection != null && fluid.input == null) {
+                    fluid.input = fluid.travelDirection;
+                } else if (fluid.travelDirection == null) {
                     fluid.travelDirection = blockEntity.behavior.routeFluid(blockEntity, blockEntity.validOutputDirections, fluid);
-                } else {
-                    fluid.stage = TravellingFluid.TravelStage.EXIT;
+                    fluid.input = null;
                 }
-
-            } else {
-                // We are splitting of the amount from the fluid stack that will fit and moving that
-                TravellingFluid newFluid = fluid.split(outputCapacity);
-                fillLevel[outputSide] += outputCapacity;
-                fillLevel[inputSide] -= outputCapacity;
-                
-                if (fluid.stage == TravellingFluid.TravelStage.ENTER) {
-                    newFluid.stage = TravellingFluid.TravelStage.MIDDLE;
-                    newFluid.travelDirection = blockEntity.behavior.routeFluid(blockEntity, blockEntity.validOutputDirections, newFluid);
-                } else {
-                    newFluid.stage = TravellingFluid.TravelStage.EXIT;
-                }
-                newFluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
-
-                contents.add(newFluid);
             }
+        } else {
+            // We are splitting of the amount from the fluid stack that will fit and moving that
+            TravellingFluid newFluid = fluid.split(outputCapacity);
+            fillLevel[outputSide] += newFluid.stack.amount;
+            fillLevel[inputSide] -= newFluid.stack.amount;
+
+            if (fluid.travelDirection != null && fluid.input == null) {
+                fluid.input = fluid.travelDirection;
+            } else if (fluid.travelDirection == null) {
+                newFluid.travelDirection = blockEntity.behavior.routeFluid(blockEntity, blockEntity.validOutputDirections, fluid);
+                newFluid.input = null;
+            }
+
+            newFluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+            contents.add(newFluid);
         }
     }
+
 
     /**
      * Hand-off fluid to another pipe or Fluid Handler
