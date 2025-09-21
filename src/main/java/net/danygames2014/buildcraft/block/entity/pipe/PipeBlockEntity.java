@@ -330,13 +330,9 @@ public class PipeBlockEntity extends BlockEntity {
                 "pipeBlock=" + pipeBlock +
                 ", behavior=" + behavior +
                 ", transporter=" + transporter +
-                ", renderState=" + renderState +
                 ", validOutputDirections=" + validOutputDirections +
-                ", random=" + random +
                 ", connections=" + connections +
                 ", neighbourUpdate=" + neighbourUpdate +
-                ", refreshRenderState=" + refreshRenderState +
-                ", hasInit=" + hasInit +
                 ", x=" + x +
                 ", y=" + y +
                 ", z=" + z +

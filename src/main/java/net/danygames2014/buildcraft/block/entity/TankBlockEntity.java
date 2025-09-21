@@ -102,7 +102,9 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
 
     @Override
     public FluidStack extractFluid(int slot, int amount, @Nullable Direction direction) {
-        return null;
+        FluidStack returnStack = fluid.copy();
+        returnStack.amount = amount;
+        return returnStack;
     }
 
     @Override

@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
+import net.danygames2014.nyalib.fluid.FluidStack;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
@@ -43,8 +44,8 @@ public class WoodenPipeBehavior extends PipeBehavior {
             }
 
             case FLUID -> {
-                FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x, y, z, FluidHandlerBlockCapability.class);
-
+                FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), FluidHandlerBlockCapability.class);
+                
                 if (cap != null) {
                     if (cap.canConnectFluid(side.getOpposite())) {
                         if (pipe.connections.containsValue(PipeConnectionType.ALTERNATE) && pipe.connections.get(side) != PipeConnectionType.ALTERNATE) {
@@ -91,22 +92,66 @@ public class WoodenPipeBehavior extends PipeBehavior {
                 for (var connection : blockEntity.connections.entrySet()) {
                     if (connection.getValue() == PipeConnectionType.ALTERNATE) {
                         Direction side = connection.getKey();
-                        
+
                         // Obtain the capability of the block we are extracting from
                         ItemHandlerBlockCapability cap = CapabilityHelper.getCapability(blockEntity.world, blockEntity.x + side.getOffsetX(), blockEntity.y + side.getOffsetY(), blockEntity.z + side.getOffsetZ(), ItemHandlerBlockCapability.class);
                         if (cap != null) {
                             // Check if we can extract from the block
-                            if (cap.canExtractItem(side.getOpposite())){
+                            if (cap.canExtractItem(side.getOpposite())) {
                                 int energyAvalible = MathHelper.floor(powerHandler.useEnergy(1, 16, false));
                                 if (energyAvalible > 0) {
                                     ItemStack extractedStack = cap.extractItem(energyAvalible, side.getOpposite());
-                                    
+
                                     if (extractedStack != null) {
                                         powerHandler.useEnergy(extractedStack.count, extractedStack.count, true);
                                         itemTransporter.injectItem(extractedStack, side);
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (blockEntity.transporter instanceof FluidPipeTransporter fluidTransporter) {
+            // Determine if we can extract from somewhere
+            if (!blockEntity.connections.containsValue(PipeConnectionType.ALTERNATE)) {
+                return;
+            }
+
+            // Find which side we can extract from
+            for (var connection : blockEntity.connections.entrySet()) {
+                if (connection.getValue() != PipeConnectionType.ALTERNATE) {
+                    continue;
+                }
+
+                Direction side = connection.getKey();
+
+                // Obtain the capability of the block we are extracting from
+                FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(blockEntity.world, blockEntity.x + side.getOffsetX(), blockEntity.y + side.getOffsetY(), blockEntity.z + side.getOffsetZ(), FluidHandlerBlockCapability.class);
+                if (cap == null) {
+                    return;
+                }
+
+                // Check if we can extract from the block
+                if (cap.canExtractFluid(side.getOpposite())) {
+                    int avalibleCapacity = fluidTransporter.getSideCapacity(side);
+                    if (avalibleCapacity <= 0) {
+                        return;
+                    }
+
+                    int energyAvalible = MathHelper.floor(powerHandler.useEnergy(1, Math.min(avalibleCapacity, 5), false));
+                    if (energyAvalible <= 0) {
+                        return;
+                    }
+
+                    FluidStack extractedStack = cap.extractFluid(energyAvalible, side.getOpposite());
+
+                    if (extractedStack != null) {
+                        powerHandler.useEnergy(extractedStack.amount, extractedStack.amount, true);
+                        if(fluidTransporter.injectFluid(extractedStack, side) > 0) {
+                            Buildcraft.LOGGER.warn("Fluid was not fully injected into a Wooden Pipe!");
                         }
                     }
                 }

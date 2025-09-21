@@ -7,6 +7,7 @@ import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockC
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class FluidPipeTransporter extends PipeTransporter {
@@ -47,16 +48,17 @@ public class FluidPipeTransporter extends PipeTransporter {
 
             if (fluid.transferDelay <= 0) {
                 switch (fluid.stage) {
-                    case ENTER -> {
-                        fluid.stage = TravellingFluid.TravelStage.MIDDLE;
-                    }
-
-                    case MIDDLE -> {
-                        fluid.stage = TravellingFluid.TravelStage.EXIT;
+                    case ENTER, MIDDLE -> {
+                        flowInternally(fluid);
+                        fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
                     }
 
                     case EXIT -> {
-
+                        if (handOffFluid(fluid)) {
+                            iterator.remove();
+                        } else {
+                            fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+                        }
                     }
                 }
             }
@@ -65,6 +67,16 @@ public class FluidPipeTransporter extends PipeTransporter {
         }
     }
 
+    public int injectFluid(FluidStack stack, Direction side) {
+        TravellingFluid travellingFluid = new TravellingFluid(world, this);
+        travellingFluid.stack = stack;
+        travellingFluid.travelDirection = side.getOpposite();
+        travellingFluid.lastTravelDirection = travellingFluid.travelDirection;
+        travellingFluid.stage = TravellingFluid.TravelStage.ENTER;
+        travellingFluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+        return injectFluid(travellingFluid, side);
+    }
+    
     /**
      * Inject a fluid into the pipe
      *
@@ -98,17 +110,62 @@ public class FluidPipeTransporter extends PipeTransporter {
     }
 
     /**
-     * @param fluid 
-     * @return
+     * @param fluid The fluid to flow internally
      */
-    public int flowInternally(TravellingFluid fluid) {
-        int side = fluid.stage == TravellingFluid.TravelStage.MIDDLE ? fluid.travelDirection.getId() : 6;
-        
-        return 0;
+    public void flowInternally(TravellingFluid fluid) {
+        int inputSide;
+        int outputSide;
+
+        switch (fluid.stage) {
+            case ENTER -> {
+                inputSide = fluid.input.ordinal();
+                outputSide = 6;
+            }
+            case MIDDLE -> {
+                inputSide = 6;
+                outputSide = fluid.travelDirection.ordinal();
+            }
+            default -> {
+                throw new IllegalStateException("flowInternally called with invalid stage: " + fluid.stage);
+            }
+        }
+
+        int outputCapacity = getSideCapacity(outputSide);
+        if (outputCapacity > 0) {
+            if (outputCapacity >= fluid.stack.amount) {
+                // We are moving the entire fluid stack
+                fillLevel[outputSide] += fluid.stack.amount;
+                fillLevel[inputSide] -= fluid.stack.amount;
+                
+                if (fluid.stage == TravellingFluid.TravelStage.ENTER) {
+                    fluid.stage = TravellingFluid.TravelStage.MIDDLE;
+                    fluid.travelDirection = blockEntity.behavior.routeFluid(blockEntity, blockEntity.validOutputDirections, fluid);
+                } else {
+                    fluid.stage = TravellingFluid.TravelStage.EXIT;
+                }
+
+            } else {
+                // We are splitting of the amount from the fluid stack that will fit and moving that
+                TravellingFluid newFluid = fluid.split(outputCapacity);
+                fillLevel[outputSide] += outputCapacity;
+                fillLevel[inputSide] -= outputCapacity;
+                
+                if (fluid.stage == TravellingFluid.TravelStage.ENTER) {
+                    newFluid.stage = TravellingFluid.TravelStage.MIDDLE;
+                    newFluid.travelDirection = blockEntity.behavior.routeFluid(blockEntity, blockEntity.validOutputDirections, newFluid);
+                } else {
+                    newFluid.stage = TravellingFluid.TravelStage.EXIT;
+                }
+                newFluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+
+                contents.add(newFluid);
+            }
+        }
     }
 
     /**
      * Hand-off fluid to another pipe or Fluid Handler
+     *
      * @param fluid The fluid to hand-off
      * @return WHether the fluid was fully handed off and can be removed
      */
@@ -118,7 +175,7 @@ public class FluidPipeTransporter extends PipeTransporter {
         if (world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) instanceof PipeBlockEntity pipe) {
             if (pipe.transporter instanceof FluidPipeTransporter otherTransporter) {
                 int injectedAmount = otherTransporter.injectFluid(fluid, side.getOpposite());
-                
+
                 if (injectedAmount <= 0) {
                     return false;
                 } else if (injectedAmount >= fluid.stack.amount) {
@@ -147,7 +204,7 @@ public class FluidPipeTransporter extends PipeTransporter {
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -162,9 +219,22 @@ public class FluidPipeTransporter extends PipeTransporter {
 
     public int getSideCapacity(Direction side) {
         if (side == null) {
-            return MAXIMUM_FILL_LEVEL - fillLevel[6];
+            return getSideCapacity(6);
         }
 
-        return MAXIMUM_FILL_LEVEL - fillLevel[side.ordinal()];
+        return getSideCapacity(side.ordinal());
+
+    }
+
+    public int getSideCapacity(int side) {
+        return MAXIMUM_FILL_LEVEL - fillLevel[side];
+    }
+
+    @Override
+    public String toString() {
+        return "FluidPipeTransporter{" +
+                "contents=" + contents +
+                ", fillLevel=" + Arrays.toString(fillLevel) +
+                '}';
     }
 }
