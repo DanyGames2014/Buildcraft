@@ -2,7 +2,6 @@ package net.danygames2014.buildcraft.block.entity.pipe;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
-import net.danygames2014.buildcraft.util.MathUtil;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
@@ -82,7 +81,9 @@ public class ItemPipeTransporter extends PipeTransporter {
                     }
                     
                     case BOUNCE -> {
-                        bounceItem(item);
+                        iterator.remove();
+                        injectItem(item.stack, item.travelDirection);
+                        item.markDead();
                     }
                 }
             }
@@ -130,16 +131,6 @@ public class ItemPipeTransporter extends PipeTransporter {
         return blockEntity.behavior.routeItem(blockEntity, blockEntity.validOutputDirections, item);
     }
     
-    // TODO: Fix bouncing not working
-    public void bounceItem(TravellingItemEntity item) {
-        item.toMiddle = true;
-        item.input = item.travelDirection;
-        item.travelDirection = routeItem(item);
-        if (item.travelDirection == null) {
-            dropItem(item);
-        }
-    }
-
     @Override
     public void onBreak() {
         for (TravellingItemEntity item : contents) {
