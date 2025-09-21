@@ -14,6 +14,8 @@ public class RenderBlock extends TemplateBlock {
     private int renderMask = 0;
     private int colorMultiplier = 0xFFFFFF;
 
+    public boolean applyUVFix = false;
+
     private TextureMatrix textureMatrix = new TextureMatrix();
 
     public RenderBlock(Identifier identifier) {

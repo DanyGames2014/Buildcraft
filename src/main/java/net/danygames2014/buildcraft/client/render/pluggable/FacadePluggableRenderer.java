@@ -118,7 +118,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
                 float b = (color & 0x0000FF) / 255.0f;
 
                 if(facadePluggable.isHollow()){
-                    //renderblocks.field_152631_f = true; TODO: check what this is for
+                    renderBlock.applyUVFix = true;
                     float[][] rotated = MatrixTransformation.deepClone(zeroStateFacade);
                     rotated[0][0] = PipeWorldRenderer.PIPE_MIN_POS - zFightOffset * 4;
                     rotated[0][1] = PipeWorldRenderer.PIPE_MAX_POS + zFightOffset * 4;
@@ -149,6 +149,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
                     MatrixTransformation.transform(rotated, side);
                     setRenderBounds(renderBlock, rotated, side);
                     blockRenderManager.renderFlat(renderBlock, x, y, z , r, g, b);
+                    renderBlock.applyUVFix = false;
                 } else {
                     float[][] rotated = MatrixTransformation.deepClone(zeroStateFacade);
                     MatrixTransformation.transform(rotated, side);
