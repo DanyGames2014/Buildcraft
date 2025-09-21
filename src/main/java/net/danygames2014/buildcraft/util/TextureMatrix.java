@@ -11,7 +11,7 @@ public class TextureMatrix {
     private  boolean dirty = false;
 
     public int getTextureIndex(Direction direction){
-        return textureIndexes[direction.ordinal()];
+        return textureIndexes[DirectionUtil.getOrdinal(direction)];
     }
 
     public void setTextureIndex(Direction direction, int value){

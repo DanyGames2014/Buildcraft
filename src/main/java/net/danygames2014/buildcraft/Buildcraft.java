@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
 import net.danygames2014.buildcraft.item.BuildcraftWrenchItem;
+import net.danygames2014.buildcraft.item.FacadeItem;
 import net.danygames2014.buildcraft.item.PipeWireItem;
 import net.danygames2014.buildcraft.item.PlugItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -38,6 +39,7 @@ public class Buildcraft {
     public static Item yellowPipeWire;
 
     public static Item plug;
+    public static Item facade;
 
     public static Material pipeMaterial;
 
@@ -78,6 +80,7 @@ public class Buildcraft {
         yellowPipeWire = new PipeWireItem(NAMESPACE.id("yellow_pipe_wire")).setTranslationKey(NAMESPACE, "yellow_pipe_wire");
 
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
+        facade = new FacadeItem(NAMESPACE.id("facade")).setTranslationKey(NAMESPACE, "facade");
     }
 
     @EventListener
