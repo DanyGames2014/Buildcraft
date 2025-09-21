@@ -1,5 +1,7 @@
 package net.danygames2014.buildcraft.client.render.block.entity;
 
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.block.entity.pipe.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
@@ -32,7 +34,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
     public int[] displayPowerList = new int[POWER_STAGES];
     public int[] displayPowerListOverload = new int[POWER_STAGES];
 
-    private final IntHashMap displayFluidLists = new IntHashMap();
+    private final Int2ObjectOpenHashMap displayFluidLists = new Int2ObjectOpenHashMap();
     private final int[] angleY = {0, 0, 270, 90, 0, 180};
     private final int[] angleZ = {90, 270, 0, 0, 0, 0};
 
