@@ -10,6 +10,8 @@ item.buildcraft.blue_pipe_wire.name=Blue Pipe Wire
 item.buildcraft.green_pipe_wire.name=Green Pipe Wire
 item.buildcraft.yellow_pipe_wire.name=Yellow Pipe Wire
 
+item.buildcraft.plug.name=Pipe Plug
+
 tile.buildcraft.chute.name=Chute
 tile.buildcraft.redstone_engine.name=Redstone Engine
 tile.buildcraft.stirling_engine.name=Stirling Engine

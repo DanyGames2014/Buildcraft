@@ -24,8 +24,8 @@ public abstract class PipePluggable {
         invalidate();
     }
 
-    public void isBlocking(PipeBlockEntity pipe, Direction direction){
-
+    public boolean isBlocking(PipeBlockEntity pipe, Direction direction){
+        return true;
     }
 
     public void invalidate(){

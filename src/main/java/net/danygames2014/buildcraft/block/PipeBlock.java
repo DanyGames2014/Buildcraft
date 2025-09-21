@@ -24,13 +24,11 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.entity.player.PlayerHelper;
-import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -44,6 +42,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
     public final PipeBlockEntityFactory blockEntityFactory;
+
+    public static int lastSideUsed;
     @Environment(EnvType.CLIENT)
     public static float tickDelta;
     @Environment(EnvType.CLIENT)
@@ -224,7 +224,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         for(Direction side : Direction.values()){
             if(pipe.getPipePluggable(side) != null){
                 Box pluggableBox = pipe.getPipePluggable(side).getBoundingBox(side);
-                setBoundingBox(box);
+                setBoundingBox(pluggableBox);
                 boxes[7 + side.ordinal()] = pluggableBox;
                 hits[7 + side.ordinal()] = super.raycast(world, x, y, z, startPos, endPos);
                 sideHit[7 + side.ordinal()] = side;
@@ -326,18 +326,26 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
+        if(!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)){
+            return false;
+        }
+        if(player.getHand() == null && player.isSneaking()){
+            if(stripEquipment(world, x, y, z, player, pipe, Direction.byId(lastSideUsed))){
+                world.setBlockDirty(x, y, z);
+                world.notifyNeighbors(x, y, z, id);
+                return true;
+            }
+        }
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             if(player.getHand() != null && player.getHand().getItem() instanceof PipePluggableItem){
                 return false;
             }
             if (player.getHand() != null && !(player.getHand().getItem() instanceof WrenchBase)) {
-                if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
-                    if (pipe.transporter instanceof ItemPipeTransporter pipeTransporter) {
-                        pipeTransporter.injectItem(player.getHand(), Direction.values()[new Random().nextInt(Direction.values().length)]);
-                        player.inventory.main[player.inventory.selectedSlot] = null;
-                        player.inventory.markDirty();
-                        return true;
-                    }
+                if (pipe.transporter instanceof ItemPipeTransporter pipeTransporter) {
+                    pipeTransporter.injectItem(player.getHand(), Direction.values()[new Random().nextInt(Direction.values().length)]);
+                    player.inventory.main[player.inventory.selectedSlot] = null;
+                    player.inventory.markDirty();
+                    return true;
                 }
             }
         }
@@ -345,6 +353,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return super.onUse(world, x, y, z, player);
     }
 
+    // TODO: might be unneeded now that lastSideUsed is a thing
     public boolean onUseItem(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side){
         if(!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)){
             return false;
@@ -354,7 +363,24 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
         if(stack.getItem() instanceof  PipePluggableItem){
             if(addOrStripPipePluggable(world, x, y, z, stack, user, Direction.byId(side), pipe)){
+                world.notifyNeighbors(x, y, z, id);
+                world.setBlockDirty(x, y, z);
                 return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean stripEquipment(World world, int x, int y, int z, PlayerEntity player, PipeBlockEntity pipe, Direction side){
+        if(!world.isRemote){
+            Direction nSide = side;
+
+            RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
+            if(raycastResult != null && raycastResult.hitPart != RaycastResult.Part.Pipe){
+                nSide = raycastResult.sideHit;
+            }
+            if(pipe.hasPipePluggable(nSide)){
+                return pipe.setPluggable(nSide, null, player);
             }
         }
         return false;
@@ -384,7 +410,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 if(pipe.setPluggable(placementSide, pluggable, player)){
                     stack.count--;
                 }
-                world.setBlockDirty(x, y, z);
                 return true;
             } else {
                 return false;
