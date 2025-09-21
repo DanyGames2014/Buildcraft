@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.item;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
@@ -16,6 +17,8 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
+
 public class FacadeItem extends TemplateItem implements PipePluggableItem {
     public FacadeItem(Identifier identifier) {
         super(identifier);
@@ -23,10 +26,15 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem {
 
     @Override
     public PipePluggable createPipePluggable(PipeBlockEntity pipe, Direction side, ItemStack stack) {
-        stack.getStationNbt().putString("id", BlockRegistry.INSTANCE.getId(Block.DIAMOND_BLOCK).toString());
-        stack.getStationNbt().putInt("meta", 0);
-        stack.getStationNbt().putBoolean("hollow", Keyboard.isKeyDown(Keyboard.KEY_LCONTROL));
         return new FacadePluggable(stack);
+    }
+
+    public static ItemStack createStack(Block block, int meta, boolean hollow){
+        ItemStack stack = new ItemStack(Buildcraft.facade);
+        stack.getStationNbt().putString("id", BlockRegistry.INSTANCE.getId(block).toString());
+        stack.getStationNbt().putInt("meta", meta);
+        stack.getStationNbt().putBoolean("hollow", hollow);
+        return stack;
     }
 
     @Override
