@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
 import net.danygames2014.buildcraft.util.DirectionUtil;
+import net.danygames2014.buildcraft.util.PipeUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -29,7 +30,10 @@ public class PipeBlockEntity extends BlockEntity {
     public final PipePluggableState pluggableState = new PipePluggableState();
     public ObjectArrayList<Direction> validOutputDirections = null;
     public final Random random = new Random();
-    
+
+    public boolean[] wireSet = new boolean[]{false, false, false, false};
+    public int[] signalStrength = new int[]{0, 0, 0, 0};
+
     public Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = null;
 
     protected PipeSideProperties sideProperties = new PipeSideProperties();
@@ -255,6 +259,22 @@ public class PipeBlockEntity extends BlockEntity {
         super.markDirty();
     }
 
+    public boolean isWireConnectedTo(BlockEntity blockEntity, PipeWire color, Direction direction){
+        if(!(blockEntity instanceof PipeBlockEntity pipe)){
+            return false;
+        }
+
+        if(!pipe.wireSet[color.ordinal()]){
+            return false;
+        }
+
+        if(hasBlockingPluggable(direction) || pipe.hasBlockingPluggable(direction.getOpposite())){
+            return false;
+        }
+
+        return true; //PipeUtil.checkPipeConnections(this, pipe);
+    }
+
     // NBT
     @Override
     public void writeNbt(NbtCompound nbt) {
@@ -270,6 +290,9 @@ public class PipeBlockEntity extends BlockEntity {
             connections.add(connection);
         }
         nbt.put("connections", connections);
+        for (int i = 0; i < 4; ++i) {
+            nbt.putBoolean("wireSet[" + i + "]", wireSet[i]);
+        }
         sideProperties.writeNbt(nbt);
     }
 
@@ -291,6 +314,10 @@ public class PipeBlockEntity extends BlockEntity {
         }
 
         updateValidOutputDirections();
+
+        for (int i = 0; i < 4; ++i) {
+            wireSet[i] = nbt.getBoolean("wireSet[" + i + "]");
+        }
 
         sideProperties.readNbt(nbt);
         init();
@@ -317,6 +344,10 @@ public class PipeBlockEntity extends BlockEntity {
                 '}';
     }
 
+    public BlockEntity getBlockEntity(Direction direction){
+        return world.getBlockEntity(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
+    }
+
     protected void refreshRenderState() {
         // Pipe connections:
         for (Direction direction : Direction.values()) {
@@ -330,13 +361,13 @@ public class PipeBlockEntity extends BlockEntity {
         }
 
         for(PipeWire color : PipeWire.values()){
-            renderState.wireMatrix.setWire(color, false);
+            renderState.wireMatrix.setWire(color, wireSet[color.ordinal()]);
 
             for(Direction direction : Direction.values()){
-                renderState.wireMatrix.setWireConnected(color, direction, false);
+                renderState.wireMatrix.setWireConnected(color, direction, isWireConnectedTo(getBlockEntity(direction), color, direction));
             }
 
-            boolean lit = true;
+            boolean lit = signalStrength[color.ordinal()] > 0;
 
             switch (color){
                 case RED:

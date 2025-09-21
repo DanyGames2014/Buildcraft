@@ -91,12 +91,12 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         boolean foundX = false, foundY = false, foundZ = false;
 
-        if (state.wireMatrix.isWireConnected(color, Direction.WEST)) {
+        if (state.wireMatrix.isWireConnected(color, Direction.NORTH)) { //south
             minX = 0;
             foundX = true;
         }
 
-        if (state.wireMatrix.isWireConnected(color, Direction.EAST)) {
+        if (state.wireMatrix.isWireConnected(color, Direction.SOUTH)) { //north
             maxX = 1;
             foundX = true;
         }
@@ -111,12 +111,12 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             foundY = true;
         }
 
-        if (state.wireMatrix.isWireConnected(color, Direction.NORTH)) {
+        if (state.wireMatrix.isWireConnected(color, Direction.EAST)) { //west
             minZ = 0;
             foundZ = true;
         }
 
-        if (state.wireMatrix.isWireConnected(color, Direction.SOUTH)) {
+        if (state.wireMatrix.isWireConnected(color, Direction.WEST)) { //east
             maxZ = 1;
             foundZ = true;
         }

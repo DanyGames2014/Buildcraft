@@ -23,4 +23,21 @@ public enum PipeWire {
             return values()[ordinal];
         }
     }
+
+    public ItemStack getStack() {
+        return new ItemStack(item);
+    }
+
+    public Item getItem() {
+        return item;
+    }
+
+    public static PipeWire fromItem(Item item) {
+        for (PipeWire wire : values()) {
+            if (wire.item == item) {
+                return wire;
+            }
+        }
+        return null;
+    }
 }

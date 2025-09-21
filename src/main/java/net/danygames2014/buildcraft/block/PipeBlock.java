@@ -7,6 +7,8 @@ import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.item.PipeWireItem;
+import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.RaycastResult;
 import net.danygames2014.uniwrench.api.WrenchMode;
@@ -356,8 +358,16 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if(!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)){
             return false;
         }
-        if(player.getHand() == null && player.isSneaking()){
+        ItemStack stack = player.getHand();
+        if(stack == null && player.isSneaking()){
             if(stripEquipment(world, x, y, z, player, pipe, Direction.byId(lastSideUsed))){
+                world.setBlockDirty(x, y, z);
+                world.notifyNeighbors(x, y, z, id);
+                return true;
+            }
+        }
+        if(stack != null && stack.getItem() instanceof PipeWireItem pipeWireItem){
+            if(addOrStripWire(player, pipe, PipeWire.fromItem(pipeWireItem))){
                 world.setBlockDirty(x, y, z);
                 world.notifyNeighbors(x, y, z, id);
                 return true;
@@ -409,6 +419,12 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             if(pipe.hasPipePluggable(nSide)){
                 return pipe.setPluggable(nSide, null, player);
             }
+
+            for(PipeWire color : PipeWire.values()){
+                if(stripWire(pipe, color, player)){
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -444,6 +460,48 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
 
         return false;
+    }
+
+    private boolean addOrStripWire(PlayerEntity player, PipeBlockEntity pipe, PipeWire color){
+        if(addWire(pipe, color)){
+            player.getHand().count --;
+            return true;
+        }
+        return player.isSneaking() && stripWire(pipe, color, player);
+    }
+
+    private boolean addWire(PipeBlockEntity pipe, PipeWire color){
+        if(!pipe.wireSet[color.ordinal()]){
+            pipe.wireSet[color.ordinal()] = true;
+            pipe.signalStrength[color.ordinal()] = 0;
+
+            //pipe.updateSignalStrength
+            pipe.scheduleRenderUpdate();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean stripWire(PipeBlockEntity pipe, PipeWire color, PlayerEntity player){
+        if(pipe.wireSet[color.ordinal()]){
+            if(!pipe.world.isRemote){
+                dropWire(color, pipe, player);
+            }
+
+            pipe.signalStrength[color.ordinal()] = 0;
+            pipe.wireSet[color.ordinal()] = false;
+
+            //pipe.updateSignalStrength
+
+            //updateNeighborSignalStrenth
+            pipe.scheduleRenderUpdate();
+            return true;
+        }
+        return false;
+    }
+
+    private void dropWire(PipeWire pipeWire, PipeBlockEntity pipe, PlayerEntity player){
+        ItemUtil.dropTryIntoPlayerInventory(pipe.world, pipe.x, pipe.y, pipe.z, pipeWire.getStack(), player);
     }
 
     private Box getPipeBoundingBox(@Nullable Direction side) {
