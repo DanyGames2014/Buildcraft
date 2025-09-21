@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
-import org.jetbrains.annotations.NotNull;
 
 public class WoodenPipeBehavior extends PipeBehavior {
     @Override
@@ -24,14 +23,21 @@ public class WoodenPipeBehavior extends PipeBehavior {
     }
 
     @Override
-    public PipeConnectionType getConnectionType(PipeType type, PipeBlockEntity blockEntity, World world, int x, int y, int z, Direction side) {
+    public PipeConnectionType getConnectionType(PipeType type, PipeBlockEntity pipe, World world, int x, int y, int z, Direction side) {
         switch (type) {
             case ITEM -> {
                 ItemHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), ItemHandlerBlockCapability.class);
 
                 if (cap != null) {
                     if (cap.canConnectItem(side.getOpposite())) {
-                        return getPipeConnectionType(blockEntity, side);
+                        if (pipe.connections.containsValue(PipeConnectionType.ALTERNATE) && pipe.connections.get(side) != PipeConnectionType.ALTERNATE) {
+                            return PipeConnectionType.NORMAL;
+                        } else {
+                            if (!cap.canExtractItem(side.getOpposite())) {
+                                return PipeConnectionType.NORMAL;
+                            }
+                            return PipeConnectionType.ALTERNATE;
+                        }
                     }
                 }
             }
@@ -41,7 +47,14 @@ public class WoodenPipeBehavior extends PipeBehavior {
 
                 if (cap != null) {
                     if (cap.canConnectFluid(side.getOpposite())) {
-                        return getPipeConnectionType(blockEntity, side);
+                        if (pipe.connections.containsValue(PipeConnectionType.ALTERNATE) && pipe.connections.get(side) != PipeConnectionType.ALTERNATE) {
+                            return PipeConnectionType.NORMAL;
+                        } else {
+                            if (!cap.canExtractFluid(side.getOpposite())) {
+                                return PipeConnectionType.NORMAL;
+                            }
+                            return PipeConnectionType.ALTERNATE;
+                        }
                     }
                 }
             }
@@ -50,27 +63,23 @@ public class WoodenPipeBehavior extends PipeBehavior {
                 BlockEntity other = world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
                 if (other instanceof IPowerEmitter powerEmitter) {
                     if (powerEmitter.canEmitPowerFrom(side.getOpposite())) {
-                        return getPipeConnectionType(blockEntity, side);
+                        if (pipe.connections.containsValue(PipeConnectionType.ALTERNATE) && pipe.connections.get(side) != PipeConnectionType.ALTERNATE) {
+                            return PipeConnectionType.NORMAL;
+                        } else {
+                            return PipeConnectionType.ALTERNATE;
+                        }
                     }
                 }
 
                 if (other instanceof IPowerReceptor powerReceptor) {
                     if (powerReceptor.getPowerReceiver(side.getOpposite()) != null) {
-                        return getPipeConnectionType(blockEntity, side);
+                        return PipeConnectionType.NORMAL;
                     }
                 }
             }
         }
 
         return PipeConnectionType.NONE;
-    }
-
-    private PipeConnectionType getPipeConnectionType(PipeBlockEntity blockEntity, Direction side) {
-        if (blockEntity.connections.containsValue(PipeConnectionType.ALTERNATE) && blockEntity.connections.get(side) != PipeConnectionType.ALTERNATE) {
-            return PipeConnectionType.NORMAL;
-        } else {
-            return PipeConnectionType.ALTERNATE;
-        }
     }
 
     @Override
