@@ -99,7 +99,11 @@ public class PipeBehavior {
     }
 
     public double modifyItemSpeed(TravellingItemEntity item) {
-        return 0.01D;
+        return TravellingItemEntity.DEFAULT_SPEED;
+    }
+    
+    public double modifyFluidTransferDelay(TravellingFluid energy) {
+        return TravellingFluid.DEFAULT_TRANSFER_DELAY;
     }
 
     /**

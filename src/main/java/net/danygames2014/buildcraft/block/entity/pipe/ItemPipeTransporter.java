@@ -8,22 +8,15 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.Iterator;
 
 public class ItemPipeTransporter extends PipeTransporter {
-    public final PipeBlockEntity blockEntity;
     public final ObjectOpenHashSet<TravellingItemEntity> contents;
-    public World world;
-    public int x;
-    public int y;
-    public int z;
 
     public ItemPipeTransporter(PipeBlockEntity blockEntity) {
         super(blockEntity);
-        this.blockEntity = blockEntity;
         this.contents = new ObjectOpenHashSet<>();
     }
 
@@ -35,13 +28,8 @@ public class ItemPipeTransporter extends PipeTransporter {
     // Pipe Logic
     @Override
     public void tick() {
-        if (world == null) {
-            world = blockEntity.world;
-            x = blockEntity.x;
-            y = blockEntity.y;
-            z = blockEntity.z;
-        }
-
+        super.tick();
+        
         Iterator<TravellingItemEntity> iterator = contents.iterator();
         while (iterator.hasNext()) {
             TravellingItemEntity item = iterator.next();
