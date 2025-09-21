@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 
 public class SimpleInventory implements Inventory {
-    private ItemStack[] stacks;
+    public ItemStack[] stacks;
     private final String name;
     private final MarkDirtyCallback markDirtyCallback;
 

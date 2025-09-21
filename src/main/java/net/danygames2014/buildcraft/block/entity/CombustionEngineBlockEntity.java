@@ -5,7 +5,8 @@ import net.danygames2014.buildcraft.api.energy.EngineCoolant;
 import net.danygames2014.buildcraft.api.energy.EngineCoolantRegistry;
 import net.danygames2014.buildcraft.api.energy.EngineFuel;
 import net.danygames2014.buildcraft.api.energy.EngineFuelRegistry;
-import net.danygames2014.buildcraft.init.FluidListener;
+import net.danygames2014.nyalib.capability.CapabilityHelper;
+import net.danygames2014.nyalib.capability.item.fluidhandler.FluidHandlerItemCapability;
 import net.danygames2014.nyalib.fluid.*;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
@@ -364,5 +365,15 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     @Override
     public boolean canConnectFluid(Direction direction) {
         return direction != facing;
+    }
+    
+    // Item Handler
+    @Override
+    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction side) {
+        if (!(stack.getItem() instanceof FluidBucket) && CapabilityHelper.getCapability(stack, FluidHandlerItemCapability.class) == null) {
+            return stack;
+        }
+        
+        return super.insertItem(stack, slot, side);
     }
 }

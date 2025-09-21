@@ -11,7 +11,10 @@ package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.util.FuelUtil;
 import net.danygames2014.buildcraft.util.MathUtil;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntity {
     final float MAX_OUTPUT = 1f;
@@ -87,6 +90,16 @@ public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntit
         double e = TARGET_OUTPUT * getMaxEnergy() - energy;
         esum = MathUtil.clamp(esum + e, -eLimit, eLimit);
         return MathUtil.clamp(e * kp + esum * ki, MIN_OUTPUT, MAX_OUTPUT);
+    }
+
+    // Item Handler
+    @Override
+    public ItemStack insertItem(ItemStack stack, int slot, @Nullable Direction side) {
+        if (FuelUtil.getEngineFuelTime(stack) <= 0) {
+            return stack;
+        }
+
+        return super.insertItem(stack, slot, side);
     }
 
     // Properties
