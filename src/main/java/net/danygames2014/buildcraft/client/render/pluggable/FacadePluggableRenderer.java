@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.block.Block;
@@ -165,6 +166,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
             float[][] rotated = MatrixTransformation.deepClone(zeroStateSupport);
             MatrixTransformation.transform(rotated, side);
 
+            renderBlock.setTextureOffset(TextureListener.structurePipe.index);
             renderBlock.setBoundingBox(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);
             blockRenderManager.renderFlat(renderBlock, x, y, z , 1.0F, 1.0F, 1.0F);
         }

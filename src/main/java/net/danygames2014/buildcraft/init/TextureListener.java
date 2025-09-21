@@ -40,6 +40,7 @@ public class TextureListener {
     public static Atlas.Sprite yellowPipeWireLit;
 
     public static Atlas.Sprite plug;
+    public static Atlas.Sprite structurePipe;
 
 
     @EventListener
@@ -73,5 +74,6 @@ public class TextureListener {
         yellowPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/yellow_pipe_wire_lit"));
 
         plug = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pluggable/plug"));
+        structurePipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/structure_pipe"));
     }
 }

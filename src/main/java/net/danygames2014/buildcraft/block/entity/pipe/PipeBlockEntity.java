@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
+import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.danygames2014.buildcraft.util.PipeUtil;
 import net.minecraft.block.entity.BlockEntity;
@@ -202,7 +203,15 @@ public class PipeBlockEntity extends BlockEntity {
     }
 
     public boolean hasFacade(Direction direction){
-        throw new NotImplementedException();
+        if(direction == null){
+            return false;
+        } else {
+            return sideProperties.pluggables[direction.ordinal()] instanceof FacadePluggable;
+        }
+    }
+
+    public boolean hasEnabledFacade(Direction direction){
+        return hasFacade(direction) && !((FacadePluggable) getPipePluggable(direction)).isTransparent();
     }
 
     public boolean hasGate(Direction direction){

@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.item.PipeWireItem;
+import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.RaycastResult;
@@ -199,6 +200,38 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
             if (connections.get(Direction.NORTH) != PipeConnectionType.NONE) {
                 this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
+
+            float facadeThickness = FacadePluggable.FACADE_THICKNESS;
+
+            if (pipe.hasEnabledFacade(Direction.SOUTH)) {
+                setBoundingBox(1 - facadeThickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
+
+            if (pipe.hasEnabledFacade(Direction.NORTH)) {
+                setBoundingBox(0.0F, 0.0F, 0.0F, facadeThickness, 1.0F, 1.0F);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
+
+            if (pipe.hasEnabledFacade(Direction.UP)) {
+                setBoundingBox(0.0F, 1 - facadeThickness, 0.0F, 1.0F, 1.0F, 1.0F);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
+
+            if (pipe.hasEnabledFacade(Direction.DOWN)) {
+                setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, facadeThickness, 1.0F);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
+
+            if (pipe.hasEnabledFacade(Direction.WEST)) {
+                setBoundingBox(0.0F, 0.0F, 1 - facadeThickness, 1.0F, 1.0F, 1.0F);
+                super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+            }
+
+            if (pipe.hasEnabledFacade(Direction.EAST)) {
+                setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, facadeThickness);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
