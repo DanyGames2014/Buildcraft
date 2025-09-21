@@ -76,6 +76,7 @@ public class PipeBlockEntity extends BlockEntity {
         if (neighbourUpdate) {
             refreshRenderState = true;
             neighbourUpdate = false;
+            updateConnections();
         }
 
         if (refreshRenderState) {
@@ -152,8 +153,22 @@ public class PipeBlockEntity extends BlockEntity {
         if (other == null) {
             return PipeConnectionType.NONE;
         }
+        if(hasBlockingPluggable(side)){
+            if(other instanceof PipeBlockEntity pipe && pipe.connections.get(side.getOpposite()) != PipeConnectionType.NONE){
+                pipe.neighborUpdate();
+            }
+            return PipeConnectionType.NONE;
+        }
 
         if (other instanceof PipeBlockEntity pipe) {
+            if(pipe.hasBlockingPluggable(side.getOpposite())){
+                return PipeConnectionType.NONE;
+            }
+
+//            if(pipe.canConnectTo(x, y, z, side.getOpposite()) == PipeConnectionType.NONE){
+//                return PipeConnectionType.NONE;
+//            }
+
             return behavior.canConnectToPipe(this, pipe, pipe.behavior);
         }
 
@@ -164,6 +179,15 @@ public class PipeBlockEntity extends BlockEntity {
         }
 
         return PipeConnectionType.NONE;
+    }
+
+    public boolean hasBlockingPluggable(Direction side){
+        PipePluggable pluggable = getPipePluggable(side);
+        if(pluggable == null){
+            return false;
+        }
+
+        return pluggable.isBlocking(this, side);
     }
 
     public void onBreak() {
@@ -225,6 +249,7 @@ public class PipeBlockEntity extends BlockEntity {
 
     @Override
     public void markDirty() {
+        updateConnections();
         scheduleRenderUpdate();
         super.markDirty();
     }
