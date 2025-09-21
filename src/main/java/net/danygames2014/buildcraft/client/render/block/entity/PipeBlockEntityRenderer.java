@@ -1,13 +1,20 @@
 package net.danygames2014.buildcraft.client.render.block.entity;
 
+import net.danygames2014.buildcraft.block.entity.pipe.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
+import net.danygames2014.buildcraft.init.FluidListener;
+import net.danygames2014.nyalib.fluid.Fluid;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.util.IntHashMap;
+import net.minecraft.world.LightType;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -54,7 +61,115 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
     public void render(BlockEntity blockEntity, double x, double y, double z, float tickDelta) {
         if(blockEntity instanceof PipeBlockEntity pipe){
             renderGatesWires(pipe, x, y, z);
+
+            if(pipe.transporter instanceof FluidPipeTransporter){
+                renderFluids(pipe, x, y, z);
+            }
         }
+    }
+
+    private DisplayFluidList getDisplayFluidList(Fluid fluid, int skylight, int blocklight, int flags, World world){
+        int finalBlockLight = Math.max(flags & 31, blocklight);
+        int listId = (fluid.getIdentifier().hashCode() & 0x3FFFF) << 13 | (flags & 0xE0 | finalBlockLight) << 5 | (skylight & 31);
+        if (displayFluidLists.containsKey(listId)) {
+            return (DisplayFluidList) displayFluidLists.get(listId);
+        }
+
+        if(fluid == null){
+            return null;
+        }
+
+        DisplayFluidList d = new DisplayFluidList();
+        displayFluidLists.put(listId, d);
+
+        EntityBlockRenderer.RenderInfo block = new EntityBlockRenderer.RenderInfo();
+        if(fluid.getStillBlock() != null){
+            block.baseBlock = fluid.getStillBlock();
+        } else {
+            block.baseBlock = Block.WATER;
+        }
+
+        block.texture = fluid.getStillBlock().getTexture(0);
+        block.brightness = skylight << 16 | finalBlockLight;
+
+        float size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
+
+        for(int s = 0; s < LIQUID_STAGES; ++s) {
+            float ratio = (float) s / (float) LIQUID_STAGES;
+
+            // SIDE HORIZONTAL
+
+            d.sideHorizontal[s] = GL11.glGenLists(1);;
+            GL11.glNewList(d.sideHorizontal[s], GL11.GL_COMPILE);
+
+            block.minX = 0.0F;
+            block.minZ = PipeWorldRenderer.PIPE_MIN_POS + 0.01F;
+
+            block.maxX = block.minX + size / 2F + 0.01F;
+            block.maxZ = block.minZ + size - 0.02F;
+
+            block.minY = PipeWorldRenderer.PIPE_MIN_POS + 0.01F;
+            block.maxY = block.minY + (size - 0.02F) * ratio;
+
+            EntityBlockRenderer.INSTANCE.renderBlock(block);
+
+            GL11.glEndList();
+
+            // SIDE VERTICAL
+
+            d.sideVertical[s] = GL11.glGenLists(1);
+            GL11.glNewList(d.sideVertical[s], GL11.GL_COMPILE);
+
+            block.minY = (float) (PipeWorldRenderer.PIPE_MAX_POS - 0.01);
+            block.maxY = 1;
+
+            block.minX = (float) (0.5 - (size / 2 - 0.01) * ratio);
+            block.maxX = (float) (0.5 + (size / 2 - 0.01) * ratio);
+
+            block.minZ = (float) (0.5 - (size / 2 - 0.01) * ratio);
+            block.maxZ = (float) (0.5 + (size / 2 - 0.01) * ratio);
+
+            EntityBlockRenderer.INSTANCE.renderBlock(block);
+
+            GL11.glEndList();
+
+            // CENTER HORIZONTAL
+
+            d.centerHorizontal[s] = GL11.glGenLists(1);
+            GL11.glNewList(d.centerHorizontal[s], GL11.GL_COMPILE);
+
+            block.minX = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
+            block.minZ = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
+
+            block.maxX = (float) (block.minX + size - 0.02);
+            block.maxZ = (float) (block.minZ + size - 0.02);
+
+            block.minY = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
+            block.maxY = block.minY + (size - 0.02F) * ratio;
+
+            EntityBlockRenderer.INSTANCE.renderBlock(block);
+
+            GL11.glEndList();
+
+            // CENTER VERTICAL
+
+            d.centerVertical[s] = GL11.glGenLists(1);
+            GL11.glNewList(d.centerVertical[s], GL11.GL_COMPILE);
+
+            block.minY = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
+            block.maxY = (float) (PipeWorldRenderer.PIPE_MAX_POS - 0.01);
+
+            block.minX = (float) (0.5 - (size / 2 - 0.02) * ratio);
+            block.maxX = (float) (0.5 + (size / 2 - 0.02) * ratio);
+
+            block.minZ = (float) (0.5 - (size / 2 - 0.02) * ratio);
+            block.maxZ = (float) (0.5 + (size / 2 - 0.02) * ratio);
+
+            EntityBlockRenderer.INSTANCE.renderBlock(block);
+
+            GL11.glEndList();
+        }
+        return d;
     }
 
     private void renderGatesWires(PipeBlockEntity pipe, double x, double y, double z){
@@ -221,6 +336,107 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         GL11.glPopMatrix();
     }
+
+    private void renderFluids(PipeBlockEntity pipe, double x, double y, double z) {
+        FluidPipeTransporter transporter = (FluidPipeTransporter) pipe.transporter;
+
+        boolean needsRender = false;
+        for (int i = 0; i < 7; ++i) {
+            if (transporter.fillLevel[i] > 0) {
+                needsRender = true;
+                break;
+            }
+        }
+
+        if (!needsRender) {
+            return;
+        }
+
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        GL11.glTranslatef((float) x, (float) y, (float) z);
+
+        int skylight = pipe.world.getBrightness(LightType.SKY, pipe.x, pipe.y, pipe.z);
+        int blockLight = pipe.world.getBrightness(LightType.BLOCK, pipe.x, pipe.y, pipe.z);
+
+        boolean sides = false, above = false;
+
+        for (Direction side : Direction.values()) {
+            int i = side.ordinal();
+
+            if (pipe.connections.get(side) == PipeConnectionType.NONE) {
+                continue;
+            }
+
+            DisplayFluidList d = getDisplayFluidList(FluidListener.fuel, skylight, blockLight, 0, pipe.world);
+
+            if (d == null) {
+                continue;
+            }
+
+            int stage = (int) ((float) transporter.fillLevel[i] / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+
+            GL11.glPushMatrix();
+            int list = 0;
+
+            switch (Direction.byId(i)) {
+                case UP:
+                    above = true;
+                    list = d.sideVertical[stage];
+                    break;
+                case DOWN:
+                    GL11.glTranslatef(0, -0.75F, 0);
+                    list = d.sideVertical[stage];
+                    break;
+                case EAST:
+                case WEST:
+                case SOUTH:
+                case NORTH:
+                    sides = true;
+                    // Yes, this is kind of ugly, but was easier than transform the coordinates above.
+                    GL11.glTranslatef(0.5F, 0.0F, 0.5F);
+                    GL11.glRotatef(angleY[i], 0, 1, 0);
+                    GL11.glRotatef(angleZ[i], 0, 0, 1);
+                    GL11.glTranslatef(-0.5F, 0.0F, -0.5F);
+                    list = d.sideHorizontal[stage];
+                    break;
+                default:
+            }
+            StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+            //RenderUtils.setGLColorFromInt(fluidRenderData.color); TODO: support fluid color
+            GL11.glCallList(list);
+            GL11.glPopMatrix();
+        }
+        // CENTER
+        if (transporter.fillLevel[6] > 0) {
+            DisplayFluidList d = getDisplayFluidList(FluidListener.fuel, skylight, blockLight, 0, pipe.world);
+
+            if (d != null) {
+                int stage = (int) ((float) transporter.fillLevel[6] / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+
+                StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+                //RenderUtils.setGLColorFromInt(fluidRenderData.color); TODO: support fluid color
+
+                if (above) {
+                    GL11.glCallList(d.centerVertical[stage]);
+                }
+
+                if (!above || sides) {
+                    GL11.glCallList(d.centerHorizontal[stage]);
+                }
+            }
+
+        }
+
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
+    }
+
 
     private static void renderLitBox(EntityBlockRenderer.RenderInfo info, boolean isLit){
         EntityBlockRenderer.INSTANCE.renderBlock(info);
