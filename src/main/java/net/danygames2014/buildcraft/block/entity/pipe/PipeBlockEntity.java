@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
+import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -324,8 +325,8 @@ public class PipeBlockEntity extends BlockEntity {
         }
 
         for (int i = 0; i < 7; i++) {
-            Direction direction = Direction.byId(i);
-            renderState.textureMatrix.setTextureIndex(direction, pipeBlock.getTexture(i));
+            Direction direction = DirectionUtil.getById(i);
+            renderState.textureMatrix.setTextureIndex(direction, pipeBlock.getTextureForSide(direction, direction != null ? this.canConnectTo(x, y, z, direction) : null));
         }
 
         for(PipeWire color : PipeWire.values()){

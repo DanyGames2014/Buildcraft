@@ -5,12 +5,18 @@ import net.modificationstation.stationapi.api.client.event.texture.TextureRegist
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.Namespace;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TextureListener {
 
     @Entrypoint.Namespace
     public static Namespace NAMESPACE;
+
+    public static List<Identifier> dynamicBlockTextures = new ArrayList<>();
 
     public static Atlas.Sprite energySprite;
 
@@ -38,16 +44,21 @@ public class TextureListener {
 
     @EventListener
     public void registerTextures(TextureRegisterEvent event){
+
+        for(Identifier identifier : dynamicBlockTextures){
+            Atlases.getTerrain().addTexture(identifier);
+        }
+
         energySprite = Atlases.getGuiItems().addTexture(NAMESPACE.id("item/energy_icon"));
 
-        cobblestoneItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_item_pipe"));
-        cobblestoneFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_fluid_pipe"));
-        cobblestoneEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_energy_pipe"));
-
-        woodenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_item_pipe"));
-        woodenFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_fluid_pipe"));
-        woodenEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_energy_pipe"));
-        goldenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/golden_item_pipe"));
+//        cobblestoneItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_item_pipe"));
+//        cobblestoneFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_fluid_pipe"));
+//        cobblestoneEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_energy_pipe"));
+//
+//        woodenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_item_pipe"));
+//        woodenFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_fluid_pipe"));
+//        woodenEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_energy_pipe"));
+//        goldenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/golden_item_pipe"));
 
         redPipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/red_pipe_wire"));
         redPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/red_pipe_wire_lit"));

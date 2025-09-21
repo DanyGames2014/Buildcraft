@@ -46,6 +46,11 @@ public class PlugPluggable extends PipePluggable {
     }
 
     @Override
+    public boolean isSolidOnSide() {
+        return true;
+    }
+
+    @Override
     public void readNbt(NbtCompound nbt) {
     }
 

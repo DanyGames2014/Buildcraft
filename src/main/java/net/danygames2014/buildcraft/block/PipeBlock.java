@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.RaycastResult;
 import net.danygames2014.uniwrench.api.WrenchMode;
@@ -52,14 +53,22 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     private PipeItemRenderer pipeItemRenderer;
     @Environment(EnvType.CLIENT)
     private Identifier texture;
+    @Environment(EnvType.CLIENT)
+    @Nullable
+    private Identifier alternativeTexture;
 
-    public PipeBlock(Identifier identifier, Material material, Identifier texture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter, PipeBlockEntityFactory blockEntityFactory) {
+    public PipeBlock(Identifier identifier, Material material, Identifier texture, @Nullable Identifier alternativeTexture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter, PipeBlockEntityFactory blockEntityFactory) {
         super(identifier, material);
         this.blockEntityFactory = blockEntityFactory;
         this.behavior = behavior;
         this.transporterFactory = transporter;
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            TextureListener.dynamicBlockTextures.add(texture);
+            if(alternativeTexture != null){
+                TextureListener.dynamicBlockTextures.add(alternativeTexture);
+            }
             this.texture = texture;
+            this.alternativeTexture = alternativeTexture;
             this.pipeWorldRenderer = new PipeWorldRenderer();
             this.pipeItemRenderer = new PipeItemRenderer();
         }
@@ -110,6 +119,25 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
 
         return false;
+    }
+
+    @Environment(EnvType.CLIENT)
+    @Override
+    public int getTexture(int side) {
+        if (Atlases.getTerrain() == null) {
+            return 0;
+        }
+        if(Atlases.getTerrain().getTexture(texture) != null){
+            return Atlases.getTerrain().getTexture(texture).index;
+        }
+        return 0;
+    }
+
+    public int getTextureForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType){
+        if(direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE){
+            return Atlases.getTerrain().getTexture(alternativeTexture).index;
+        }
+        return Atlases.getTerrain().getTexture(texture).index;
     }
 
     // Block Entity
@@ -280,16 +308,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         setBoundingBox((float) box.minX, (float) box.minY, (float) box.minZ, (float) box.maxX, (float) box.maxY, (float) box.maxZ);
     }
 
-    // Rendering
-    @Environment(EnvType.CLIENT)
-    @Override
-    public int getTexture(int side) {
-        if (Atlases.getTerrain() == null) {
-            return 0;
-        }
-        return Atlases.getTerrain().getTexture(texture).index;
-    }
-
     @Override
     public boolean isFullCube() {
         return false;
@@ -322,6 +340,15 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             System.out.println(pipe);
             player.sendMessage(pipe.toString());
         }
+    }
+
+    @Override
+    public boolean isSolidFace(BlockView blockView, int x, int y, int z, int face) {
+        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe){
+            Direction side = Direction.byId(face);
+            return pipe.hasPipePluggable(side) && pipe.getPipePluggable(side).isSolidOnSide();
+        }
+        return false;
     }
 
     @Override
