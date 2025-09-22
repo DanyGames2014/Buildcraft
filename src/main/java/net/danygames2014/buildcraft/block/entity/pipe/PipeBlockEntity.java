@@ -35,6 +35,8 @@ public class PipeBlockEntity extends BlockEntity {
     public boolean[] wireSet = new boolean[]{false, false, false, false};
     public int[] signalStrength = new int[]{0, 0, 0, 0};
 
+    public PipeEventBus eventBus = new PipeEventBus();
+
     public Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = null;
 
     protected PipeSideProperties sideProperties = new PipeSideProperties();
@@ -50,6 +52,7 @@ public class PipeBlockEntity extends BlockEntity {
     // Normal constructor for when the pipe is first created
     public PipeBlockEntity(PipeBlock pipeBlock) {
         this.pipeBlock = pipeBlock;
+        eventBus.registerHandler(behavior);
         init();
     }
 
@@ -95,7 +98,7 @@ public class PipeBlockEntity extends BlockEntity {
             for(int i = 0; i < Direction.values().length; i++){
                 if(sideProperties.pluggables[i] != null){
                     // TODO: figure out what this does
-                    //pipe.eventBus.registerHandler(sideProperties.pluggables[i]);
+                    eventBus.registerHandler(sideProperties.pluggables[i]);
                     sideProperties.pluggables[i].onAttachedToPipe(this, Direction.byId(i));
                 }
             }
@@ -234,12 +237,12 @@ public class PipeBlockEntity extends BlockEntity {
         if(sideProperties.pluggables[direction.ordinal()] != null){
             sideProperties.dropItem(this, direction, player);
             // TODO: implement this later
-            //pipe.eventBus.unregisterHandler(sideProperties.pluggables[direction.ordinal()]);
+            eventBus.unregisterHandler(sideProperties.pluggables[direction.ordinal()]);
         }
 
         sideProperties.pluggables[direction.ordinal()] = pluggable;
         if(pluggable != null){
-            //pipe.eventBus.registerHandler(pluggable);
+            eventBus.registerHandler(pluggable);
             pluggable.onAttachedToPipe(this, direction);
         }
         markDirty();
