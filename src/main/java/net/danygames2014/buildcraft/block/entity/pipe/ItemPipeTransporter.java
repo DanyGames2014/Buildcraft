@@ -30,6 +30,10 @@ public class ItemPipeTransporter extends PipeTransporter {
     public void tick() {
         super.tick();
         
+        if (world.isRemote) {
+            return;
+        }
+        
         Iterator<TravellingItemEntity> iterator = contents.iterator();
         while (iterator.hasNext()) {
             TravellingItemEntity item = iterator.next();

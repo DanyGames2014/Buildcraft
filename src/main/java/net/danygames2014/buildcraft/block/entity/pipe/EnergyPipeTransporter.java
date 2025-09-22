@@ -31,6 +31,10 @@ public class EnergyPipeTransporter extends PipeTransporter {
     public void tick() {
         super.tick();
         
+        if (world.isRemote) {
+            return;
+        }
+        
         Iterator<TravellingEnergy> iterator = contents.iterator();
         while (iterator.hasNext()) {
             TravellingEnergy energy = iterator.next();
