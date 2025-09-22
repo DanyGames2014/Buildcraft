@@ -114,7 +114,7 @@ public class PipeBehavior {
     }
     
     public double modifyFluidTransferDelay(TravellingFluid fluid) {
-        return TravellingFluid.DEFAULT_TRANSFER_DELAY;
+        return 0;
     }
 
     /**

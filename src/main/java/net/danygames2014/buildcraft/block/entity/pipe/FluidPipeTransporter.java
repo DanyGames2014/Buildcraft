@@ -1,27 +1,34 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.danygames2014.buildcraft.Buildcraft;
-import net.danygames2014.nyalib.capability.CapabilityHelper;
-import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
+import net.danygames2014.buildcraft.block.entity.pipe.TravellingFluid.FlowDirection;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
-
-import java.util.Arrays;
-import java.util.Iterator;
 
 public class FluidPipeTransporter extends PipeTransporter {
     public static final int MAXIMUM_FILL_LEVEL = 10;
-
-    public ObjectOpenHashSet<TravellingFluid> contents;
-    /**
-     * Index 0-5 is {@link Direction} ids. Index 6 is the center;
-     */
-    public int[] fillLevel = new int[7];
+    public static final int TRANSFER_DELAY = 4;
+    public static final int FLOW_RATE = 10;
+    // TODO: When pipe is updated, remove the keys belonging to non existent sides.
+    public Object2ObjectOpenHashMap<FlowDirection, ObjectOpenHashSet<TravellingFluid>> contents;
 
     public FluidPipeTransporter(PipeBlockEntity blockEntity) {
         super(blockEntity);
-        this.contents = new ObjectOpenHashSet<>();
+        this.contents = new Object2ObjectOpenHashMap<>();
+        initContents();
+    }
+
+    public void initContents() {
+        for (FlowDirection flowDirection : FlowDirection.values()) {
+            if (flowDirection == FlowDirection.OUT) {
+                continue;
+            }
+            
+            this.contents.put(flowDirection, new ObjectOpenHashSet<>());
+        }
     }
 
     @Override
@@ -32,53 +39,51 @@ public class FluidPipeTransporter extends PipeTransporter {
     @Override
     public void tick() {
         super.tick();
+        
+        if (world.isRemote || world.getTime() % TRANSFER_DELAY != 0) {
+            return;
+        }
 
-        validateFillLevel();
-
-        Iterator<TravellingFluid> iterator = contents.iterator();
-        while (iterator.hasNext()) {
-            TravellingFluid fluid = iterator.next();
-
-            if (fluid == null || fluid.invalid) {
-                iterator.remove();
-                continue;
-            }
-
-            fluid.tick();
-
-            if (fluid.transferDelay <= 0) {
-                if (fluid.travelDirection == null && fluid.input != null) {
-                    // Side -> Middle
-                    flowInternally(fluid);
-                    fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
-
-                } else if (fluid.travelDirection != null && fluid.input == null) {
-                    // Middle -> Side
-                    flowInternally(fluid);
-                    fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
-
-                } else if (fluid.travelDirection != null && fluid.input != null) {
-                    // Side -> Out
-                    if (handOffFluid(fluid)) {
+        for (FlowDirection section : FlowDirection.values()) {
+            ObjectIterator<TravellingFluid> iterator = contents.get(section).iterator();
+            while (iterator.hasNext()) {
+                TravellingFluid fluid = iterator.next();
+                
+                if (fluid == null || fluid.invalid) {
+                    iterator.remove();
+                    continue;
+                }
+                
+                fluid.tick();
+                
+                if (section != FlowDirection.CENTER) {
+                    if (handOff(fluid, section)) {
                         iterator.remove();
-                    } else {
-                        fluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+                        continue;
                     }
-                } else {
-                    System.err.println("WHAT");
+
+                    if (fluid.bounceTimer >= 5) {
+                        bounceFluid(fluid, section);
+                    }
+                }
+                
+                if (section == FlowDirection.CENTER) {
+                    flowToSides(fluid, section);
+                }
+                
+                if (section != FlowDirection.CENTER) {
+                    flowToCenter(fluid, section);
                 }
             }
-
-            fluid.transferDelay--;
         }
     }
 
     public int injectFluid(FluidStack stack, Direction side) {
         TravellingFluid travellingFluid = new TravellingFluid(world, this);
         travellingFluid.stack = stack;
-        travellingFluid.input = side;
-        travellingFluid.travelDirection = null;
-        travellingFluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
+        travellingFluid.input = FlowDirection.fromDirection(side);
+        travellingFluid.flowDirection = FlowDirection.CENTER;
+        travellingFluid.bounceTimer = 0;
         return injectFluid(travellingFluid, side);
     }
 
@@ -89,143 +94,107 @@ public class FluidPipeTransporter extends PipeTransporter {
      * @param side  The side to inject on
      * @return The amount of fluid that was injected
      */
-    public int injectFluid(TravellingFluid fluid, Direction side) {
-        // Check if the fluid is already in the pipe
-        for (var content : contents) {
-            if (!content.stack.isFluidEqual(fluid.stack)) {
-                return 0;
-            }
-        }
-
-        int sideCapacity = getSideCapacity(side);
+    private int injectFluid(TravellingFluid fluid, Direction side) {
+        int sideCapacity = getSideRemainingCapacity(FlowDirection.fromDirection(side));
         if (sideCapacity > 0) {
-            if (sideCapacity >= fluid.stack.amount) {
-                fillLevel[side.ordinal()] += fluid.stack.amount;
-                contents.add(fluid);
+            var sideContents = contents.get(FlowDirection.fromDirection(side));
+
+            if (fluid.stack.amount <= sideCapacity) {
+                sideContents.add(fluid);
                 return fluid.stack.amount;
             } else {
-                TravellingFluid newFluid = fluid.split(sideCapacity);
-                fillLevel[side.ordinal()] += sideCapacity;
-                contents.add(newFluid);
+                sideContents.add(fluid.split(sideCapacity));
                 return sideCapacity;
             }
         }
 
         return 0;
     }
-
-    /**
-     * @param fluid The fluid to flow internally
-     */
-    public void flowInternally(TravellingFluid fluid) {
-        int inputSide = fluid.input != null ? fluid.input.ordinal() : 6;
-        int outputSide = fluid.travelDirection != null ? fluid.travelDirection.ordinal() : 6;
-
-        int outputCapacity = getSideCapacity(outputSide);
-        if (outputCapacity > 0) {
-            if (outputCapacity >= fluid.stack.amount) {
-                // We are moving the entire fluid stack
-                fillLevel[outputSide] += fluid.stack.amount;
-                fillLevel[inputSide] -= fluid.stack.amount;
-
-                if (fluid.travelDirection != null && fluid.input == null) {
-                    fluid.input = fluid.travelDirection;
-                } else if (fluid.travelDirection == null) {
-                    fluid.travelDirection = blockEntity.behavior.routeFluid(blockEntity, blockEntity.validOutputDirections, fluid);
-                    fluid.input = null;
-                }
-            }
-        } else {
-            // We are splitting of the amount from the fluid stack that will fit and moving that
-            TravellingFluid newFluid = fluid.split(outputCapacity);
-            fillLevel[outputSide] += newFluid.stack.amount;
-            fillLevel[inputSide] -= newFluid.stack.amount;
-
-            if (fluid.travelDirection != null && fluid.input == null) {
-                fluid.input = fluid.travelDirection;
-            } else if (fluid.travelDirection == null) {
-                newFluid.travelDirection = blockEntity.behavior.routeFluid(blockEntity, blockEntity.validOutputDirections, fluid);
-                newFluid.input = null;
-            }
-
-            newFluid.transferDelay = TravellingFluid.DEFAULT_TRANSFER_DELAY;
-            contents.add(newFluid);
-        }
-    }
-
-
-    /**
-     * Hand-off fluid to another pipe or Fluid Handler
-     *
-     * @param fluid The fluid to hand-off
-     * @return WHether the fluid was fully handed off and can be removed
-     */
-    public boolean handOffFluid(TravellingFluid fluid) {
-        Direction side = fluid.travelDirection;
-
+    
+    public boolean handOff(TravellingFluid fluid, FlowDirection section) {
+        Direction side = FlowDirection.toDirecton(section);
+        
+        assert side != null;
+        
         if (world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) instanceof PipeBlockEntity pipe) {
             if (pipe.transporter instanceof FluidPipeTransporter otherTransporter) {
                 int injectedAmount = otherTransporter.injectFluid(fluid, side.getOpposite());
-
-                if (injectedAmount <= 0) {
-                    return false;
-                } else if (injectedAmount >= fluid.stack.amount) {
-                    fillLevel[side.ordinal()] -= fluid.stack.amount;
-                    return true;
+                
+                // If we injected any amount of fluid
+                if (injectedAmount > 0) {
+                    if (injectedAmount >= fluid.stack.amount) {
+                        // Full amount was injected, the TravellingFluid object was transferred to the other transporter
+                        return true;
+                    } else {
+                        // Full amount was not injected, a copy object was created in the other transporter. Reduce the amount of the original TravellingFluid object.
+                        fluid.stack.amount -= injectedAmount;
+                        return false;
+                    }
                 } else {
-                    fluid.stack.amount -= injectedAmount;
-                    fillLevel[side.ordinal()] -= injectedAmount;
+                    // No fluid was injected, increase the bounce timer.
+                    fluid.bounceTimer++;
                     return false;
                 }
             }
         }
-
-        FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), FluidHandlerBlockCapability.class);
-        if (cap != null) {
-            if (cap.canInsertFluid(side.getOpposite())) {
-                FluidStack returnedStack = cap.insertFluid(fluid.stack, side.getOpposite());
-                if (returnedStack == null) {
-                    fillLevel[side.ordinal()] -= fluid.stack.amount;
-                    fluid.invalid = true;
-                    return true;
-                } else {
-                    fillLevel[side.ordinal()] -= fluid.stack.amount - returnedStack.amount;
-                    fluid.stack = returnedStack;
-                    return false;
-                }
-            }
-        }
-
+        
+        // TODO: Hand-off to FluidHandlerBlockCapability
+        
         return false;
     }
+    
+    public void bounceFluid(TravellingFluid fluid, FlowDirection section) {
+        fluid.input = section;
+        fluid.flowDirection = FlowDirection.CENTER; 
+        fluid.bounceTimer = 0;
+    }
+    
+    public void flowToSides(TravellingFluid fluid, FlowDirection section) {
+        
+    }
+    
+    public void flowToCenter(TravellingFluid fluid, FlowDirection section) {
+        
+    }
 
-    public void validateFillLevel() {
-        for (int i = 0; i < 6; i++) {
-            if (fillLevel[i] > MAXIMUM_FILL_LEVEL) {
-                Buildcraft.LOGGER.warn("Fill level for side " + i + " is too high! Setting it to " + MAXIMUM_FILL_LEVEL);
-                fillLevel[i] = MAXIMUM_FILL_LEVEL;
-            }
+    // Capacity
+    public int getSideRemainingCapacity(FlowDirection section) {
+        return MAXIMUM_FILL_LEVEL - getSideFillLevel(section);
+    }
+
+    public int getSideRemainingCapacity(int side) {
+        return getSideRemainingCapacity(FlowDirection.values()[side]);
+    }
+
+    public int getSideFillLevel(FlowDirection section) {
+        int fillevel = 0;
+        for (TravellingFluid fluid : contents.get(section)) {
+            fillevel += fluid.stack.amount;
         }
+        return fillevel;
+    }
+    
+    public int getSideFillLevel(int side) {
+        return getSideFillLevel(FlowDirection.values()[side]);
+    }
+    
+    // NBT
+    @Override
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
     }
 
-    public int getSideCapacity(Direction side) {
-        if (side == null) {
-            return getSideCapacity(6);
-        }
-
-        return getSideCapacity(side.ordinal());
-
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        initContents();
     }
 
-    public int getSideCapacity(int side) {
-        return MAXIMUM_FILL_LEVEL - fillLevel[side];
-    }
-
+    // Debug
     @Override
     public String toString() {
         return "FluidPipeTransporter{" +
                 "contents=" + contents +
-                ", fillLevel=" + Arrays.toString(fillLevel) +
                 '}';
     }
 }

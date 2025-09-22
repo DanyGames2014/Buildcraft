@@ -344,7 +344,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         boolean needsRender = false;
         for (int i = 0; i < 7; ++i) {
-            if (transporter.fillLevel[i] > 0) {
+            if (transporter.getSideFillLevel(i) > 0) {
                 needsRender = true;
                 break;
             }
@@ -381,7 +381,8 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 continue;
             }
 
-            int stage = (int) ((float) transporter.fillLevel[i] / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+            int stage = (int) ((float) transporter.getSideFillLevel(i) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+            stage = Math.abs(stage);
 
             GL11.glPushMatrix();
             int list = 0;
@@ -415,11 +416,11 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             GL11.glPopMatrix();
         }
         // CENTER
-        if (transporter.fillLevel[6] > 0) {
+        if (transporter.getSideFillLevel(6) > 0) {
             DisplayFluidList d = getDisplayFluidList(FluidListener.fuel, skylight, blockLight, 0, pipe.world);
 
             if (d != null) {
-                int stage = (int) ((float) transporter.fillLevel[6] / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+                int stage = (int) ((float) transporter.getSideFillLevel(6) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
 
                 StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
                 //RenderUtils.setGLColorFromInt(fluidRenderData.color); TODO: support fluid color

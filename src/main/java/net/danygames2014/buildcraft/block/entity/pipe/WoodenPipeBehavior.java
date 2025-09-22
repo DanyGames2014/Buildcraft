@@ -136,7 +136,7 @@ public class WoodenPipeBehavior extends PipeBehavior {
 
                 // Check if we can extract from the block
                 if (cap.canExtractFluid(side.getOpposite())) {
-                    int avalibleCapacity = fluidTransporter.getSideCapacity(side);
+                    int avalibleCapacity = fluidTransporter.getSideRemainingCapacity(TravellingFluid.FlowDirection.fromDirection(side));
                     if (avalibleCapacity <= 0) {
                         return;
                     }
@@ -151,7 +151,7 @@ public class WoodenPipeBehavior extends PipeBehavior {
                     if (extractedStack != null) {
                         powerHandler.useEnergy(extractedStack.amount, extractedStack.amount, true);
                         if(fluidTransporter.injectFluid(extractedStack, side) > 0) {
-                            Buildcraft.LOGGER.warn("Fluid was not fully injected into a Wooden Pipe!");
+                            Buildcraft.LOGGER.warn("Fluid was not fully injected into a Wooden Pipe!"); // TODO: This is just plain fucking wrong, it issues a warning only when everything was correct
                         }
                     }
                 }

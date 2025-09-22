@@ -6,28 +6,15 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class TravellingFluid {
-    public static final int MINIMUM_TRANSFER_DELAY = 1;
-    public static final int DEFAULT_TRANSFER_DELAY = 5;
-    public static final int MAXIMUM_TRANSFER_DELAY = 20;
-    public static final double ACCELERATION_MODIFIER = 0.5D;
-    public static final double DECCELERATION_MODIFIER = 1.1D;
-    
     public FluidPipeTransporter transporter;
-    public double transferDelay = DEFAULT_TRANSFER_DELAY;
-    public boolean invalid = false;
-
-
-    /**
-     * The direction the fluid is coming from. If this is null, its coming from the middle
-     */
-    public Direction input = null;
-    /**
-     * The direction this fluid is traveling to. If this is null, its going to the middle
-     */
-    public Direction travelDirection = null;
-    
-    public FluidStack stack;
     public World world;
+
+    public FluidStack stack;
+    public FlowDirection input;
+    public FlowDirection flowDirection;
+    public int bounceTimer = 0;
+    public double transferDelay = 0;
+    public boolean invalid = false;
     
     public TravellingFluid(World world, FluidPipeTransporter transporter) {
         this.world = world;
@@ -60,28 +47,94 @@ public class TravellingFluid {
         
         FluidStack splitStack = stack.copy();
         splitStack.amount = amount;
-        this.stack.amount -= amount;
+        this.stack.amount -= splitStack.amount;
         TravellingFluid splitFluid = new TravellingFluid(world, transporter);
         splitFluid.stack = splitStack;
         return splitFluid;
     }
-
+    
     // NBT
     public void writeNbt(NbtCompound nbt) {
-        nbt.putInt("input", input.getId());
-        nbt.putInt("travelDirection", travelDirection.getId());
+        nbt.putInt("input", input.ordinal());
+        nbt.putInt("travelDirection", flowDirection.ordinal());
         nbt.putDouble("transferDelay", transferDelay);
     }
 
     public void read(NbtCompound nbt) {
-        input = Direction.byId(nbt.getInt("input"));
-        travelDirection = Direction.byId(nbt.getInt("travelDirection"));
+        input = FlowDirection.values()[nbt.getInt("input")];
+        flowDirection = FlowDirection.values()[nbt.getInt("travelDirection")];
         transferDelay = nbt.getDouble("transferDelay");
     }
+
+    @Override
+    public String toString() {
+        return "TravellingFluid{" +
+                "input=" + input +
+                ", travelDirection=" + flowDirection +
+                ", stack=" + stack +
+                '}';
+    }
     
-    public enum TravelStage {
-        ENTER,
-        MIDDLE,
-        EXIT;
+    public enum FlowDirection {
+        DOWN,
+        UP,
+        EAST,
+        WEST,
+        NORTH,
+        SOUTH,
+        CENTER,
+        OUT;
+        
+        public static FlowDirection fromDirection(Direction direction) {
+            switch (direction) {
+                case DOWN -> {
+                    return DOWN;
+                }
+                case UP -> {
+                    return UP;
+                }
+                case EAST -> {
+                    return EAST;
+                }
+                case WEST -> {
+                    return WEST;
+                }
+                case NORTH -> {
+                    return NORTH;
+                }
+                case SOUTH -> {
+                    return SOUTH;
+                }
+                default -> {
+                    return null;
+                }
+            }
+        }
+        
+        public static Direction toDirecton(FlowDirection direction) {
+            switch (direction) {
+                case NORTH -> {
+                    return Direction.NORTH;
+                }
+                case SOUTH -> {
+                    return Direction.SOUTH;
+                }
+                case EAST -> {
+                    return Direction.EAST;
+                }
+                case WEST -> {
+                    return Direction.WEST;
+                }
+                case UP -> {
+                    return Direction.UP;
+                }
+                case DOWN -> {
+                    return Direction.DOWN;
+                }
+                default -> {
+                    return null;
+                }
+            }
+        }
     }
 }
