@@ -139,6 +139,8 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
                 energy = 0;
             }
         }
+        
+        powerHandler.update();
     }
 
     public boolean isActive() {
