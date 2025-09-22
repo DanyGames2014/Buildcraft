@@ -44,6 +44,7 @@ public class PipeBlockEntity extends BlockEntity {
 
     protected boolean neighbourUpdate = false;
     protected boolean refreshRenderState = false;
+    private boolean internalUpdateScheduled = false;
 
     // Empty constructor for loading
     public PipeBlockEntity() {
@@ -52,7 +53,7 @@ public class PipeBlockEntity extends BlockEntity {
     // Normal constructor for when the pipe is first created
     public PipeBlockEntity(PipeBlock pipeBlock) {
         this.pipeBlock = pipeBlock;
-        eventBus.registerHandler(behavior);
+        eventBus.registerHandler(this);
         init();
     }
 
@@ -86,6 +87,11 @@ public class PipeBlockEntity extends BlockEntity {
             refreshRenderState = true;
             neighbourUpdate = false;
             updateConnections();
+        }
+
+        if(internalUpdateScheduled){
+            internalUpdate();
+            internalUpdateScheduled = false;
         }
 
         if (refreshRenderState) {
@@ -271,6 +277,97 @@ public class PipeBlockEntity extends BlockEntity {
         super.markDirty();
     }
 
+    private void readNearbyPipesSignal(PipeWire color){
+        boolean foundBiggerSignal = false;
+
+        for (Direction direction : Direction.values()) {
+            BlockEntity blockEntity = getBlockEntity(direction);
+
+            if (blockEntity instanceof PipeBlockEntity pipe) {
+                if (isWireConnectedTo(blockEntity, color, direction)) {
+                    foundBiggerSignal |= receiveSignal(pipe.signalStrength[color.ordinal()] - 1, color);
+                }
+            }
+        }
+
+        if (!foundBiggerSignal && signalStrength[color.ordinal()] != 0) {
+            signalStrength[color.ordinal()] = 0;
+            scheduleRenderUpdate();
+
+            for (Direction direction : Direction.values()) {
+                BlockEntity blockEntity = getBlockEntity(direction);
+
+                if (blockEntity instanceof PipeBlockEntity pipe) {
+                    pipe.internalUpdateScheduled = true;
+                }
+            }
+        }
+    }
+
+    public void updateSignalState() {
+        for (PipeWire color : PipeWire.values()) {
+            updateSignalStateForColor(color);
+        }
+    }
+
+    private void updateSignalStateForColor(PipeWire wire) {
+        if (!wireSet[wire.ordinal()]) {
+            return;
+        }
+
+        // STEP 1: compute internal signal strength
+
+        boolean readNearbySignal = true;
+//        for (Gate gate : gates) {
+//            if (gate != null && gate.broadcastSignal.get(wire.ordinal())) {
+//                receiveSignal(255, wire);
+//                readNearbySignal = false;
+//            }
+//        }
+
+        if (readNearbySignal) {
+            readNearbyPipesSignal(wire);
+        }
+
+        // STEP 2: transmit signal in nearby blocks
+
+        if (signalStrength[wire.ordinal()] > 1) {
+            for (Direction direction : Direction.values()) {
+                BlockEntity blockEntity = getBlockEntity(direction);
+
+                if (blockEntity instanceof PipeBlockEntity pipe) {
+
+                    if (pipe.wireSet[wire.ordinal()]) {
+                        if (isWireConnectedTo(blockEntity, wire, direction)) {
+                            pipe.receiveSignal(signalStrength[wire.ordinal()] - 1, wire);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean receiveSignal(int signal, PipeWire color) {
+        if (world == null) {
+            return false;
+        }
+
+        int oldSignal = signalStrength[color.ordinal()];
+
+        if (signal >= signalStrength[color.ordinal()] && signal != 0) {
+            signalStrength[color.ordinal()] = signal;
+            internalUpdateScheduled = true;
+
+            if (oldSignal == 0) {
+                scheduleRenderUpdate();
+            }
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public boolean isWireConnectedTo(BlockEntity blockEntity, PipeWire color, Direction direction){
         if(!(blockEntity instanceof PipeBlockEntity pipe)){
             return false;
@@ -398,6 +495,10 @@ public class PipeBlockEntity extends BlockEntity {
         if(renderState.isDirty()){
             renderState.clean();
         }
+    }
+
+    private void internalUpdate(){
+        updateSignalState();
     }
 
     @Override
