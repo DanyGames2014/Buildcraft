@@ -79,7 +79,6 @@ public class PipeBlockEntity extends BlockEntity {
 
         if (connections == null) {
             updateConnections();
-            updateValidOutputDirections();
         }
 
         // TODO: This does more, but I only added the render related code for now
@@ -87,6 +86,7 @@ public class PipeBlockEntity extends BlockEntity {
             refreshRenderState = true;
             neighbourUpdate = false;
             updateConnections();
+            transporter.onConnectionsUpdate();
         }
 
         if(internalUpdateScheduled){
@@ -131,6 +131,8 @@ public class PipeBlockEntity extends BlockEntity {
             //System.out.println(side + " -> " + world.getBlockState(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()) + " -> " + world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
             connections.put(side, canConnectTo(x, y, z, side));
         }
+        
+        updateValidOutputDirections();
     }
     
     public void updateValidOutputDirections() {

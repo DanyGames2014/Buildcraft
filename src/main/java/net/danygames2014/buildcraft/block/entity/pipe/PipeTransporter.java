@@ -31,6 +31,11 @@ public abstract class PipeTransporter {
         
     }
 
+    // Connections Update
+    public void onConnectionsUpdate() {
+
+    }
+
     // Type
     public abstract PipeType getType();
     

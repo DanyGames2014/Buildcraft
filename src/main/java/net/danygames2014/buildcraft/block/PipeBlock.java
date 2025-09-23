@@ -104,7 +104,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     public void updateConnections(World world, int x, int y, int z) {
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipe.updateConnections();
-            pipe.updateValidOutputDirections();
         }
     }
 

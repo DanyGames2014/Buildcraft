@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.buildcraft.block.entity.pipe.TravellingFluid.FlowDirection;
+import net.danygames2014.nyalib.capability.CapabilityHelper;
+import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -13,7 +15,7 @@ import java.util.Random;
 
 public class FluidPipeTransporter extends PipeTransporter {
     public static final int MAXIMUM_FILL_LEVEL = 20;
-    public static final int TRANSFER_DELAY = 10;
+    public static final int TRANSFER_DELAY = 1;
     public static final int FLOW_RATE = 10;
     // TODO: When pipe is updated, remove the keys belonging to non existent sides.
     public Object2ObjectOpenHashMap<FlowDirection, ObjectOpenHashSet<TravellingFluid>> contents;
@@ -54,6 +56,13 @@ public class FluidPipeTransporter extends PipeTransporter {
                 }
 
                 fluid.tick();
+                
+                // Bounce Fluid
+                if (fluid.bounceTimer >= 2) {
+                    if (bounceFluid(fluid, section)) {
+                        continue;
+                    }
+                }
 
                 // Hand Off
                 if (section != FlowDirection.CENTER) {
@@ -61,10 +70,6 @@ public class FluidPipeTransporter extends PipeTransporter {
                         if (handOff(fluid, section)) {
                             iterator.remove();
                             continue;
-                        }
-
-                        if (fluid.bounceTimer >= 5) {
-                            bounceFluidToCenter(fluid, section);
                         }
                     }
                 }
@@ -90,6 +95,21 @@ public class FluidPipeTransporter extends PipeTransporter {
         }
     }
 
+    @Override
+    public void onConnectionsUpdate() {
+        for (Direction side : Direction.values()) {
+            if (!blockEntity.validOutputDirections.contains(side)) {
+                contents.get(FlowDirection.fromDirection(side)).clear();
+            }
+
+//            if (blockEntity.validOutputDirections.contains(direction) && !contents.containsKey(FlowDirection.fromDirection(direction))) {
+//                contents.put(FlowDirection.fromDirection(direction), new ObjectOpenHashSet<>());
+//            } else if (!blockEntity.validOutputDirections.contains(direction)) {
+//                contents.remove(FlowDirection.fromDirection(direction));
+//            }
+        }
+    }
+
     public int injectFluid(FluidStack stack, Direction side) {
         TravellingFluid travellingFluid = new TravellingFluid(world, this);
         travellingFluid.stack = stack;
@@ -102,7 +122,7 @@ public class FluidPipeTransporter extends PipeTransporter {
     private int injectFluid(TravellingFluid fluid, Direction side) {
         return injectFluid(fluid, FlowDirection.fromDirection(side));
     }
-    
+
     /**
      * Inject a fluid into the pipe
      *
@@ -159,21 +179,65 @@ public class FluidPipeTransporter extends PipeTransporter {
             }
         }
 
-        // TODO: Hand-off to FluidHandlerBlockCapability
-
+        FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), FluidHandlerBlockCapability.class);
+        if (cap != null) {
+            if (cap.canInsertFluid(side.getOpposite())) {
+                FluidStack returnedStack = cap.insertFluid(fluid.stack, side.getOpposite());
+                
+                if (returnedStack == null) {
+                    return true;
+                } else {
+                    fluid.stack = returnedStack;
+                    return false;
+                }
+            }
+        }
+        
+        
+        fluid.bounceTimer++;
         return false;
     }
 
-    public void bounceFluidToCenter(TravellingFluid fluid, FlowDirection section) {
-        fluid.input = section;
-        fluid.flowDirection = FlowDirection.CENTER;
+    public boolean bounceFluid(TravellingFluid fluid, FlowDirection section) {
+        if (fluid.flowDirection != FlowDirection.CENTER) {
+            fluid.input = section;
+            fluid.flowDirection = FlowDirection.CENTER;
+        } else {
+            fluid.input = FlowDirection.CENTER;
+            fluid.flowDirection = FlowDirection.fromDirection(pickDirection());
+        }
         fluid.bounceTimer = 0;
+        return false;
     }
-    
+
+    public boolean flowToSides(TravellingFluid fluid, FlowDirection section) {
+        int originalAmount = fluid.stack.amount;
+        int injectedAmount = internalFlow(fluid, fluid.flowDirection);
+
+        if (injectedAmount > 0) {
+            return injectedAmount >= originalAmount;
+        }
+        
+        fluid.bounceTimer++;
+        return false;
+    }
+
+    public boolean flowToCenter(TravellingFluid fluid, FlowDirection section) {
+        int originalAmount = fluid.stack.amount;
+        int injectedAmount = internalFlow(fluid, FlowDirection.fromDirection(pickDirection(fluid)));
+
+        if (injectedAmount > 0) {
+            return injectedAmount >= originalAmount;
+        }
+
+        fluid.bounceTimer++;
+        return false;
+    }
+
     private int internalFlow(TravellingFluid fluid, FlowDirection newDirection) {
         int sideCapacity = getSideRemainingCapacity(fluid.flowDirection);
         if (sideCapacity > 0) {
-            var sideContents = contents.get(fluid.flowDirection);
+            ObjectOpenHashSet<TravellingFluid> sideContents = contents.get(fluid.flowDirection);
 
             if (fluid.stack.amount <= sideCapacity) {
                 fluid.flowDirection = newDirection;
@@ -190,45 +254,29 @@ public class FluidPipeTransporter extends PipeTransporter {
         return 0;
     }
     
-    public FlowDirection pickDirection(TravellingFluid fluid) {
-        ObjectArrayList<FlowDirection> directions = new ObjectArrayList<>(FlowDirection.values());
+    public Direction pickDirection() {
+        ObjectArrayList<Direction> validDirections = new ObjectArrayList<>(blockEntity.validOutputDirections);
         
-        for (var flowDir : FlowDirection.values()) {
-            if (!blockEntity.validOutputDirections.contains(FlowDirection.toDirecton(flowDir))) {
-                directions.remove(flowDir);
+        if (validDirections.isEmpty()) {
+            return null;
+        } else {
+            return validDirections.get(new Random().nextInt(validDirections.size()));
+        }
+    }
+
+    public Direction pickDirection(TravellingFluid fluid) {
+        ObjectArrayList<Direction> validDirections = new ObjectArrayList<>(blockEntity.validOutputDirections);
+        
+        if (validDirections.isEmpty()) {
+            return null;
+        } else {
+            if (validDirections.size() == 1) {
+                return validDirections.get(0);
             }
+            
+            validDirections.remove(FlowDirection.toDirecton(fluid.input));
+            return validDirections.get(new Random().nextInt(validDirections.size()));
         }
-        
-        directions.remove(FlowDirection.CENTER);
-        
-        if (directions.size() == 1) {
-            return directions.get(0);
-        }
-        
-        directions.remove(fluid.input);
-        return directions.get(new Random().nextInt(directions.size()));
-    }
-    
-    public boolean flowToSides(TravellingFluid fluid, FlowDirection section) {
-        int originalAmount = fluid.stack.amount;
-        int injectedAmount = internalFlow(fluid, fluid.flowDirection);
-        
-        if (injectedAmount > 0) {
-            return injectedAmount >= originalAmount;
-        }
-
-        return false;
-    }
-
-    public boolean flowToCenter(TravellingFluid fluid, FlowDirection section) {
-        int originalAmount = fluid.stack.amount;
-        int injectedAmount = internalFlow(fluid, pickDirection(fluid));
-
-        if (injectedAmount > 0) {
-            return injectedAmount >= originalAmount;
-        }
-
-        return false;
     }
 
     // Capacity
@@ -238,12 +286,12 @@ public class FluidPipeTransporter extends PipeTransporter {
 
     public int getSideFillLevel(FlowDirection section) {
         int fillevel = 0;
-        
+
         if (!contents.containsKey(section)) {
             System.err.println(section);
             return fillevel;
         }
-        
+
         for (TravellingFluid fluid : contents.get(section)) {
             fillevel += fluid.stack.amount;
         }
