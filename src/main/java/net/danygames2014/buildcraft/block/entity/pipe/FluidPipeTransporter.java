@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class FluidPipeTransporter extends PipeTransporter {
     public static final int MAXIMUM_FILL_LEVEL = 20;
-    public static final int TRANSFER_DELAY = 1;
+    public static final int TRANSFER_DELAY = 4;
     public static final int FLOW_RATE = 10;
     // TODO: When pipe is updated, remove the keys belonging to non existent sides.
     public Object2ObjectOpenHashMap<FlowDirection, ObjectOpenHashSet<TravellingFluid>> contents;
