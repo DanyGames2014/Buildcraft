@@ -82,8 +82,7 @@ public class TravellingFluid {
         WEST,
         NORTH,
         SOUTH,
-        CENTER,
-        OUT;
+        CENTER;
         
         public static FlowDirection fromDirection(Direction direction) {
             switch (direction) {

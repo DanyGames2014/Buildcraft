@@ -2,10 +2,8 @@ package net.danygames2014.buildcraft.client.render.block.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.danygames2014.buildcraft.block.entity.pipe.FluidPipeTransporter;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.TravellingFluid.FlowDirection;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
@@ -343,8 +341,8 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         FluidPipeTransporter transporter = (FluidPipeTransporter) pipe.transporter;
 
         boolean needsRender = false;
-        for (int i = 0; i < 7; ++i) {
-            if (transporter.getSideFillLevel(i) > 0) {
+        for (var side : transporter.contents.keySet()) {
+            if (transporter.getSideFillLevel(side) > 0) {
                 needsRender = true;
                 break;
             }
@@ -368,15 +366,16 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         boolean sides = false, above = false;
 
-        for (Direction side : Direction.values()) {
-            int i = side.ordinal();
-
-            if (transporter.getSideFillLevel(i) <= 0){
+        for (FlowDirection side : FlowDirection.values()) {
+            if (side == FlowDirection.CENTER) {
                 continue;
             }
-
-
-            if (pipe.connections.get(side) == PipeConnectionType.NONE) {
+            
+            if (pipe.connections.get(FlowDirection.toDirecton(side)) == PipeConnectionType.NONE) {
+                continue;
+            }
+            
+            if (transporter.getSideFillLevel(side) <= 0) {
                 continue;
             }
 
@@ -386,13 +385,13 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 continue;
             }
 
-            int stage = (int) ((float) transporter.getSideFillLevel(i) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+            int stage = (int) ((float) transporter.getSideFillLevel(side) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
             stage = Math.abs(stage);
 
             GL11.glPushMatrix();
             int list = 0;
 
-            switch (Direction.byId(i)) {
+            switch (side) {
                 case UP:
                     above = true;
                     list = d.sideVertical[stage];
@@ -408,8 +407,8 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                     sides = true;
                     // Yes, this is kind of ugly, but was easier than transform the coordinates above.
                     GL11.glTranslatef(0.5F, 0.0F, 0.5F);
-                    GL11.glRotatef(angleY[i], 0, 1, 0);
-                    GL11.glRotatef(angleZ[i], 0, 0, 1);
+                    GL11.glRotatef(angleY[FlowDirection.toDirecton(side).ordinal()], 0, 1, 0);
+                    GL11.glRotatef(angleZ[FlowDirection.toDirecton(side).ordinal()], 0, 0, 1);
                     GL11.glTranslatef(-0.5F, 0.0F, -0.5F);
                     list = d.sideHorizontal[stage];
                     break;
@@ -420,12 +419,13 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             GL11.glCallList(list);
             GL11.glPopMatrix();
         }
+        
         // CENTER
-        if (transporter.getSideFillLevel(6) > 0) {
+        if (transporter.getSideFillLevel(FlowDirection.CENTER) > 0) {
             DisplayFluidList d = getDisplayFluidList(FluidListener.fuel, skylight, blockLight, 0, pipe.world);
 
             if (d != null) {
-                int stage = (int) ((float) transporter.getSideFillLevel(6) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+                int stage = (int) ((float) transporter.getSideFillLevel(FlowDirection.CENTER) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
 
                 StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
                 //RenderUtils.setGLColorFromInt(fluidRenderData.color); TODO: support fluid color
