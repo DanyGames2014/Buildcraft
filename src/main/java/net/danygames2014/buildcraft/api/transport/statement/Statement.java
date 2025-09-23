@@ -1,22 +1,18 @@
-package net.danygames2014.buildcraft.api.statement;
+package net.danygames2014.buildcraft.api.transport.statement;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
+import net.modificationstation.stationapi.api.util.Identifier;
 
 public interface Statement {
-    /**
-     * Every statement needs a unique tag, it should be in the format of
-     * "&lt;modid&gt;:&lt;name&gt;.
-     *
-     * @return the unique id
-     */
-    String getUniqueTag();
+    Identifier getIdentifier();
 
     @Environment(EnvType.CLIENT)
-    int getIcon();
+    Atlas.Sprite getSprite();
 
     @Environment(EnvType.CLIENT)
-    void registerIcons(int iconRegister);
+    void registerTextures();
 
     /**
      * Return the maximum number of parameter this statement can have, 0 if none.

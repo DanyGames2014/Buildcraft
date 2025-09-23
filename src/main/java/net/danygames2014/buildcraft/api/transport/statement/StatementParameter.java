@@ -1,21 +1,17 @@
-package net.danygames2014.buildcraft.api.statement;
+package net.danygames2014.buildcraft.api.transport.statement;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
+import net.modificationstation.stationapi.api.util.Identifier;
 
 public interface StatementParameter {
-    /**
-     * Every parameter needs a unique tag, it should be in the format of
-     * "&lt;modi&gt;:&lt;name&gt;".
-     *
-     * @return the unique id
-     */
-    String getUniqueTag();
+    Identifier getIdentifier();
 
     @Environment(EnvType.CLIENT)
-    int getIcon();
+    Atlas.Sprite getSprite();
 
     ItemStack getItemStack();
 
@@ -27,14 +23,14 @@ public interface StatementParameter {
      * fact that they, unlike Parameters, store no additional data)
      */
     @Environment(EnvType.CLIENT)
-    void registerIcons(int iconRegister);
+    void registerTextures();
 
     /**
      * Return the parameter description in the UI
      */
     String getDescription();
 
-    void onClick(StatementContainer source, Statement stmt, ItemStack stack, StatementMouseClick mouse);
+    void click(StatementContainer source, Statement stmt, ItemStack stack, StatementMouseClick mouse);
 
     void readNBT(NbtCompound nbt);
 

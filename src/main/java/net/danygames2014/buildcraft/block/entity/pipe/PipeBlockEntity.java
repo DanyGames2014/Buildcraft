@@ -2,7 +2,10 @@ package net.danygames2014.buildcraft.block.entity.pipe;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.PipeBlock;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
@@ -21,6 +24,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.Collection;
 import java.util.Random;
 
 public class PipeBlockEntity extends BlockEntity {
@@ -34,10 +38,14 @@ public class PipeBlockEntity extends BlockEntity {
 
     public boolean[] wireSet = new boolean[]{false, false, false, false};
     public int[] signalStrength = new int[]{0, 0, 0, 0};
+    public final Gate[] gates = new Gate[Direction.values().length];
 
     public PipeEventBus eventBus = new PipeEventBus();
 
     public Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = null;
+
+    public int redstoneInput;
+    public int[] redstoneInputSide = new int[Direction.values().length];
 
     protected PipeSideProperties sideProperties = new PipeSideProperties();
     protected boolean attachPluggables = false;
@@ -196,6 +204,22 @@ public class PipeBlockEntity extends BlockEntity {
         }
 
         return PipeConnectionType.NONE;
+    }
+
+    public void actionsActivated(Collection<StatementSlot> actions) {
+    }
+
+    protected void notifyBlocksOfNeighborChange(Direction side) {
+        world.notifyNeighbors(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), 0);
+    }
+
+    public void updateNeighbors(boolean needSelf) {
+        if (needSelf) {
+            world.notifyNeighbors(x, y, z, 0);
+        }
+        for (Direction side : Direction.values()) {
+            notifyBlocksOfNeighborChange(side);
+        }
     }
 
     public boolean hasBlockingPluggable(Direction side){

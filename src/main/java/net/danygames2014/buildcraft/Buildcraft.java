@@ -1,7 +1,10 @@
 package net.danygames2014.buildcraft;
 
+import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
+import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.statement.ActionSignalOutput;
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
 import net.danygames2014.buildcraft.item.BuildcraftWrenchItem;
 import net.danygames2014.buildcraft.item.FacadeItem;
@@ -64,6 +67,10 @@ public class Buildcraft {
 
     //TODO: figure out how to avoid registering the renderblock
     public static RenderBlock renderBlock;
+
+    public static TriggerInternal[] triggerPipeWireActive = new TriggerInternal[PipeWire.values().length];
+    public static TriggerInternal[] triggerPipeWireInactive = new TriggerInternal[PipeWire.values().length];
+    public static ActionInternal[] actionPipeWire = new ActionSignalOutput[PipeWire.values().length];
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {

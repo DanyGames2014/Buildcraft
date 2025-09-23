@@ -1,8 +1,8 @@
-package net.danygames2014.buildcraft.api.transport;
+package net.danygames2014.buildcraft.api.transport.gate;
 
-import net.danygames2014.buildcraft.api.statement.Statement;
-import net.danygames2014.buildcraft.api.statement.StatementParameter;
-import net.danygames2014.buildcraft.api.statement.StatementSlot;
+import net.danygames2014.buildcraft.api.transport.statement.Statement;
+import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
+import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 
 import java.util.List;
