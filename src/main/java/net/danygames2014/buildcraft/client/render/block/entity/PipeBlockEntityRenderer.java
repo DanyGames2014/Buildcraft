@@ -371,6 +371,11 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         for (Direction side : Direction.values()) {
             int i = side.ordinal();
 
+            if (transporter.getSideFillLevel(i) <= 0){
+                continue;
+            }
+
+
             if (pipe.connections.get(side) == PipeConnectionType.NONE) {
                 continue;
             }
