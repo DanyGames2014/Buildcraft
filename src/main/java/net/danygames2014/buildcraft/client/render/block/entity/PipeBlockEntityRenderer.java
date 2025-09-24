@@ -341,7 +341,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         FluidPipeTransporter transporter = (FluidPipeTransporter) pipe.transporter;
 
         boolean needsRender = false;
-        for (var side : transporter.contents.keySet()) {
+        for (var side : ForgeDirection.values()) {
             if (transporter.getSideFillLevel(side) > 0) {
                 needsRender = true;
                 break;
@@ -366,12 +366,12 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         boolean sides = false, above = false;
 
-        for (FlowDirection side : FlowDirection.values()) {
-            if (side == FlowDirection.CENTER) {
+        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
+            if (side == ForgeDirection.UNKNOWN) {
                 continue;
             }
             
-            if (pipe.connections.get(FlowDirection.toDirecton(side)) == PipeConnectionType.NONE) {
+            if (pipe.connections.get(side.getDirection()) == PipeConnectionType.NONE) {
                 continue;
             }
             
@@ -385,7 +385,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 continue;
             }
 
-            int stage = (int) ((float) transporter.getSideFillLevel(side) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+            int stage = (int) ((float) transporter.getSideFillLevel(side) / (float) (transporter.getCapacity()) * (LIQUID_STAGES - 1));
             stage = Math.abs(stage);
 
             GL11.glPushMatrix();
@@ -407,8 +407,8 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                     sides = true;
                     // Yes, this is kind of ugly, but was easier than transform the coordinates above.
                     GL11.glTranslatef(0.5F, 0.0F, 0.5F);
-                    GL11.glRotatef(angleY[FlowDirection.toDirecton(side).ordinal()], 0, 1, 0);
-                    GL11.glRotatef(angleZ[FlowDirection.toDirecton(side).ordinal()], 0, 0, 1);
+                    GL11.glRotatef(angleY[side.getDirection().ordinal()], 0, 1, 0);
+                    GL11.glRotatef(angleZ[side.getDirection().ordinal()], 0, 0, 1);
                     GL11.glTranslatef(-0.5F, 0.0F, -0.5F);
                     list = d.sideHorizontal[stage];
                     break;
@@ -421,11 +421,11 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         }
         
         // CENTER
-        if (transporter.getSideFillLevel(FlowDirection.CENTER) > 0) {
+        if (transporter.getSideFillLevel(ForgeDirection.UNKNOWN) > 0) {
             DisplayFluidList d = getDisplayFluidList(FluidListener.fuel, skylight, blockLight, 0, pipe.world);
 
             if (d != null) {
-                int stage = (int) ((float) transporter.getSideFillLevel(FlowDirection.CENTER) / (float) (transporter.MAXIMUM_FILL_LEVEL) * (LIQUID_STAGES - 1));
+                int stage = (int) ((float) transporter.getSideFillLevel(ForgeDirection.UNKNOWN) / (float) (transporter.getCapacity()) * (LIQUID_STAGES - 1));
 
                 StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
                 //RenderUtils.setGLColorFromInt(fluidRenderData.color); TODO: support fluid color
