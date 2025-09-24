@@ -11,11 +11,12 @@ import net.danygames2014.nyalib.fluid.FluidStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.Map;
 import java.util.Random;
 
 public class FluidPipeTransporter extends PipeTransporter {
     public static final int MAXIMUM_FILL_LEVEL = 20;
-    public static final int TRANSFER_DELAY = 4;
+    public static final int TRANSFER_DELAY = 10;
     public static final int FLOW_RATE = 10;
     // TODO: When pipe is updated, remove the keys belonging to non existent sides.
     public Object2ObjectOpenHashMap<FlowDirection, ObjectOpenHashSet<TravellingFluid>> contents;
@@ -255,7 +256,13 @@ public class FluidPipeTransporter extends PipeTransporter {
     }
     
     public Direction pickDirection() {
-        ObjectArrayList<Direction> validDirections = new ObjectArrayList<>(blockEntity.validOutputDirections);
+        ObjectArrayList<Direction> validDirections = new ObjectArrayList<>();
+        
+        for (Map.Entry<Direction, PipeConnectionType> con : blockEntity.connections.entrySet()) {
+            if (con.getValue() == PipeConnectionType.NORMAL) {
+                validDirections.add(con.getKey());
+            }
+        }
         
         if (validDirections.isEmpty()) {
             return null;
