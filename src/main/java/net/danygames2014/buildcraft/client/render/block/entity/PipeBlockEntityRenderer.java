@@ -379,7 +379,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 continue;
             }
 
-            DisplayFluidList d = getDisplayFluidList(FluidListener.fuel, skylight, blockLight, 0, pipe.world);
+            DisplayFluidList d = getDisplayFluidList(transporter.fluidType, skylight, blockLight, 0, pipe.world);
 
             if (d == null) {
                 continue;
@@ -422,7 +422,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         
         // CENTER
         if (transporter.getSideFillLevel(ForgeDirection.UNKNOWN) > 0) {
-            DisplayFluidList d = getDisplayFluidList(FluidListener.fuel, skylight, blockLight, 0, pipe.world);
+            DisplayFluidList d = getDisplayFluidList(transporter.fluidType, skylight, blockLight, 0, pipe.world);
 
             if (d != null) {
                 int stage = (int) ((float) transporter.getSideFillLevel(ForgeDirection.UNKNOWN) / (float) (transporter.getCapacity()) * (LIQUID_STAGES - 1));
