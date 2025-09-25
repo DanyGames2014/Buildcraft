@@ -178,6 +178,7 @@ public class PipeBlockEntity extends BlockEntity {
         if (other == null) {
             return PipeConnectionType.NONE;
         }
+        
         if(hasBlockingPluggable(side)){
             if(other instanceof PipeBlockEntity pipe && pipe.connections.get(side.getOpposite()) != PipeConnectionType.NONE){
                 pipe.neighborUpdate();

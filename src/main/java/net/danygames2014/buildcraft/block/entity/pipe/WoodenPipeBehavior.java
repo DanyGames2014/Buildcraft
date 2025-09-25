@@ -150,9 +150,7 @@ public class WoodenPipeBehavior extends PipeBehavior {
 
                     if (extractedStack != null) {
                         powerHandler.useEnergy(extractedStack.amount, extractedStack.amount, true);
-                        if(fluidTransporter.injectFluid(extractedStack, ForgeDirection.fromDirection(side)) > 0) {
-                            Buildcraft.LOGGER.warn("Fluid was not fully injected into a Wooden Pipe!"); // TODO: This is just plain fucking wrong, it issues a warning only when everything was correct
-                        }
+                        fluidTransporter.injectFluid(extractedStack, ForgeDirection.fromDirection(side));
                     }
                 }
             }

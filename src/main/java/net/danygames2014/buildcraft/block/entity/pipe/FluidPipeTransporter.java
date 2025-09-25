@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 
-@SuppressWarnings({"DataFlowIssue", "RedundantIfStatement", "StatementWithEmptyBody", "SameParameterValue", "ConstantValue", "EmptyClassInitializer", "PointlessArithmeticExpression"})
+@SuppressWarnings({"DataFlowIssue", "RedundantIfStatement", "StatementWithEmptyBody", "SameParameterValue", "ConstantValue", "PointlessArithmeticExpression", "MismatchedReadAndWriteOfArray"})
 public class FluidPipeTransporter extends PipeTransporter implements FluidHandler {
     static final int pipeFluidsBaseFlowRate = 10;
 

@@ -57,7 +57,7 @@ public class PipeBehavior {
             }
 
             case FLUID -> {
-                FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x, y, z, FluidHandlerBlockCapability.class);
+                FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), FluidHandlerBlockCapability.class);
 
                 if (cap != null) {
                     return cap.canConnectFluid(side.getOpposite()) ? PipeConnectionType.NORMAL : PipeConnectionType.NONE;
@@ -97,22 +97,22 @@ public class PipeBehavior {
 
         return directions.get(blockEntity.random.nextInt(directions.size()));
     }
-    
+
     public Direction routeFluid(PipeBlockEntity blockEntity, ObjectArrayList<Direction> validOutputDirections, TravellingFluid fluid) {
         ObjectArrayList<Direction> directions = new ObjectArrayList<>(validOutputDirections);
         directions.remove(fluid.input);
-        
+
         if (directions.isEmpty()) {
             return null;
         }
-        
+
         return directions.get(blockEntity.random.nextInt(directions.size()));
     }
 
     public double modifyItemSpeed(TravellingItemEntity item) {
         return TravellingItemEntity.DEFAULT_SPEED;
     }
-    
+
     public double modifyFluidTransferDelay(TravellingFluid fluid) {
         return 0;
     }
