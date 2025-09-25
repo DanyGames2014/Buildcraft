@@ -167,7 +167,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
             float[][] rotated = MatrixTransformation.deepClone(zeroStateSupport);
             MatrixTransformation.transform(rotated, side);
 
-            renderBlock.setTextureIdentifier(TextureListener.structurePipe.getId());
+            renderBlock.setTextureIdentifier(TextureListener.structurePipe);
             renderBlock.setBoundingBox(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);
             blockRenderManager.renderFlat(renderBlock, x, y, z , 1.0F, 1.0F, 1.0F);
         }

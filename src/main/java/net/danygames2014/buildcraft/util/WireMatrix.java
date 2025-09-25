@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.util;
 
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.io.DataInputStream;
@@ -12,7 +13,7 @@ public class WireMatrix {
     private final BitSet hasWire = new BitSet(PipeWire.values().length);
 
     private final ConnectionMatrix[] wires = new ConnectionMatrix[PipeWire.values().length];
-    private final int[] wireTextureOffsets = new int[PipeWire.values().length];
+    private final Identifier[] wireTextureIdentifiers = new Identifier[PipeWire.values().length];
 
     private boolean dirty = false;
 
@@ -41,13 +42,13 @@ public class WireMatrix {
         wires[color.ordinal()].setConnected(direction, value);
     }
 
-    public int getWireTextureIndex(PipeWire color){
-        return wireTextureOffsets[color.ordinal()];
+    public Identifier getWireTextureIdentifier(PipeWire color){
+        return wireTextureIdentifiers[color.ordinal()];
     }
 
-    public void setWireTextureIndex(PipeWire color, int value){
-        if(wireTextureOffsets[color.ordinal()] != value){
-            wireTextureOffsets[color.ordinal()] = value;
+    public void setWireTextureIdentifier(PipeWire color, Identifier value){
+        if(wireTextureIdentifiers[color.ordinal()] != value){
+            wireTextureIdentifiers[color.ordinal()] = value;
             dirty = true;
         }
     }

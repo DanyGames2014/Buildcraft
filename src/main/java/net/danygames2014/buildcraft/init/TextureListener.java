@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.init;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
@@ -12,9 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextureListener {
-
-    @Entrypoint.Namespace
-    public static Namespace NAMESPACE;
 
     public static List<Identifier> dynamicBlockTextures = new ArrayList<>();
 
@@ -30,17 +28,19 @@ public class TextureListener {
     public static Atlas.Sprite woodenEnergyPipe;
     public static Atlas.Sprite goldenItemPipe;
 
-    public static Atlas.Sprite redPipeWire;
-    public static Atlas.Sprite redPipeWireLit;
-    public static Atlas.Sprite bluePipeWire;
-    public static Atlas.Sprite bluePipeWireLit;
-    public static Atlas.Sprite greenPipeWire;
-    public static Atlas.Sprite greenPipeWireLit;
-    public static Atlas.Sprite yellowPipeWire;
-    public static Atlas.Sprite yellowPipeWireLit;
+    public static Identifier redPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire");
+    public static Identifier redPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire_lit");
+    public static Identifier bluePipeWire = Buildcraft.NAMESPACE.id("block/pipewire/blue_pipe_wire");
+    public static Identifier bluePipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/blue_pipe_wire_lit");
+    public static Identifier greenPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/green_pipe_wire");
+    public static Identifier greenPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/green_pipe_wire_lit");
+    public static Identifier yellowPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/yellow_pipe_wire");
+    public static Identifier yellowPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/yellow_pipe_wire_lit");
 
-    public static Atlas.Sprite plug;
-    public static Atlas.Sprite structurePipe;
+    public static Identifier plug = Buildcraft.NAMESPACE.id("block/pluggable/plug");
+    public static Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/structure_pipe");
+
+    public static Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
 
 
     @EventListener
@@ -50,7 +50,7 @@ public class TextureListener {
             Atlases.getTerrain().addTexture(identifier);
         }
 
-        energySprite = Atlases.getGuiItems().addTexture(NAMESPACE.id("item/energy_icon"));
+        energySprite = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/energy_icon"));
 
 //        cobblestoneItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_item_pipe"));
 //        cobblestoneFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_fluid_pipe"));
@@ -61,19 +61,21 @@ public class TextureListener {
 //        woodenEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_energy_pipe"));
 //        goldenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/golden_item_pipe"));
 
-        redPipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/red_pipe_wire"));
-        redPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/red_pipe_wire_lit"));
+        Atlases.getTerrain().addTexture(redPipeWire);
+        Atlases.getTerrain().addTexture(redPipeWireLit);
 
-        bluePipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/blue_pipe_wire"));
-        bluePipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/blue_pipe_wire_lit"));
+        Atlases.getTerrain().addTexture(bluePipeWire);
+        Atlases.getTerrain().addTexture(bluePipeWireLit);
 
-        greenPipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/green_pipe_wire"));
-        greenPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/green_pipe_wire_lit"));
+        Atlases.getTerrain().addTexture(greenPipeWire);
+        Atlases.getTerrain().addTexture(greenPipeWireLit);
 
-        yellowPipeWire = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/yellow_pipe_wire"));
-        yellowPipeWireLit = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipewire/yellow_pipe_wire_lit"));
+        Atlases.getTerrain().addTexture(yellowPipeWire);
+        Atlases.getTerrain().addTexture(yellowPipeWireLit);
 
-        plug = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pluggable/plug"));
-        structurePipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/structure_pipe"));
+        Atlases.getTerrain().addTexture(plug);
+        Atlases.getTerrain().addTexture(structurePipe);
+
+        Atlases.getTerrain().addTexture(missingTexture);
     }
 }

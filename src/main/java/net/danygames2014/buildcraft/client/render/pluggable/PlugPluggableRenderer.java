@@ -30,7 +30,7 @@ public class PlugPluggableRenderer implements PipePluggableRenderer {
         zeroState[2][0] = 0.25F + zFightOffset;
         zeroState[2][1] = 0.75F - zFightOffset;
 
-        renderBlock.setTextureIdentifier(TextureListener.plug.getId());
+        renderBlock.setTextureIdentifier(TextureListener.plug);
 
         float[][] rotated = MatrixTransformation.deepClone(zeroState);
         MatrixTransformation.transform(rotated, side);

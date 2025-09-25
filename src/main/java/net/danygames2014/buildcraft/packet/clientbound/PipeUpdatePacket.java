@@ -37,6 +37,7 @@ public class PipeUpdatePacket extends Packet implements ManagedPacket<PipeUpdate
             blockPos = StationBlockPos.fromLong(stream.readLong());
             if(player.world.getBlockEntity(blockPos.getX(), blockPos.getY(), blockPos.getZ()) instanceof PipeBlockEntity pipe){
                 pipe.renderState.read(stream);
+                player.world.setBlockDirty(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             } else {
                 state = new PipeRenderState();
                 state.read(stream);

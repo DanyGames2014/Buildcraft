@@ -1,22 +1,20 @@
 package net.danygames2014.buildcraft.client.render.block.entity;
 
-import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
-import net.danygames2014.buildcraft.block.entity.pipe.TravellingFluid.FlowDirection;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
-import net.danygames2014.buildcraft.init.FluidListener;
+import net.danygames2014.buildcraft.util.TextureUtil;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-import net.minecraft.util.IntHashMap;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.lwjgl.opengl.GL11;
 
@@ -301,8 +299,9 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
         EntityBlockRenderer.RenderInfo renderBox = new EntityBlockRenderer.RenderInfo();
-        renderBox.texture = state.wireMatrix.getWireTextureIndex(color);
-        boolean isLit = (state.wireMatrix.getWireTextureIndex(color) & 1) > 0;
+        Identifier wireTexture = state.wireMatrix.getWireTextureIdentifier(color);
+        renderBox.texture = TextureUtil.getTerrainTextureOffset(wireTexture);
+        boolean isLit = (wireTexture.toString().endsWith("lit"));
 
         // Z render
 

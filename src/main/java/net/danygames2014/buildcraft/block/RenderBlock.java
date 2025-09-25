@@ -3,6 +3,8 @@ package net.danygames2014.buildcraft.block;
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.danygames2014.buildcraft.util.TextureMatrix;
 import net.danygames2014.buildcraft.util.TextureUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -38,7 +40,7 @@ public class RenderBlock extends TemplateBlock {
 
     @Override
     public int getTexture(int side) {
-        if(Atlases.getTerrain() == null){
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER || Atlases.getTerrain() == null){
             return 0;
         }
         return TextureUtil.getTerrainTextureOffset(textureMatrix.getTextureIdentifier(DirectionUtil.getById(side)));

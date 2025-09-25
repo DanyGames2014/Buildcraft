@@ -54,9 +54,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     private PipeWorldRenderer pipeWorldRenderer;
     @Environment(EnvType.CLIENT)
     private PipeItemRenderer pipeItemRenderer;
-    @Environment(EnvType.CLIENT)
     private Identifier texture;
-    @Environment(EnvType.CLIENT)
     @Nullable
     private Identifier alternativeTexture;
 
@@ -126,7 +124,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Environment(EnvType.CLIENT)
     @Override
     public int getTexture(int side) {
-        if (Atlases.getTerrain() == null) {
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER || Atlases.getTerrain() == null) {
             return 0;
         }
         if(Atlases.getTerrain().getTexture(texture) != null){
@@ -137,9 +135,9 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType){
         if(direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE){
-            return Atlases.getTerrain().getTexture(alternativeTexture).getId();
+            return alternativeTexture;
         }
-        return Atlases.getTerrain().getTexture(texture).getId();
+        return texture;
     }
 
     // Block Entity
@@ -409,14 +407,14 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             if(player.getHand() != null && player.getHand().getItem() instanceof PipePluggableItem){
                 return false;
             }
-            if (player.getHand() != null && !(player.getHand().getItem() instanceof WrenchBase)) {
-                if (pipe.transporter instanceof ItemPipeTransporter pipeTransporter) {
-                    pipeTransporter.injectItem(player.getHand(), Direction.values()[new Random().nextInt(Direction.values().length)]);
-                    player.inventory.main[player.inventory.selectedSlot] = null;
-                    player.inventory.markDirty();
-                    return true;
-                }
-            }
+//            if (player.getHand() != null && !(player.getHand().getItem() instanceof WrenchBase)) {
+//                if (pipe.transporter instanceof ItemPipeTransporter pipeTransporter) {
+//                    pipeTransporter.injectItem(player.getHand(), Direction.values()[new Random().nextInt(Direction.values().length)]);
+//                    player.inventory.main[player.inventory.selectedSlot] = null;
+//                    player.inventory.markDirty();
+//                    return true;
+//                }
+//            }
         }
 
         return super.onUse(world, x, y, z, player);

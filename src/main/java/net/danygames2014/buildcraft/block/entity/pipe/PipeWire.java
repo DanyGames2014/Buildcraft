@@ -4,16 +4,18 @@ import net.danygames2014.buildcraft.Buildcraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.function.Supplier;
+
 public enum PipeWire {
-    RED(Buildcraft.redPipeWire),
-    BLUE(Buildcraft.bluePipeWire),
-    GREEN(Buildcraft.greenPipeWire),
-    YELLOW(Buildcraft.yellowPipeWire);
+    RED(() -> Buildcraft.redPipeWire),
+    BLUE(() -> Buildcraft.bluePipeWire),
+    GREEN(() -> Buildcraft.greenPipeWire),
+    YELLOW(() -> Buildcraft.yellowPipeWire);
 
-    private final Item item;
+    private final Supplier<Item> itemSupplier;
 
-    PipeWire(Item item){
-        this.item = item;
+    PipeWire(Supplier<Item> item){
+        this.itemSupplier = item;
     }
 
     public static PipeWire fromOrdinal(int ordinal){
@@ -25,16 +27,16 @@ public enum PipeWire {
     }
 
     public ItemStack getStack() {
-        return new ItemStack(item);
+        return new ItemStack(itemSupplier.get());
     }
 
     public Item getItem() {
-        return item;
+        return itemSupplier.get();
     }
 
     public static PipeWire fromItem(Item item) {
         for (PipeWire wire : values()) {
-            if (wire.item == item) {
+            if (wire.itemSupplier.get().equals(item)) {
                 return wire;
             }
         }

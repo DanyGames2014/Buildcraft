@@ -32,13 +32,14 @@ public class TextureMatrix {
 
     public void write(DataOutputStream stream) throws IOException {
         for(Identifier identifier : textureIndexes){
-            stream.writeUTF(identifier.toString());
+            stream.writeUTF(identifier != null ? identifier.toString() : "");
         }
     }
 
     public void read(DataInputStream stream) throws IOException {
         for(int i = 0; i < textureIndexes.length; i++){
-            Identifier identifier = Identifier.tryParse(stream.readUTF());
+            String identifierString = stream.readUTF();
+            Identifier identifier = !identifierString.isEmpty() ? Identifier.tryParse(identifierString) : null;
             if(textureIndexes[i] != identifier){
                 textureIndexes[i] = identifier;
                 dirty = true;
