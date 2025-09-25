@@ -2,13 +2,13 @@ package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.danygames2014.buildcraft.util.TextureMatrix;
+import net.danygames2014.buildcraft.util.TextureUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.BlockView;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
-
-import java.io.DataInputStream;
 
 public class RenderBlock extends TemplateBlock {
     private int renderMask = 0;
@@ -26,19 +26,22 @@ public class RenderBlock extends TemplateBlock {
         return colorMultiplier;
     }
 
-    public void setTextureOffset(int textureOffset){
+    public void setTextureIdentifier(Identifier identifier){
         for(Direction direction : DirectionUtil.directionsWithInvalid){
-            textureMatrix.setTextureIndex(direction, textureOffset);
+            textureMatrix.setTextureIdentifier(direction, identifier);
         }
     }
 
-    public void setTextureOffsetForSide(Direction direction, int textureOffset){
-        textureMatrix.setTextureIndex(direction, textureOffset);
+    public void setTextureIdentifierForSide(Direction direction, Identifier identifier){
+        textureMatrix.setTextureIdentifier(direction, identifier);
     }
 
     @Override
     public int getTexture(int side) {
-        return textureMatrix.getTextureIndex(DirectionUtil.getById(side));
+        if(Atlases.getTerrain() == null){
+            return 0;
+        }
+        return TextureUtil.getTerrainTextureOffset(textureMatrix.getTextureIdentifier(DirectionUtil.getById(side)));
     }
 
     @Override

@@ -135,11 +135,11 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return 0;
     }
 
-    public int getTextureForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType){
+    public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType){
         if(direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE){
-            return Atlases.getTerrain().getTexture(alternativeTexture).index;
+            return Atlases.getTerrain().getTexture(alternativeTexture).getId();
         }
-        return Atlases.getTerrain().getTexture(texture).index;
+        return Atlases.getTerrain().getTexture(texture).getId();
     }
 
     // Block Entity

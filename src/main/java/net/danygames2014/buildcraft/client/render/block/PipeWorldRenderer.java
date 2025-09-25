@@ -27,7 +27,7 @@ public class PipeWorldRenderer {
         if(connectivity != 0x3F){
             resetToCenterDimensions(dim);
 
-            renderBlock.setTextureOffset(state.textureMatrix.getTextureIndex(Direction.UP));
+            renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(Direction.UP));
 
             renderTwoWayBlock(blockRenderManager, renderBlock, x, y, z, dim, connectivity ^ 0x3F);
         }
@@ -46,7 +46,7 @@ public class PipeWorldRenderer {
 
             int renderMask = (3 << (dir & 0x6)) ^ 0x3f;
 
-            renderBlock.setTextureOffset(state.textureMatrix.getTextureIndex(Direction.byId(dir)));
+            renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(Direction.byId(dir)));
 
             renderTwoWayBlock(blockRenderManager, renderBlock, x, y, z, dim, renderMask);
 

@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.util;
 
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.io.DataInputStream;
@@ -7,14 +8,14 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class TextureMatrix {
-    private final int[] textureIndexes = new int[7];
+    private final Identifier[] textureIndexes = new Identifier[7];
     private  boolean dirty = false;
 
-    public int getTextureIndex(Direction direction){
+    public Identifier getTextureIdentifier(Direction direction){
         return textureIndexes[DirectionUtil.getOrdinal(direction)];
     }
 
-    public void setTextureIndex(Direction direction, int value){
+    public void setTextureIdentifier(Direction direction, Identifier value){
         if(textureIndexes[DirectionUtil.getOrdinal(direction)] != value){
             textureIndexes[DirectionUtil.getOrdinal(direction)] = value;
             dirty = true;
@@ -30,16 +31,16 @@ public class TextureMatrix {
     }
 
     public void write(DataOutputStream stream) throws IOException {
-        for(int index : textureIndexes){
-            stream.writeByte(index);
+        for(Identifier identifier : textureIndexes){
+            stream.writeUTF(identifier.toString());
         }
     }
 
     public void read(DataInputStream stream) throws IOException {
         for(int i = 0; i < textureIndexes.length; i++){
-            int index = stream.readByte();
-            if(textureIndexes[i] != index){
-                textureIndexes[i] = index;
+            Identifier identifier = Identifier.tryParse(stream.readUTF());
+            if(textureIndexes[i] != identifier){
+                textureIndexes[i] = identifier;
                 dirty = true;
             }
         }

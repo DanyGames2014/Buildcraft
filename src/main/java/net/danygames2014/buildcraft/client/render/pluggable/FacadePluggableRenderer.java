@@ -9,6 +9,7 @@ import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
+import net.danygames2014.buildcraft.util.TextureUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.world.BlockView;
@@ -100,7 +101,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
             if(block.getRenderLayer() == renderPass){
                 int meta = facadePluggable.getMeta();
                 for(Direction dir : Direction.values()){
-                    renderBlock.setTextureOffsetForSide(dir, block.getTexture(dir.ordinal(), meta));
+                    renderBlock.setTextureIdentifierForSide(dir, TextureUtil.getTerrainIdentifierFromOffset(block.getTexture(dir.ordinal(), meta)));
                     if(dir == side || dir == side.getOpposite()){
                         renderBlock.setRenderSide(dir, true);
                     } else {
@@ -166,7 +167,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
             float[][] rotated = MatrixTransformation.deepClone(zeroStateSupport);
             MatrixTransformation.transform(rotated, side);
 
-            renderBlock.setTextureOffset(TextureListener.structurePipe.index);
+            renderBlock.setTextureIdentifier(TextureListener.structurePipe.getId());
             renderBlock.setBoundingBox(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);
             blockRenderManager.renderFlat(renderBlock, x, y, z , 1.0F, 1.0F, 1.0F);
         }

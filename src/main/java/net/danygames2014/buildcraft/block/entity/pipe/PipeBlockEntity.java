@@ -2,7 +2,6 @@ package net.danygames2014.buildcraft.block.entity.pipe;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
@@ -12,7 +11,6 @@ import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.DirectionUtil;
-import net.danygames2014.buildcraft.util.PipeUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -489,7 +487,7 @@ public class PipeBlockEntity extends BlockEntity {
 
         for (int i = 0; i < 7; i++) {
             Direction direction = DirectionUtil.getById(i);
-            renderState.textureMatrix.setTextureIndex(direction, pipeBlock.getTextureForSide(direction, direction != null ? this.canConnectTo(x, y, z, direction) : null));
+            renderState.textureMatrix.setTextureIdentifier(direction, pipeBlock.getTextureIdentifierForSide(direction, direction != null ? this.canConnectTo(x, y, z, direction) : null));
         }
 
         for(PipeWire color : PipeWire.values()){
