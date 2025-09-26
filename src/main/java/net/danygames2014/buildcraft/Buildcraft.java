@@ -114,11 +114,11 @@ public class Buildcraft {
         greenPipeWire = new PipeWireItem(NAMESPACE.id("green_pipe_wire")).setTranslationKey(NAMESPACE, "green_pipe_wire");
         yellowPipeWire = new PipeWireItem(NAMESPACE.id("yellow_pipe_wire")).setTranslationKey(NAMESPACE, "yellow_pipe_wire");
 
-        // redstoneChipset
-        // redstoneIronChipset
-        // redstoneGoldenChipset
-        // redstoneDiamondChipset
-        // pulsatingChipset
+        redstoneChipset = new TemplateItem(NAMESPACE.id("redstone_chipset")).setTranslationKey(NAMESPACE, "redstone_chipset");
+        redstoneIronChipset = new TemplateItem(NAMESPACE.id("redstone_iron_chipset")).setTranslationKey(NAMESPACE, "redstone_iron_chipset");
+        redstoneGoldenChipset = new TemplateItem(NAMESPACE.id("redstone_golden_chipset")).setTranslationKey(NAMESPACE, "redstone_golden_chipset");
+        redstoneDiamondChipset = new TemplateItem(NAMESPACE.id("redstone_diamond_chipset")).setTranslationKey(NAMESPACE, "redstone_diamond_chipset");
+        pulsatingChipset = new TemplateItem(NAMESPACE.id("pulsating_chipset")).setTranslationKey(NAMESPACE, "pulsating_chipset");
 
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
         facade = new FacadeItem(NAMESPACE.id("facade")).setTranslationKey(NAMESPACE, "facade");
