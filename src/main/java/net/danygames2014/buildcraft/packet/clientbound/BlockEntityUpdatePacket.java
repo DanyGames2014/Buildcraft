@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.packet.clientbound;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
+import net.danygames2014.buildcraft.api.core.SynchedBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.packet.CoordinatesPacket;
@@ -39,12 +40,17 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
     public void read(DataInputStream stream) {
         super.read(stream);
         try {
-            int stateCount = stream.readByte();
+            byte stateCount = stream.readByte();
 
             for (int i = 0; i < stateCount; i++) {
-                int id = stream.readByte();
-                Serializable state = StateRegistry.create(id);
-                state.readData(stream);
+                byte id = stream.readByte();
+                PlayerEntity player = PlayerHelper.getPlayerFromGame();
+                if(player.world.getBlockEntity(x, y, z) instanceof SynchedBlockEntity synchedBlockEntity){
+                    synchedBlockEntity.getStateInstance(id).readData(stream);
+                    synchedBlockEntity.afterStateUpdated(id);
+                } else {
+                    StateRegistry.create(id).readData(stream);
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -13,6 +13,8 @@ import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
+import net.danygames2014.buildcraft.pluggable.GatePluggable;
+import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -541,24 +543,82 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
         updateSignalState();
     }
 
-//    @Override
-//    public Packet createUpdatePacket() {
-//        return new BlockEntityUpdatePacket(renderState, new BlockPos(x ,y, z));
-//    }
+    @Override
+    public Packet createUpdatePacket() {
+        return getBlockEntityUpdatePacket();
+    }
+
+    public BlockEntityUpdatePacket getBlockEntityUpdatePacket(){
+        BlockEntityUpdatePacket packet = new BlockEntityUpdatePacket(x, y, z);
+        packet.addStateForSerialization(renderState);
+        packet.addStateForSerialization(pluggableState);
+        return packet;
+    }
 
     @Override
     public Serializable getStateInstance(byte stateId) {
-        switch (stateId) {
-            case 0:
-                return renderState;
-            case 1:
-                return pluggableState;
+        Class stateClass = StateRegistry.getClass(stateId);
+        if(stateClass == PipeRenderState.class){
+            return renderState;
+        }
+        if(stateClass == PipePluggableState.class){
+            return pluggableState;
         }
         throw new RuntimeException("Unknown state requested: " + stateId + " this is a bug!");
     }
 
     @Override
     public void afterStateUpdated(byte stateId) {
+        if(!world.isRemote){
+            return;
+        }
+        Class stateClass = StateRegistry.getClass(stateId);
+        if(stateClass == PipeRenderState.class){
+            if(renderState.needsRenderUpdate()){
+                world.setBlockDirty(x, y, z);
+                renderState.clean();
+            }
+            return;
+        }
+        if(stateClass == PipePluggableState.class){
+            PipePluggable[] newPluggables = pluggableState.getPluggables();
 
+            // mark for render update if necessary
+            for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
+                PipePluggable old = sideProperties.pluggables[i];
+                PipePluggable newer = newPluggables[i];
+                if (old == null && newer == null) {
+                    continue;
+                } else if (old != null && newer != null && old.getClass() == newer.getClass()) {
+                    if (newer.requiresRenderUpdate(old)) {
+                        world.setBlockDirty(x, y, z);
+                        break;
+                    }
+                } else {
+                    // one of them is null but not the other, so update
+                    world.setBlockDirty(x, y, z);
+                    break;
+                }
+            }
+            sideProperties.pluggables = newPluggables.clone();
+
+            // TODO: support gates
+
+//            for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
+//                final PipePluggable pluggable = getPipePluggable(ForgeDirection.getOrientation(i));
+//                if (pluggable != null && pluggable instanceof GatePluggable) {
+//                    final GatePluggable gatePluggable = (GatePluggable) pluggable;
+//                    Gate gate = pipe.gates[i];
+//                    if (gate == null || gate.logic != gatePluggable.getLogic() || gate.material != gatePluggable.getMaterial()) {
+//                        pipe.gates[i] = GateFactory.makeGate(pipe, gatePluggable.getMaterial(), gatePluggable.getLogic(), ForgeDirection.getOrientation(i));
+//                    }
+//                } else {
+//                    pipe.gates[i] = null;
+//                }
+//            }
+//
+//            syncGateExpansions();
+            return;
+        }
     }
 }

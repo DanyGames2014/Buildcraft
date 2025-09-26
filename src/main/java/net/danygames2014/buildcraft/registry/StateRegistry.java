@@ -11,6 +11,7 @@ import java.util.Map;
 public class StateRegistry {
     private static final Map<Integer, StateRegistry.StateFactory> ID_TO_STATE = new HashMap<>();
     private static final Map<Class<? extends Serializable>, Integer> CLASS_TO_ID = new HashMap<>();
+    private static final Map<Integer, Class<? extends Serializable>> ID_TO_CLASS = new HashMap<>();
     private static int NEXT_ID = 0;
     public static void register(Class<? extends Serializable> stateClass){
 
@@ -22,6 +23,7 @@ public class StateRegistry {
             }
         });
         CLASS_TO_ID.put(stateClass, NEXT_ID);
+        ID_TO_CLASS.put(NEXT_ID, stateClass);
         NEXT_ID++;
     }
 
@@ -35,6 +37,14 @@ public class StateRegistry {
             throw new IllegalArgumentException("State class not registered: " + stateClass);
         }
         return id;
+    }
+
+    public static Class<? extends Serializable> getClass(int id){
+        Class<? extends Serializable> clazz = ID_TO_CLASS.get(id);
+        if(clazz == null){
+            throw new IllegalArgumentException("Unknown state id: " + id);
+        }
+        return clazz;
     }
 
     public static Serializable create(int id) {
