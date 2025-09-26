@@ -1,0 +1,10 @@
+{
+  "parent": "buildcraft:block/template/machine",
+  "textures": {
+    "top": "buildcraft:block/builder_top",
+    "bottom": "buildcraft:block/builder_side",
+    "side": "buildcraft:block/builder_side",
+    "front": "buildcraft:block/builder_front",
+    "back": "buildcraft:block/builder_side"
+  }
+}

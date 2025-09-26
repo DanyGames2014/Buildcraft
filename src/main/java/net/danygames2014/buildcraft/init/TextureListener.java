@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.modificationstation.stationapi.api.client.event.render.model.ItemModelPredicateProviderRegistryEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -77,5 +78,24 @@ public class TextureListener {
         Atlases.getTerrain().addTexture(structurePipe);
 
         Atlases.getTerrain().addTexture(missingTexture);
+    }
+
+    @EventListener
+    public void registerItemModelPredicates(ItemModelPredicateProviderRegistryEvent event) {
+        event.registry.register(
+                Buildcraft.blueprint,
+                Buildcraft.NAMESPACE.id("blueprint_used"),
+                (stack, world, entity, seed) -> {
+                    return stack.getStationNbt().getInt("used");
+                }
+        );
+
+        event.registry.register(
+                Buildcraft.template,
+                Buildcraft.NAMESPACE.id("template_used"),
+                (stack, world, entity, seed) -> {
+                    return stack.getStationNbt().getInt("used");
+                }
+        );
     }
 }

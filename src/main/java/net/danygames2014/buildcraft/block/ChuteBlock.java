@@ -26,7 +26,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
-public class ChuteBlock extends TemplateBlockWithEntity implements BlockWithWorldRenderer, BlockWithInventoryRenderer {
+public class ChuteBlock extends TemplateMachineBlock implements BlockWithWorldRenderer, BlockWithInventoryRenderer {
     @Environment(EnvType.CLIENT)
     private ChuteRenderer chuteRenderer;
     private final Random random;

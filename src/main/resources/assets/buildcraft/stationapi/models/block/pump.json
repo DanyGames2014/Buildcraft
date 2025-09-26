@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "top": "buildcraft:block/pump_top",
+    "bottom": "buildcraft:block/pump_bottom",
+    "side": "buildcraft:block/pump_side"
+  }
+}

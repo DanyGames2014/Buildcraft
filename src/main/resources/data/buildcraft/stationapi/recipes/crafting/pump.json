@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "t",
+    "m"
+  ],
+  "key": {
+    "t": {
+      "item": "buildcraft:tank"
+    },
+    "m": {
+      "item": "buildcraft:mining_well"
+    }
+  },
+  "result": {
+    "item": "buildcraft:pump"
+  }
+}

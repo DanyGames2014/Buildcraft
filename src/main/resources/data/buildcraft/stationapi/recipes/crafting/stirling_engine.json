@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ccc",
+    " s ",
+    "gpg"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:cobblestone"
+    },
+    "s": {
+      "item": "minecraft:glass"
+    },
+    "g": {
+      "item": "buildcraft:stone_gear"
+    },
+    "p": {
+      "item": "minecraft:piston"
+    }
+  },
+  "result": {
+    "item": "buildcraft:stirling_engine"
+  }
+}

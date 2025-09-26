@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "buildcraft:item/blueprint"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "buildcraft:blueprint_used": 1
+      },
+      "model": "buildcraft:item/blueprint_used"
+    }
+  ]
+}

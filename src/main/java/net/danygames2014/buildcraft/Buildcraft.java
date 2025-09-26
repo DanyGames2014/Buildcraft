@@ -12,10 +12,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTran
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
-import net.danygames2014.buildcraft.item.BuildcraftWrenchItem;
-import net.danygames2014.buildcraft.item.FacadeItem;
-import net.danygames2014.buildcraft.item.PipeWireItem;
-import net.danygames2014.buildcraft.item.PlugItem;
+import net.danygames2014.buildcraft.item.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
@@ -41,11 +38,20 @@ public class Buildcraft {
     public static Item ironGear;
     public static Item goldGear;
     public static Item diamondGear;
+    public static Item template;
+    public static Item blueprint;
+    public static Item pipeWaterproof;
 
     public static Item redPipeWire;
     public static Item bluePipeWire;
     public static Item greenPipeWire;
     public static Item yellowPipeWire;
+    
+    public static Item redstoneChipset; // NYI
+    public static Item redstoneIronChipset; // NYI
+    public static Item redstoneGoldenChipset; // NYI
+    public static Item redstoneDiamondChipset; // NYI
+    public static Item pulsatingChipset; // NYI
 
     public static Item plug;
     public static Item facade;
@@ -57,12 +63,25 @@ public class Buildcraft {
     public static GoldenPipeBehavior goldenPipeBehavior;
 
     public static Block chuteBlock;
+    public static Block autoWorkbench; // NYI
+    public static Block miningWell; // NYI
+    public static Block quarry; // NYI
+    public static Block pump; // NYI
+    public static Block tank;
+    public static Block refinery; // NYI
+    public static Block laser; // NYI
+    public static Block assemblyTable; // NYI
+    public static Block filler; // NYI
+    public static Block builder; // NYI
+    public static Block architectTable; // NYI
+    public static Block blueprintLibrary; // NYI
+    public static Block landMarker; // NYI
+    public static Block pathMarker; // NYI
     public static Block redstoneEngine;
     public static Block stirlingEngine;
     public static Block combustionEngine;
-    public static Block tank;
-    public static Block frame;
 
+    public static Block frame;
     public static Block woodenItemPipe;
     public static Block cobblestoneItemPipe;
     public static Block goldenItemPipe;
@@ -86,11 +105,20 @@ public class Buildcraft {
         ironGear = new TemplateItem(NAMESPACE.id("iron_gear")).setTranslationKey(NAMESPACE, "iron_gear");
         goldGear = new TemplateItem(NAMESPACE.id("golden_gear")).setTranslationKey(NAMESPACE, "golden_gear");
         diamondGear = new TemplateItem(NAMESPACE.id("diamond_gear")).setTranslationKey(NAMESPACE, "diamond_gear");
-
+        template = new BuilderTemplateItem(NAMESPACE.id("template")).setTranslationKey(NAMESPACE, "template");
+        blueprint = new BuilderTemplateItem(NAMESPACE.id("blueprint")).setTranslationKey(NAMESPACE, "blueprint");
+        pipeWaterproof = new TemplateItem(NAMESPACE.id("pipe_waterproof")).setTranslationKey(NAMESPACE, "pipe_waterproof");
+        
         redPipeWire = new PipeWireItem(NAMESPACE.id("red_pipe_wire")).setTranslationKey(NAMESPACE, "red_pipe_wire");
         bluePipeWire = new PipeWireItem(NAMESPACE.id("blue_pipe_wire")).setTranslationKey(NAMESPACE, "blue_pipe_wire");
         greenPipeWire = new PipeWireItem(NAMESPACE.id("green_pipe_wire")).setTranslationKey(NAMESPACE, "green_pipe_wire");
         yellowPipeWire = new PipeWireItem(NAMESPACE.id("yellow_pipe_wire")).setTranslationKey(NAMESPACE, "yellow_pipe_wire");
+
+        // redstoneChipset
+        // redstoneIronChipset
+        // redstoneGoldenChipset
+        // redstoneDiamondChipset
+        // pulsatingChipset
 
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
         facade = new FacadeItem(NAMESPACE.id("facade")).setTranslationKey(NAMESPACE, "facade");
@@ -105,10 +133,24 @@ public class Buildcraft {
         goldenPipeBehavior = new GoldenPipeBehavior();
 
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        autoWorkbench = new AutocraftingTableBlock(NAMESPACE.id("autocrafting_table"), Material.WOOD).setTranslationKey(NAMESPACE, "auto_workbench").setHardness(2.5F);
+        miningWell = new MiningWellBlock(NAMESPACE.id("mining_well"), Material.METAL).setTranslationKey(NAMESPACE, "mining_well").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        quarry = new QuarryBlock(NAMESPACE.id("quarry"), Material.METAL).setTranslationKey(NAMESPACE, "quarry").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        pump = new PumpBlock(NAMESPACE.id("pump"), Material.METAL).setTranslationKey(NAMESPACE, "pump").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        tank = new TankBlock(NAMESPACE.id("tank")).setTranslationKey(NAMESPACE, "tank").setHardness(0.5F);
+        // refinery
+        // laser
+        // assembly table
+        filler = new FillerBlock(NAMESPACE.id("filler"), Material.METAL).setTranslationKey(NAMESPACE, "filler").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        builder = new BuilderBlock(NAMESPACE.id("builder"), Material.METAL).setTranslationKey(NAMESPACE, "builder").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        architectTable = new ArchitectTableBlock(NAMESPACE.id("architect_table"), Material.METAL).setTranslationKey(NAMESPACE, "architect_table").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        blueprintLibrary = new BlueprintLibraryBlock(NAMESPACE.id("blueprint_library"), Material.METAL).setTranslationKey(NAMESPACE, "blueprint_library").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        // land marker
+        // path marker
         redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine").setHardness(0.7F).setSoundGroup(Block.WOOD_SOUND_GROUP);
         stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine").setHardness(1.0F).setSoundGroup(Block.STONE_SOUND_GROUP);
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
-        tank = new TankBlock(NAMESPACE.id("tank")).setTranslationKey(NAMESPACE, "tank").setHardness(0.5F);
+        
         frame = new FrameBlock(NAMESPACE.id("frame"), pipeMaterial).setTranslationKey(NAMESPACE, "frame").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
         renderBlock = new RenderBlock(NAMESPACE.id("render_block"));

@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "top": "buildcraft:block/autocrafting_table_top",
+    "bottom": "buildcraft:block/autocrafting_table_top",
+    "side": "buildcraft:block/autocrafting_table_side"
+  }
+}

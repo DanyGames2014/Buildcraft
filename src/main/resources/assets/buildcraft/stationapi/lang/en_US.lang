@@ -4,19 +4,50 @@ item.buildcraft.stone_gear.name=Stone Gear
 item.buildcraft.iron_gear.name=Iron Gear
 item.buildcraft.golden_gear.name=Golden Gear
 item.buildcraft.diamond_gear.name=Diamond Gear
+item.buildcraft.template.name=Template
+item.buildcraft.blueprint.name=Blueprint
+item.buildcraft.pipe_waterproof.name=Pipe Waterproof
 
 item.buildcraft.red_pipe_wire.name=Red Pipe Wire
 item.buildcraft.blue_pipe_wire.name=Blue Pipe Wire
 item.buildcraft.green_pipe_wire.name=Green Pipe Wire
 item.buildcraft.yellow_pipe_wire.name=Yellow Pipe Wire
 
+item.buildcraft.redstone_chipset.name=Redstone Chipset
+item.buildcraft.redstone_iron_chipset.name=Redstone Iron Chipset
+item.buildcraft.redstone_golden_chipset.name=Redston Golden Chipset
+item.buildcraft.redstone_diamond_chipset.name=Redstone Diamond Chipset
+item.buildcraft.pulsating_chipset.name=Pulsating Chipset
+
 item.buildcraft.plug.name=Pipe Plug
 
 tile.buildcraft.chute.name=Chute
+tile.buildcraft.auto_workbench.name=Auto Workbench
+tile.buildcraft.mining_well.name=Mining Well
+tile.buildcraft.quarry.name=Quarry
+tile.buildcraft.pump.name=Pump
+tile.buildcraft.tank.name=Tank
+tile.buildcraft.refinery.name=Refinery
+tile.buildcraft.laser.name=Laser
+tile.buildcraft.assembly_table.name=Assembly Table
+tile.buildcraft.filler.name=Filler
+tile.buildcraft.builder.name=Builder
+tile.buildcraft.architect_table.name=Architect Table
+tile.buildcraft.blueprint_library.name=Blueprint Library
+tile.buildcraft.land_marker.name=Land Marker
+tile.buildcraft.path_marker.name=Path Marker
 tile.buildcraft.redstone_engine.name=Redstone Engine
 tile.buildcraft.stirling_engine.name=Stirling Engine
 tile.buildcraft.combustion_engine.name=Combustion Engine
+
 tile.buildcraft.frame.name=Frame
+tile.buildcraft.wooden_item_pipe.name=Wooden Transport Pipe
+tile.buildcraft.cobblestone_item_pipe.name=Cobblestone Transport Pipe
+tile.buildcraft.golden_item_pipe.name=Golden Transport Pipe
+tile.buildcraft.wooden_fluid_pipe.name=Wooden Fluid Pipe
+tile.buildcraft.cobblestone_fluid_pipe.name=Cobblestone Fluid Pipe
+tile.buildcraft.wooden_energy_pipe.name=Wooden Kinesis Pipe
+tile.buildcraft.cobblestone_energy_pipe.name=Cobblestone Kinesis Pipe
 
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel

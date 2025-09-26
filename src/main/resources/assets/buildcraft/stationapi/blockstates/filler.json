@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "pattern=none": {
+      "model": "buildcraft:block/filler/filler_off"
+    },
+    "pattern=clear": {
+      "model": "buildcraft:block/filler/filler_clear"
+    },
+    "pattern=fill": {
+      "model": "buildcraft:block/filler/filler_fill"
+    },
+    "pattern=flatten": {
+      "model": "buildcraft:block/filler/filler_flatten"
+    },
+    "pattern=horizon": {
+      "model": "buildcraft:block/filler/filler_horizon"
+    },
+    "pattern=pyramid": {
+      "model": "buildcraft:block/filler/filler_pyramid"
+    },
+    "pattern=stairs": {
+      "model": "buildcraft:block/filler/filler_stairs"
+    },
+    "pattern=walls": {
+      "model": "buildcraft:block/filler/filler_walls"
+    }
+  }
+}

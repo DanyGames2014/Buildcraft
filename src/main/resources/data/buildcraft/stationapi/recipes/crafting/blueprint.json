@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ppp",
+    "plp",
+    "ppp"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "l": {
+      "item": "minecraft:dye",
+      "damage": 4
+    }
+  },
+  "result": {
+    "item": "buildcraft:blueprint"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:dye",
+      "damage": 2
+    }
+  ],
+  "result": {
+    "item": "buildcraft:pipe_waterproof"
+  }
+}

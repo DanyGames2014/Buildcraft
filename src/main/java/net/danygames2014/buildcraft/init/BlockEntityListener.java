@@ -17,10 +17,18 @@ public class BlockEntityListener {
     @EventListener
     public void registerBlockEntities(BlockEntityRegisterEvent event){
         event.register(ChuteBlockEntity.class, NAMESPACE.id("chute").toString());
+        event.register(AutocraftingTableBlockEntity.class, NAMESPACE.id("autocrafting_table").toString());
+        event.register(MiningWellBlockEntity.class, NAMESPACE.id("mining_well").toString());
+        event.register(QuarryBlockEntity.class, NAMESPACE.id("quarry").toString());
+        event.register(PumpBlockEntity.class, NAMESPACE.id("pump").toString());
+        event.register(TankBlockEntity.class, NAMESPACE.id("tank").toString());
+        event.register(FillerBlockEntity.class, NAMESPACE.id("filler").toString());
+        event.register(BuilderBlockEntity.class, NAMESPACE.id("builder").toString());
+        event.register(ArchitectTableBlockEntity.class, NAMESPACE.id("architect_table").toString());
+        event.register(BlueprintLibraryBlockEntity.class, NAMESPACE.id("blueprint_library").toString());
         event.register(RedstoneEngineBlockEntity.class, NAMESPACE.id("redstone_engine").toString());
         event.register(StirlingEngineBlockEntity.class, NAMESPACE.id("stirling_engine").toString());
         event.register(CombustionEngineBlockEntity.class, NAMESPACE.id("combustion_engine").toString());
-        event.register(TankBlockEntity.class, NAMESPACE.id("tank").toString());
         event.register(PipeBlockEntity.class, NAMESPACE.id("pipe").toString());
         event.register(PoweredPipeBlockEntity.class, NAMESPACE.id("powered_pipe").toString());
     }

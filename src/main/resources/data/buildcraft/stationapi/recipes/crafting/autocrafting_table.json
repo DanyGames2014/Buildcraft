@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " g ",
+    "gwg",
+    " g "
+  ],
+  "key": {
+    "w": {
+      "item": "minecraft:crafting_table"
+    },
+    "g": {
+      "item": "buildcraft:wooden_gear"
+    }
+  },
+  "result": {
+    "item": "buildcraft:autocrafting_table"
+  }
+}

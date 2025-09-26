@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "buildcraft:item/template"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "buildcraft:template_used": 1
+      },
+      "model": "buildcraft:item/template_used"
+    }
+  ]
+}

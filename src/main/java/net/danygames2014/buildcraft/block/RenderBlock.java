@@ -22,6 +22,7 @@ public class RenderBlock extends TemplateBlock {
 
     public RenderBlock(Identifier identifier) {
         super(identifier, Material.AIR);
+        this.setTranslationKey(identifier.namespace.id("render_block"));
     }
 
     public int getColorMultiplier() {

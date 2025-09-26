@@ -1,6 +1,13 @@
 {
   "values": [
     "buildcraft:chute",
+    "buildcraft:mining_well",
+    "buildcraft:quarry",
+    "buildcraft:pump",
+    "buildcraft:filler",
+    "buildcraft:builder",
+    "buildcraft:architect_table",
+    "buildcraft:blueprint_library",
     "buildcraft:stirling_engine",
     "buildcraft:combustion_engine"
   ]

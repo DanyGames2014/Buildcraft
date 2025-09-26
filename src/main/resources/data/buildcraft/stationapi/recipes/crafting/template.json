@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ppp",
+    "pip",
+    "ppp"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "i": {
+      "item": "minecraft:dye"
+    }
+  },
+  "result": {
+    "item": "buildcraft:template"
+  }
+}

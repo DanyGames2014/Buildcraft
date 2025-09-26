@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "buildcraft:block/blueprint_library_end",
+    "side": "buildcraft:block/blueprint_library_side"
+  }
+}
