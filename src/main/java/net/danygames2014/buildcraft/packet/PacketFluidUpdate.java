@@ -1,6 +1,6 @@
 package net.danygames2014.buildcraft.packet;
 
-import net.danygames2014.buildcraft.block.entity.pipe.FluidRenderData;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidRenderData;
 
 import java.util.BitSet;
 

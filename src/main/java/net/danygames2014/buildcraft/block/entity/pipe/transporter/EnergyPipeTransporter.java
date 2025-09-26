@@ -1,11 +1,9 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.transporter;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
-import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
-import net.danygames2014.buildcraft.entity.TravellingItemEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.world.World;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.Iterator;

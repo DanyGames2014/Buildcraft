@@ -1,9 +1,11 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.behavior;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
+import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.TravellingFluid;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;

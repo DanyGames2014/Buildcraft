@@ -1,6 +1,5 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.transporter;
 
-import net.danygames2014.nyalib.fluid.FluidStack;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class FluidRenderData {

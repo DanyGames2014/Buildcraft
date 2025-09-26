@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.client.render.block.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;

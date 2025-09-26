@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.behavior;
 
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.buildcraft.util.MathUtil;

@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.transporter;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;

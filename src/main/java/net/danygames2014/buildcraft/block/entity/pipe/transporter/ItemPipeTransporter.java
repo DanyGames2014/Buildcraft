@@ -1,6 +1,9 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.transporter;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;

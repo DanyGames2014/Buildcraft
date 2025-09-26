@@ -1,6 +1,6 @@
 package net.danygames2014.buildcraft.entity;
 
-import net.danygames2014.buildcraft.block.entity.pipe.ItemPipeTransporter;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;

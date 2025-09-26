@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.transporter;
 
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.minecraft.nbt.NbtCompound;

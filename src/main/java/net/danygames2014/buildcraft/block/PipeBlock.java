@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.api.core.Debuggable;
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
@@ -14,7 +15,6 @@ import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.RaycastResult;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
-import net.danygames2014.uniwrench.item.WrenchBase;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -39,7 +39,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {

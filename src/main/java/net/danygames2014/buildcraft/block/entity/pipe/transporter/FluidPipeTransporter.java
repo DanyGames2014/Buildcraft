@@ -1,10 +1,11 @@
-package net.danygames2014.buildcraft.block.entity.pipe;
+package net.danygames2014.buildcraft.block.entity.pipe.transporter;
 
 import com.google.common.collect.EnumMultiset;
 import com.google.common.collect.Multiset;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.core.SafeTimeTracker;
 import net.danygames2014.buildcraft.block.PipeBlock;
+import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.packet.PacketFluidUpdate;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
