@@ -14,6 +14,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Set;
 
 public class GatePluggable extends PipePluggable {
@@ -176,5 +179,15 @@ public class GatePluggable extends PipePluggable {
 
     public GateExpansion[] getExpansions() {
         return expansions;
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+
     }
 }

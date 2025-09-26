@@ -1,6 +1,8 @@
 package net.danygames2014.buildcraft.client.render;
 
+import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.util.ConnectionMatrix;
+import net.danygames2014.buildcraft.util.PipeConnectionMatrix;
 import net.danygames2014.buildcraft.util.TextureMatrix;
 import net.danygames2014.buildcraft.util.WireMatrix;
 import net.minecraft.nbt.NbtCompound;
@@ -10,8 +12,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 // TODO: update as we add wires, etc
-public class PipeRenderState {
-    public final ConnectionMatrix pipeConnectionMatrix = new ConnectionMatrix();
+public class PipeRenderState implements Serializable {
+    public final PipeConnectionMatrix pipeConnectionMatrix = new PipeConnectionMatrix();
     public final TextureMatrix textureMatrix = new TextureMatrix();
     public final WireMatrix wireMatrix = new WireMatrix();
 
@@ -33,13 +35,13 @@ public class PipeRenderState {
     }
 
     // TODO, make this write to buffer instead, for update packet
-    public void write(DataOutputStream stream) throws IOException {
-        pipeConnectionMatrix.write(stream);
-        textureMatrix.write(stream);
+    public void writeData(DataOutputStream stream) throws IOException {
+        pipeConnectionMatrix.writeData(stream);
+        textureMatrix.writeData(stream);
     }
 
-    public void read(DataInputStream stream) throws IOException {
-        pipeConnectionMatrix.read(stream);
-        textureMatrix.read(stream);
+    public void readData(DataInputStream stream) throws IOException {
+        pipeConnectionMatrix.readData(stream);
+        textureMatrix.readData(stream);
     }
 }

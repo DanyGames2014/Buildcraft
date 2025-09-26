@@ -13,6 +13,10 @@ import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class FacadePluggable extends PipePluggable {
     private Block block;
     private int meta;
@@ -105,5 +109,15 @@ public class FacadePluggable extends PipePluggable {
     @Override
     public boolean isSolidOnSide() {
         return !isHollow();
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+
     }
 }

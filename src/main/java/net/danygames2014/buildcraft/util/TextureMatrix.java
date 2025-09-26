@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.util;
 
+import net.danygames2014.buildcraft.api.core.Serializable;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -7,7 +8,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class TextureMatrix {
+public class TextureMatrix implements Serializable {
     private final Identifier[] textureIndexes = new Identifier[7];
     private  boolean dirty = false;
 
@@ -30,13 +31,13 @@ public class TextureMatrix {
         dirty = false;
     }
 
-    public void write(DataOutputStream stream) throws IOException {
+    public void writeData(DataOutputStream stream) throws IOException {
         for(Identifier identifier : textureIndexes){
             stream.writeUTF(identifier != null ? identifier.toString() : "");
         }
     }
 
-    public void read(DataInputStream stream) throws IOException {
+    public void readData(DataInputStream stream) throws IOException {
         for(int i = 0; i < textureIndexes.length; i++){
             String identifierString = stream.readUTF();
             Identifier identifier = !identifierString.isEmpty() ? Identifier.tryParse(identifierString) : null;

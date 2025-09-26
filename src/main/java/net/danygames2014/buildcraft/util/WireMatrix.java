@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.util;
 
+import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -9,7 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.BitSet;
 
-public class WireMatrix {
+public class WireMatrix implements Serializable {
     private final BitSet hasWire = new BitSet(PipeWire.values().length);
 
     private final ConnectionMatrix[] wires = new ConnectionMatrix[PipeWire.values().length];
@@ -70,11 +71,11 @@ public class WireMatrix {
     }
 
     // TODO: implement this
-    public void write(DataOutputStream stream) throws IOException {
+    public void writeData(DataOutputStream stream) throws IOException {
 
     }
 
-    public void read(DataInputStream stream) throws IOException {
+    public void readData(DataInputStream stream) throws IOException {
 
     }
 }

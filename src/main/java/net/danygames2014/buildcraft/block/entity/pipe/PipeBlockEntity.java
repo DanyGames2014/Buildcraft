@@ -2,6 +2,8 @@ package net.danygames2014.buildcraft.block.entity.pipe;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.buildcraft.api.core.Serializable;
+import net.danygames2014.buildcraft.api.core.SynchedBlockEntity;
 import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
@@ -9,7 +11,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
-import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
+import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,7 +28,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.Collection;
 import java.util.Random;
 
-public class PipeBlockEntity extends BlockEntity {
+public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
     public PipeBlock pipeBlock;
     public PipeBehavior behavior;
     public PipeTransporter transporter;
@@ -51,6 +53,7 @@ public class PipeBlockEntity extends BlockEntity {
 
     protected boolean neighbourUpdate = false;
     protected boolean refreshRenderState = false;
+    protected boolean sendClientUpdate = false;
     private boolean internalUpdateScheduled = false;
 
     // Empty constructor for loading
@@ -83,6 +86,8 @@ public class PipeBlockEntity extends BlockEntity {
         if (!hasInit) {
             init();
         }
+
+
 
         if (connections == null) {
             updateConnections();
@@ -172,6 +177,9 @@ public class PipeBlockEntity extends BlockEntity {
      * @return Whether this pipe can connect to the target block
      */
     public PipeConnectionType canConnectTo(int x, int y, int z, Direction side) {
+        if(world.isRemote){
+            return renderState.pipeConnectionMatrix.getConnectionType(side);
+        }
         BlockEntity other = world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
 
         if (other == null) {
@@ -373,6 +381,7 @@ public class PipeBlockEntity extends BlockEntity {
         }
     }
 
+
     private boolean receiveSignal(int signal, PipeWire color) {
         if (world == null) {
             return false;
@@ -483,7 +492,7 @@ public class PipeBlockEntity extends BlockEntity {
         // Pipe connections:
         for (Direction direction : Direction.values()) {
             // TODO: Actually use the returned connection type here to swap the texture when neeeded, no fucking idea how to do it, sorry ralf
-            renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction) != PipeConnectionType.NONE);
+            renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction));
         }
 
         for (int i = 0; i < 7; i++) {
@@ -521,14 +530,35 @@ public class PipeBlockEntity extends BlockEntity {
         if(renderState.isDirty()){
             renderState.clean();
         }
+        sendUpdateToClient();
+    }
+
+    public void sendUpdateToClient() {
+        sendClientUpdate = true;
     }
 
     private void internalUpdate(){
         updateSignalState();
     }
 
+//    @Override
+//    public Packet createUpdatePacket() {
+//        return new BlockEntityUpdatePacket(renderState, new BlockPos(x ,y, z));
+//    }
+
     @Override
-    public Packet createUpdatePacket() {
-        return new PipeUpdatePacket(renderState, new BlockPos(x ,y, z));
+    public Serializable getStateInstance(byte stateId) {
+        switch (stateId) {
+            case 0:
+                return renderState;
+            case 1:
+                return pluggableState;
+        }
+        throw new RuntimeException("Unknown state requested: " + stateId + " this is a bug!");
+    }
+
+    @Override
+    public void afterStateUpdated(byte stateId) {
+
     }
 }

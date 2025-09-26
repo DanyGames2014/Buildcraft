@@ -1,6 +1,9 @@
 package net.danygames2014.buildcraft.init;
 
-import net.danygames2014.buildcraft.packet.clientbound.PipeUpdatePacket;
+import net.danygames2014.buildcraft.client.render.PipeRenderState;
+import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
+import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
+import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.network.packet.PacketRegisterEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -15,6 +18,9 @@ public class PacketTypeListener {
 
     @EventListener
     public void registerPacketTypes(PacketRegisterEvent event){
-        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_pipe"), PipeUpdatePacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_pipe"), BlockEntityUpdatePacket.TYPE);
+
+        StateRegistry.register(PipeRenderState.class);
+        StateRegistry.register(PipePluggableState.class);
     }
 }

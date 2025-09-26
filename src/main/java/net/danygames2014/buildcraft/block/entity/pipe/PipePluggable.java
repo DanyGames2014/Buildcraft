@@ -1,4 +1,5 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
+import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.client.render.PipePluggableDynamicRenderer;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.fabricmc.api.EnvType;
@@ -9,7 +10,7 @@ import net.minecraft.util.math.Box;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public abstract class PipePluggable {
+public abstract class PipePluggable implements Serializable {
     public abstract ItemStack[] getDropItems(PipeBlockEntity pipe);
 
     public void update(PipeBlockEntity pipe, Direction direction){
