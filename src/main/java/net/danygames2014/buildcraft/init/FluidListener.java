@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.api.energy.EngineCoolant;
 import net.danygames2014.buildcraft.api.energy.EngineCoolantRegistry;
 import net.danygames2014.buildcraft.api.energy.EngineFuel;
 import net.danygames2014.buildcraft.api.energy.EngineFuelRegistry;
+import net.danygames2014.nyalib.event.AfterFluidRegistryEvent;
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBuilder;
@@ -30,7 +31,10 @@ public class FluidListener {
                                .color(0xC4C00E)
                                .build()
         );
-
+    }
+    
+    @EventListener
+    public void afterFluidRegister(AfterFluidRegistryEvent event) {
         EngineCoolantRegistry.register(Fluids.WATER, new EngineCoolant(0.023F));
         // TODO: Replace the 1.0F with a config multiplier, kthxbai
         EngineFuelRegistry.register(oil, new EngineFuel(oil, 3, (int) (25000 * 1.0F)));
