@@ -29,6 +29,8 @@ public class BlockEntityListener {
         event.register(BuilderBlockEntity.class, NAMESPACE.id("builder").toString());
         event.register(ArchitectTableBlockEntity.class, NAMESPACE.id("architect_table").toString());
         event.register(BlueprintLibraryBlockEntity.class, NAMESPACE.id("blueprint_library").toString());
+        event.register(LandMarkerBlockEntity.class, NAMESPACE.id("land_marker").toString());
+        event.register(PathMarkerBlockEntity.class, NAMESPACE.id("path_marker").toString());
         event.register(RedstoneEngineBlockEntity.class, NAMESPACE.id("redstone_engine").toString());
         event.register(StirlingEngineBlockEntity.class, NAMESPACE.id("stirling_engine").toString());
         event.register(CombustionEngineBlockEntity.class, NAMESPACE.id("combustion_engine").toString());

@@ -1,0 +1,6 @@
+{
+  "parent": "buildcraft:block/template/centered_torch",
+  "textures": {
+    "torch": "buildcraft:block/land_marker"
+  }
+}
