@@ -1,6 +1,7 @@
 {
   "parent": "buildcraft:block/template/centered_torch",
   "textures": {
-    "torch": "buildcraft:block/path_marker"
+    "torch": "buildcraft:block/path_marker",
+    "particles": "buildcraft:block/path_marker"
   }
 }
