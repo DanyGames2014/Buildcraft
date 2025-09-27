@@ -16,12 +16,17 @@ import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.danygames2014.buildcraft.util.DirectionUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ServerWorld;
+import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -108,9 +113,22 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
             internalUpdateScheduled = false;
         }
 
-        if (refreshRenderState && !world.isRemote) {
+        if (refreshRenderState) {
             refreshRenderState();
             refreshRenderState = false;
+        }
+
+        if(sendClientUpdate) {
+            sendClientUpdate = false;
+            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
+                Packet updatePacket = getBlockEntityUpdatePacket();
+                for(Object o : world.players){
+                    PlayerEntity player = (PlayerEntity) o;
+                    if(player.getDistance(x, y, z) < 40){
+                        PacketHelper.sendTo(player, updatePacket);
+                    }
+                }
+            }
         }
 
         if(attachPluggables){
@@ -499,7 +517,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
 
         for (int i = 0; i < 7; i++) {
             Direction direction = DirectionUtil.getById(i);
-            renderState.textureMatrix.setTextureIdentifier(direction, pipeBlock.getTextureIdentifierForSide(direction, direction != null && !world.isRemote ? this.canConnectTo(x, y, z, direction) : null));
+            renderState.textureMatrix.setTextureIdentifier(direction, pipeBlock.getTextureIdentifierForSide(direction, direction != null ? this.canConnectTo(x, y, z, direction) : null));
         }
 
         for(PipeWire color : PipeWire.values()){

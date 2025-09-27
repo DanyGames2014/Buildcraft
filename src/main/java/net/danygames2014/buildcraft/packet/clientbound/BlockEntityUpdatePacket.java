@@ -25,6 +25,8 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
 
     private List<Serializable> stateList = new LinkedList<>();
 
+    private boolean wroteData = false;
+
     public BlockEntityUpdatePacket(){
     }
 
@@ -48,8 +50,11 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
                 if(player.world.getBlockEntity(x, y, z) instanceof SynchedBlockEntity synchedBlockEntity){
                     synchedBlockEntity.getStateInstance(id).readData(stream);
                     synchedBlockEntity.afterStateUpdated(id);
+                    wroteData = true;
                 } else {
-                    StateRegistry.create(id).readData(stream);
+                    Serializable state = StateRegistry.create(id);
+                    state.readData(stream);
+                    stateList.add(state);
                 }
             }
         } catch (IOException e) {
@@ -72,8 +77,32 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
         }
     }
 
+    // TODO: This is probably bad so might have to rewrite at some point
     @Override
     public void apply(NetworkHandler networkHandler) {
+        if(wroteData){
+            return;
+        }
+        PlayerEntity player = PlayerHelper.getPlayerFromGame();
+        if(player.world.getBlockEntity(x, y, z) instanceof SynchedBlockEntity synchedBlockEntity){
+            for(Serializable state : stateList){
+                byte id = (byte) StateRegistry.getId(state.getClass());
+                Serializable instance = synchedBlockEntity.getStateInstance(id);
+
+                try {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    DataOutputStream dos = new DataOutputStream(baos);
+                    state.writeData(dos);
+                    dos.flush();
+
+                    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+                    DataInputStream dis = new DataInputStream(bais);
+                    instance.readData(dis);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     @Override

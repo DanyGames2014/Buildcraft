@@ -17,7 +17,7 @@ public class PipeRenderState implements Serializable {
     public final TextureMatrix textureMatrix = new TextureMatrix();
     public final WireMatrix wireMatrix = new WireMatrix();
 
-    private boolean dirty = false;
+    private boolean dirty = true;
 
     public void clean(){
         dirty = false;

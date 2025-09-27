@@ -62,13 +62,13 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         this.blockEntityFactory = blockEntityFactory;
         this.behavior = behavior;
         this.transporterFactory = transporter;
+        this.texture = texture;
+        this.alternativeTexture = alternativeTexture;
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             TextureListener.dynamicBlockTextures.add(texture);
             if(alternativeTexture != null){
                 TextureListener.dynamicBlockTextures.add(alternativeTexture);
             }
-            this.texture = texture;
-            this.alternativeTexture = alternativeTexture;
             this.pipeWorldRenderer = new PipeWorldRenderer();
             this.pipeItemRenderer = new PipeItemRenderer();
         }
