@@ -1,0 +1,54 @@
+{
+  "parent": "block/cube",
+  "format_version": "1.9.0",
+  "credit": "Made with Blockbench",
+  "ambientocclusion": false,
+  "textures": {
+    "0": "buildcraft:block/refinery",
+    "particle": "buildcraft:block/refinery"
+  },
+  "elements": [
+    {
+      "name": "front_tank",
+      "from": [4, 0, 0],
+      "to": [12, 16, 8],
+      "rotation": {"angle": 0, "axis": "y", "origin": [4, 0, 0]},
+      "faces": {
+        "north": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "east": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "south": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "west": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "up": {"uv": [4, 0, 8, 4], "texture": "#0"},
+        "down": {"uv": [4, 0, 8, 4], "texture": "#0"}
+      }
+    },
+    {
+      "name": "right_rear_tank",
+      "from": [0, 0, 8],
+      "to": [8, 16, 16],
+      "rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 8]},
+      "faces": {
+        "north": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "east": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "south": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "west": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "up": {"uv": [4, 0, 8, 4], "texture": "#0"},
+        "down": {"uv": [4, 0, 8, 4], "texture": "#0"}
+      }
+    },
+    {
+      "name": "left_rear_tank",
+      "from": [8, 0, 8],
+      "to": [16, 16, 16],
+      "rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
+      "faces": {
+        "north": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "east": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "south": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "west": {"uv": [0, 0, 4, 8], "texture": "#0"},
+        "up": {"uv": [4, 0, 8, 4], "texture": "#0"},
+        "down": {"uv": [4, 0, 8, 4], "texture": "#0"}
+      }
+    }
+  ]
+}

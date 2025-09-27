@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "buildcraft:block/refinery",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "buildcraft:block/refinery",
+      "y": 0
+    },
+    "facing=south": {
+      "model": "buildcraft:block/refinery",
+      "y": 90
+    },
+    "facing=west": {
+      "model": "buildcraft:block/refinery",
+      "y": 180
+    }
+  }
+}
