@@ -47,7 +47,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     public final PipeBlockEntityFactory blockEntityFactory;
 
     public static int lastSideUsed;
-    @Environment(EnvType.CLIENT)
     public static float tickDelta;
     @Environment(EnvType.CLIENT)
     private PipeWorldRenderer pipeWorldRenderer;
