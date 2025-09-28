@@ -3,8 +3,8 @@
   "credit": "Made with Blockbench",
   "ambientocclusion": false,
   "textures": {
-    "particle": "stationapi:block/path_marker",
-    "torch": "stationapi:block/path_marker"
+    "particle": "buildcraft:block/path_marker",
+    "torch": "buildcraft:block/path_marker"
   },
   "elements": [
     {
