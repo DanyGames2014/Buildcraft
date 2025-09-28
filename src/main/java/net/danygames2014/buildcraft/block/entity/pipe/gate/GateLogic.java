@@ -3,6 +3,8 @@ package net.danygames2014.buildcraft.block.entity.pipe.gate;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
+import java.util.Locale;
+
 public enum GateLogic {
     AND, OR;
     public static final GateLogic[] VALUES = values();
@@ -48,6 +50,10 @@ public enum GateLogic {
     @Environment(EnvType.CLIENT)
     public void registerItemIcons(){
 
+    }
+
+    public String getTag() {
+        return name().toLowerCase(Locale.ENGLISH);
     }
 
     public static GateLogic fromOrdinal(int ordinal) {

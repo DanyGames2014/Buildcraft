@@ -56,3 +56,13 @@ gui.buildcraft.engine.energy=Energy
 gui.buildcraft.engine.current_output=Current output
 gui.buildcraft.engine.stored=Stored
 gui.buildcraft.engine.heat=Heat
+
+gate.logic.and=AND
+gate.logic.or=OR
+
+gate.material.iron=Iron
+gate.material.gold=Gold
+gate.material.diamond=Diamond
+
+gate.name=%s %s Gate
+gate.name.basic=Basic Gate

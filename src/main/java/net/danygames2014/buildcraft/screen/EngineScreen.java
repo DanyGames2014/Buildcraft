@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.util.ScreenUtil;
 import net.danygames2014.uniwrench.init.ItemListener;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.inventory.Inventory;
@@ -32,7 +33,7 @@ public abstract class EngineScreen extends BuildcraftScreen{
         @Override
         public void draw(int x, int y) {
             drawBackground(x, y);
-            drawSprite(TextureListener.energySprite, x + 3, y + 4, 16, 16);
+            ScreenUtil.drawSprite(TextureListener.energySprite, x + 3, y + 4, 16, 16, zOffset);
 
 
             if(!isFullyOpened()){

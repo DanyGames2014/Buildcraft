@@ -56,6 +56,8 @@ public class Buildcraft {
     public static Item plug;
     public static Item facade;
 
+    public static Item gateItem;
+
     public static Material pipeMaterial;
 
     public static WoodenPipeBehavior woodenPipeBehavior;
@@ -122,6 +124,8 @@ public class Buildcraft {
 
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
         facade = new FacadeItem(NAMESPACE.id("facade")).setTranslationKey(NAMESPACE, "facade");
+
+        gateItem = new GateItem(NAMESPACE.id("gate"));
     }
 
     @EventListener

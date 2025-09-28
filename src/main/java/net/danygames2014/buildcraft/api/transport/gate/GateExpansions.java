@@ -28,7 +28,7 @@ public class GateExpansions {
         recipes.put(expansion, addedRecipe);
     }
 
-    public static GateExpansion getExpansion(String identifier) {
+    public static GateExpansion getExpansion(Identifier identifier) {
         return expansions.get(identifier);
     }
 
