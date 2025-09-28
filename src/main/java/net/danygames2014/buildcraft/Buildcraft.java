@@ -145,8 +145,8 @@ public class Buildcraft {
         builder = new BuilderBlock(NAMESPACE.id("builder"), Material.METAL).setTranslationKey(NAMESPACE, "builder").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         architectTable = new ArchitectTableBlock(NAMESPACE.id("architect_table"), Material.METAL).setTranslationKey(NAMESPACE, "architect_table").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         blueprintLibrary = new BlueprintLibraryBlock(NAMESPACE.id("blueprint_library"), Material.METAL).setTranslationKey(NAMESPACE, "blueprint_library").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
-        landMarker = new LandMarkerBlock(NAMESPACE.id("land_marker"), Material.PISTON_BREAKABLE).setTranslationKey(NAMESPACE, "land_marker").setHardness(0.2F);
-        pathMarker = new PathMarkerBlock(NAMESPACE.id("path_marker"), Material.PISTON_BREAKABLE).setTranslationKey(NAMESPACE, "path_marker").setHardness(0.2F);
+        landMarker = new LandMarkerBlock(NAMESPACE.id("land_marker"), Material.PISTON_BREAKABLE).setTranslationKey(NAMESPACE, "land_marker");
+        pathMarker = new PathMarkerBlock(NAMESPACE.id("path_marker"), Material.PISTON_BREAKABLE).setTranslationKey(NAMESPACE, "path_marker");
         redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine").setHardness(0.7F).setSoundGroup(Block.WOOD_SOUND_GROUP);
         stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine").setHardness(1.0F).setSoundGroup(Block.STONE_SOUND_GROUP);
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
