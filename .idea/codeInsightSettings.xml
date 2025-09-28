@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JavaProjectCodeInsightSettings">
+    <excluded-names>
+      <name>com.jcraft.jorbis</name>
+      <name>javafx</name>
+      <name>javax.swing</name>
+      <name>org.w3c.dom</name>
+    </excluded-names>
+  </component>
+</project>
