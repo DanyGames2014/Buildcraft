@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "g",
+    "t"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:dye",
+      "damage": 2
+    },
+    "t": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "result": {
+    "item": "buildcraft:path_marker"
+  }
+}

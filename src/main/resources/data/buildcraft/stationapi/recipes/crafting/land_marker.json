@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "l",
+    "t"
+  ],
+  "key": {
+    "l": {
+      "item": "minecraft:dye",
+      "damage": 4
+    },
+    "t": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "result": {
+    "item": "buildcraft:land_marker"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "bsb",
+    "bbb"
+  ],
+  "key": {
+    "b": {
+      "item": "buildcraft:blueprint"
+    },
+    "s": {
+      "item": "minecraft:bookshelf"
+    }
+  },
+  "result": {
+    "item": "buildcraft:blueprint_library"
+  }
+}

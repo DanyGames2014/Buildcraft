@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ili",
+    "ywy",
+    "gcg"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:dye"
+    },
+    "l": {
+      "item": "buildcraft:land_marker"
+    },
+    "y": {
+      "item": "minecraft:dye",
+      "damage": 11
+    },
+    "w": {
+      "item": "minecraft:crafting_table"
+    },
+    "g": {
+      "item": "buildcraft:golden_gear"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result": {
+    "item": "buildcraft:filler"
+  }
+}
