@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.client.render.entity;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.entity.EntityBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -27,7 +28,7 @@ public class EntityBlockRenderer extends EntityRenderer {
         public float maxX = 1.0F;
         public float maxY = 1.0F;
         public float maxZ = 1.0F;
-        public Block baseBlock = Block.SAND;
+        public Block baseBlock = Buildcraft.renderBlock;
         public Integer texture = null;
         public int[] textureArray = null;
         public boolean[] renderSide = new boolean[]{true, true, true, true, true, true};

@@ -14,7 +14,8 @@ public abstract class BaseLaserTableBlockEntity extends BlockEntity implements I
     // ILaserTarget
     @Override
     public boolean requiresLaserEnergy() {
-        return false;
+        // I'm setting this to true for testing
+        return true;
     }
 
     @Override
@@ -29,17 +30,17 @@ public abstract class BaseLaserTableBlockEntity extends BlockEntity implements I
 
     @Override
     public int getXCoord() {
-        return 0;
+        return x;
     }
 
     @Override
     public int getYCoord() {
-        return 0;
+        return y;
     }
 
     @Override
     public int getZCoord() {
-        return 0;
+        return z;
     }
 
     // Inventory

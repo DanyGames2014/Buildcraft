@@ -4,10 +4,7 @@ import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.BaseEngineBlock;
 import net.danygames2014.buildcraft.block.entity.*;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.client.render.block.entity.ChuteBlockEntityRenderer;
-import net.danygames2014.buildcraft.client.render.block.entity.EngineBlockEntityRenderer;
-import net.danygames2014.buildcraft.client.render.block.entity.PipeBlockEntityRenderer;
-import net.danygames2014.buildcraft.client.render.block.entity.TankBlockEntityRenderer;
+import net.danygames2014.buildcraft.client.render.block.entity.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.block.entity.BlockEntityRendererRegisterEvent;
 
@@ -21,5 +18,6 @@ public class BlockEntityRendererListener {
         event.renderers.put(CreativeEngineBlockEntity.class, new EngineBlockEntityRenderer(((BaseEngineBlock)Buildcraft.creativeEngine).getBaseTexturePath(), ((BaseEngineBlock)Buildcraft.creativeEngine).getChamberTexturePath(), ((BaseEngineBlock)Buildcraft.creativeEngine).getTrunkTexturePath()));
         event.renderers.put(TankBlockEntity.class, new TankBlockEntityRenderer());
         event.renderers.put(PipeBlockEntity.class, PipeBlockEntityRenderer.INSTANCE);
+        event.renderers.put(LaserBlockEntity.class, LaserBlockEntityRenderer.INSTANCE);
     }
 }
