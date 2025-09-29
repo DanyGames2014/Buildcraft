@@ -39,6 +39,7 @@ tile.buildcraft.path_marker.name=Path Marker
 tile.buildcraft.redstone_engine.name=Redstone Engine
 tile.buildcraft.stirling_engine.name=Stirling Engine
 tile.buildcraft.combustion_engine.name=Combustion Engine
+tile.buildcraft.creative_engine.name=Creative Engine
 
 tile.buildcraft.frame.name=Frame
 tile.buildcraft.wooden_item_pipe.name=Wooden Transport Pipe
@@ -66,3 +67,5 @@ gate.material.diamond=Diamond
 
 gate.name=%s %s Gate
 gate.name.basic=Basic Gate
+
+chat.engine.creative.mode=Switched to %d MJ/t limit

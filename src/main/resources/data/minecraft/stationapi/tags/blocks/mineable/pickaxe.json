@@ -13,6 +13,7 @@
     "buildcraft:blueprint_library",
     "buildcraft:redstone_engine",
     "buildcraft:stirling_engine",
-    "buildcraft:combustion_engine"
+    "buildcraft:combustion_engine",
+    "buildcraft:creative_engine"
   ]
 }

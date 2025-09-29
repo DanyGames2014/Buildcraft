@@ -161,14 +161,22 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
     }
 
     public String getBaseTexturePath() {
-        return "";
+        return null;
+    }
+
+    public String getTrunkTexturePath(){
+        return null;
+    }
+
+    public String getChamberTexturePath(){
+        return null;
     }
 
     @Environment(EnvType.CLIENT)
     @Override
     public void renderInventory(BlockRenderManager blockRenderManager, int i) {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
-        engineRenderer.render(Minecraft.INSTANCE.textureManager, EnergyStage.BLUE, 0.25F, Direction.UP, this.getBaseTexturePath(), -0.5D, -0.5D, -0.5D);
+        engineRenderer.render(Minecraft.INSTANCE.textureManager, EnergyStage.BLUE, 0.25F, Direction.UP, this.getBaseTexturePath(), this.getChamberTexturePath(), this.getTrunkTexturePath(), -0.5D, -0.5D, -0.5D);
     }
 
     @Environment(EnvType.CLIENT)

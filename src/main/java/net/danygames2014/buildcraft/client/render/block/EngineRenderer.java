@@ -8,6 +8,8 @@ import net.minecraft.client.texture.TextureManager;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.lwjgl.opengl.GL11;
 
+import javax.annotation.Nullable;
+
 @Environment(EnvType.CLIENT)
 public class EngineRenderer {
     private final ModelPart box;
@@ -52,7 +54,7 @@ public class EngineRenderer {
         chamber.pivotZ = 8F;
     }
 
-    public void render(TextureManager textureManager, EnergyStage energy, float progress, Direction facing, String baseTexture, double x, double y, double z){
+    public void render(TextureManager textureManager, EnergyStage energy, float progress, Direction facing, String baseTexture, @Nullable String chamberTexturePath, @Nullable String trunkTexturePath, double x, double y, double z){
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
 
@@ -113,7 +115,7 @@ public class EngineRenderer {
         movingBox.render(factor);
         GL11.glTranslatef(-translate[2] * translatefact, -translate[1] * translatefact, -translate[0] * translatefact);
 
-        textureManager.bindTexture(textureManager.getTextureId("/assets/buildcraft/stationapi/textures/block/engine_chamber.png"));
+        textureManager.bindTexture(textureManager.getTextureId(chamberTexturePath != null ? chamberTexturePath : "/assets/buildcraft/stationapi/textures/block/engine_chamber.png"));
 
         float chamberf = 2F / 16F;
 
@@ -141,6 +143,10 @@ public class EngineRenderer {
             default:
                 texture = "/assets/buildcraft/stationapi/textures/block/engine_trunk_red.png";
                 break;
+        }
+
+        if(trunkTexturePath != null){
+            texture = trunkTexturePath;
         }
 
         textureManager.bindTexture(textureManager.getTextureId(texture));

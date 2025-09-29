@@ -34,6 +34,7 @@ public class BlockEntityListener {
         event.register(RedstoneEngineBlockEntity.class, NAMESPACE.id("redstone_engine").toString());
         event.register(StirlingEngineBlockEntity.class, NAMESPACE.id("stirling_engine").toString());
         event.register(CombustionEngineBlockEntity.class, NAMESPACE.id("combustion_engine").toString());
+        event.register(CreativeEngineBlockEntity.class, NAMESPACE.id("creative_engine").toString());
         event.register(PipeBlockEntity.class, NAMESPACE.id("pipe").toString());
         event.register(PoweredPipeBlockEntity.class, NAMESPACE.id("powered_pipe").toString());
     }

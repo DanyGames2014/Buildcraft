@@ -82,6 +82,7 @@ public class Buildcraft {
     public static Block redstoneEngine;
     public static Block stirlingEngine;
     public static Block combustionEngine;
+    public static Block creativeEngine;
 
     public static Block frame;
     public static Block woodenItemPipe;
@@ -154,7 +155,8 @@ public class Buildcraft {
         redstoneEngine = new RedstoneEngineBlock(NAMESPACE.id("redstone_engine")).setTranslationKey(NAMESPACE, "redstone_engine").setHardness(0.7F).setSoundGroup(Block.WOOD_SOUND_GROUP);
         stirlingEngine = new StirlingEngineBlock(NAMESPACE.id("stirling_engine")).setTranslationKey(NAMESPACE, "stirling_engine").setHardness(1.0F).setSoundGroup(Block.STONE_SOUND_GROUP);
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
-        
+        creativeEngine = new CreativeEngineBlock(NAMESPACE.id("creative_engine")).setTranslationKey(NAMESPACE, "creative_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
+
         frame = new FrameBlock(NAMESPACE.id("frame"), pipeMaterial).setTranslationKey(NAMESPACE, "frame").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
         renderBlock = new RenderBlock(NAMESPACE.id("render_block"));
