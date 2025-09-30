@@ -1,8 +1,10 @@
 package net.danygames2014.buildcraft.init;
 
+import net.danygames2014.buildcraft.block.entity.AutocraftingTableBlockEntity;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
 import net.danygames2014.buildcraft.block.entity.StirlingEngineBlockEntity;
+import net.danygames2014.buildcraft.screen.AutocraftingTableScreen;
 import net.danygames2014.buildcraft.screen.ChuteScreen;
 import net.danygames2014.buildcraft.screen.CombustionEngineScreen;
 import net.danygames2014.buildcraft.screen.StirlingEngineScreen;
@@ -25,6 +27,7 @@ public class ScreenHandlerListener {
         event.register(NAMESPACE.id("chute_screen"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openChuteScreen, ChuteBlockEntity::new));
         event.register(NAMESPACE.id("stirling_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openStirlingEngineScreen, StirlingEngineBlockEntity::new));
         event.register(NAMESPACE.id("combustion_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openCombustionEngineScreen, CombustionEngineBlockEntity::new));
+        event.register(NAMESPACE.id("autocrafting_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAutocraftingTableScreen, AutocraftingTableBlockEntity::new));
     }
 
     public Screen openChuteScreen(PlayerEntity playerEntity, Inventory inventory) {
@@ -37,5 +40,9 @@ public class ScreenHandlerListener {
 
     public Screen openCombustionEngineScreen(PlayerEntity playerEntity, Inventory inventory) {
         return new CombustionEngineScreen(playerEntity, (CombustionEngineBlockEntity) inventory);
+    }
+    
+    public Screen openAutocraftingTableScreen(PlayerEntity playerEntity, Inventory inventory) {
+        return new AutocraftingTableScreen(playerEntity, (AutocraftingTableBlockEntity) inventory);
     }
 }

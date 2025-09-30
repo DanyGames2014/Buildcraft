@@ -6,13 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 
 
-public class AutocraftingTableInventory extends CraftingInventory {
-    private final ScreenHandler handler;
+public class UnhandledAutocraftingTableInventory extends CraftingInventory {
     private final Inventory parent;
 
-    public AutocraftingTableInventory(ScreenHandler handler, Inventory parent) {
+    public UnhandledAutocraftingTableInventory(ScreenHandler handler, Inventory parent) {
         super(handler, 3, 3);
-        this.handler = handler;
         this.parent = parent;
     }
 
@@ -37,17 +35,11 @@ public class AutocraftingTableInventory extends CraftingInventory {
 
     @Override
     public ItemStack removeStack(int slot, int amount) {
-        ItemStack stack = parent.removeStack(slot, amount);
-        if (stack != null) {
-            this.handler.onSlotUpdate(this);
-        }
-
-        return stack;
+        return parent.removeStack(slot, amount);
     }
 
     @Override
     public void setStack(int slot, ItemStack stack) {
         this.parent.setStack(slot, stack);
-        this.handler.onSlotUpdate(this);
     }
 }
