@@ -1,9 +1,11 @@
 package net.danygames2014.buildcraft.block;
 
+import net.danygames2014.buildcraft.block.entity.LandMarkerBlockEntity;
 import net.danygames2014.buildcraft.block.entity.PathMarkerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -76,6 +78,38 @@ public abstract class MarkerBlock extends TemplateBlockWithEntity {
 
     @Override
     public boolean isOpaque() {
+        return false;
+    }
+
+    @Override
+    public void onBreak(World world, int x, int y, int z) {
+        if(world.getBlockEntity(x, y, z) instanceof LandMarkerBlockEntity landMarkerBlockEntity){
+            landMarkerBlockEntity.destroy();
+            landMarkerBlockEntity.removeFromWorld();
+        }
+        super.onBreak(world, x, y, z);
+    }
+
+    @Override
+    public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
+        if (super.onUse(world, x, y, z, player)) {
+            return true;
+        }
+
+//        if (player.getHand() != null
+//                    && player.getHand().getItem() instanceof IMapLocation) {
+//            return false;
+//        }
+
+        if (player.isSneaking()) {
+            return false;
+        }
+
+        BlockEntity tile = world.getBlockEntity(x, y, z);
+        if (tile instanceof LandMarkerBlockEntity landMarkerBlockEntity) {
+            landMarkerBlockEntity.tryConnection();
+            return true;
+        }
         return false;
     }
 }
