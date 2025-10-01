@@ -60,12 +60,14 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
 
                 if (neighborHandler != null) {
                     ItemStack[] inv = chest.getInventory(neighborHandler.side.getOpposite());
-                    for (ItemStack chestStack : inv) {
-                        if (chestStack == null) {
+                    for (int chestSlot = 0; chestSlot < inv.length; chestSlot++) {
+                        if (inv[chestSlot] == null) {
                             continue;
                         }
-                        
-                        if (stack.isItemEqual(chestStack)) {
+
+                        if (stack.isItemEqual(inv[chestSlot]) && usedItems.getOrDefault(chestSlot, 0) < inv[chestSlot].count) {
+                            usedItems.putIfAbsent(chestSlot, 0);
+                            usedItems.put(chestSlot, usedItems.get(chestSlot) + 1);
                             found = true;
                             break;
                         }
@@ -91,7 +93,7 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
                                 continue;
                             }
                             
-                            if (stack.isItemEqual(inv[chestSlot]) && usedItems.getOrDefault(chestSlot, 0) < stack.count) {
+                            if (stack.isItemEqual(inv[chestSlot]) && usedItems.getOrDefault(chestSlot, 0) < inv[chestSlot].count) {
                                 usedItems.putIfAbsent(chestSlot, 0);
                                 usedItems.put(chestSlot, usedItems.get(chestSlot) + 1);
                                 enough = true;
@@ -129,6 +131,10 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
         
         ItemStack result = CraftingRecipeManager.getInstance().craft(this.craftingMatrix);
         result = result != null ? result.copy() : null;
+        
+        if (result == null) {
+            return null;
+        }
 
         for (int matrixSlot = 0; matrixSlot < this.craftingMatrix.size(); ++matrixSlot) {
             ItemStack stack = this.craftingMatrix.getStack(matrixSlot);
@@ -143,7 +149,8 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
 
                 if (neighborHandler != null) {
                     for (int slot = 0; slot < chest.getItemSlots(chestFace); slot++) {
-                        if (stack.isItemEqual(chest.getItem(slot, chestFace))) {
+                        ItemStack potentialStack = chest.getItem(slot, chestFace);
+                        if (potentialStack != null && stack.isItemEqual(potentialStack)) {
                             // Set the replacement item into the slot
                             this.craftingMatrix.setStack(matrixSlot, chest.extractItem(slot, 1, chestFace));
 
@@ -175,7 +182,7 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
                         for (int chestSlot = 0; chestSlot < chest.getItemSlots(chestFace); chestSlot++) {
                             ItemStack potentialStack = chest.getItem(chestSlot, chestFace);
                             if (potentialStack != null && potentialStack.isItemEqual(removedStack)) {
-                                craftingMatrix.setStack(chestSlot, chest.extractItem(chestSlot, 1, chestFace));
+                                craftingMatrix.setStack(matrixSlot, chest.extractItem(chestSlot, 1, chestFace));
                                 break;
                             }
                         }
@@ -275,7 +282,7 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
             return null;
         }
 
-        return inventory.removeStack(slot, amount);
+        return autoCraft();
     }
 
     @Override
