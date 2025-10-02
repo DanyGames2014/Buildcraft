@@ -1,13 +1,7 @@
 package net.danygames2014.buildcraft.init;
 
-import net.danygames2014.buildcraft.block.entity.AutocraftingTableBlockEntity;
-import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
-import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
-import net.danygames2014.buildcraft.block.entity.StirlingEngineBlockEntity;
-import net.danygames2014.buildcraft.screen.AutocraftingTableScreen;
-import net.danygames2014.buildcraft.screen.ChuteScreen;
-import net.danygames2014.buildcraft.screen.CombustionEngineScreen;
-import net.danygames2014.buildcraft.screen.StirlingEngineScreen;
+import net.danygames2014.buildcraft.block.entity.*;
+import net.danygames2014.buildcraft.screen.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
@@ -28,6 +22,7 @@ public class ScreenHandlerListener {
         event.register(NAMESPACE.id("stirling_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openStirlingEngineScreen, StirlingEngineBlockEntity::new));
         event.register(NAMESPACE.id("combustion_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openCombustionEngineScreen, CombustionEngineBlockEntity::new));
         event.register(NAMESPACE.id("autocrafting_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAutocraftingTableScreen, AutocraftingTableBlockEntity::new));
+        event.register(NAMESPACE.id("assembly_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAssemblyTableScreen, AssemblyTableBlockEntity::new));
     }
 
     public Screen openChuteScreen(PlayerEntity playerEntity, Inventory inventory) {
@@ -44,5 +39,9 @@ public class ScreenHandlerListener {
     
     public Screen openAutocraftingTableScreen(PlayerEntity playerEntity, Inventory inventory) {
         return new AutocraftingTableScreen(playerEntity, (AutocraftingTableBlockEntity) inventory);
+    }
+    
+    public Screen openAssemblyTableScreen(PlayerEntity playerEntity, Inventory inventory) {
+        return new AssemblyTableScreen(playerEntity, (AssemblyTableBlockEntity) inventory);
     }
 }

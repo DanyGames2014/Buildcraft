@@ -16,7 +16,7 @@ public class AutocraftingTableScreen extends HandledScreen {
 
     @Override
     protected void drawForeground() {
-        textRenderer.draw("Autocrafting Table", 60, 6, 4210752);
+        textRenderer.draw("Autocrafting Table", 30, 6, 4210752);
         textRenderer.draw("Inventory", 8, this.backgroundHeight - 96 + 2, 4210752);
     }
 
