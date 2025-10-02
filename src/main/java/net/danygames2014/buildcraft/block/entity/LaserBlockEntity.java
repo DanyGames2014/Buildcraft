@@ -283,11 +283,11 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
     public String getTexture() {
         double avg = powerAverage / POWER_AVERAGING;
 
-        if (avg <= 10.0) {
+        if (avg <= 1.0) {
             return LaserRenderer.LASER_TEXTURES[0];
-        } else if (avg <= 20.0) {
+        } else if (avg <= 2.0) {
             return LaserRenderer.LASER_TEXTURES[1];
-        } else if (avg <= 30.0) {
+        } else if (avg <= 3.0) {
             return LaserRenderer.LASER_TEXTURES[2];
         } else {
             return LaserRenderer.LASER_TEXTURES[3];

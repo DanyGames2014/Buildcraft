@@ -26,6 +26,7 @@ public class AssemblyTableBlock extends TemplateMachineBlock {
         if (!world.isRemote) {
             if (world.getBlockEntity(x, y, z) instanceof AssemblyTableBlockEntity table) {
                 GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("assembly_table"), table, new AssemblyTableScreenHandler(player, table));
+                return true;
             }
         }
 
