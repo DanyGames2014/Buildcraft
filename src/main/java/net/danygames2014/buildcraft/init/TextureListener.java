@@ -43,6 +43,9 @@ public class TextureListener {
 
     public static Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
 
+    public static Atlas.Sprite energyRedSprite;
+    public static Atlas.Sprite energyCyanSprite;
+
 
     @EventListener
     public void registerTextures(TextureRegisterEvent event){
@@ -78,6 +81,9 @@ public class TextureListener {
         Atlases.getTerrain().addTexture(structurePipe);
 
         Atlases.getTerrain().addTexture(missingTexture);
+
+        energyRedSprite = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/misc/power_red"));
+        energyCyanSprite = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/misc/power_cyan"));
     }
 
     @EventListener

@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTrans
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.TextureUtil;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.Block;
@@ -64,6 +65,70 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             if(pipe.transporter instanceof FluidPipeTransporter){
                 renderFluids(pipe, x, y, z);
             }
+            if(false){
+                renderPower(pipe, x, y, z);
+            }
+        }
+    }
+
+    private void initializeDisplayPowerList(World world) {
+        if (initialized) {
+            return;
+        }
+
+        initialized = true;
+
+        EntityBlockRenderer.RenderInfo block = new EntityBlockRenderer.RenderInfo();
+        block.texture = TextureListener.energyCyanSprite.index;
+
+        float size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
+
+        for (int s = 0; s < POWER_STAGES; ++s) {
+            displayPowerList[s] = GL11.glGenLists(1);
+            GL11.glNewList(displayPowerList[s], GL11.GL_COMPILE);
+
+            float minSize = 0.005F;
+
+            float unit = (size - minSize) / 2F / POWER_STAGES;
+
+            block.minY = (float) (0.5 - (minSize / 2F) - unit * s);
+            block.maxY = (float) (0.5 + (minSize / 2F) + unit * s);
+
+            block.minZ = (float) (0.5 - (minSize / 2F) - unit * s);
+            block.maxZ = (float) (0.5 + (minSize / 2F) + unit * s);
+
+            block.minX = 0;
+            block.maxX = (float) (0.5 + (minSize / 2F) + unit * s);
+
+            EntityBlockRenderer.INSTANCE.renderBlock(block);
+
+            GL11.glEndList();
+        }
+
+        block.texture = TextureListener.energyRedSprite.index;
+
+        size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
+
+        for (int s = 0; s < POWER_STAGES; ++s) {
+            displayPowerListOverload[s] = GL11.glGenLists(1);
+            GL11.glNewList(displayPowerListOverload[s], GL11.GL_COMPILE);
+
+            float minSize = 0.005F;
+
+            float unit = (size - minSize) / 2F / POWER_STAGES;
+
+            block.minY = (float) (0.5 - (minSize / 2F) - unit * s);
+            block.maxY = (float) (0.5 + (minSize / 2F) + unit * s);
+
+            block.minZ = (float) (0.5 - (minSize / 2F) - unit * s);
+            block.maxZ = (float) (0.5 + (minSize / 2F) + unit * s);
+
+            block.minX = 0;
+            block.maxX = (float) (0.5 + (minSize / 2F) + unit * s);
+
+            EntityBlockRenderer.INSTANCE.renderBlock(block);
+
+            GL11.glEndList();
         }
     }
 
@@ -439,6 +504,53 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 }
             }
 
+        }
+
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
+    }
+
+    private void renderPower(PipeBlockEntity pipe, double x, double y, double z) {
+        initializeDisplayPowerList(pipe.world);
+
+        //PipeTransportPower pow = pipe.transport;
+
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glDisable(GL11.GL_LIGHTING);
+
+        GL11.glTranslatef((float) x, (float) y, (float) z);
+
+        StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+
+        // TODO: implement this when dany is finished plumbing
+        int[] displayList = displayPowerList; //pow.overload > 0 ? displayPowerListOverload : displayPowerList;
+
+        for (int side = 0; side < 6; ++side) {
+            short stage = 5; //pow.displayPower[side]
+            if (stage >= 1) {
+                // TODO: this probably doesn't work on server
+                if (pipe.connections.get(Direction.byId(side)) == PipeConnectionType.NONE) {
+                    continue;
+                }
+
+                GL11.glPushMatrix();
+
+                GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+                GL11.glRotatef(angleY[side], 0, 1, 0);
+                GL11.glRotatef(angleZ[side], 0, 0, 1);
+                float scale = 1.0F - side * 0.0001F;
+                GL11.glScalef(scale, scale, scale);
+                GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+
+                if (stage < displayList.length) {
+                    GL11.glCallList(displayList[stage]);
+                } else {
+                    GL11.glCallList(displayList[displayList.length - 1]);
+                }
+
+                GL11.glPopMatrix();
+            }
         }
 
         GL11.glPopAttrib();
