@@ -49,12 +49,14 @@ public class AssemblyTableScreen extends HandledScreen {
                     int x = 134 + column * 18;
                     int y = 36 + row * 18;
 
-                    if (recipe.selected) {
+                    if (recipe.selected && !recipe.active) {
                         int textureId = minecraft.textureManager.getTextureId("/assets/buildcraft/stationapi/textures/gui/assembly_table.png");
                         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                         minecraft.textureManager.bindTexture(textureId);
                         drawTexture(x, y, 177, 1, 16, 16);
-                    } else if (recipe.active) {
+                    }
+                    
+                    if (recipe.active) {
                         int textureId = minecraft.textureManager.getTextureId("/assets/buildcraft/stationapi/textures/gui/assembly_table.png");
                         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                         minecraft.textureManager.bindTexture(textureId);
@@ -75,5 +77,10 @@ public class AssemblyTableScreen extends HandledScreen {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
         drawTexture(x, y, 0, 0, backgroundWidth, backgroundHeight);
+        
+        int progress = blockEntity.getProgressScaled(70);
+        if (progress > 0) {
+            drawTexture(x + 95, y + 36 + 70 - progress, 176, 18, 4, progress);
+        }
     }
 }

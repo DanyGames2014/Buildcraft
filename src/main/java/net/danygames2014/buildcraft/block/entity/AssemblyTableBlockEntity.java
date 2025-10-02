@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.recipe.AssemblyTableRecipe;
 import net.danygames2014.buildcraft.recipe.AssemblyTableRecipeRegistry;
 import net.danygames2014.buildcraft.recipe.output.RecipeOutputType;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
@@ -19,17 +20,103 @@ import java.util.Random;
 public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarget, Inventory {
     protected SimpleInventory inventory = new SimpleInventory(12, "Assembly Table", this::inventoryChanged);
     public ArrayList<RecipeEntry> recipes = new ArrayList<>();
+    public ArrayList<RecipeEntry> selectedRecipes = new ArrayList<>();
+    public RecipeEntry currentRecipe;
+    public double progress;
     public Random random = new Random();
     public boolean hasInit = false;
-    
+
     @Override
     public void tick() {
         super.tick();
-        
+
         if (!hasInit) {
             hasInit = true;
             inventoryChanged();
         }
+
+        updateCurrentRecipe();
+    }
+
+    public void updateCurrentRecipe() {
+        // If there are no avalible recipes, return
+        if (recipes.isEmpty()) {
+            currentRecipe = null;
+            progress = 0;
+            return;
+        }
+
+        if (currentRecipe == null) {
+            switchRecipe();
+        }
+
+        // If there is an selected and active recipe, tick the progress
+        if (currentRecipe != null) {
+            if (progress >= currentRecipe.recipe.recipeTime) {
+                craftRecipe();
+            }
+        }
+    }
+
+    public void craftRecipe() {
+        for (ItemStack output : currentRecipe.recipe.getOutputs(random).get(RecipeOutputType.PRIMARY)) {
+            world.spawnEntity(new ItemEntity(world, x, y, z, output));
+        }
+
+        progress = 0;
+        switchRecipe();
+    }
+
+    public void switchRecipe() {
+        // Construct a list of currently selected recipes
+        selectedRecipes.clear();
+        for (RecipeEntry entry : recipes) {
+            if (entry.selected) {
+                selectedRecipes.add(entry);
+            } else {
+                if (entry.active) {
+                    entry.active = false;
+                }
+            }
+        }
+
+        if (selectedRecipes.isEmpty()) {
+            currentRecipe = null;
+            progress = 0;
+            return;
+        }
+
+        // If there is only one recipe, there is nothing to talk about
+        if (selectedRecipes.size() == 1) {
+            currentRecipe = selectedRecipes.get(0);
+            selectedRecipes.get(0).active = true;
+            return;
+        }
+
+        for (int i = 0; i < selectedRecipes.size(); i++) {
+            // If the current recipe is the active one, switch to next one
+            if (selectedRecipes.get(i).active) {
+                // Deactivate the current one
+                selectedRecipes.get(i).active = false;
+
+                // Check if we are at the end of the list
+                if (i >= selectedRecipes.size() - 1) {
+                    // If we are at the end of the list, switch back to first recipe
+                    currentRecipe = selectedRecipes.get(0);
+                    selectedRecipes.get(0).active = true;
+                } else {
+                    // If we are not at the end, switch to next recipe
+                    currentRecipe = selectedRecipes.get(i + 1);
+                    selectedRecipes.get(i + 1).active = true;
+                }
+
+                return;
+            }
+        }
+
+        // If there is not an active recipe, the first one become active
+        currentRecipe = selectedRecipes.get(0);
+        selectedRecipes.get(0).active = true;
     }
 
     public void inventoryChanged() {
@@ -64,12 +151,12 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
 
             for (RecipeEntry newRecipe : newRecipes) {
                 boolean add = true;
-                
+
                 for (var recipe : recipes) {
                     if (recipe.recipe.equals(newRecipe.recipe)) {
                         add = false;
                         break;
-                    }                    
+                    }
                 }
 
                 if (add) {
@@ -88,18 +175,34 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
 
         RecipeEntry recipe = recipes.get(index);
         recipe.selected = !recipe.selected;
+        
+        if (currentRecipe == null || currentRecipe == recipe) {
+            switchRecipe();
+        }
+    }
+
+    public int getProgressScaled(int scale) {
+        if (currentRecipe == null) {
+            return 0;
+        }
+
+        return (int) ((progress / currentRecipe.recipe.recipeTime) * scale);
     }
 
     // ILaserTarget
     @Override
     public boolean requiresLaserEnergy() {
-        // I'm setting this to true for testing
-        return true;
+        return currentRecipe != null;
     }
 
     @Override
     public void receiveLaserEnergy(double energy) {
+        if (currentRecipe == null) {
+            progress = 0;
+            return;
+        }
 
+        progress = Math.min(progress + energy, currentRecipe.recipe.recipeTime);
     }
 
     @Override
