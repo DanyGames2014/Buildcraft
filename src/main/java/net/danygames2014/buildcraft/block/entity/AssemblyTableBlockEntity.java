@@ -1,11 +1,14 @@
 package net.danygames2014.buildcraft.block.entity;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.api.energy.ILaserTarget;
 import net.danygames2014.buildcraft.inventory.SimpleInventory;
 import net.danygames2014.buildcraft.recipe.AssemblyTableRecipe;
 import net.danygames2014.buildcraft.recipe.AssemblyTableRecipeRegistry;
 import net.danygames2014.buildcraft.recipe.output.RecipeOutputType;
+import net.danygames2014.nyalib.capability.CapabilityHelper;
+import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,6 +16,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -59,8 +63,26 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
     }
 
     public void craftRecipe() {
+        Object2ObjectOpenHashMap<Direction, ItemHandlerBlockCapability> neighbors = new Object2ObjectOpenHashMap<>();
+
+        for (Direction side : Direction.values()) {
+            var capability = CapabilityHelper.getCapability(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), ItemHandlerBlockCapability.class);
+            if (capability != null) {
+                neighbors.put(side, capability);
+            }
+        }
+
         for (ItemStack output : currentRecipe.recipe.getOutputs(random).get(RecipeOutputType.PRIMARY)) {
-            world.spawnEntity(new ItemEntity(world, x, y, z, output));
+            for (var capability : neighbors.entrySet()) {
+                output = capability.getValue().insertItem(output, capability.getKey().getOpposite());
+                if (output == null) {
+                    break;
+                }
+            }
+            
+            if (output != null) {
+                world.spawnEntity(new ItemEntity(world, x + 0.5D, y + 0.7D, z + 0.5D, output));
+            }
         }
 
         progress = 0;
@@ -175,7 +197,7 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
 
         RecipeEntry recipe = recipes.get(index);
         recipe.selected = !recipe.selected;
-        
+
         if (currentRecipe == null || currentRecipe == recipe) {
             switchRecipe();
         }
