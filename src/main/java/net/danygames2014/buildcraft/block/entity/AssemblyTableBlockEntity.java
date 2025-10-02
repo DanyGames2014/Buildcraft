@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.block.entity;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.energy.ILaserTarget;
 import net.danygames2014.buildcraft.inventory.SimpleInventory;
 import net.danygames2014.buildcraft.recipe.AssemblyTableRecipe;
@@ -81,11 +82,14 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
             }
             
             if (output != null) {
-                world.spawnEntity(new ItemEntity(world, x + 0.5D, y + 0.7D, z + 0.5D, output));
+                world.spawnEntity(new ItemEntity(world, x + 0.5D, y + 1.5D, z + 0.5D, output));
             }
         }
 
         progress = 0;
+        if (!currentRecipe.recipe.consume(inventory.stacks)) {
+            Buildcraft.LOGGER.warn("Failed to consume items from assembly table inventory!");
+        }
         switchRecipe();
     }
 
