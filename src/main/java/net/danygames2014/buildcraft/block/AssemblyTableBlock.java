@@ -31,4 +31,14 @@ public class AssemblyTableBlock extends TemplateMachineBlock {
 
         return super.onUse(world, x, y, z, player);
     }
+
+    @Override
+    public boolean isFullCube() {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaque() {
+        return false;
+    }
 }
