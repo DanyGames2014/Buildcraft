@@ -5,6 +5,9 @@ import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter.HandOffResult;
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
@@ -97,6 +100,10 @@ public class PipeBehavior {
         }
 
         return directions.get(blockEntity.random.nextInt(directions.size()));
+    }
+    
+    public HandOffResult getFailedInsertResult(PipeBlockEntity blockEntity, ItemPipeTransporter transporter, TravellingItemEntity item) {
+        return Config.PIPE_CONFIG.failedInsertResult;
     }
 
     public double modifyItemSpeed(TravellingItemEntity item) {

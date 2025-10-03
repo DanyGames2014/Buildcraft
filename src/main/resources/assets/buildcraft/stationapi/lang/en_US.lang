@@ -47,6 +47,7 @@ tile.buildcraft.cobblestone_item_pipe.name=Cobblestone Transport Pipe
 tile.buildcraft.stone_item_pipe.name=Stone Transport Pipe
 tile.buildcraft.sandstone_item_pipe.name=Sandstone Transport Pipe
 tile.buildcraft.golden_item_pipe.name=Golden Transport Pipe
+tile.buildcraft.clay_item_pipe.name=Clay Transport Pipe
 
 tile.buildcraft.wooden_fluid_pipe.name=Wooden Fluid Pipe
 tile.buildcraft.cobblestone_fluid_pipe.name=Cobblestone Fluid Pipe

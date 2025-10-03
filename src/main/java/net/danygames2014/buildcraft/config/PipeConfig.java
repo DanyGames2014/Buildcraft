@@ -4,8 +4,8 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransp
 import net.glasslauncher.mods.gcapi3.api.ConfigEntry;
 
 public class PipeConfig {
-    @ConfigEntry(name = "Failed Hand-Off Result", multiplayerSynced = true)
-    public HandOffResult failedHandOffResult = HandOffResult.DROP;
+    @ConfigEntry(name = "Failed Insert Result", multiplayerSynced = true)
+    public HandOffResult failedInsertResult = HandOffResult.DROP;
 
     @ConfigEntry(name = "Render inner pipe")
     public Boolean renderInnerPipe = true;

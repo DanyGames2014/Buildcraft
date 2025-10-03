@@ -13,7 +13,6 @@ import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
-import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.fabricmc.api.EnvType;
@@ -23,9 +22,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.Packet;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ServerWorld;
-import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -221,7 +217,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
 //            if(pipe.canConnectTo(x, y, z, side.getOpposite()) == PipeConnectionType.NONE){
 //                return PipeConnectionType.NONE;
 //            }
-
+            
             return behavior.canConnectToPipe(this, pipe, pipe.behavior);
         }
 
