@@ -231,7 +231,7 @@ public class Buildcraft {
                 null,
                 stonePipeBehavior,
                 EnergyPipeTransporter::new,
-                PipeBlockEntity::new
+                PoweredPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "cobblestone_energy_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
     }
 }

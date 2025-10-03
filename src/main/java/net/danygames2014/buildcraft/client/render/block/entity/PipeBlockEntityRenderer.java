@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.client.render.block.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
@@ -31,6 +32,8 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
     public int[] displayPowerList = new int[POWER_STAGES];
     public int[] displayPowerListOverload = new int[POWER_STAGES];
+    private final int[] powerAngleY = {0, 0, 270, 90, 0, 180};
+    private final int[] powerAngleZ = {90, 270, 0, 0, 0, 0};
 
     private final Int2ObjectOpenHashMap displayFluidLists = new Int2ObjectOpenHashMap();
     private final int[] angleY = {0, 0, 270, 90, 0, 180};
@@ -65,7 +68,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             if(pipe.transporter instanceof FluidPipeTransporter){
                 renderFluids(pipe, x, y, z);
             }
-            if(false){
+            if(pipe.transporter instanceof EnergyPipeTransporter){
                 renderPower(pipe, x, y, z);
             }
         }
@@ -513,7 +516,12 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
     private void renderPower(PipeBlockEntity pipe, double x, double y, double z) {
         initializeDisplayPowerList(pipe.world);
 
-        //PipeTransportPower pow = pipe.transport;
+        EnergyPipeTransporter pow;
+        if (pipe.transporter instanceof EnergyPipeTransporter energyPipeTransporter) {
+            pow = energyPipeTransporter;
+        } else {
+            return;
+        }
 
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
@@ -524,22 +532,22 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
         // TODO: implement this when dany is finished plumbing
-        int[] displayList = displayPowerList; //pow.overload > 0 ? displayPowerListOverload : displayPowerList;
+        int[] displayList = pow.overload > 0 ? displayPowerListOverload : displayPowerList;
 
-        for (int side = 0; side < 6; ++side) {
-            short stage = 5; //pow.displayPower[side]
+        for (var side : ForgeDirection.VALID_DIRECTIONS) {
+            short stage = (short) pow.displayPower[side.ordinal()];
             if (stage >= 1) {
                 // TODO: this probably doesn't work on server
-                if (pipe.connections.get(Direction.byId(side)) == PipeConnectionType.NONE) {
+                if (pipe.connections.get(side.getDirection()) == PipeConnectionType.NONE) {
                     continue;
                 }
 
                 GL11.glPushMatrix();
 
                 GL11.glTranslatef(0.5F, 0.5F, 0.5F);
-                GL11.glRotatef(angleY[side], 0, 1, 0);
-                GL11.glRotatef(angleZ[side], 0, 0, 1);
-                float scale = 1.0F - side * 0.0001F;
+                GL11.glRotatef(angleY[side.getDirection().ordinal()], 0, 1, 0);
+                GL11.glRotatef(angleZ[side.getDirection().ordinal()], 0, 0, 1);
+                float scale = 1.0F - side.ordinal() * 0.0001F;
                 GL11.glScalef(scale, scale, scale);
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 

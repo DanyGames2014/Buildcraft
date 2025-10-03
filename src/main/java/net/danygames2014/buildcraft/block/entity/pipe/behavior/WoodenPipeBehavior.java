@@ -17,7 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class WoodenPipeBehavior extends PipeBehavior {
+public class WoodenPipeBehavior extends PipeBehavior implements IPipeTransportPowerHook {
     @Override
     public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior) {
         if (super.canConnectToPipe(blockEntity, otherBlockEntity, otherPipeBehavior) != PipeConnectionType.NONE && otherPipeBehavior != Buildcraft.woodenPipeBehavior) {
@@ -67,11 +67,7 @@ public class WoodenPipeBehavior extends PipeBehavior {
                 BlockEntity other = world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
                 if (other instanceof IPowerEmitter powerEmitter) {
                     if (powerEmitter.canEmitPowerFrom(side.getOpposite())) {
-                        if (pipe.connections.containsValue(PipeConnectionType.ALTERNATE) && pipe.connections.get(side) != PipeConnectionType.ALTERNATE) {
-                            return PipeConnectionType.NORMAL;
-                        } else {
-                            return PipeConnectionType.ALTERNATE;
-                        }
+                        return PipeConnectionType.ALTERNATE;
                     }
                 }
 
@@ -158,5 +154,19 @@ public class WoodenPipeBehavior extends PipeBehavior {
                 }
             }
         }
+    }
+
+    @Override
+    public float receiveEnergy(PipeBlockEntity pipe, ForgeDirection from, float val) {
+        return -1;
+    }
+
+    @Override
+    public float requestEnergy(PipeBlockEntity pipe, ForgeDirection from, float amount) {
+        if (from.getDirection() != null && pipe.getBlockEntity(from.getDirection()) instanceof PipeBlockEntity) {
+            return amount;
+        }
+        
+        return 0;
     }
 }

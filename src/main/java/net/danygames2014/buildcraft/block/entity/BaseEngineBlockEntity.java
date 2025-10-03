@@ -4,14 +4,14 @@ import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
-import net.danygames2014.buildcraft.api.transport.IPipeTile;
 import net.danygames2014.buildcraft.block.BaseEngineBlock;
+import net.danygames2014.buildcraft.block.entity.pipe.ForgeDirection;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.States;
-import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -198,7 +198,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         for (Direction direction : Direction.values()) {
             BlockEntity tile = world.getBlockEntity(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
 
-            if ((!pipesOnly || tile instanceof IPipeTile) && isPoweredTile(tile, direction)) {
+            if ((!pipesOnly || tile instanceof PipeBlockEntity) && isPoweredTile(tile, direction)) {
                 setFacing(direction);
                 return true;
             }
@@ -340,6 +340,16 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
     private void sendPower() {
         BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+        
+        if (tile instanceof PipeBlockEntity pipe && pipe.transporter instanceof EnergyPipeTransporter energyTransporter) {
+            float extracted = (float) getPowerToExtract();
+            if (extracted > 0) {
+                double needed = energyTransporter.receiveEnergy(ForgeDirection.fromDirection(getFacing().getOpposite()), extracted);
+                extractEnergy(0, needed, true);
+            }
+            return;
+        }
+        
         if (isPoweredTile(tile, getFacing())) {
             PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
 
