@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
@@ -111,10 +112,10 @@ public class ItemPipeTransporter extends PipeTransporter {
                     return HandOffResult.REMOVE;
                 } else {
                     item.stack = returnedStack;
-                    return HandOffResult.BOUNCE;
+                    return Config.PIPE_CONFIG.failedHandOffResult;
                 }
             } else {
-                return HandOffResult.BOUNCE;
+                return Config.PIPE_CONFIG.failedHandOffResult;
             }
         }
 

@@ -34,6 +34,12 @@
     ],
     "buildcraft:event_bus": [
       "net.danygames2014.buildcraft.init.RecipeListener"
+    ],
+    "gcapi3": [
+      "net.danygames2014.buildcraft.config.Config"
+    ],
+    "gcapi3:factory_provider": [
+      "net.danygames2014.buildcraft.config.Config"
     ]
   },
   "mixins": [
