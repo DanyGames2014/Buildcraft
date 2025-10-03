@@ -2,11 +2,13 @@ package net.danygames2014.buildcraft.util;
 
 import net.danygames2014.buildcraft.api.core.LaserKind;
 import net.danygames2014.buildcraft.api.core.Position;
+import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.entity.EntityBlock;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.minecraft.world.World;
 
 public class LaserUtil {
-    public static EntityBlock createLaser(World world, Position p1, Position p2) {
+    public static EntityBlock createLaser(World world, Position p1, Position p2, LaserKind kind) {
         if (p1.equals(p2)) {
             return null;
         }
@@ -44,13 +46,14 @@ public class LaserUtil {
 
         EntityBlock block = new EntityBlock(world, i, j, k, iSize, jSize, kSize);
         block.setBrightness(210);
+        block.texture = getLaserTexture(kind);
 
         world.spawnEntity(block);
 
         return block;
     }
 
-    public static EntityBlock[] createLaserBox(World world, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
+    public static EntityBlock[] createLaserBox(World world, double xMin, double yMin, double zMin, double xMax, double yMax, double zMax, LaserKind kind) {
         EntityBlock[] lasers = new EntityBlock[12];
         Position[] p = new Position[8];
 
@@ -63,19 +66,33 @@ public class LaserUtil {
         p[6] = new Position(xMin, yMax, zMax);
         p[7] = new Position(xMax, yMax, zMax);
 
-        lasers[0] = LaserUtil.createLaser(world, p[0], p[1]);
-        lasers[1] = LaserUtil.createLaser(world, p[0], p[2]);
-        lasers[2] = LaserUtil.createLaser(world, p[2], p[3]);
-        lasers[3] = LaserUtil.createLaser(world, p[1], p[3]);
-        lasers[4] = LaserUtil.createLaser(world, p[4], p[5]);
-        lasers[5] = LaserUtil.createLaser(world, p[4], p[6]);
-        lasers[6] = LaserUtil.createLaser(world, p[5], p[7]);
-        lasers[7] = LaserUtil.createLaser(world, p[6], p[7]);
-        lasers[8] = LaserUtil.createLaser(world, p[0], p[4]);
-        lasers[9] = LaserUtil.createLaser(world, p[1], p[5]);
-        lasers[10] = LaserUtil.createLaser(world, p[2], p[6]);
-        lasers[11] = LaserUtil.createLaser(world, p[3], p[7]);
+        lasers[0] = LaserUtil.createLaser(world, p[0], p[1], kind);
+        lasers[1] = LaserUtil.createLaser(world, p[0], p[2], kind);
+        lasers[2] = LaserUtil.createLaser(world, p[2], p[3], kind);
+        lasers[3] = LaserUtil.createLaser(world, p[1], p[3], kind);
+        lasers[4] = LaserUtil.createLaser(world, p[4], p[5], kind);
+        lasers[5] = LaserUtil.createLaser(world, p[4], p[6], kind);
+        lasers[6] = LaserUtil.createLaser(world, p[5], p[7], kind);
+        lasers[7] = LaserUtil.createLaser(world, p[6], p[7], kind);
+        lasers[8] = LaserUtil.createLaser(world, p[0], p[4], kind);
+        lasers[9] = LaserUtil.createLaser(world, p[1], p[5], kind);
+        lasers[10] = LaserUtil.createLaser(world, p[2], p[6], kind);
+        lasers[11] = LaserUtil.createLaser(world, p[3], p[7], kind);
 
         return lasers;
+    }
+
+    public static int getLaserTexture(LaserKind kind){
+        switch (kind) {
+            case BLUE:
+                return TextureListener.blueLaser.index;
+
+            case RED:
+                return TextureListener.redLaser.index;
+
+            case STRIPES:
+                return TextureListener.stripesLaser.index;
+        }
+        return 0;
     }
 }

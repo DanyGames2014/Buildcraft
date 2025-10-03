@@ -67,6 +67,9 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
     @Override
     public void tick() {
         super.tick();
+
+        laser.iterateTexture();
+
         if (world.isRemote)
             return;
 

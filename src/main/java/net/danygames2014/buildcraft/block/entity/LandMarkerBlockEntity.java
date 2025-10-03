@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.core.BlockEntityAreaProvider;
+import net.danygames2014.buildcraft.api.core.LaserKind;
 import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.entity.EntityBlock;
@@ -143,18 +144,18 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         if (showSignals) {
             signals = new EntityBlock[6];
             if (!origin.isSet() || !origin.vect[0].isSet()) {
-                signals[0] = LaserUtil.createLaser(world, new Position(x, y, z), new Position(x + MARKER_RANGE - 1, y, z));
-                signals[1] = LaserUtil.createLaser(world, new Position(x - MARKER_RANGE + 1, y, z), new Position(x, y, z));
+                signals[0] = LaserUtil.createLaser(world, new Position(x, y, z), new Position(x + MARKER_RANGE - 1, y, z), LaserKind.BLUE);
+                signals[1] = LaserUtil.createLaser(world, new Position(x - MARKER_RANGE + 1, y, z), new Position(x, y, z), LaserKind.BLUE);
             }
 
             if (!origin.isSet() || !origin.vect[1].isSet()) {
-                signals[2] = LaserUtil.createLaser(world, new Position(x, y, z), new Position(x, y + MARKER_RANGE - 1, z));
-                signals[3] = LaserUtil.createLaser(world, new Position(x, y - MARKER_RANGE + 1, z), new Position(x, y, z));
+                signals[2] = LaserUtil.createLaser(world, new Position(x, y, z), new Position(x, y + MARKER_RANGE - 1, z), LaserKind.BLUE);
+                signals[3] = LaserUtil.createLaser(world, new Position(x, y - MARKER_RANGE + 1, z), new Position(x, y, z), LaserKind.BLUE);
             }
 
             if (!origin.isSet() || !origin.vect[2].isSet()) {
-                signals[4] = LaserUtil.createLaser(world, new Position(x, y, z), new Position(x, y, z + MARKER_RANGE - 1));
-                signals[5] = LaserUtil.createLaser(world, new Position(x, y, z - MARKER_RANGE + 1), new Position(x, y, z));
+                signals[4] = LaserUtil.createLaser(world, new Position(x, y, z), new Position(x, y, z + MARKER_RANGE - 1), LaserKind.BLUE);
+                signals[5] = LaserUtil.createLaser(world, new Position(x, y, z - MARKER_RANGE + 1), new Position(x, y, z), LaserKind.BLUE);
             }
         }
     }
@@ -302,7 +303,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
             o.zMax = origin.vect[2].z;
         }
 
-        lasers = LaserUtil.createLaserBox(world, o.xMin, o.yMin, o.zMin, o.xMax, o.yMax, o.zMax);
+        lasers = LaserUtil.createLaserBox(world, o.xMin, o.yMin, o.zMin, o.xMax, o.yMax, o.zMax, LaserKind.RED);
     }
 
     @Override
