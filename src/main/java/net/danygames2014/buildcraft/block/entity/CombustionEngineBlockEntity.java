@@ -323,6 +323,10 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
 
     @Override
     public boolean setFluid(int slot, FluidStack fluidStack, @Nullable Direction direction) {
+        if (fluidStack == null) {
+            return false;
+        }
+        
         switch (slot) {
             // Coolant
             case 0 -> {
