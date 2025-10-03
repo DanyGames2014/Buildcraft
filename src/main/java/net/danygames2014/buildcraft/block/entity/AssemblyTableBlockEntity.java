@@ -82,7 +82,7 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
             }
             
             if (output != null) {
-                world.spawnEntity(new ItemEntity(world, x + 0.5D, y + 1.5D, z + 0.5D, output));
+                world.spawnEntity(new ItemEntity(world, x + 0.5D, y + 0.7D, z + 0.5D, output));
             }
         }
 
