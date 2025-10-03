@@ -2,9 +2,12 @@ package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.AssemblyTableBlockEntity;
 import net.danygames2014.buildcraft.packet.AssemblyTableUpdateS2CPacket;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.screen.slot.Slot;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
@@ -12,6 +15,8 @@ public class AssemblyTableScreenHandler extends ScreenHandler {
     public PlayerEntity player;
     public Inventory playerInventory;
     public AssemblyTableBlockEntity blockEntity;
+    
+    public int scaledProgress;
     
     public AssemblyTableScreenHandler(PlayerEntity player, AssemblyTableBlockEntity blockEntity) {
         this.player = player;
@@ -38,12 +43,6 @@ public class AssemblyTableScreenHandler extends ScreenHandler {
         }
     }
 
-    @Override
-    public void sendContentUpdates() {
-        super.sendContentUpdates();
-        sendTableUpdatePacket();
-    }
-
     public void sendTableUpdatePacket() {
         int recipeCount = blockEntity.recipes.size();
         
@@ -62,6 +61,39 @@ public class AssemblyTableScreenHandler extends ScreenHandler {
         }
 
         PacketHelper.sendTo(player, new AssemblyTableUpdateS2CPacket(resultIds, resultAmounts, selected, active));
+    }
+
+    @Environment(EnvType.SERVER)
+    @Override
+    public void addListener(ScreenHandlerListener listener) {
+        super.addListener(listener);
+        listener.onPropertyUpdate(this, 0, this.blockEntity.scaledProgress);
+    }
+
+    @Override
+    public void sendContentUpdates() {
+        super.sendContentUpdates();
+        sendTableUpdatePacket();
+
+        for (var listenerO : this.listeners) {
+            if (listenerO instanceof ScreenHandlerListener listener) {
+                if (this.scaledProgress != this.blockEntity.scaledProgress) {
+                    this.scaledProgress = this.blockEntity.scaledProgress;
+                    listener.onPropertyUpdate(this, 0, this.scaledProgress);
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("SwitchStatementWithTooFewBranches")
+    @Environment(EnvType.CLIENT)
+    @Override
+    public void setProperty(int id, int value) {
+        switch (id) {
+            case 0 -> {
+                this.blockEntity.scaledProgress = value;
+            }
+        }
     }
 
     @Override

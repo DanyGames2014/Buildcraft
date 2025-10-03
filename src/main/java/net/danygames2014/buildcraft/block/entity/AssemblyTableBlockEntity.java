@@ -28,6 +28,7 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
     public ArrayList<RecipeEntry> selectedRecipes = new ArrayList<>();
     public RecipeEntry currentRecipe;
     public double progress;
+    public int scaledProgress = 0;
     public Random random = new Random();
     public boolean hasInit = false;
 
@@ -38,13 +39,15 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         if (world.isRemote) {
             return;
         }
-
+        
         if (!hasInit) {
             hasInit = true;
             inventoryChanged();
         }
 
         updateCurrentRecipe();
+
+        scaledProgress = getProgressScaled(70);
     }
 
     public void updateCurrentRecipe() {

@@ -118,7 +118,7 @@ public class AssemblyTableScreen extends HandledScreen {
         int y = (height - backgroundHeight) / 2;
         drawTexture(x, y, 0, 0, backgroundWidth, backgroundHeight);
         
-        int progress = blockEntity.getProgressScaled(70);
+        int progress = blockEntity.scaledProgress;
         if (progress > 0) {
             drawTexture(x + 95, y + 36 + 70 - progress, 176, 18, 4, progress);
         }
