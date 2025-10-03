@@ -99,15 +99,20 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
     @Override
     public void onPlaced(World world, int x, int y, int z) {
         super.onPlaced(world, x, y, z);
-        if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
-            engine.init();
+        
+        if (!world.isRemote) {
+            if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
+                engine.init();
+            }
         }
     }
 
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
-        if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
-            engine.checkRedstonePower();
+        if (!world.isRemote) {
+            if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
+                engine.checkRedstonePower();
+            }
         }
     }
 
