@@ -66,7 +66,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
     // Normal constructor for when the pipe is first created
     public PipeBlockEntity(PipeBlock pipeBlock) {
         this.pipeBlock = pipeBlock;
-        eventBus.registerHandler(this);
+        //eventBus.registerHandler(this);
         init();
     }
 

@@ -35,6 +35,10 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
     public void tick() {
         super.tick();
 
+        if (world.isRemote) {
+            return;
+        }
+
         if (!hasInit) {
             hasInit = true;
             inventoryChanged();
@@ -80,7 +84,7 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
                     break;
                 }
             }
-            
+
             if (output != null) {
                 world.spawnEntity(new ItemEntity(world, x + 0.5D, y + 0.7D, z + 0.5D, output));
             }
@@ -90,9 +94,9 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         if (!currentRecipe.recipe.consume(inventory.stacks)) {
             Buildcraft.LOGGER.warn("Failed to consume items from assembly table inventory!");
         }
-        
+
         inventoryChanged();
-        
+
         switchRecipe();
     }
 
@@ -149,56 +153,58 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
     }
 
     public void inventoryChanged() {
-        if (!world.isRemote) {
-            validateInventory();
-            
-            ArrayList<RecipeEntry> newRecipes = new ArrayList<>();
+        if (world == null || world.isRemote) {
+            return;
+        }
 
-            for (var recipe : AssemblyTableRecipeRegistry.get(inventory.stacks)) {
-                ObjectArrayList<ItemStack> outputs = recipe.getOutputs(random).get(RecipeOutputType.PRIMARY);
-                ItemStack iconItem;
+        validateInventory();
 
-                if (!outputs.isEmpty()) {
-                    iconItem = outputs.get(0);
-                } else {
-                    iconItem = new ItemStack(Item.RAW_FISH);
-                }
+        ArrayList<RecipeEntry> newRecipes = new ArrayList<>();
 
-                newRecipes.add(new RecipeEntry(recipe, iconItem));
+        for (var recipe : AssemblyTableRecipeRegistry.get(inventory.stacks)) {
+            ObjectArrayList<ItemStack> outputs = recipe.getOutputs(random).get(RecipeOutputType.PRIMARY);
+            ItemStack iconItem;
+
+            if (!outputs.isEmpty()) {
+                iconItem = outputs.get(0);
+            } else {
+                iconItem = new ItemStack(Item.RAW_FISH);
             }
 
-            recipes.removeIf(entry -> {
-                boolean remove = true;
+            newRecipes.add(new RecipeEntry(recipe, iconItem));
+        }
 
-                for (var newRecipe : newRecipes) {
-                    if (newRecipe.recipe.equals(entry.recipe)) {
-                        remove = false;
-                        break;
-                    }
+        recipes.removeIf(entry -> {
+            boolean remove = true;
+
+            for (var newRecipe : newRecipes) {
+                if (newRecipe.recipe.equals(entry.recipe)) {
+                    remove = false;
+                    break;
                 }
+            }
 
-                return remove;
-            });
+            return remove;
+        });
 
-            for (RecipeEntry newRecipe : newRecipes) {
-                boolean add = true;
+        for (RecipeEntry newRecipe : newRecipes) {
+            boolean add = true;
 
-                for (var recipe : recipes) {
-                    if (recipe.recipe.equals(newRecipe.recipe)) {
-                        add = false;
-                        break;
-                    }
+            for (var recipe : recipes) {
+                if (recipe.recipe.equals(newRecipe.recipe)) {
+                    add = false;
+                    break;
                 }
+            }
 
-                if (add) {
-                    recipes.add(newRecipe);
-                }
+            if (add) {
+                recipes.add(newRecipe);
             }
         }
 
         markDirty();
     }
-    
+
     public void validateInventory() {
         for (int slot = 0; slot < inventory.size(); slot++) {
             if (inventory.stacks[slot] != null && inventory.stacks[slot].count <= 0) {
@@ -236,6 +242,10 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
 
     @Override
     public void receiveLaserEnergy(double energy) {
+        if (world == null || world.isRemote) {
+            return;
+        }
+
         if (currentRecipe == null) {
             progress = 0;
             return;

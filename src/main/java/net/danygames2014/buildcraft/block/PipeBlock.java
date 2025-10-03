@@ -77,6 +77,11 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
         super.neighborUpdate(world, x, y, z, id);
+
+        if (world.isRemote) {
+            return;
+        }
+        
         updateConnections(world, x, y, z);
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
             pipeBlockEntity.neighborUpdate();
@@ -86,18 +91,28 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Override
     public void onPlaced(World world, int x, int y, int z) {
         super.onPlaced(world, x, y, z);
-        updateConnections(world, x, y, z);
+
+        if (!world.isRemote) {
+            updateConnections(world, x, y, z);
+        }
     }
 
     @Override
     public void onBreak(World world, int x, int y, int z) {
-        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
-            pipeBlockEntity.onBreak();
+        if (!world.isRemote) {
+            if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
+                pipeBlockEntity.onBreak();
+            }
         }
+        
         super.onBreak(world, x, y, z);
     }
 
     public void updateConnections(World world, int x, int y, int z) {
+        if (world.isRemote) {
+            return;
+        }
+        
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipe.updateConnections();
         }

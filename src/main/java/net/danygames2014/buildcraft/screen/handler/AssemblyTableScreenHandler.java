@@ -1,10 +1,12 @@
 package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.AssemblyTableBlockEntity;
+import net.danygames2014.buildcraft.packet.AssemblyTableUpdateS2CPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
 public class AssemblyTableScreenHandler extends ScreenHandler {
     public PlayerEntity player;
@@ -35,7 +37,33 @@ public class AssemblyTableScreenHandler extends ScreenHandler {
             this.addSlot(new Slot(playerInventory, column, 8 + column * 18, 181));
         }
     }
-    
+
+    @Override
+    public void sendContentUpdates() {
+        super.sendContentUpdates();
+        sendTableUpdatePacket();
+    }
+
+    public void sendTableUpdatePacket() {
+        int recipeCount = blockEntity.recipes.size();
+        
+        int[] resultIds = new int[recipeCount];
+        byte[] resultAmounts = new byte[recipeCount];
+        boolean[] selected = new boolean[recipeCount];
+        boolean[] active = new boolean[recipeCount];
+        
+        for (var i = 0; i < recipeCount; i++) {
+            var recipe = blockEntity.recipes.get(i);
+            
+            resultIds[i] = recipe.icon.itemId;
+            resultAmounts[i] = (byte) recipe.icon.count;
+            selected[i] = recipe.selected;
+            active[i] = recipe.active;
+        }
+
+        PacketHelper.sendTo(player, new AssemblyTableUpdateS2CPacket(resultIds, resultAmounts, selected, active));
+    }
+
     @Override
     public boolean canUse(PlayerEntity player) {
         return true;
