@@ -38,10 +38,12 @@ public class PipeRenderState implements Serializable {
     public void writeData(DataOutputStream stream) throws IOException {
         pipeConnectionMatrix.writeData(stream);
         textureMatrix.writeData(stream);
+        wireMatrix.writeData(stream);
     }
 
     public void readData(DataInputStream stream) throws IOException {
         pipeConnectionMatrix.readData(stream);
         textureMatrix.readData(stream);
+        wireMatrix.readData(stream);
     }
 }

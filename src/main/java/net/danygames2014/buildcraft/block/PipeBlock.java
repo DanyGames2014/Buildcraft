@@ -183,32 +183,32 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
 
-            if (connections.get(Direction.UP) != PipeConnectionType.NONE) {
+            if (!world.isRemote ? connections.get(Direction.UP) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.UP)) {
                 this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, 1.0F, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (connections.get(Direction.DOWN) != PipeConnectionType.NONE) {
+            if (!world.isRemote ? connections.get(Direction.DOWN) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.DOWN)) {
                 this.setBoundingBox(minOffset, 0.0F, minOffset, maxOffset, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (connections.get(Direction.WEST) != PipeConnectionType.NONE) {
+            if (!world.isRemote ? connections.get(Direction.WEST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.WEST)) {
                 this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, 1.0F);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (connections.get(Direction.EAST) != PipeConnectionType.NONE) {
+            if (!world.isRemote ? connections.get(Direction.EAST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.EAST)) {
                 this.setBoundingBox(minOffset, minOffset, 0.0F, maxOffset, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (connections.get(Direction.SOUTH) != PipeConnectionType.NONE) {
+            if (!world.isRemote ? connections.get(Direction.SOUTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.SOUTH)) {
                 this.setBoundingBox(minOffset, minOffset, minOffset, 1.0F, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (connections.get(Direction.NORTH) != PipeConnectionType.NONE) {
+            if (!world.isRemote ? connections.get(Direction.NORTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.NORTH)) {
                 this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
@@ -262,7 +262,18 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     public RaycastResult raycastPipe(World world, int x, int y, int z, PlayerEntity player) {
         double distance = 5d;
-        Vec3d positionVector = player.getPosition(tickDelta);
+
+        double eyeHeight = 0;
+
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
+            eyeHeight = player.getEyeHeight();
+        }
+
+        double playerX = player.prevX + (player.x - player.prevX) * (double)tickDelta;
+        double playerY = player.prevY + (player.y - player.prevY) * (double)tickDelta;
+        double playerZ = player.prevZ + (player.z - player.prevZ) * (double)tickDelta;
+
+        Vec3d positionVector = Vec3d.create(playerX, playerY + eyeHeight, playerZ);
         Vec3d lookVector = player.getLookVector(tickDelta);
 
         Vec3d endVector = positionVector.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
@@ -285,7 +296,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         hits[6] = super.raycast(world, x, y, z, startPos, endPos);
         sideHit[6] = null;
         for (Direction side : Direction.values()) {
-            if (isPipeConnected(pipe, side)) {
+            if (!world.isRemote ? isPipeConnected(pipe, side) : pipe.renderState.pipeConnectionMatrix.isConnected(side)) {
                 box = getPipeBoundingBox(side);
                 setBoundingBox(box);
                 boxes[side.ordinal()] = box;

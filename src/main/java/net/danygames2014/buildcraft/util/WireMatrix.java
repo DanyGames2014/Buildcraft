@@ -12,6 +12,7 @@ import java.util.BitSet;
 
 public class WireMatrix implements Serializable {
     private final BitSet hasWire = new BitSet(PipeWire.values().length);
+    private final BitSetCodec bitSetCodec = new BitSetCodec();
 
     private final ConnectionMatrix[] wires = new ConnectionMatrix[PipeWire.values().length];
     private final Identifier[] wireTextureIdentifiers = new Identifier[PipeWire.values().length];
@@ -72,10 +73,19 @@ public class WireMatrix implements Serializable {
 
     // TODO: implement this
     public void writeData(DataOutputStream stream) throws IOException {
-
+        stream.writeByte(bitSetCodec.encode(hasWire));
+        for(int i = 0; i < PipeWire.values().length; i++){
+            wires[i].writeData(stream);
+            stream.writeUTF(wireTextureIdentifiers[i] != null ? wireTextureIdentifiers[i].toString() : "");
+        }
     }
 
     public void readData(DataInputStream stream) throws IOException {
-
+        bitSetCodec.decode(stream.readByte(), hasWire);
+        for (int i = 0; i < PipeWire.values().length; i++) {
+            wires[i].readData(stream);
+            String identifier = stream.readUTF();
+            wireTextureIdentifiers[i] = identifier.isEmpty() ? null : Identifier.tryParse(identifier);
+        }
     }
 }

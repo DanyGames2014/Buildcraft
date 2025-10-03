@@ -112,7 +112,6 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
     @Override
     public void tick() {
         super.tick();
-        System.out.println(x + " " + y + " " + z);
         if (world.isRemote) {
             return;
         }
