@@ -2,15 +2,14 @@
   "schemaVersion": 1,
   "id": "buildcraft",
   "version": "${version}",
-
   "name": "Buildcraft",
-  "description": "",
+  "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more!\nThis is a part port and part reimplementation of various Buildcraft versions aiming for feature parity with Buildcraft for Minecraft r1.2.5",
   "authors": [
-    "DanyGames2014",
-    "ralf2oo2"
+    "ralf2oo2",
+    "DanyGames2014"
   ],
 
-  "license": "MIT",
+  "license": "MMPLv1",
   "icon": "assets/buildcraft/icon.png",
 
   "environment": "*",
