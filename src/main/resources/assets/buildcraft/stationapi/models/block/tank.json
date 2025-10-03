@@ -1,4 +1,6 @@
 {
+  "parent": "block/cube",
+  "ambientocclusion": false,
   "elements": [
     {
       "from": [2, 0, 2],

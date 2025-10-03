@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "stacked=false": {
       "model": "buildcraft:block/tank"
+    },
+    "stacked=true": {
+      "model": "buildcraft:block/tank_stacked"
     }
   }
 }
