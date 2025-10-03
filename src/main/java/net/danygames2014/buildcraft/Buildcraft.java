@@ -3,10 +3,10 @@ package net.danygames2014.buildcraft;
 import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.*;
-import net.danygames2014.buildcraft.block.entity.pipe.*;
-import net.danygames2014.buildcraft.block.entity.pipe.behavior.GoldenPipeBehavior;
-import net.danygames2014.buildcraft.block.entity.pipe.behavior.StonePipeBehavior;
-import net.danygames2014.buildcraft.block.entity.pipe.behavior.WoodenPipeBehavior;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.ActionSignalOutput;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
@@ -60,10 +60,6 @@ public class Buildcraft {
 
     public static Material pipeMaterial;
 
-    public static WoodenPipeBehavior woodenPipeBehavior;
-    public static StonePipeBehavior stonePipeBehavior;
-    public static GoldenPipeBehavior goldenPipeBehavior;
-
     public static Block chuteBlock;
     public static Block autoWorkbench; // NYI
     public static Block miningWell; // NYI
@@ -85,13 +81,30 @@ public class Buildcraft {
     public static Block creativeEngine;
 
     public static Block frame;
+
+    public static WoodenPipeBehavior woodenPipeBehavior;
+    public static CobblestonePipeBehavior cobblestonePipeBehavior;
+    public static StonePipeBehavior stonePipeBehavior;
+    public static SandstonePipeBehavior sandstonePipeBehavior;
+    public static GoldenPipeBehavior goldenPipeBehavior;
+    
     public static Block woodenItemPipe;
     public static Block cobblestoneItemPipe;
+    public static Block stoneItemPipe;
+    public static Block sandstoneItemPipe;
     public static Block goldenItemPipe;
+    
     public static Block woodenFluidPipe;
     public static Block cobblestoneFluidPipe;
+    public static Block stoneFluidPipe;
+    public static Block sandstoneFluidPipe;
+    public static Block goldenFluidPipe;
+    
     public static Block woodenEnergyPipe;
     public static Block cobblestoneEnergyPipe;
+    public static Block stoneEnergyPipe;
+    public static Block sandstoneEnergyPipe;
+    public static Block goldenEnergyPipe;
 
     //TODO: figure out how to avoid registering the renderblock
     public static RenderBlock renderBlock;
@@ -134,7 +147,9 @@ public class Buildcraft {
         pipeMaterial = new PipeMaterial(MapColor.LIGHT_GRAY);
 
         woodenPipeBehavior = new WoodenPipeBehavior();
+        cobblestonePipeBehavior = new CobblestonePipeBehavior();
         stonePipeBehavior = new StonePipeBehavior();
+        sandstonePipeBehavior = new SandstonePipeBehavior();
         goldenPipeBehavior = new GoldenPipeBehavior();
 
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
@@ -177,10 +192,30 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_item_pipe"),
                 null,
-                stonePipeBehavior,
+                cobblestonePipeBehavior,
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "cobblestone_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        stoneItemPipe = new PipeBlock(
+                NAMESPACE.id("stone_item_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/stone_item_pipe"),
+                null,
+                stonePipeBehavior,
+                ItemPipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "stone_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        sandstoneItemPipe = new PipeBlock(
+                NAMESPACE.id("sandstone_item_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/sandstone_item_pipe"),
+                null,
+                sandstonePipeBehavior,
+                ItemPipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "sandstone_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
         
         goldenItemPipe = new PipeBlock(
                 NAMESPACE.id("golden_item_pipe"),
@@ -208,10 +243,40 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_fluid_pipe"),
                 null,
-                stonePipeBehavior,
+                cobblestonePipeBehavior,
                 FluidPipeTransporter::new,
                 PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "cobblestone_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        stoneFluidPipe = new PipeBlock(
+                NAMESPACE.id("stone_fluid_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/stone_fluid_pipe"),
+                null,
+                stonePipeBehavior,
+                FluidPipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "stone_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        sandstoneFluidPipe = new PipeBlock(
+                NAMESPACE.id("sandstone_fluid_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/sandstone_fluid_pipe"),
+                null,
+                sandstonePipeBehavior,
+                FluidPipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "sandstone_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        goldenFluidPipe = new PipeBlock(
+                NAMESPACE.id("golden_fluid_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/golden_fluid_pipe"),
+                null,
+                goldenPipeBehavior,
+                FluidPipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "golden_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
         // Energy Pipes
         woodenEnergyPipe = new PipeBlock(
@@ -229,9 +294,39 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_energy_pipe"),
                 null,
-                stonePipeBehavior,
+                cobblestonePipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "cobblestone_energy_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        stoneEnergyPipe = new PipeBlock(
+                NAMESPACE.id("stone_energy_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/stone_energy_pipe"),
+                null,
+                stonePipeBehavior,
+                EnergyPipeTransporter::new,
+                PoweredPipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "stone_energy_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        sandstoneEnergyPipe = new PipeBlock(
+                NAMESPACE.id("sandstone_energy_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/sandstone_energy_pipe"),
+                null,
+                sandstonePipeBehavior,
+                EnergyPipeTransporter::new,
+                PoweredPipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "sandstone_energy_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+
+        goldenEnergyPipe = new PipeBlock(
+                NAMESPACE.id("golden_energy_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/golden_energy_pipe"),
+                null,
+                goldenPipeBehavior,
+                EnergyPipeTransporter::new,
+                PoweredPipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "golden_energy_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
     }
 }

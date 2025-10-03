@@ -44,11 +44,21 @@ tile.buildcraft.creative_engine.name=Creative Engine
 tile.buildcraft.frame.name=Frame
 tile.buildcraft.wooden_item_pipe.name=Wooden Transport Pipe
 tile.buildcraft.cobblestone_item_pipe.name=Cobblestone Transport Pipe
+tile.buildcraft.stone_item_pipe.name=Stone Transport Pipe
+tile.buildcraft.sandstone_item_pipe.name=Sandstone Transport Pipe
 tile.buildcraft.golden_item_pipe.name=Golden Transport Pipe
+
 tile.buildcraft.wooden_fluid_pipe.name=Wooden Fluid Pipe
 tile.buildcraft.cobblestone_fluid_pipe.name=Cobblestone Fluid Pipe
+tile.buildcraft.stone_fluid_pipe.name=Stone Fluid Pipe
+tile.buildcraft.sandstone_fluid_pipe.name=Sandstone Fluid Pipe
+tile.buildcraft.golden_fluid_pipe.name=Golden Fluid Pipe
+
 tile.buildcraft.wooden_energy_pipe.name=Wooden Kinesis Pipe
 tile.buildcraft.cobblestone_energy_pipe.name=Cobblestone Kinesis Pipe
+tile.buildcraft.stone_energy_pipe.name=Stone Kinesis Pipe
+tile.buildcraft.sandstone_energy_pipe.name=Sandstone Kinesis Pipe
+tile.buildcraft.golden_energy_pipe.name=Golden Kinesis Pipe
 
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel
