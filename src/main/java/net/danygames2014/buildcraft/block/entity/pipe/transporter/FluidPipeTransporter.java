@@ -782,17 +782,15 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
     static {
         fluidCapacities.put(Buildcraft.woodenFluidPipe, 1 * pipeFluidsBaseFlowRate);
         fluidCapacities.put(Buildcraft.cobblestoneFluidPipe, 1 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.stoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.sandstoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.goldenFluidPipe, 8 * pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsClay.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsCobblestone.class, 1 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsDiamond.class, 8 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsEmerald.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsGold.class, 8 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsIron.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsQuartz.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsSandstone.class, 2 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsStone.class, 2 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsVoid.class, 1 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsWood.class, 1 * BuildCraftTransport.pipeFluidsBaseFlowRate);
     }
 
     @Override
