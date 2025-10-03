@@ -98,7 +98,6 @@ public class ItemPipeTransporter extends PipeTransporter {
         if (sideBlockEntity instanceof PipeBlockEntity pipe) {
             if (pipe.transporter instanceof ItemPipeTransporter otherTransporter) {
                 otherTransporter.receiveTravellingItem(item, side.getOpposite());
-                System.out.println("Handing off item from " + this.hashCode() + " to " + otherTransporter.hashCode());
                 return HandOffResult.REMOVE;
             }
         }
@@ -158,8 +157,6 @@ public class ItemPipeTransporter extends PipeTransporter {
     }
 
     public void receiveTravellingItem(TravellingItemEntity item, Direction side) {
-        System.out.println("Received item to " + this.hashCode());
-
         item.input = side;
         item.transporter = this;
         item.toMiddle = true;
