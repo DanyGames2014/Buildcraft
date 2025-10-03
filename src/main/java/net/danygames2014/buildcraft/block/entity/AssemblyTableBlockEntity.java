@@ -90,6 +90,9 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         if (!currentRecipe.recipe.consume(inventory.stacks)) {
             Buildcraft.LOGGER.warn("Failed to consume items from assembly table inventory!");
         }
+        
+        inventoryChanged();
+        
         switchRecipe();
     }
 
@@ -147,6 +150,8 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
 
     public void inventoryChanged() {
         if (!world.isRemote) {
+            validateInventory();
+            
             ArrayList<RecipeEntry> newRecipes = new ArrayList<>();
 
             for (var recipe : AssemblyTableRecipeRegistry.get(inventory.stacks)) {
@@ -192,6 +197,14 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         }
 
         markDirty();
+    }
+    
+    public void validateInventory() {
+        for (int slot = 0; slot < inventory.size(); slot++) {
+            if (inventory.stacks[slot] != null && inventory.stacks[slot].count <= 0) {
+                inventory.stacks[slot] = null;
+            }
+        }
     }
 
     public void selectRecipe(int index) {
