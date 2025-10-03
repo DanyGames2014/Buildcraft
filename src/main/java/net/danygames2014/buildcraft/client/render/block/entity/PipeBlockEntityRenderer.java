@@ -7,11 +7,13 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTrans
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.TextureUtil;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
@@ -24,6 +26,8 @@ import org.lwjgl.opengl.GL11;
 public class PipeBlockEntityRenderer extends BlockEntityRenderer {
     public static final PipeBlockEntityRenderer INSTANCE = new PipeBlockEntityRenderer();
 
+    public static boolean prevRenderInnerPipe = true;
+
     public static final float DISPLAY_MULTIPLIER = 0.1f;
     public static final int POWER_STAGES = 100;
 
@@ -32,8 +36,6 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
     public int[] displayPowerList = new int[POWER_STAGES];
     public int[] displayPowerListOverload = new int[POWER_STAGES];
-    private final int[] powerAngleY = {0, 0, 270, 90, 0, 180};
-    private final int[] powerAngleZ = {90, 270, 0, 0, 0, 0};
 
     private final Int2ObjectOpenHashMap displayFluidLists = new Int2ObjectOpenHashMap();
     private final int[] angleY = {0, 0, 270, 90, 0, 180};
@@ -62,6 +64,10 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
     @Override
     public void render(BlockEntity blockEntity, double x, double y, double z, float tickDelta) {
+        if(prevRenderInnerPipe != Config.PIPE_CONFIG.renderInnerPipe){
+            prevRenderInnerPipe = Config.PIPE_CONFIG.renderInnerPipe;
+            Minecraft.INSTANCE.worldRenderer.reload();
+        }
         if(blockEntity instanceof PipeBlockEntity pipe){
             renderGatesWires(pipe, x, y, z);
 

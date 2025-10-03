@@ -6,4 +6,7 @@ import net.glasslauncher.mods.gcapi3.api.ConfigEntry;
 public class PipeConfig {
     @ConfigEntry(name = "Failed Hand-Off Result", multiplayerSynced = true)
     public HandOffResult failedHandOffResult = HandOffResult.DROP;
+
+    @ConfigEntry(name = "Render inner pipe")
+    public Boolean renderInnerPipe = true;
 }

@@ -489,6 +489,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
 
     @Override
     public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
         if (nbt.contains("vectO")) {
             initVectO = new Position(nbt.getCompound("vectO"));
             initVect = new Position[3];

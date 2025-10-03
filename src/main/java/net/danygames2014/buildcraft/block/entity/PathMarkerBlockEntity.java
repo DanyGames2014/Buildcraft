@@ -33,6 +33,8 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
         return links[0] == pathMarker || links[1] == pathMarker;
     }
 
+    public PathMarkerBlockEntity(){}
+
     public void connect(PathMarkerBlockEntity marker, LaserData laser) {
         if (lasers[0] == null) {
             lasers[0] = laser;
@@ -110,6 +112,7 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
     @Override
     public void tick() {
         super.tick();
+        System.out.println(x + " " + y + " " + z);
         if (world.isRemote) {
             return;
         }

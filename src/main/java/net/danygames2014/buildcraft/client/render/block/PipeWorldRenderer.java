@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
+import net.danygames2014.buildcraft.config.Config;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -118,9 +119,11 @@ public class PipeWorldRenderer {
         stateHost.setBoundingBox(dim[2], dim[0], dim[1], dim[5], dim[3], dim[4]);
         blockRenderManager.renderFlat(stateHost, x, y, z, r, g, b);
 
-        stateHost.setRenderMask((mask & 0x15) << 1 | (mask & 0x2a) >> 1); // pairwise swapped mask
-        stateHost.setBoundingBox(dim[5], dim[3], dim[4], dim[2], dim[0], dim[1]);
-        blockRenderManager.renderFlat(stateHost, x, y, z, r * 0.67f, g * 0.67f, b * 0.67f);
+        if(Config.PIPE_CONFIG.renderInnerPipe){
+            stateHost.setRenderMask((mask & 0x15) << 1 | (mask & 0x2a) >> 1); // pairwise swapped mask
+            stateHost.setBoundingBox(dim[5], dim[3], dim[4], dim[2], dim[0], dim[1]);
+            blockRenderManager.renderFlat(stateHost, x, y, z, r * 0.67f, g * 0.67f, b * 0.67f);
+        }
 
         stateHost.setRenderAllSides();
     }
