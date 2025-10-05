@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.MiningWellBlock;
 import net.danygames2014.buildcraft.config.Config;
 import net.minecraft.block.Block;
+import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.Item;
@@ -91,7 +92,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
     public MiningWellBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
 
-        powerHandler.configure(2, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock * 10);
+        powerHandler.configure(2, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock * 10);
         powerHandler.configurePowerPerdition(1, 1);
     }
 
@@ -157,6 +158,14 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         if (state.isAir()) {
             return true;
         }
+        
+        if (state.isOf(Buildcraft.miningPipe)) {
+            return false;
+        }
+        
+        if (state.getBlock() instanceof LiquidBlock) {
+            return true;
+        }
 
         if (canHarvest(state.getBlock())) {
             int meta = world.getBlockMeta(x, y, z);
@@ -167,7 +176,8 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
                 drops = new ArrayList<>();
                 int itemId = state.getBlock().getDroppedItemId(meta, RANDOM);
                 int count = state.getBlock().getDroppedItemCount(RANDOM);
-                if (count > 0) {
+                
+                if (itemId != 0 && count > 0) {
                     drops.add(new ItemStack(itemId, count, 0));
                 }
             }
