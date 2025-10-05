@@ -41,6 +41,7 @@ tile.buildcraft.stirling_engine.name=Stirling Engine
 tile.buildcraft.combustion_engine.name=Combustion Engine
 tile.buildcraft.creative_engine.name=Creative Engine
 
+tile.buildcraft.mining_pipe.name=Mining Pipe
 tile.buildcraft.frame.name=Frame
 tile.buildcraft.wooden_item_pipe.name=Wooden Transport Pipe
 tile.buildcraft.cobblestone_item_pipe.name=Cobblestone Transport Pipe

@@ -9,6 +9,7 @@ import java.util.Random;
 public class MiningPipeBlock extends TemplateBlock {
     public MiningPipeBlock(Identifier identifier, Material material) {
         super(identifier, material);
+        setBoundingBox(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
     }
 
     @Override
