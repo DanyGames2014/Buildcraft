@@ -9,12 +9,16 @@ import net.danygames2014.buildcraft.api.transport.gate.GateExpansionController;
 import net.danygames2014.buildcraft.api.transport.statement.*;
 import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneStatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.container.SidedStatementContainer;
+import net.danygames2014.buildcraft.block.entity.PipeBlockEntityInventory;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.danygames2014.buildcraft.screen.handler.GateInterfaceScreenHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.modificationstation.stationapi.api.client.gui.screen.GuiHandler;
+import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -289,8 +293,9 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     // GUI // TODO: implement gui
     public void openGui(PlayerEntity player) {
         if (!player.world.isRemote) {
-//            player.openGui(BuildCraftTransport.instance, GuiIds.GATES, pipe.container.getWorldObj(), pipe.container.xCoord, pipe.container.yCoord, pipe.container.zCoord);
-//            ((ContainerGateInterface) player.openContainer).setGate(direction.ordinal());
+            GateInterfaceScreenHandler screenHandler = new GateInterfaceScreenHandler(player.inventory, pipe);
+            screenHandler.setGate(direction.ordinal());
+            GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("gate"), new PipeBlockEntityInventory(), screenHandler);
         }
     }
 

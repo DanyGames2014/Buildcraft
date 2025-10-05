@@ -5,11 +5,13 @@ import net.danygames2014.buildcraft.api.core.Debuggable;
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.item.PipeWireItem;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
+import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.RaycastResult;
@@ -427,6 +429,27 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 return true;
             }
         }
+        if(stack != null && stack.getItem() instanceof  PipePluggableItem){
+            if(addOrStripPipePluggable(world, x, y, z, stack, player, Direction.byId(lastSideUsed), pipe)){
+                world.notifyNeighbors(x, y, z, id);
+                world.setBlockDirty(x, y, z);
+                return true;
+            }
+        }
+
+        Gate clickedGate = null;
+
+        RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
+
+        if (raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pluggable
+                    && pipe.getPipePluggable(raycastResult.sideHit) instanceof GatePluggable) {
+            clickedGate = pipe.gates[raycastResult.sideHit.ordinal()];
+        }
+        if (clickedGate != null) {
+            clickedGate.openGui(player);
+            return true;
+        }
+
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             if(player.getHand() != null && player.getHand().getItem() instanceof PipePluggableItem){
                 return false;
@@ -452,13 +475,13 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if(stack == null){
             return false;
         }
-        if(stack.getItem() instanceof  PipePluggableItem){
-            if(addOrStripPipePluggable(world, x, y, z, stack, user, Direction.byId(side), pipe)){
-                world.notifyNeighbors(x, y, z, id);
-                world.setBlockDirty(x, y, z);
-                return true;
-            }
-        }
+//        if(stack.getItem() instanceof  PipePluggableItem){
+//            if(addOrStripPipePluggable(world, x, y, z, stack, user, Direction.byId(side), pipe)){
+//                world.notifyNeighbors(x, y, z, id);
+//                world.setBlockDirty(x, y, z);
+//                return true;
+//            }
+//        }
         return false;
     }
 

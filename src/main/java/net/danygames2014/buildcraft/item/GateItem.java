@@ -1,12 +1,13 @@
 package net.danygames2014.buildcraft.item;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
-import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
-import net.danygames2014.buildcraft.block.entity.pipe.gate.GateDefinition;
-import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
-import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.*;
+import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.glasslauncher.mods.alwaysmoreitems.api.SubItemProvider;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.NbtString;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -24,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GateItem extends TemplateItem implements CustomTooltipProvider {
+public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem {
     protected static final String NBT_TAG_MAT = "mat";
     protected static final String NBT_TAG_LOGIC = "logic";
     protected static final String NBT_TAG_EX = "ex";
@@ -183,5 +185,10 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider {
         }
 
         return lines.toArray(String[]::new);
+    }
+
+    @Override
+    public PipePluggable createPipePluggable(PipeBlockEntity pipe, Direction side, ItemStack stack) {
+        return new GatePluggable(GateFactory.makeGate(pipe, stack, side));
     }
 }

@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.block.entity.*;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.screen.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.client.gui.screen.Screen;
@@ -10,6 +11,8 @@ import net.modificationstation.stationapi.api.client.gui.screen.GuiHandler;
 import net.modificationstation.stationapi.api.event.registry.GuiHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
+
+import java.nio.channels.Pipe;
 
 public class ScreenHandlerListener {
 
@@ -23,6 +26,7 @@ public class ScreenHandlerListener {
         event.register(NAMESPACE.id("combustion_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openCombustionEngineScreen, CombustionEngineBlockEntity::new));
         event.register(NAMESPACE.id("autocrafting_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAutocraftingTableScreen, AutocraftingTableBlockEntity::new));
         event.register(NAMESPACE.id("assembly_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAssemblyTableScreen, AssemblyTableBlockEntity::new));
+        event.register(NAMESPACE.id("gate"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openGateScreen, PipeBlockEntityInventory::new));
     }
 
     public Screen openChuteScreen(PlayerEntity playerEntity, Inventory inventory) {
@@ -43,5 +47,9 @@ public class ScreenHandlerListener {
     
     public Screen openAssemblyTableScreen(PlayerEntity playerEntity, Inventory inventory) {
         return new AssemblyTableScreen(playerEntity, (AssemblyTableBlockEntity) inventory);
+    }
+
+    public Screen openGateScreen(PlayerEntity playerEntity, Inventory inventory) {
+        return new GateInterfaceScreen(playerEntity.inventory, (PipeBlockEntity) inventory);
     }
 }
