@@ -31,7 +31,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
 
     private final PickaxeItem pickaxe = (PickaxeItem) Item.IRON_PICKAXE;
     private final TagKey<Block> target = TagKey.of(BlockRegistry.INSTANCE.getKey(), Buildcraft.NAMESPACE.id("mining_well_target"));
-    protected PowerHandler powerHandler;
+    public PowerHandler powerHandler;
     private final ObjectArrayList<Vec3i> queue = new ObjectArrayList<>();
 
     static {

@@ -7,7 +7,7 @@ public class RedstoneEngineBlockEntity extends BaseEngineBlockEntity {
     public static final double OUTPUT = 0.05D;
     
     @Override
-    protected EnergyStage calculateEnergyStage() {
+    public EnergyStage calculateEnergyStage() {
         double energyLevel = getEnergyLevel();
         if (energyLevel < 0.25f) {
             return EnergyStage.BLUE;

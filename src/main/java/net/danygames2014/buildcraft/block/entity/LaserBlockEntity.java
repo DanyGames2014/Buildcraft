@@ -6,9 +6,6 @@ import net.danygames2014.buildcraft.api.core.SafeTimeTracker;
 import net.danygames2014.buildcraft.api.energy.ILaserTarget;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
-import net.danygames2014.buildcraft.api.transport.statement.ActionReceptor;
-import net.danygames2014.buildcraft.api.transport.statement.Statement;
-import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.minecraft.block.entity.BlockEntity;
@@ -39,7 +36,7 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
     private final double[] power = new double[POWER_AVERAGING];
 
     private ILaserTarget laserTarget;
-    protected PowerHandler powerHandler;
+    public PowerHandler powerHandler;
     protected Controllable.Mode mode = Mode.On;
     private static final PowerHandler.PerditionCalculator PERDITION = new PowerHandler.PerditionCalculator(0.5F);
 

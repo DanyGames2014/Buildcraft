@@ -40,6 +40,9 @@
     ],
     "gcapi3:factory_provider": [
       "net.danygames2014.buildcraft.config.Config"
+    ],
+    "whatsthis": [
+      "net.danygames2014.buildcraft.init.ProbeInfoProviderListener"
     ]
   },
   "mixins": [

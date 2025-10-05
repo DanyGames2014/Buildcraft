@@ -244,7 +244,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     }
 
     // Energy Stage
-    protected EnergyStage calculateEnergyStage() {
+    public EnergyStage calculateEnergyStage() {
         float heatLevel = getHeatLevel();
 
         if (heatLevel < 0.25f) {

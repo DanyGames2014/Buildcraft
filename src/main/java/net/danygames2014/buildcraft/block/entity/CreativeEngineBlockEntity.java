@@ -51,7 +51,7 @@ public class CreativeEngineBlockEntity  extends BaseEngineBlockEntity{
     }
 
     @Override
-    protected EnergyStage calculateEnergyStage() {
+    public EnergyStage calculateEnergyStage() {
         return EnergyStage.BLUE;
     }
 
