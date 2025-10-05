@@ -18,6 +18,9 @@ public class Config implements ConfigFactoryProvider {
     @ConfigRoot(value = "pipe", visibleName = "Pipe Config", index = 1)
     public static final PipeConfig PIPE_CONFIG = new PipeConfig();
 
+    @ConfigRoot(value = "machine", visibleName = "Machine Config", index = 2)
+    public static final MachineConfig MACHINE_CONFIG = new MachineConfig();
+
     @Override
     public void provideLoadFactories(ImmutableMap.Builder<Type, SeptFunction<String, ConfigEntry, Field, Object, Boolean, Object, Object, ConfigEntryHandler<?>>> immutableBuilder) {
         immutableBuilder.put(HandOffResult.class, ((id, configEntry, parentField, parentObject, isMultiplayerSynced, enumOrOrdinal, defaultEnum) -> new EnumConfigEntryHandler<HandOffResult>(id, configEntry, parentField, parentObject, isMultiplayerSynced, DefaultFactoryProvider.enumOrOrdinalToOrdinal(enumOrOrdinal), ((HandOffResult) defaultEnum).ordinal(), HandOffResult.class)));

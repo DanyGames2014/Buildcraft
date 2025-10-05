@@ -80,6 +80,7 @@ public class Buildcraft {
     public static Block combustionEngine;
     public static Block creativeEngine;
 
+    public static Block miningPipe;
     public static Block frame;
 
     public static WoodenPipeBehavior woodenPipeBehavior;
@@ -175,6 +176,7 @@ public class Buildcraft {
         combustionEngine = new CombustionEngineBlock(NAMESPACE.id("combustion_engine")).setTranslationKey(NAMESPACE, "combustion_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
         creativeEngine = new CreativeEngineBlock(NAMESPACE.id("creative_engine")).setTranslationKey(NAMESPACE, "creative_engine").setHardness(1.2F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
+        miningPipe = new MiningPipeBlock(NAMESPACE.id("mining_pipe"), pipeMaterial).setTranslationKey(NAMESPACE, "mining_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
         frame = new FrameBlock(NAMESPACE.id("frame"), pipeMaterial).setTranslationKey(NAMESPACE, "frame").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
         renderBlock = new RenderBlock(NAMESPACE.id("render_block"));

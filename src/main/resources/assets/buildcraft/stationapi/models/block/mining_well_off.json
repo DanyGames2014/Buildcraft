@@ -1,0 +1,10 @@
+{
+  "parent": "buildcraft:block/template/machine",
+  "textures": {
+    "top": "buildcraft:block/mining_well_top_off",
+    "bottom": "buildcraft:block/mining_well_back",
+    "side": "buildcraft:block/mining_well_side",
+    "front": "buildcraft:block/mining_well_front",
+    "back": "buildcraft:block/mining_well_back"
+  }
+}
