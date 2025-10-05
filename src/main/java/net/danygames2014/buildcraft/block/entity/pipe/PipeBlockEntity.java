@@ -581,6 +581,13 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
         throw new RuntimeException("Unknown state requested: " + stateId + " this is a bug!");
     }
 
+    public net.danygames2014.buildcraft.api.transport.gate.Gate getGate(Direction side){
+        if(side == null){
+            return null;
+        }
+        return gates[side.ordinal()];
+    }
+
     @Override
     public void afterStateUpdated(byte stateId) {
         if(!world.isRemote){

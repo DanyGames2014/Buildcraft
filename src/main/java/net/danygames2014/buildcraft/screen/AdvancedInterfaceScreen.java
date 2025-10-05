@@ -125,6 +125,27 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
         }
     }
 
+    protected void drawBackgroundSlots() {
+        //RenderHelper.enableGUIStandardItemLighting();
+        GL11.glPushMatrix();
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
+        int i1 = 240;
+        int k1 = 240;
+        //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i1 / 1.0F, k1 / 1.0F);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+
+        if (slots != null) {
+            for (AdvancedSlot slot : slots) {
+                if (slot != null) {
+                    slot.drawSprite(0, 0);
+                }
+            }
+        }
+
+        GL11.glPopMatrix();
+    }
+
     // TODO: Use this for all children of this class
     protected void slotClicked(AdvancedSlot slot, int mouseButton) {
 

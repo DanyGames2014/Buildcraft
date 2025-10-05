@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.init;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.packet.AssemblyTableUpdateS2CPacket;
+import net.danygames2014.buildcraft.packet.CommandPacket;
 import net.danygames2014.buildcraft.packet.SelectAssemblyRecipeC2SPacket;
 import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
 import net.danygames2014.buildcraft.registry.StateRegistry;
@@ -23,6 +24,7 @@ public class PacketTypeListener {
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_pipe"), BlockEntityUpdatePacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("select_assembly_recipe"), SelectAssemblyRecipeC2SPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("assembly_table_recipes_update"), AssemblyTableUpdateS2CPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("command"), CommandPacket.TYPE);
 
         StateRegistry.register(PipeRenderState.class);
         StateRegistry.register(PipePluggableState.class);

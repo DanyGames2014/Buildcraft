@@ -45,11 +45,6 @@ public class PlugPluggable extends PipePluggable {
     }
 
     @Override
-    public boolean requiresRenderUpdate(PipePluggable old) {
-        return false;
-    }
-
-    @Override
     public boolean isSolidOnSide() {
         return true;
     }

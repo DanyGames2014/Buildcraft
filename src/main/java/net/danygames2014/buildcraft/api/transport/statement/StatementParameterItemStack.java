@@ -3,8 +3,13 @@ package net.danygames2014.buildcraft.api.transport.statement;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtIo;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.util.Identifier;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class StatementParameterItemStack implements StatementParameter{
 
