@@ -33,7 +33,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     public GateInterfaceScreen gateCallback;
 
     Inventory playerInventory;
-    private final PipeBlockEntity pipe;
+    private PipeBlockEntity pipe;
     private Gate gate;
     private final NavigableSet<Statement> potentialTriggers = new TreeSet<>(Comparator.comparing(Statement::getIdentifier));
 
