@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft;
 
 import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
+import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
@@ -13,6 +14,8 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTrans
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
 import net.danygames2014.buildcraft.item.*;
+import net.danygames2014.buildcraft.statements.PipeTriggerProvider;
+import net.danygames2014.buildcraft.statements.TriggerPipeSignal;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
@@ -118,6 +121,18 @@ public class Buildcraft {
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
+
+        // Register triggers actions and parameters
+        // TODO: maybe move to its own event?
+        for(PipeWire wire : PipeWire.values()){
+            triggerPipeWireActive[wire.ordinal()] = new TriggerPipeSignal(true, wire);
+            triggerPipeWireInactive[wire.ordinal()] = new TriggerPipeSignal(false, wire);
+            actionPipeWire[wire.ordinal()] = new ActionSignalOutput(wire);
+        }
+
+        StatementManager.registerTriggerProvider(new PipeTriggerProvider());
+
+
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");
         woodenGear = new TemplateItem(NAMESPACE.id("wooden_gear")).setTranslationKey(NAMESPACE, "wooden_gear");
         stoneGear = new TemplateItem(NAMESPACE.id("stone_gear")).setTranslationKey(NAMESPACE, "stone_gear");

@@ -463,7 +463,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
      */
     // TODO: probably return right gui texture here
     public String  getGateGuiFile() {
-        return gate.material.backgroundTexture;
+        return "/assets/buildcraft/stationapi/textures/gui/" + gate.material.backgroundTexture;
     }
 
     public String getGateName() {

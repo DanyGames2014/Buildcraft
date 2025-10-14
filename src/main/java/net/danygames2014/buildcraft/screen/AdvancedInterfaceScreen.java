@@ -20,8 +20,9 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
     }
 
     public int getSlotIndexAtLocation(int i, int j) {
-        int x = i - 0;
-        int y = j - 0;
+
+        int x = i - ((width - backgroundWidth) / 2);
+        int y = j - ((height - backgroundHeight) / 2);
 
         for (int position = 0; position < slots.size(); ++position) {
             AdvancedSlot s = slots.get(position);
