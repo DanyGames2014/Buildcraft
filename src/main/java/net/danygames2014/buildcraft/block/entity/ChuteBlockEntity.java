@@ -1,13 +1,12 @@
 package net.danygames2014.buildcraft.block.entity;
 
-import net.danygames2014.nyalib.capability.Capability;
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -24,15 +23,19 @@ public class ChuteBlockEntity extends BlockEntity implements Inventory {
     @Override
     public void tick() {
         super.tick();
-        if(world.isRemote || world.getTime() % 5 != 0) return;
+        if(world.isRemote || world.getTime() % Config.MACHINE_CONFIG.chute.tickDelay != 0) return;
         if(itemBox == null){
             itemBox = Box.create(x, y + 1, z, x + 1, y + 1.6D, z + 1);
         }
         ItemHandlerBlockCapability capability = CapabilityHelper.getCapability(world, x, y + 1, z, ItemHandlerBlockCapability.class);
         if(capability != null){
-            extractFromAbove(capability);
+            if (Config.MACHINE_CONFIG.chute.allowInventoryExtraction) {
+                extractFromAbove(capability);
+            }
         } else {
-            extractItemsFromWorld();
+            if (Config.MACHINE_CONFIG.chute.allowItemPickup) {
+                extractItemsFromWorld();
+            }
         }
         insertIntoBelow();
     }

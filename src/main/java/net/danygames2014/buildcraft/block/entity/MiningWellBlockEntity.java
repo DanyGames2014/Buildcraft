@@ -82,9 +82,9 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
             world.setBlockStateWithNotify(x, y, z, state.with(MiningWellBlock.ACTIVE, active));
             
             if (active) {
-                powerHandler.configure(2, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock * 10);        
+                powerHandler.configure(2, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);        
             } else {
-                powerHandler.configure(0, 0, Integer.MAX_VALUE, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock * 10);
+                powerHandler.configure(0, 0, Integer.MAX_VALUE, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
             }
         }
     }
@@ -92,7 +92,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
     public MiningWellBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
 
-        powerHandler.configure(2, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock, Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock * 10);
+        powerHandler.configure(2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
         powerHandler.configurePowerPerdition(1, 1);
     }
 
@@ -107,7 +107,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
             return;
         }
 
-        float mj = Config.MACHINE_CONFIG.miningWellConfig.mjPerBlock;
+        float mj = Config.MACHINE_CONFIG.miningWell.mjPerBlock;
 
         // Check if enough energy is avalible
         if (powerHandler.useEnergy(mj, mj, false) < mj) {
