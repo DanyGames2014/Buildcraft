@@ -2,9 +2,11 @@ package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.event.AssemblyTableRecipeRegisterEvent;
-import net.danygames2014.buildcraft.recipe.AssemblyTableRecipe;
-import net.danygames2014.buildcraft.recipe.input.ItemRecipeInput;
-import net.danygames2014.buildcraft.recipe.output.RecipeOutput;
+import net.danygames2014.buildcraft.event.RefineryRecipeRegisterEvent;
+import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipe;
+import net.danygames2014.buildcraft.recipe.machine.input.ItemRecipeInput;
+import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutput;
+import net.danygames2014.buildcraft.recipe.refinery.RefineryRecipe;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -90,6 +92,14 @@ public class RecipeListener {
                         .addInput(new ItemRecipeInput(Item.IRON_INGOT))
                         .addInput(new ItemRecipeInput(Item.DYE, 1, 11))
                         .addOutput(new RecipeOutput(new ItemStack(Buildcraft.yellowPipeWire, 8)))
+        );
+    }
+    
+    @EventListener
+    public void registerRefineryRecipes(RefineryRecipeRegisterEvent event) {
+        event.register(
+                NAMESPACE.id("oil_to_fuel"),
+                new RefineryRecipe(FluidListener.oil, 1, FluidListener.fuel, 1)
         );
     }
 }

@@ -4,12 +4,14 @@ import net.danygames2014.buildcraft.api.energy.EngineCoolant;
 import net.danygames2014.buildcraft.api.energy.EngineCoolantRegistry;
 import net.danygames2014.buildcraft.api.energy.EngineFuel;
 import net.danygames2014.buildcraft.api.energy.EngineFuelRegistry;
+import net.danygames2014.buildcraft.event.RefineryRecipeRegisterEvent;
 import net.danygames2014.nyalib.event.AfterFluidRegistryEvent;
 import net.danygames2014.nyalib.event.FluidRegistryEvent;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBuilder;
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
 
@@ -35,9 +37,13 @@ public class FluidListener {
     
     @EventListener
     public void afterFluidRegister(AfterFluidRegistryEvent event) {
+        // Engine Coolants and Fuels
         EngineCoolantRegistry.register(Fluids.WATER, new EngineCoolant(0.023F));
         // TODO: Replace the 1.0F with a config multiplier, kthxbai
         EngineFuelRegistry.register(oil, new EngineFuel(oil, 3, (int) (25000 * 1.0F)));
         EngineFuelRegistry.register(fuel, new EngineFuel(fuel, 6, (int) (25000 * 1.0F)));
+        
+        // Refinery Recipes
+        StationAPI.EVENT_BUS.post(new RefineryRecipeRegisterEvent());
     }
 }
