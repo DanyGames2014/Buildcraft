@@ -33,7 +33,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     public GateInterfaceScreen gateCallback;
 
     Inventory playerInventory;
-    private final PipeBlockEntity pipe;
+    private PipeBlockEntity pipe;
     private Gate gate;
     private final NavigableSet<Statement> potentialTriggers = new TreeSet<>(Comparator.comparing(Statement::getIdentifier));
 
@@ -463,7 +463,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
      */
     // TODO: probably return right gui texture here
     public String  getGateGuiFile() {
-        return gate.material.backgroundTexture;
+        return "/assets/buildcraft/stationapi/textures/gui/" + gate.material.backgroundTexture;
     }
 
     public String getGateName() {

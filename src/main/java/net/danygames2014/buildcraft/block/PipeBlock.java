@@ -67,7 +67,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         this.alternativeTexture = alternativeTexture;
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             TextureListener.dynamicBlockTextures.add(texture);
-            if(alternativeTexture != null){
+            if (alternativeTexture != null) {
                 TextureListener.dynamicBlockTextures.add(alternativeTexture);
             }
             this.pipeWorldRenderer = new PipeWorldRenderer();
@@ -83,7 +83,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (world.isRemote) {
             return;
         }
-        
+
         updateConnections(world, x, y, z);
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
             pipeBlockEntity.neighborUpdate();
@@ -106,7 +106,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 pipeBlockEntity.onBreak();
             }
         }
-        
+
         super.onBreak(world, x, y, z);
     }
 
@@ -114,7 +114,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (world.isRemote) {
             return;
         }
-        
+
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipe.updateConnections();
         }
@@ -142,14 +142,14 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER || Atlases.getTerrain() == null) {
             return 0;
         }
-        if(Atlases.getTerrain().getTexture(texture) != null){
+        if (Atlases.getTerrain().getTexture(texture) != null) {
             return Atlases.getTerrain().getTexture(texture).index;
         }
         return 0;
     }
 
-    public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType){
-        if(direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE){
+    public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
+        if (direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE) {
             return alternativeTexture;
         }
         return texture;
@@ -267,13 +267,13 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
         double eyeHeight = 0;
 
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
             eyeHeight = player.getEyeHeight();
         }
 
-        double playerX = player.prevX + (player.x - player.prevX) * (double)tickDelta;
-        double playerY = player.prevY + (player.y - player.prevY) * (double)tickDelta;
-        double playerZ = player.prevZ + (player.z - player.prevZ) * (double)tickDelta;
+        double playerX = player.prevX + (player.x - player.prevX) * (double) tickDelta;
+        double playerY = player.prevY + (player.y - player.prevY) * (double) tickDelta;
+        double playerZ = player.prevZ + (player.z - player.prevZ) * (double) tickDelta;
 
         Vec3d positionVector = Vec3d.create(playerX, playerY + eyeHeight, playerZ);
         Vec3d lookVector = player.getLookVector(tickDelta);
@@ -283,8 +283,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return raycastPipe(world, x, y, z, positionVector, endVector);
     }
 
-    private RaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos){
-        if(!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)){
+    private RaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
+        if (!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)) {
             return null;
         }
 
@@ -307,8 +307,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             }
         }
 
-        for(Direction side : Direction.values()){
-            if(pipe.getPipePluggable(side) != null){
+        for (Direction side : Direction.values()) {
+            if (pipe.getPipePluggable(side) != null) {
                 Box pluggableBox = pipe.getPipePluggable(side).getBoundingBox(side);
                 setBoundingBox(pluggableBox);
                 boxes[7 + side.ordinal()] = pluggableBox;
@@ -402,7 +402,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public boolean isSolidFace(BlockView blockView, int x, int y, int z, int face) {
-        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe){
+        if (blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             Direction side = Direction.byId(face);
             return pipe.hasPipePluggable(side) && pipe.getPipePluggable(side).isSolidOnSide();
         }
@@ -411,26 +411,29 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        if(!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)){
+        if (!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)) {
             return false;
         }
+        
         ItemStack stack = player.getHand();
-        if(stack == null && player.isSneaking()){
-            if(stripEquipment(world, x, y, z, player, pipe, Direction.byId(lastSideUsed))){
+        if (stack == null && player.isSneaking()) {
+            if (stripEquipment(world, x, y, z, player, pipe, Direction.byId(lastSideUsed))) {
                 world.setBlockDirty(x, y, z);
                 world.notifyNeighbors(x, y, z, id);
                 return true;
             }
         }
-        if(stack != null && stack.getItem() instanceof PipeWireItem pipeWireItem){
-            if(addOrStripWire(player, pipe, PipeWire.fromItem(pipeWireItem))){
+
+        if (stack != null && stack.getItem() instanceof PipeWireItem pipeWireItem) {
+            if (addOrStripWire(player, pipe, PipeWire.fromItem(pipeWireItem))) {
                 world.setBlockDirty(x, y, z);
                 world.notifyNeighbors(x, y, z, id);
                 return true;
             }
         }
-        if(stack != null && stack.getItem() instanceof  PipePluggableItem){
-            if(addOrStripPipePluggable(world, x, y, z, stack, player, Direction.byId(lastSideUsed), pipe)){
+        
+        if (stack != null && stack.getItem() instanceof PipePluggableItem) {
+            if (addOrStripPipePluggable(world, x, y, z, stack, player, Direction.byId(lastSideUsed), pipe)) {
                 world.notifyNeighbors(x, y, z, id);
                 world.setBlockDirty(x, y, z);
                 return true;
@@ -442,16 +445,17 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
 
         if (raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pluggable
-                    && pipe.getPipePluggable(raycastResult.sideHit) instanceof GatePluggable) {
+                && pipe.getPipePluggable(raycastResult.sideHit) instanceof GatePluggable) {
             clickedGate = pipe.gates[raycastResult.sideHit.ordinal()];
         }
+        
         if (clickedGate != null) {
-            clickedGate.openGui(player);
+            clickedGate.openGui(player, pipe);
             return true;
         }
 
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            if(player.getHand() != null && player.getHand().getItem() instanceof PipePluggableItem){
+            if (player.getHand() != null && player.getHand().getItem() instanceof PipePluggableItem) {
                 return false;
             }
 //            if (player.getHand() != null && !(player.getHand().getItem() instanceof WrenchBase)) {
@@ -468,11 +472,11 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     }
 
     // TODO: might be unneeded now that lastSideUsed is a thing
-    public boolean onUseItem(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side){
-        if(!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)){
+    public boolean onUseItem(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side) {
+        if (!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)) {
             return false;
         }
-        if(stack == null){
+        if (stack == null) {
             return false;
         }
 //        if(stack.getItem() instanceof  PipePluggableItem){
@@ -485,20 +489,20 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return false;
     }
 
-    private boolean stripEquipment(World world, int x, int y, int z, PlayerEntity player, PipeBlockEntity pipe, Direction side){
-        if(!world.isRemote){
+    private boolean stripEquipment(World world, int x, int y, int z, PlayerEntity player, PipeBlockEntity pipe, Direction side) {
+        if (!world.isRemote) {
             Direction nSide = side;
 
             RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
-            if(raycastResult != null && raycastResult.hitPart != RaycastResult.Part.Pipe){
+            if (raycastResult != null && raycastResult.hitPart != RaycastResult.Part.Pipe) {
                 nSide = raycastResult.sideHit;
             }
-            if(pipe.hasPipePluggable(nSide)){
+            if (pipe.hasPipePluggable(nSide)) {
                 return pipe.setPluggable(nSide, null, player);
             }
 
-            for(PipeWire color : PipeWire.values()){
-                if(stripWire(pipe, color, player)){
+            for (PipeWire color : PipeWire.values()) {
+                if (stripWire(pipe, color, player)) {
                     return true;
                 }
             }
@@ -506,7 +510,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return false;
     }
 
-    private boolean addOrStripPipePluggable(World world, int x, int y, int z, ItemStack stack, PlayerEntity player, Direction side, PipeBlockEntity pipe){
+    private boolean addOrStripPipePluggable(World world, int x, int y, int z, ItemStack stack, PlayerEntity player, Direction side, PipeBlockEntity pipe) {
         RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
 
         Direction placementSide = raycastResult != null && raycastResult.sideHit != null ? raycastResult.sideHit : side;
@@ -514,20 +518,20 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         PipePluggableItem pluggableItem = (PipePluggableItem) stack.getItem();
         PipePluggable pluggable = pluggableItem.createPipePluggable(pipe, placementSide, stack);
 
-        if(pluggable == null){
+        if (pluggable == null) {
             return false;
         }
 
-        if(player.isSneaking()){
-            if(pipe.hasPipePluggable(side) && raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pluggable
-                && pluggable.getClass().isInstance(pipe.getPipePluggable(side))){
+        if (player.isSneaking()) {
+            if (pipe.hasPipePluggable(side) && raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pluggable
+                    && pluggable.getClass().isInstance(pipe.getPipePluggable(side))) {
                 return pipe.setPluggable(side, null, player);
             }
         }
 
-        if(raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pipe){
-            if(!pipe.hasPipePluggable(side)){
-                if(pipe.setPluggable(placementSide, pluggable, player)){
+        if (raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pipe) {
+            if (!pipe.hasPipePluggable(side)) {
+                if (pipe.setPluggable(placementSide, pluggable, player)) {
                     stack.count--;
                 }
                 return true;
@@ -539,16 +543,16 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return false;
     }
 
-    private boolean addOrStripWire(PlayerEntity player, PipeBlockEntity pipe, PipeWire color){
-        if(addWire(pipe, color)){
-            player.getHand().count --;
+    private boolean addOrStripWire(PlayerEntity player, PipeBlockEntity pipe, PipeWire color) {
+        if (addWire(pipe, color)) {
+            player.getHand().count--;
             return true;
         }
         return player.isSneaking() && stripWire(pipe, color, player);
     }
 
-    private boolean addWire(PipeBlockEntity pipe, PipeWire color){
-        if(!pipe.wireSet[color.ordinal()]){
+    private boolean addWire(PipeBlockEntity pipe, PipeWire color) {
+        if (!pipe.wireSet[color.ordinal()]) {
             pipe.wireSet[color.ordinal()] = true;
             pipe.signalStrength[color.ordinal()] = 0;
 
@@ -559,9 +563,9 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return false;
     }
 
-    private boolean stripWire(PipeBlockEntity pipe, PipeWire color, PlayerEntity player){
-        if(pipe.wireSet[color.ordinal()]){
-            if(!pipe.world.isRemote){
+    private boolean stripWire(PipeBlockEntity pipe, PipeWire color, PlayerEntity player) {
+        if (pipe.wireSet[color.ordinal()]) {
+            if (!pipe.world.isRemote) {
                 dropWire(color, pipe, player);
             }
 
@@ -577,7 +581,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return false;
     }
 
-    private void dropWire(PipeWire pipeWire, PipeBlockEntity pipe, PlayerEntity player){
+    private void dropWire(PipeWire pipeWire, PipeBlockEntity pipe, PlayerEntity player) {
         ItemUtil.dropTryIntoPlayerInventory(pipe.world, pipe.x, pipe.y, pipe.z, pipeWire.getStack(), player);
     }
 

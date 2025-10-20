@@ -23,7 +23,7 @@ public class GatePluggable extends PipePluggable {
 
     public GateMaterial material;
     public GateLogic logic;
-    public GateExpansion[] expansions;
+    public GateExpansion[] expansions = new GateExpansion[0];
     public boolean isLit, isPulsing;
 
     public Gate realGate, instantiatedGate;

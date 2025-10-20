@@ -19,6 +19,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.Packet;
@@ -31,7 +33,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.Collection;
 import java.util.Random;
 
-public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
+public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, Inventory {
     public PipeBlock pipeBlock;
     public PipeBehavior behavior;
     public PipeTransporter transporter;
@@ -642,4 +644,41 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity {
             return;
         }
     }
+
+    // Dummy Inventory
+    @Override
+    public int size() {
+        return 0;
+    }
+
+    @Override
+    public ItemStack getStack(int slot) {
+        return null;
+    }
+
+    @Override
+    public ItemStack removeStack(int slot, int amount) {
+        return null;
+    }
+
+    @Override
+    public void setStack(int slot, ItemStack stack) {
+
+    }
+
+    @Override
+    public String getName() {
+        return "";
+    }
+
+    @Override
+    public int getMaxCountPerStack() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPlayerUse(PlayerEntity player) {
+        return true;
+    }
+    // End of Dummy Inventory
 }

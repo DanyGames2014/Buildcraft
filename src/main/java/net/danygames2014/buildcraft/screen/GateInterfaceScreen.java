@@ -179,8 +179,8 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
     protected void drawBackground(float tickDelta) {
         screenHandler.synchronize();
 
-        int guiLeft = 0;
-        int guiTop = 0;
+        int x = (width - backgroundWidth) / 2;
+        int y = (height - backgroundHeight) / 2;
 
         if(gate == null){
             return;
@@ -191,7 +191,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.textureManager.bindTexture(minecraft.textureManager.getTextureId(texture));
 
-        drawTexture(guiLeft, guiTop, 0, 0, backgroundWidth, backgroundHeight);
+        drawTexture(x, y, 0, 0, backgroundWidth, backgroundHeight);
 
         for (AdvancedSlot slot : slots) {
             if (slot instanceof TriggerSlot) {
@@ -200,7 +200,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 if (screenHandler.actionsState[((TriggerSlot) slot).slot] != ActionActiveState.Deactivated) {
                     minecraft.textureManager.bindTexture(minecraft.textureManager.getTextureId(texture));
 
-                    drawTexture(guiLeft + slot.x + 17 + 18 * gate.material.numTriggerParameters, guiTop
+                    drawTexture(x + slot.x + 17 + 18 * gate.material.numTriggerParameters, y
                                                                                                                    + slot.y + 6, 176, 18, halfWidth ? 9 : 18, 4);
                 }
             } else if (slot instanceof StatementParameterSlot) {
@@ -211,12 +211,12 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
 
                 if (statement.isDefined()) {
                     if (!paramSlot.isAllowed()) {
-                        drawTexture(guiLeft + slot.x - 1, guiTop + slot.y - 1, 176, 0, 18, 18);
+                        drawTexture(x + slot.x - 1, y + slot.y - 1, 176, 0, 18, 18);
                     } else if (paramSlot.isRequired() && paramSlot.getItemStack() == null) {
-                        drawTexture(guiLeft + slot.x - 1, guiTop + slot.y - 1, 176, 22, 18, 18);
+                        drawTexture(x + slot.x - 1, y + slot.y - 1, 176, 22, 18, 18);
                     }
                 } else {
-                    drawTexture(guiLeft + slot.x - 1, guiTop + slot.y - 1, 176, 0, 18, 18);
+                    drawTexture(x + slot.x - 1, y + slot.y - 1, 176, 0, 18, 18);
                 }
             }
         }
