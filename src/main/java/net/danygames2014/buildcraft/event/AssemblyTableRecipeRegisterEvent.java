@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.event;
 
-import net.danygames2014.buildcraft.recipe.AssemblyTableRecipe;
-import net.danygames2014.buildcraft.recipe.AssemblyTableRecipeRegistry;
+import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipe;
+import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipeRegistry;
 import net.mine_diver.unsafeevents.Event;
 import net.modificationstation.stationapi.api.util.Identifier;
 

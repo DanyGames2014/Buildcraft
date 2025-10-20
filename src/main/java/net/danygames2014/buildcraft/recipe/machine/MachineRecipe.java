@@ -1,10 +1,10 @@
-package net.danygames2014.buildcraft.recipe;
+package net.danygames2014.buildcraft.recipe.machine;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.Buildcraft;
-import net.danygames2014.buildcraft.recipe.input.RecipeInput;
-import net.danygames2014.buildcraft.recipe.output.RecipeOutput;
-import net.danygames2014.buildcraft.recipe.output.RecipeOutputType;
+import net.danygames2014.buildcraft.recipe.machine.input.RecipeInput;
+import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutput;
+import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutputType;
 import net.minecraft.item.ItemStack;
 
 import java.util.HashMap;

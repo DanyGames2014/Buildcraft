@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.recipe;
+package net.danygames2014.buildcraft.recipe.machine;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.minecraft.item.ItemStack;
