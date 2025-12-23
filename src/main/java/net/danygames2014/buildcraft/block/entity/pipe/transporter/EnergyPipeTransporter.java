@@ -24,10 +24,10 @@ public class EnergyPipeTransporter extends PipeTransporter {
         powerCapacities.put(Buildcraft.woodenEnergyPipe, 32);
         powerCapacities.put(Buildcraft.cobblestoneEnergyPipe, 8);
         powerCapacities.put(Buildcraft.stoneEnergyPipe, 16);
+        powerCapacities.put(Buildcraft.ironEnergyPipe, 128);
         powerCapacities.put(Buildcraft.sandstoneEnergyPipe, 16);
         powerCapacities.put(Buildcraft.goldenEnergyPipe, 256);
 //        powerCapacities.put(PipePowerQuartz.class, 64);
-//        powerCapacities.put(PipePowerIron.class, 128);
 //        powerCapacities.put(PipePowerDiamond.class, 1024);
     }
     
