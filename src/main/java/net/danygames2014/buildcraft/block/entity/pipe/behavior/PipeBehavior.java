@@ -12,7 +12,10 @@ import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
+import net.danygames2014.uniwrench.api.WrenchMode;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -101,6 +104,10 @@ public class PipeBehavior {
         }
 
         return directions.get(blockEntity.random.nextInt(directions.size()));
+    }
+
+    public boolean isValidOutputDirection(PipeBlockEntity blockEntity, Direction side, PipeConnectionType connectionType) {
+        return connectionType != PipeConnectionType.NONE;
     }
     
     public HandOffResult getFailedInsertResult(PipeBlockEntity blockEntity, ItemPipeTransporter transporter, TravellingItemEntity item) {

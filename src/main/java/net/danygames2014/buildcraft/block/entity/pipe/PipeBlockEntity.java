@@ -172,7 +172,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
         validOutputDirections.clear();
         for (Direction side : Direction.values()) {
-            if (connections.get(side) != PipeConnectionType.NONE) {
+            if (behavior.isValidOutputDirection(this, side, connections.get(side))) {
                 validOutputDirections.add(side);
             }
         }
@@ -475,14 +475,14 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             this.connections.put(side, type);
         }
 
-        updateValidOutputDirections();
-
         for (int i = 0; i < 4; ++i) {
             wireSet[i] = nbt.getBoolean("wireSet[" + i + "]");
         }
 
         sideProperties.readNbt(nbt);
         init();
+        updateValidOutputDirections();
+        
         attachPluggables = true;
     }
 
