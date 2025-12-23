@@ -19,8 +19,8 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class WoodenPipeBehavior extends PipeBehavior implements IPipeTransportPowerHook {
     @Override
-    public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior) {
-        if (super.canConnectToPipe(blockEntity, otherBlockEntity, otherPipeBehavior) != PipeConnectionType.NONE && otherPipeBehavior != Buildcraft.woodenPipeBehavior) {
+    public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior, Direction side) {
+        if (super.canConnectToPipe(blockEntity, otherBlockEntity, otherPipeBehavior, side) != PipeConnectionType.NONE && otherPipeBehavior != Buildcraft.woodenPipeBehavior) {
             return PipeConnectionType.NORMAL;
         }
         return PipeConnectionType.NONE;

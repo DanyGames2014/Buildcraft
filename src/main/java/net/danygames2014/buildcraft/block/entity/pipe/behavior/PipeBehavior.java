@@ -28,9 +28,10 @@ public class PipeBehavior {
      * @param blockEntity       The block entity of the pipe this is called on
      * @param otherBlockEntity  The block entity of the pipe we want to connect to
      * @param otherPipeBehavior The behavior of the pipe we want to connect to
+     * @param side              The side on which the other pipe is
      * @return If we can connect to the other pipe
      */
-    public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior) {
+    public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior, Direction side) {
         if (otherBlockEntity.transporter.getType() == blockEntity.transporter.getType()) {
             return PipeConnectionType.NORMAL;
         }
