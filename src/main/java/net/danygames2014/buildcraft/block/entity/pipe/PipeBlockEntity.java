@@ -80,6 +80,12 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     private boolean hasInit = false;
 
     public void init() {
+        if (pipeBlock == null) {
+            if (world != null && y != 0 && world.getBlockState(x,y,z).getBlock() instanceof PipeBlock block) {
+                pipeBlock = block;
+            }
+        }
+        
         behavior = pipeBlock.behavior;
         transporter = pipeBlock.transporterFactory.create(this);
         transporter.init();
@@ -95,8 +101,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         if (!hasInit) {
             init();
         }
-
-
 
         if (connections == null) {
             updateConnections();
@@ -164,6 +168,10 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     }
 
     public void updateConnections() {
+        if (world == null || world.isRemote) {
+            return;
+        }
+        
         if (connections == null) {
             connections = new Object2ObjectOpenHashMap<>(6);
         }
@@ -214,9 +222,10 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
      * @return Whether this pipe can connect to the target block
      */
     public PipeConnectionType canConnectTo(int x, int y, int z, Direction side) {
-        if(world.isRemote){
+        if(world.isRemote) {
             return renderState.pipeConnectionMatrix.getConnectionType(side);
         }
+        
         BlockEntity other = world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
 
         if (other == null) {
@@ -224,22 +233,22 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         }
         
         if(hasBlockingPluggable(side)){
-            if(other instanceof PipeBlockEntity pipe && pipe.connections.get(side.getOpposite()) != PipeConnectionType.NONE){
-                pipe.neighborUpdate();
+            if(other instanceof PipeBlockEntity otherPipe && otherPipe.connections.get(side.getOpposite()) != PipeConnectionType.NONE){
+                otherPipe.neighborUpdate();
             }
             return PipeConnectionType.NONE;
         }
 
-        if (other instanceof PipeBlockEntity pipe) {
-            if(pipe.hasBlockingPluggable(side.getOpposite())){
+        if (other instanceof PipeBlockEntity otherPipe) {
+            if(otherPipe.hasBlockingPluggable(side.getOpposite())) {
                 return PipeConnectionType.NONE;
             }
-
-//            if(pipe.canConnectTo(x, y, z, side.getOpposite()) == PipeConnectionType.NONE){
-//                return PipeConnectionType.NONE;
-//            }
             
-            return behavior.canConnectToPipe(this, pipe, pipe.behavior, side);
+            if (otherPipe.transporter == null) {
+                return PipeConnectionType.NONE;
+            }
+            
+            return behavior.canConnectToPipe(this, otherPipe, otherPipe.behavior, side);
         }
 
         PipeConnectionType transporterConnectType = behavior.getConnectionType(transporter.getType(), this, world, x, y, z, side);
@@ -490,6 +499,11 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         this.pipeBlock = (PipeBlock) BlockRegistry.INSTANCE.get(Identifier.of(nbt.getString("pipeId")));
+        
+        if (this.pipeBlock == null) {
+            throw new IllegalStateException("PipeBlockEntity does not have any pipe block");
+        }
+        
         // Connections
         if (connections == null) {
             connections = new Object2ObjectOpenHashMap<>(6);
@@ -540,6 +554,10 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     }
 
     protected void refreshRenderState() {
+        if (world == null || world.isRemote) {
+            return;
+        }
+        
         // Pipe connections:
         for (Direction direction : Direction.values()) {
             // TODO: Actually use the returned connection type here to swap the texture when neeeded, no fucking idea how to do it, sorry ralf
