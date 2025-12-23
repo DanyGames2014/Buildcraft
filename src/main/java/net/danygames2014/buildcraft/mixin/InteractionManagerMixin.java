@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(InteractionManager.class)
 public class InteractionManagerMixin {
     @Inject(method = "interactBlock", at = @At("HEAD"))
-    public void getSide(PlayerEntity world, World item, ItemStack x, int y, int z, int side, int par7, CallbackInfoReturnable<Boolean> cir){
+    public void getSide(PlayerEntity player, World world, ItemStack stack, int x, int y, int z, int side, CallbackInfoReturnable<Boolean> cir){
         PipeBlock.lastSideUsed = side;
     }
 }
