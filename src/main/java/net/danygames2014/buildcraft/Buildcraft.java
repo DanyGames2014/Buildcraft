@@ -262,7 +262,7 @@ public class Buildcraft {
                 NAMESPACE.id("wooden_fluid_pipe"),
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_fluid_pipe"),
-                null,
+                NAMESPACE.id("block/pipe/wooden_fluid_pipe_alternative"),
                 woodenPipeBehavior,
                 FluidPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -313,7 +313,7 @@ public class Buildcraft {
                 NAMESPACE.id("wooden_energy_pipe"),
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_energy_pipe"),
-                null,
+                NAMESPACE.id("block/pipe/wooden_energy_pipe_alternative"),
                 woodenPipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new
