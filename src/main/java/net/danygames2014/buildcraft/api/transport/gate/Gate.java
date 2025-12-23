@@ -8,6 +8,8 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import java.util.List;
 
 public interface Gate {
+    void setPulsing(boolean pulsing);
+
     PipeBlockEntity getPipe();
 
     List<Statement> getTriggers();

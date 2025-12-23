@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft;
 
+import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
 import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerExternal;
@@ -9,6 +10,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
 import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionPulsar;
 import net.danygames2014.buildcraft.statements.ActionSignalOutput;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
@@ -135,7 +137,8 @@ public class Buildcraft {
     public static TriggerExternal triggerInventoryBelow75;
 
     public static ActionInternal[] actionPipeWire = new ActionSignalOutput[PipeWire.values().length];
-
+    public static ActionInternal actionEnergyPulser;
+    public static ActionInternal actionSingleEnergyPulse;
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
 
@@ -146,6 +149,8 @@ public class Buildcraft {
             triggerPipeWireInactive[wire.ordinal()] = new TriggerPipeSignal(false, wire);
             actionPipeWire[wire.ordinal()] = new ActionSignalOutput(wire);
         }
+        actionEnergyPulser = new ActionEnergyPulsar();
+        actionSingleEnergyPulse = new ActionSingleEnergyPulse();
 
         for (TriggerPipeContents.PipeContents kind : TriggerPipeContents.PipeContents.values()) {
             triggerPipe[kind.ordinal()] = new TriggerPipeContents(kind);
@@ -166,6 +171,8 @@ public class Buildcraft {
         StatementManager.registerTriggerProvider(new DefaultTriggerProvider());
 
         StatementManager.registerActionProvider(new PipeActionProvider());
+
+        GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
 
 
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");

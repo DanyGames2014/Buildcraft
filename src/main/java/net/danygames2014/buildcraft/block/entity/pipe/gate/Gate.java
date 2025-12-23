@@ -571,7 +571,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
         return allActions;
     }
 
-    //@Override TODO
+    @Override
     public void setPulsing(boolean pulsing) {
         if (pulsing != isPulsing) {
             isPulsing = pulsing;
