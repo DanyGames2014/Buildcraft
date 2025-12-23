@@ -56,7 +56,11 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public ItemStack[] getDropItems(PipeBlockEntity pipe) {
-        return new ItemStack[0];
+        ItemStack gate = GateItem.makeGateItem(material, logic);
+        for (GateExpansion expansion : expansions) {
+            GateItem.addGateExpansion(gate, expansion);
+        }
+        return new ItemStack[] { gate };
     }
 
     @Override

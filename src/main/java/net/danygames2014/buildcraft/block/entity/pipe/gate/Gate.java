@@ -11,12 +11,15 @@ import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneSt
 import net.danygames2014.buildcraft.api.transport.statement.container.SidedStatementContainer;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.danygames2014.buildcraft.item.GateItem;
 import net.danygames2014.buildcraft.screen.handler.GateInterfaceScreenHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -169,9 +172,6 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
 
     // / SAVING & LOADING
     public void writeToNBT(NbtCompound data) {
-        if(material == null){
-            return;
-        }
         data.putString("material", material.name());
         data.putString("logic", logic.name());
         data.putInt("direction", direction.ordinal());
@@ -211,11 +211,11 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
         // Read
         for (int i = 0; i < material.numSlots; ++i) {
             if (data.contains("trigger[" + i + "]")) {
-                triggers[i] = StatementManager.statements.get(data.getString("trigger[" + i + "]"));
+                triggers[i] = StatementManager.statements.get(Identifier.tryParse(data.getString("trigger[" + i + "]")));
             }
 
             if (data.contains("action[" + i + "]")) {
-                actions[i] = StatementManager.statements.get(data.getString("action[" + i + "]"));
+                actions[i] = StatementManager.statements.get(Identifier.tryParse(data.getString("action[" + i + "]")));
             }
 
             // This is for legacy trigger loading
@@ -306,12 +306,12 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
         }
     }
 
-//    public ItemStack getGateItem() {
-//        return ItemGate.makeGateItem(this);
-//    }
-//
+    public ItemStack getGateItem() {
+        return GateItem.makeGateItem(this);
+    }
+
 //    public void dropGate() {
-//        pipe.dropItem(getGateItem());
+//        pipe.dropdItem(getGateItem());
 //    }
 
     public void resetGate() {

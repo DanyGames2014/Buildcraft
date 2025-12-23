@@ -61,7 +61,7 @@ public class PipeSideProperties {
             if(pluggable != null){
                 NbtCompound pluggableData = new NbtCompound();
                 pluggableData.putString("id", PluggableRegistry.getIdentifier(pluggable.getClass()).toString());
-                pluggable.writeNbt(nbt);
+                pluggable.writeNbt(pluggableData);
                 nbt.put(key, pluggableData);
             }
         }

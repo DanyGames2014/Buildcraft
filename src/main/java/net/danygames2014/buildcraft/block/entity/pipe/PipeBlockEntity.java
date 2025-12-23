@@ -528,7 +528,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             wireSet[i] = nbt.getBoolean("wireSet[" + i + "]");
         }
 
-        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
+        for (int i = 0; i < Direction.values().length; i++) {
             final String key = "Gate[" + i + "]";
             gates[i] = nbt.contains(key) ? GateFactory.makeGate(this, nbt.getCompound(key)) : null;
         }
