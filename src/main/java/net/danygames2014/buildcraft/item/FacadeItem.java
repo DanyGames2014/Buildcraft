@@ -36,14 +36,4 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem {
         stack.getStationNbt().putBoolean("hollow", hollow);
         return stack;
     }
-
-    @Override
-    public boolean useOnBlock(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side) {
-        BlockState blockState = world.getBlockState(x, y, z);
-        if(blockState.getBlock() instanceof PipeBlock pipeBlock){
-            pipeBlock.onUseItem(stack, user, world, x, y, z, side);
-            return true;
-        }
-        return false;
-    }
 }

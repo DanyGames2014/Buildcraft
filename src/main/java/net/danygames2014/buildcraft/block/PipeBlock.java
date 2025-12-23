@@ -482,24 +482,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return super.onUse(world, x, y, z, player);
     }
 
-    // TODO: might be unneeded now that lastSideUsed is a thing
-    public boolean onUseItem(ItemStack stack, PlayerEntity user, World world, int x, int y, int z, int side) {
-        if (!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)) {
-            return false;
-        }
-        if (stack == null) {
-            return false;
-        }
-//        if(stack.getItem() instanceof  PipePluggableItem){
-//            if(addOrStripPipePluggable(world, x, y, z, stack, user, Direction.byId(side), pipe)){
-//                world.notifyNeighbors(x, y, z, id);
-//                world.setBlockDirty(x, y, z);
-//                return true;
-//            }
-//        }
-        return false;
-    }
-
     private boolean stripEquipment(World world, int x, int y, int z, PlayerEntity player, PipeBlockEntity pipe, Direction side) {
         if (!world.isRemote) {
             Direction nSide = side;
