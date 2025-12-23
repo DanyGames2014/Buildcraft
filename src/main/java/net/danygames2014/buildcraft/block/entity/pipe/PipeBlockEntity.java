@@ -220,7 +220,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 //                return PipeConnectionType.NONE;
 //            }
             
-            return behavior.canConnectToPipe(this, pipe, pipe.behavior);
+            return behavior.canConnectToPipe(this, pipe, pipe.behavior, side);
         }
 
         PipeConnectionType transporterConnectType = behavior.getConnectionType(transporter.getType(), this, world, x, y, z, side);
