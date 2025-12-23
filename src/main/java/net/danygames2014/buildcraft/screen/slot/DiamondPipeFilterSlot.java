@@ -25,7 +25,7 @@ public class DiamondPipeFilterSlot extends Slot {
 
     @Override
     public boolean canInsert(ItemStack stack) {
-        inventory.setStack(index, new ItemStack(stack.itemId, 0, stack.getDamage()));
+        inventory.setStack(index, new ItemStack(stack.itemId, 1, stack.getDamage()));
         if (inventory instanceof DiamondPipeBlockEntity pipe) {
             pipe.filterChanged();
         }

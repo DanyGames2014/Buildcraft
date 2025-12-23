@@ -1,13 +1,11 @@
 package net.danygames2014.buildcraft.block.entity.pipe.behavior;
 
+import com.google.common.collect.Multiset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
-import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter.HandOffResult;
 import net.danygames2014.buildcraft.config.Config;
@@ -15,6 +13,7 @@ import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
+import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -119,6 +118,10 @@ public class PipeBehavior {
 
     public double modifyItemSpeed(TravellingItemEntity item) {
         return TravellingItemEntity.DEFAULT_SPEED;
+    }
+    
+    public Multiset<ForgeDirection> routeFluid(PipeBlockEntity blockEntity, Multiset<ForgeDirection> directions, FluidStack fluidStack) {
+        return directions;
     }
     
     public boolean isFluidInputOpen(PipeBlockEntity blockEntity, Direction side, PipeConnectionType connectionType) {

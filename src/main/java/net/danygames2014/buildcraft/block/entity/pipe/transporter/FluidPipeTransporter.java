@@ -354,8 +354,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         }
 
         if (!realDirections.isEmpty()) {
-            // TODO blockEntity.pipe.eventBus.handleEvent(PipeEventFluid.FindDest.class, new PipeEventFluid.FindDest(blockEntity.pipe, new FluidStack(fluidType, pushAmount), realDirections));
-
+            realDirections = this.blockEntity.behavior.routeFluid(this.blockEntity, realDirections, new FluidStack(fluidType, pushAmount));
 
             float min = Math.min(flowRate * realDirections.size(), totalAvailable) / (float) flowRate / realDirections.size();
 

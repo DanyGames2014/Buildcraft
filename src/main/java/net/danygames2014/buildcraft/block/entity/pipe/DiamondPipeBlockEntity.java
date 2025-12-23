@@ -1,16 +1,24 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.block.PipeBlock;
+import net.danygames2014.nyalib.fluid.Fluid;
+import net.danygames2014.nyalib.fluid.FluidBucket;
+import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory {
     public ItemStack[] filterInventory = new ItemStack[54];
-    public Int2ObjectOpenHashMap<ObjectArrayList<Direction>> routingCache = new Int2ObjectOpenHashMap<>();
+    
+    public Int2ObjectOpenHashMap<ObjectArrayList<Direction>> itemRoutingCache = new Int2ObjectOpenHashMap<>();
+    public Object2ObjectOpenHashMap<Fluid, ObjectArrayList<Direction>> fluidRoutingCache = new Object2ObjectOpenHashMap<>();
+    
     public boolean filterMeta = true;
     public boolean filterTags = false;
     
@@ -51,12 +59,38 @@ public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory
         return emptyFilter;
     }
 
+    private boolean doesFluidFilterMatch(Fluid fluid, FilterDirection direction) {
+        boolean emptyFilter = true;
+
+        for (int i = direction.startIndex; i < direction.endIndex; i++) {
+            if (filterInventory[i] != null) {
+                emptyFilter = false;
+                ItemStack filterStack = filterInventory[i];
+                
+                if (filterStack.getItem() instanceof FluidBucket fluidBucket) {
+                    if (fluidBucket.getFluid() == fluid) {
+                        return true;
+                    }
+                }
+                
+                if (filterStack.getItem() instanceof BlockItem blockItem) {
+                    if (FluidRegistry.get(blockItem.getBlock().id) == fluid) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return emptyFilter;
+    }
+
     public void filterChanged() {
         cleanRoutingCache();
     }
     
     private void cleanRoutingCache() {
-        routingCache.clear();
+        itemRoutingCache.clear();
+        fluidRoutingCache.clear();
     }
     
     private ObjectArrayList<Direction> calculateItemRoute(ItemStack stack) {
@@ -74,7 +108,23 @@ public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory
     public ObjectArrayList<Direction> getItemRoutes(ItemStack stack) {
         int routingId = (stack.itemId << 4) | (stack.getDamage() & 0b1111);
 
-        return routingCache.computeIfAbsent(routingId, routeId -> calculateItemRoute(stack));
+        return itemRoutingCache.computeIfAbsent(routingId, routeId -> calculateItemRoute(stack));
+    }
+
+    private ObjectArrayList<Direction> calculateFluidRoute(Fluid fluid) {
+        var directions = new ObjectArrayList<Direction>();
+
+        for (FilterDirection direction : FilterDirection.values()) {
+            if (doesFluidFilterMatch(fluid, direction)) {
+                directions.add(direction.side);
+            }
+        }
+
+        return directions;
+    }
+
+    public ObjectArrayList<Direction> getFluidRoutes(Fluid fluid) {
+        return fluidRoutingCache.computeIfAbsent(fluid, fl -> calculateFluidRoute(fluid));
     }
     
     // Inventory
