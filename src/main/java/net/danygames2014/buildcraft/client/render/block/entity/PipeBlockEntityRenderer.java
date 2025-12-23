@@ -1,6 +1,9 @@
 package net.danygames2014.buildcraft.client.render.block.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
+import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
@@ -9,15 +12,19 @@ import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.pluggable.GatePluggable;
+import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.TextureUtil;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -70,6 +77,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         }
         if(blockEntity instanceof PipeBlockEntity pipe){
             renderGatesWires(pipe, x, y, z);
+            renderPluggables(pipe, x, y, z);
 
             if(pipe.transporter instanceof FluidPipeTransporter){
                 renderFluids(pipe, x, y, z);
@@ -139,6 +147,138 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
             GL11.glEndList();
         }
+    }
+
+    private void renderPluggables(PipeBlockEntity pipe, double x, double y, double z) {
+        StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+        for (Direction direction : Direction.values()) {
+            PipePluggable pluggable = pipe.getPipePluggable(direction);
+            if (pluggable != null && pluggable.getDynamicRenderer() != null) {
+                pluggable.getDynamicRenderer().renderPluggable(pipe, direction, pluggable, x, y, z);
+            }
+        }
+    }
+
+    public static void renderGate(double x, double y, double z, GatePluggable gate, Direction direction) {
+        GL11.glPushMatrix();
+        GL11.glColor4f(1, 1, 1, 1);
+        GL11.glTranslatef((float) x, (float) y, (float) z);
+
+        Atlas.Sprite lightIcon;
+        if (gate.isLit) {
+            lightIcon = gate.getLogic().getLitTexture();
+        } else {
+            lightIcon = gate.getLogic().getDarkTexture();
+        }
+
+        float translateCenter = 0;
+
+        renderGate(lightIcon, 0, 0.1F, 0, 0, direction, gate.isLit, 1);
+
+        float pulseStage = gate.getPulseStage() * 2F;
+
+        if (gate.isPulsing || pulseStage != 0) {
+            Atlas.Sprite gateIcon = gate.getLogic().getGateTexture();
+
+            // Render pulsing gate
+            float amplitude = 0.10F;
+            float start = 0.01F;
+
+            if (pulseStage < 1) {
+                translateCenter = (pulseStage * amplitude) + start;
+            } else {
+                translateCenter = amplitude - ((pulseStage - 1F) * amplitude) + start;
+            }
+
+            renderGate(gateIcon, 0, 0.13F, translateCenter, translateCenter, direction, false, 2);
+            renderGate(lightIcon, 0, 0.13F, translateCenter, translateCenter, direction, gate.isLit, 0);
+        }
+
+        Atlas.Sprite materialIcon = gate.getMaterial().getBlockTexture();
+        if (materialIcon != null) {
+            renderGate(materialIcon, 1, 0.13F, translateCenter, translateCenter, direction, false, 1);
+        }
+
+        for (GateExpansion expansion : gate.getExpansions()) {
+            renderGate(expansion.getOverlayBlockSprite(), 2, 0.13F, translateCenter, translateCenter, direction, false, 0);
+        }
+
+        GL11.glPopMatrix();
+    }
+
+    private static void renderGate(Atlas.Sprite icon, int layer, float trim, float translateCenter, float extraDepth, Direction direction, boolean isLit, int sideRenderingMode) {
+        EntityBlockRenderer.RenderInfo renderBox = new EntityBlockRenderer.RenderInfo();
+        renderBox.texture = icon.index;
+
+        float[][] zeroState = new float[3][2];
+        float min = PipeWorldRenderer.PIPE_MIN_POS + trim / 2F;
+        float max = PipeWorldRenderer.PIPE_MAX_POS - trim / 2F;
+
+        // X START - END
+        zeroState[0][0] = min;
+        zeroState[0][1] = max;
+        // Y START - END
+        zeroState[1][0] = PipeWorldRenderer.PIPE_MIN_POS - 0.10F - 0.001F * layer;
+        zeroState[1][1] = PipeWorldRenderer.PIPE_MIN_POS + 0.001F + 0.01F * layer + extraDepth;
+        // Z START - END
+        zeroState[2][0] = min;
+        zeroState[2][1] = max;
+
+
+        if (translateCenter != 0) {
+            GL11.glPushMatrix();
+            float xt = direction.getOffsetX() * translateCenter, yt = direction.getOffsetY() * translateCenter, zt = direction.getOffsetZ() * translateCenter;
+
+            GL11.glTranslatef(xt, yt, zt);
+        }
+
+        float[][] rotated = MatrixTransformation.deepClone(zeroState);
+        MatrixTransformation.transform(rotated, direction);
+
+        switch (sideRenderingMode) {
+            case 0:
+                renderBox.setRenderSingleSide(direction.ordinal());
+                break;
+            case 1:
+                renderBox.setRenderSingleSide(direction.ordinal());
+                renderBox.renderSide[direction.ordinal() ^ 1] = true;
+                break;
+            case 2:
+                break;
+        }
+
+        renderBox.setBounds(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);
+        renderLitBox(renderBox, isLit);
+        if (translateCenter != 0) {
+            GL11.glPopMatrix();
+        }
+    }
+
+    public static void renderGateStatic(BlockRenderManager blockRenderManager, Direction direction, GatePluggable gate, int x, int y, int z) {
+        RenderBlock renderBlock = Buildcraft.renderBlock;
+        renderBlock.setTextureIdentifier(gate.logic.getGateTexture().getId());
+
+        float trim = 0.1F;
+        float[][] zeroState = new float[3][2];
+        float min = PipeWorldRenderer.PIPE_MIN_POS + trim / 2F;
+        float max = PipeWorldRenderer.PIPE_MAX_POS - trim / 2F;
+
+        // X START - END
+        zeroState[0][0] = min;
+        zeroState[0][1] = max;
+        // Y START - END
+        zeroState[1][0] = PipeWorldRenderer.PIPE_MIN_POS - 0.10F;
+        zeroState[1][1] = PipeWorldRenderer.PIPE_MIN_POS + 0.001F;
+        // Z START - END
+        zeroState[2][0] = min;
+        zeroState[2][1] = max;
+
+        float[][] rotated = MatrixTransformation.deepClone(zeroState);
+        MatrixTransformation.transform(rotated, direction);
+
+        renderBlock.setRenderAllSides();
+        renderBlock.setBoundingBox(rotated[0][0], rotated[1][0], rotated[2][0], rotated[0][1], rotated[1][1], rotated[2][1]);
+        blockRenderManager.renderBlock(renderBlock, x, y, z);
     }
 
     private DisplayFluidList getDisplayFluidList(Fluid fluid, int skylight, int blocklight, int flags, World world){

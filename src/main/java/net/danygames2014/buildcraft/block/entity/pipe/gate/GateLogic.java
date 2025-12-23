@@ -1,7 +1,10 @@
 package net.danygames2014.buildcraft.block.entity.pipe.gate;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 
 import java.util.Locale;
 
@@ -10,46 +13,45 @@ public enum GateLogic {
     public static final GateLogic[] VALUES = values();
 
     @Environment(EnvType.CLIENT)
-    private int litTexture;
+    private Atlas.Sprite litTexture;
 
     @Environment(EnvType.CLIENT)
-    private int darkTexture;
+    private Atlas.Sprite darkTexture;
 
     @Environment(EnvType.CLIENT)
-    private int itemTexture;
+    private Atlas.Sprite itemTexture;
 
     @Environment(EnvType.CLIENT)
-    private int gateTexture;
+    private Atlas.Sprite gateTexture;
 
     @Environment(EnvType.CLIENT)
-    public int getLitTexture() {
+    public Atlas.Sprite getLitTexture() {
         return litTexture;
     }
 
     @Environment(EnvType.CLIENT)
-    public int getDarkTexture() {
+    public Atlas.Sprite getDarkTexture() {
         return darkTexture;
     }
 
     @Environment(EnvType.CLIENT)
-    public int getItemTexture() {
+    public Atlas.Sprite getItemTexture() {
         return itemTexture;
     }
 
     @Environment(EnvType.CLIENT)
-    public int getGateTexture() {
+    public Atlas.Sprite getGateTexture() {
         return gateTexture;
     }
 
     // TODO: actually register textures
     @Environment(EnvType.CLIENT)
-    public void registerBlockTextures(){
+    public void registerTextures(){
+        litTexture = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/gate/gate_" + getTag() + "_lit"));
+        darkTexture = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/gate/gate_" + getTag() + "_dark"));
+        gateTexture = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/gate/gate_" + getTag()));
 
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void registerItemIcons(){
-
+        itemTexture = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/gate/gate_logic_" + getTag()));
     }
 
     public String getTag() {

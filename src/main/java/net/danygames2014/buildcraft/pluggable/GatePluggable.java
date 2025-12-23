@@ -8,8 +8,10 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateDefinition;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
+import net.danygames2014.buildcraft.client.render.PipePluggableDynamicRenderer;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
+import net.danygames2014.buildcraft.client.render.pluggable.GatePluggableRenderer;
 import net.danygames2014.buildcraft.item.GateItem;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.item.ItemStack;
@@ -79,7 +81,12 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public PipePluggableRenderer getRenderer() {
-        return null;
+        return GatePluggableRenderer.INSTANCE;
+    }
+
+    @Override
+    public PipePluggableDynamicRenderer getDynamicRenderer() {
+        return GatePluggableRenderer.INSTANCE;
     }
 
     @Override
@@ -114,6 +121,8 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public void update(PipeBlockEntity pipe, Direction direction) {
+        isLit = realGate != null ? realGate.isGateActive() : false;
+        isPulsing = realGate != null ? realGate.isGatePulsing() : false;
         if (isPulsing || pulseStage > 0.11F) {
             // if it is moving, or is still in a moved state, then complete
             // the current movement

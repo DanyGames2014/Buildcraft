@@ -89,7 +89,7 @@ public class GateExpansionPulsar extends GateExpansionBuildcraft implements Gate
                 return;
             }
 
-            PowerHandler.PowerReceiver powerReceptor = ((IPowerReceptor) pipe).getPowerReceiver(null);
+            PowerHandler.PowerReceiver powerReceptor = pipe instanceof IPowerReceptor ? ((IPowerReceptor) pipe).getPowerReceiver(null) : null;
 
             if (powerReceptor != null && (!singlePulse || !hasPulsed)) {
                 gate.setPulsing(true);

@@ -1,7 +1,11 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
+import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.render.model.ItemModelPredicateProviderRegistryEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
@@ -95,6 +99,18 @@ public class TextureListener {
         stripesLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/stripes_red"));
 
         StatementManager.registerTextures();
+
+        for(GateMaterial material : GateMaterial.VALUES) {
+            material.registerTextures();
+        }
+
+        for(GateLogic logic : GateLogic.VALUES) {
+            logic.registerTextures();
+        }
+
+        for(GateExpansion expansion : GateExpansions.getExpansions()) {
+            expansion.registerTextures();
+        }
     }
 
     @EventListener

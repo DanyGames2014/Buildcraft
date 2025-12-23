@@ -160,6 +160,13 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             }
         }
 
+        for (Direction direction : Direction.values()) {
+            PipePluggable p = getPipePluggable(direction);
+            if (p != null) {
+                p.update(this, direction);
+            }
+        }
+
         if(world.isRemote) {
             if(resyncGateExpansions) {
                 syncGateExpansions();

@@ -1,7 +1,10 @@
 package net.danygames2014.buildcraft.block.entity.pipe.gate;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 
 import java.util.Locale;
 
@@ -19,9 +22,9 @@ public enum GateMaterial {
     public final int numActionParameters;
 
     @Environment(EnvType.CLIENT)
-    private int blockTexture;
+    private Atlas.Sprite blockTexture;
     @Environment(EnvType.CLIENT)
-    private int itemTexture;
+    private Atlas.Sprite itemTexture;
 
     GateMaterial(String backgroundTexture, int guiHeight, int numSlots, int numTriggerParameters, int numActionParameters){
         this.backgroundTexture = backgroundTexture;
@@ -32,12 +35,12 @@ public enum GateMaterial {
     }
 
     @Environment(EnvType.CLIENT)
-    public int getBlockTexture(){
+    public Atlas.Sprite getBlockTexture(){
         return blockTexture;
     }
 
     @Environment(EnvType.CLIENT)
-    public int getItemTexture(){
+    public Atlas.Sprite getItemTexture(){
         return itemTexture;
     }
 
@@ -46,17 +49,9 @@ public enum GateMaterial {
     }
 
     @Environment(EnvType.CLIENT)
-    public void setBlockTexture(int texture){
-        if(this != REDSTONE){
-            blockTexture = texture;
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void setItemTexture(int texture){
-        if(this != REDSTONE){
-            itemTexture = texture;
-        }
+    public void registerTextures(){
+        blockTexture = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/gate/gate_material_" + getTag()));
+        itemTexture = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/gate/gate_material_" + getTag()));
     }
 
     public static GateMaterial fromOrdinal(int ordinal) {

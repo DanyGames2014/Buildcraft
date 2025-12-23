@@ -11,9 +11,7 @@ public interface GateExpansion {
 
     GateExpansionController makeController(PipeBlockEntity pipe);
 
-    void registerBlockTexture();
-
-    void registerItemTexture();
+    void registerTextures();
 
     Atlas.Sprite getOverlayBlockSprite();
 
