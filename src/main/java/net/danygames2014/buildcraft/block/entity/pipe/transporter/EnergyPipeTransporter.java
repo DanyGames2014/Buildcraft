@@ -27,8 +27,8 @@ public class EnergyPipeTransporter extends PipeTransporter {
         powerCapacities.put(Buildcraft.ironEnergyPipe, 128);
         powerCapacities.put(Buildcraft.sandstoneEnergyPipe, 16);
         powerCapacities.put(Buildcraft.goldenEnergyPipe, 256);
+        powerCapacities.put(Buildcraft.diamondEnergyPipe, 1024);
 //        powerCapacities.put(PipePowerQuartz.class, 64);
-//        powerCapacities.put(PipePowerDiamond.class, 1024);
     }
     
     private boolean needsInit = true;

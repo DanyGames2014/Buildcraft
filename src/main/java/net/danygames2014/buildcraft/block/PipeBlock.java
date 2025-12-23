@@ -62,6 +62,9 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         super(identifier, material);
         this.blockEntityFactory = blockEntityFactory;
         this.behavior = behavior;
+        if (behavior == null) {
+            throw new NullPointerException("PipeBehavior on PipeBlock with Identifier " + identifier + " is null!");
+        }
         this.transporterFactory = transporter;
         this.texture = texture;
         this.alternativeTexture = alternativeTexture;

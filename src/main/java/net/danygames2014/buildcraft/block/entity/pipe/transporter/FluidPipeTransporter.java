@@ -785,8 +785,8 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         fluidCapacities.put(Buildcraft.sandstoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
         fluidCapacities.put(Buildcraft.goldenFluidPipe, 8 * pipeFluidsBaseFlowRate);
         fluidCapacities.put(Buildcraft.ironFluidPipe, 4 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.diamondFluidPipe, 8 * pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsClay.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsDiamond.class, 8 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsEmerald.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsQuartz.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsVoid.class, 1 * BuildCraftTransport.pipeFluidsBaseFlowRate);

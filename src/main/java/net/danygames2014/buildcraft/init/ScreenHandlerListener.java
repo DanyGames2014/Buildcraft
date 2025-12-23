@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.block.entity.*;
+import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.screen.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -11,8 +12,6 @@ import net.modificationstation.stationapi.api.client.gui.screen.GuiHandler;
 import net.modificationstation.stationapi.api.event.registry.GuiHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
-
-import java.nio.channels.Pipe;
 
 public class ScreenHandlerListener {
 
@@ -27,6 +26,11 @@ public class ScreenHandlerListener {
         event.register(NAMESPACE.id("autocrafting_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAutocraftingTableScreen, AutocraftingTableBlockEntity::new));
         event.register(NAMESPACE.id("assembly_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAssemblyTableScreen, AssemblyTableBlockEntity::new));
         event.register(NAMESPACE.id("gate"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openGateScreen, PipeBlockEntity::new));
+        event.register(NAMESPACE.id("diamond_pipe"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openDiamondPipeScreen, DiamondPipeBlockEntity::new));
+    }
+
+    public Screen openDiamondPipeScreen(PlayerEntity player, Inventory inventory) {
+        return new DiamondPipeScreen(player, (DiamondPipeBlockEntity) inventory);
     }
 
     public Screen openChuteScreen(PlayerEntity playerEntity, Inventory inventory) {

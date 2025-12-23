@@ -49,6 +49,7 @@ tile.buildcraft.stone_item_pipe.name=Stone Transport Pipe
 tile.buildcraft.iron_item_pipe.name=Iron Transport Pipe
 tile.buildcraft.sandstone_item_pipe.name=Sandstone Transport Pipe
 tile.buildcraft.golden_item_pipe.name=Golden Transport Pipe
+tile.buildcraft.diamond_item_pipe.name=Diamond Transport Pipe
 tile.buildcraft.clay_item_pipe.name=Clay Transport Pipe
 
 tile.buildcraft.wooden_fluid_pipe.name=Wooden Fluid Pipe
@@ -57,6 +58,7 @@ tile.buildcraft.stone_fluid_pipe.name=Stone Fluid Pipe
 tile.buildcraft.iron_fluid_pipe.name=Iron Fluid Pipe
 tile.buildcraft.sandstone_fluid_pipe.name=Sandstone Fluid Pipe
 tile.buildcraft.golden_fluid_pipe.name=Golden Fluid Pipe
+tile.buildcraft.diamond_fluid_pipe.name=Diamond Fluid Pipe
 
 tile.buildcraft.wooden_energy_pipe.name=Wooden Kinesis Pipe
 tile.buildcraft.cobblestone_energy_pipe.name=Cobblestone Kinesis Pipe
@@ -64,6 +66,7 @@ tile.buildcraft.stone_energy_pipe.name=Stone Kinesis Pipe
 tile.buildcraft.iron_energy_pipe.name=Iron Kinesis Pipe
 tile.buildcraft.sandstone_energy_pipe.name=Sandstone Kinesis Pipe
 tile.buildcraft.golden_energy_pipe.name=Golden Kinesis Pipe
+tile.buildcraft.diamond_energy_pipe.name=Diamond Kinesis Pipe
 
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel
