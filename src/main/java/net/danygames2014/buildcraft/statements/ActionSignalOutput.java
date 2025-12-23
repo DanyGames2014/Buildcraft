@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.block.entity.pipe.statement;
+package net.danygames2014.buildcraft.statements;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
@@ -7,7 +7,9 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
 import net.danygames2014.buildcraft.block.entity.pipe.parameter.ActionParameterSignal;
+import net.danygames2014.buildcraft.block.entity.pipe.statement.BCStatement;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 
 import java.util.Locale;
 
@@ -50,5 +52,10 @@ public class ActionSignalOutput extends BCStatement implements ActionInternal {
     @Override
     public StatementParameter createParameter(int index) {
         return new ActionParameterSignal();
+    }
+
+    @Override
+    public void registerTextures() {
+        icon = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/trigger_pipesignal_" + color.name().toLowerCase(Locale.ENGLISH) + "_active"));
     }
 }

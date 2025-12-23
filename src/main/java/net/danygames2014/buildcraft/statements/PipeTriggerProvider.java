@@ -32,25 +32,24 @@ public class PipeTriggerProvider implements TriggerProvider {
             ((Gate) container).addTriggers(result);
         }
 
-        // TODO: add these
-//        switch (((TileGenericPipe) blockEntity).getPipeType()) {
-//            case ITEM:
-//                result.add(TriggerPipeContents.PipeContents.empty.trigger);
-//                result.add(TriggerPipeContents.PipeContents.containsItems.trigger);
-//                break;
-//            case FLUID:
-//                result.add(TriggerPipeContents.PipeContents.empty.trigger);
-//                result.add(TriggerPipeContents.PipeContents.containsFluids.trigger);
-//                break;
-//            case POWER:
-//                result.add(TriggerPipeContents.PipeContents.empty.trigger);
-//                result.add(TriggerPipeContents.PipeContents.containsEnergy.trigger);
-//                result.add(TriggerPipeContents.PipeContents.tooMuchEnergy.trigger);
-//                result.add(TriggerPipeContents.PipeContents.requestsEnergy.trigger);
-//                break;
-//            case STRUCTURE:
-//                break;
-//        }
+        switch (pipe.transporter.getType()) {
+            case ITEM:
+                result.add(TriggerPipeContents.PipeContents.empty.trigger);
+                result.add(TriggerPipeContents.PipeContents.containsItems.trigger);
+                break;
+            case FLUID:
+                result.add(TriggerPipeContents.PipeContents.empty.trigger);
+                result.add(TriggerPipeContents.PipeContents.containsFluids.trigger);
+                break;
+            case ENERGY:
+                result.add(TriggerPipeContents.PipeContents.empty.trigger);
+                result.add(TriggerPipeContents.PipeContents.containsEnergy.trigger);
+                result.add(TriggerPipeContents.PipeContents.tooMuchEnergy.trigger);
+                result.add(TriggerPipeContents.PipeContents.requestsEnergy.trigger);
+                break;
+            case STRUCTURE:
+                break;
+        }
         return result;
     }
 

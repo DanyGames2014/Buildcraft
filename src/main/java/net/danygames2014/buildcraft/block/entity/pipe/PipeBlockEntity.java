@@ -142,6 +142,15 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         }
 
         transporter.tick();
+
+        if(!world.isRemote){
+            for(Gate gate : gates){
+                if(gate != null) {
+                    gate.resolveActions();
+                    gate.tick();
+                }
+            }
+        }
     }
 
     public void updateConnections() {
@@ -370,12 +379,12 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         // STEP 1: compute internal signal strength
 
         boolean readNearbySignal = true;
-//        for (Gate gate : gates) {
-//            if (gate != null && gate.broadcastSignal.get(wire.ordinal())) {
-//                receiveSignal(255, wire);
-//                readNearbySignal = false;
-//            }
-//        }
+        for (Gate gate : gates) {
+            if (gate != null && gate.broadcastSignal.get(wire.ordinal())) {
+                receiveSignal(255, wire);
+                readNearbySignal = false;
+            }
+        }
 
         if (readNearbySignal) {
             readNearbyPipesSignal(wire);

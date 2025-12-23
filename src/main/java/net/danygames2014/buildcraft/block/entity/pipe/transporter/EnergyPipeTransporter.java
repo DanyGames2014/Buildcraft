@@ -54,6 +54,15 @@ public class EnergyPipeTransporter extends PipeTransporter {
         maxPower = powerCapacities.getInt(blockEntity.pipeBlock);
     }
 
+    public boolean isQueryingPower() {
+        for (int d : powerQuery) {
+            if (d > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public PipeType getType() {
         return PipeType.ENERGY;

@@ -55,7 +55,7 @@ public class StatementManager {
             }
         }
 
-        result = new LinkedList<TriggerExternal>();
+        result = new LinkedList<>();
 
         for (TriggerProvider provider : triggerProviders) {
             Collection<TriggerExternal> toAdd = provider.getExternalTriggers(side, blockEntity);
@@ -73,14 +73,14 @@ public class StatementManager {
     }
 
     public static List<ActionExternal> getExternalActions(Direction side, BlockEntity blockEntity) {
-        List<ActionExternal> result = new LinkedList<ActionExternal>();
+        List<ActionExternal> result = new LinkedList<>();
 
         if (blockEntity instanceof OverrideDefaultStatements) {
             result = ((OverrideDefaultStatements) blockEntity).overrideActions();
             if (result != null) {
                 return result;
             } else {
-                result = new LinkedList<ActionExternal>();
+                result = new LinkedList<>();
             }
         }
 
@@ -100,7 +100,7 @@ public class StatementManager {
     }
 
     public static List<TriggerInternal> getInternalTriggers(StatementContainer container) {
-        List<TriggerInternal> result = new LinkedList<TriggerInternal>();
+        List<TriggerInternal> result = new LinkedList<>();
 
         for (TriggerProvider provider : triggerProviders) {
             Collection<TriggerInternal> toAdd = provider.getInternalTriggers(container);
@@ -118,7 +118,7 @@ public class StatementManager {
     }
 
     public static List<ActionInternal> getInternalActions(StatementContainer container) {
-        List<ActionInternal> result = new LinkedList<ActionInternal>();
+        List<ActionInternal> result = new LinkedList<>();
 
         for (ActionProvider provider : actionProviders) {
             Collection<ActionInternal> toAdd = provider.getInternalActions(container);

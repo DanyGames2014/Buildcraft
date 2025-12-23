@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.render.model.ItemModelPredicateProviderRegistryEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
@@ -92,6 +93,8 @@ public class TextureListener {
         redLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/block_red"));
         blueLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/block_red"));
         stripesLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/stripes_red"));
+
+        StatementManager.registerTextures();
     }
 
     @EventListener

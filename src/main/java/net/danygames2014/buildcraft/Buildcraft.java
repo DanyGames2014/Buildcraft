@@ -2,20 +2,20 @@ package net.danygames2014.buildcraft;
 
 import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
 import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
+import net.danygames2014.buildcraft.api.transport.statement.TriggerExternal;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
 import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
-import net.danygames2014.buildcraft.block.entity.pipe.statement.ActionSignalOutput;
+import net.danygames2014.buildcraft.statements.ActionSignalOutput;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
 import net.danygames2014.buildcraft.item.*;
-import net.danygames2014.buildcraft.statements.PipeTriggerProvider;
-import net.danygames2014.buildcraft.statements.TriggerPipeSignal;
+import net.danygames2014.buildcraft.statements.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
@@ -119,8 +119,21 @@ public class Buildcraft {
     //TODO: figure out how to avoid registering the renderblock
     public static RenderBlock renderBlock;
 
+
+    public static TriggerInternal triggerRedstoneActive;
+    public static TriggerInternal triggerRedstoneInactive;
     public static TriggerInternal[] triggerPipeWireActive = new TriggerInternal[PipeWire.values().length];
     public static TriggerInternal[] triggerPipeWireInactive = new TriggerInternal[PipeWire.values().length];
+    public static TriggerInternal[] triggerPipe = new TriggerInternal[TriggerPipeContents.PipeContents.values().length];
+
+    public static TriggerExternal triggerEmptyInventory;
+    public static TriggerExternal triggerContainsInventory;
+    public static TriggerExternal triggerSpaceInventory;
+    public static TriggerExternal triggerFullInventory;
+    public static TriggerExternal triggerInventoryBelow25;
+    public static TriggerExternal triggerInventoryBelow50;
+    public static TriggerExternal triggerInventoryBelow75;
+
     public static ActionInternal[] actionPipeWire = new ActionSignalOutput[PipeWire.values().length];
 
     @EventListener
@@ -134,7 +147,25 @@ public class Buildcraft {
             actionPipeWire[wire.ordinal()] = new ActionSignalOutput(wire);
         }
 
+        for (TriggerPipeContents.PipeContents kind : TriggerPipeContents.PipeContents.values()) {
+            triggerPipe[kind.ordinal()] = new TriggerPipeContents(kind);
+        }
+
+        triggerRedstoneActive = new TriggerRedstoneInput(true);
+        triggerRedstoneInactive = new TriggerRedstoneInput(false);
+
+        triggerEmptyInventory = new TriggerInventory(TriggerInventory.State.Empty);
+        triggerContainsInventory = new TriggerInventory(TriggerInventory.State.Contains);
+        triggerSpaceInventory = new TriggerInventory(TriggerInventory.State.Space);
+        triggerFullInventory = new TriggerInventory(TriggerInventory.State.Full);
+        triggerInventoryBelow25 = new TriggerInventoryLevel(TriggerInventoryLevel.TriggerType.BELOW25);
+        triggerInventoryBelow50 = new TriggerInventoryLevel(TriggerInventoryLevel.TriggerType.BELOW50);
+        triggerInventoryBelow75 = new TriggerInventoryLevel(TriggerInventoryLevel.TriggerType.BELOW75);
+
         StatementManager.registerTriggerProvider(new PipeTriggerProvider());
+        StatementManager.registerTriggerProvider(new DefaultTriggerProvider());
+
+        StatementManager.registerActionProvider(new PipeActionProvider());
 
 
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");

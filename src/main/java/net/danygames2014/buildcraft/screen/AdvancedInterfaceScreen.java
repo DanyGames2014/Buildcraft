@@ -3,11 +3,13 @@ package net.danygames2014.buildcraft.screen;
 import net.danygames2014.buildcraft.screen.slot.AdvancedSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.platform.Lighting;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import java.util.ArrayList;
 
@@ -47,6 +49,8 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
     @Override
     protected void drawBackground(float tickDelta) {
         //RenderHelper.enableGUIStandardItemLighting();
+        int x = ((width - backgroundWidth) / 2);
+        int y = ((height - backgroundHeight) / 2);
         GL11.glPushMatrix();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
@@ -58,7 +62,7 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
         if (slots != null) {
             for (AdvancedSlot slot : slots) {
                 if (slot != null) {
-                    slot.drawSprite(0, 0);
+                    slot.drawSprite(x, y);
                 }
             }
         }
@@ -100,10 +104,12 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
         Minecraft mc = Minecraft.INSTANCE;
 
         if (item != null) {
-            GL11.glEnable(GL11.GL_LIGHTING);
+//            Lighting.turnOn();
+//            GL11.glDisable(GL11.GL_LIGHTING);
             AdvancedInterfaceScreen.getItemRenderer().renderGuiItem(mc.textRenderer, mc.textureManager, item, x, y);
             AdvancedInterfaceScreen.getItemRenderer().renderGuiItemDecoration(mc.textRenderer, mc.textureManager, item, x, y);
-            GL11.glDisable(GL11.GL_LIGHTING);
+//            GL11.glEnable(GL11.GL_LIGHTING);
+//            Lighting.turnOff();
         }
     }
 
@@ -133,13 +139,17 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
         GL11.glEnable(32826 /* GL_RESCALE_NORMAL_EXT */);
         int i1 = 240;
         int k1 = 240;
+
+        int x = ((width - backgroundWidth) / 2);
+        int y = ((height - backgroundHeight) / 2);
+
         //OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, i1 / 1.0F, k1 / 1.0F);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         if (slots != null) {
             for (AdvancedSlot slot : slots) {
                 if (slot != null) {
-                    slot.drawSprite(0, 0);
+                    slot.drawSprite(x, y);
                 }
             }
         }
@@ -149,6 +159,5 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
 
     // TODO: Use this for all children of this class
     protected void slotClicked(AdvancedSlot slot, int mouseButton) {
-
     }
 }

@@ -200,8 +200,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 if (screenHandler.actionsState[((TriggerSlot) slot).slot] != ActionActiveState.Deactivated) {
                     minecraft.textureManager.bindTexture(minecraft.textureManager.getTextureId(texture));
 
-                    drawTexture(x + slot.x + 17 + 18 * gate.material.numTriggerParameters, y
-                                                                                                                   + slot.y + 6, 176, 18, halfWidth ? 9 : 18, 4);
+                    drawTexture(x + slot.x + 17 + 18 * gate.material.numTriggerParameters, y + slot.y + 6, 176, 18, halfWidth ? 9 : 18, 4);
                 }
             } else if (slot instanceof StatementParameterSlot) {
                 StatementParameterSlot paramSlot = (StatementParameterSlot) slot;
@@ -309,6 +308,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 screenHandler.setAction(actionSlot.slot, null, true);
             } else {
                 screenHandler.setAction(actionSlot.slot, changed.getIdentifier(), true);
+                System.out.println(changed.getIdentifier());
             }
 
             for (StatementParameterSlot p : actionSlot.parameters) {
@@ -347,7 +347,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
         }
         super.mouseClicked(mouseX, mouseY, button);
 
-        AdvancedSlot slot = getSlotAtLocation(mouseX, mouseX);
+        AdvancedSlot slot = getSlotAtLocation(mouseX, mouseY);
 
         if (slot != null) {
             doSlotClick(slot, button);
@@ -367,5 +367,10 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
 
     public boolean isShiftKeyDown(){
         return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+    }
+
+    @Override
+    protected void slotClicked(AdvancedSlot slot, int mouseButton) {
+        screenHandler.sendContentUpdates();
     }
 }

@@ -14,7 +14,7 @@ import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class TriggerParameterSignal implements StatementParameter {
-    public static Atlas.Sprite[] sprites;
+    public static Atlas.Sprite[] sprites = new Atlas.Sprite[8];
 
     public boolean active = false;
     public PipeWire color = null;

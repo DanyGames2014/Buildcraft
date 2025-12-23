@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.BCStatement;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 
 import java.util.Locale;
 
@@ -68,5 +69,10 @@ public class TriggerPipeSignal extends BCStatement implements TriggerInternal {
     @Override
     public StatementParameter createParameter(int index) {
         return new TriggerParameterSignal();
+    }
+
+    @Override
+    public void registerTextures() {
+        icon = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/trigger_pipesignal_" + color.name().toLowerCase(Locale.ENGLISH) + "_" + (active ? "active" : "inactive")));
     }
 }

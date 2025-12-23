@@ -184,22 +184,22 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     }
 // TODO: decide if this will need to be used
 
-//    @Override
-//    public void detectAndSendChanges() {
-//        super.detectAndSendChanges();
-//
-//        int state = calculateTriggerState();
-//
-//        if (state != lastTriggerState) {
+    @Override
+    public void sendContentUpdates() {
+        super.sendContentUpdates();
+
+        int state = calculateTriggerState();
+
+        if (state != lastTriggerState) {
 //            for (Object crafter : this.crafters) {
 //                ICrafting viewingPlayer = (ICrafting) crafter;
 //
 //                viewingPlayer.sendProgressBarUpdate(this, 0 /* State update */, state);
 //            }
-//
-//            lastTriggerState = state;
-//        }
-//    }
+
+            lastTriggerState = state;
+        }
+    }
 
     /**
      * TRIGGERS *
@@ -418,6 +418,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     }
 
     public void setTrigger(int trigger, Identifier tag, boolean notifyServer) {
+        System.out.println(tag);
         if (gate == null) {
             return;
         }
