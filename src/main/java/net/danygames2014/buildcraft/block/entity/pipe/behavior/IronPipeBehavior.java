@@ -59,6 +59,11 @@ public class IronPipeBehavior extends PipeBehavior {
     }
 
     @Override
+    public boolean isFluidOutputOpen(PipeBlockEntity blockEntity, Direction side, PipeConnectionType connectionType) {
+        return connectionType == PipeConnectionType.NORMAL;
+    }
+
+    @Override
     public boolean wrenchRightClick(PipeBlockEntity blockEntity, ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = blockEntity.connections;
         

@@ -4,7 +4,10 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
-import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
+import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter.HandOffResult;
 import net.danygames2014.buildcraft.config.Config;
@@ -116,6 +119,14 @@ public class PipeBehavior {
 
     public double modifyItemSpeed(TravellingItemEntity item) {
         return TravellingItemEntity.DEFAULT_SPEED;
+    }
+    
+    public boolean isFluidInputOpen(PipeBlockEntity blockEntity, Direction side, PipeConnectionType connectionType) {
+        return true;
+    }
+    
+    public boolean isFluidOutputOpen(PipeBlockEntity blockEntity, Direction side, PipeConnectionType connectionType) {
+        return true;
     }
 
     /**

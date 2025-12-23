@@ -616,13 +616,12 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         }
     }
 
-    // TODO: Hook up properly
-    public boolean inputOpen(Direction direction) {
-        return true;
+    public boolean inputOpen(Direction side) {
+        return blockEntity.behavior.isFluidInputOpen(blockEntity, side, blockEntity.connections.get(side));
     }
 
-    public boolean outputOpen(Direction direction) {
-        return true;
+    public boolean outputOpen(Direction side) {
+        return blockEntity.behavior.isFluidOutputOpen(blockEntity, side, blockEntity.connections.get(side));
     }
 
     public boolean isPipeConnected(Direction direction) {
@@ -785,10 +784,10 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         fluidCapacities.put(Buildcraft.stoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
         fluidCapacities.put(Buildcraft.sandstoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
         fluidCapacities.put(Buildcraft.goldenFluidPipe, 8 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.ironFluidPipe, 4 * pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsClay.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsDiamond.class, 8 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsEmerald.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsIron.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsQuartz.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
 //        fluidCapacities.put(PipeFluidsVoid.class, 1 * BuildCraftTransport.pipeFluidsBaseFlowRate);
     }
