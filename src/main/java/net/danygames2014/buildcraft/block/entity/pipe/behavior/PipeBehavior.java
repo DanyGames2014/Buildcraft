@@ -121,4 +121,8 @@ public class PipeBehavior {
     public void doWork(PoweredPipeBlockEntity blockEntity, PowerHandler powerHandler) {
 
     }
+
+    public boolean wrenchRightClick(PipeBlockEntity blockEntity, ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+        return false;            
+    }
 }
