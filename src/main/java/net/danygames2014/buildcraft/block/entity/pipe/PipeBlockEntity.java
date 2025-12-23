@@ -510,7 +510,8 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         // Pipe connections:
         for (Direction direction : Direction.values()) {
             // TODO: Actually use the returned connection type here to swap the texture when neeeded, no fucking idea how to do it, sorry ralf
-            renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction));
+            renderState.pipeConnectionMatrix.setConnected(direction, connections.get(direction));
+            //renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction));
         }
 
         for (int i = 0; i < 7; i++) {
