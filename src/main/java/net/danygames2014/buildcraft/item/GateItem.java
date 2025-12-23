@@ -27,9 +27,9 @@ import java.util.List;
 import java.util.Set;
 
 public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem {
-    protected static final String NBT_TAG_MAT = "mat";
-    protected static final String NBT_TAG_LOGIC = "logic";
-    protected static final String NBT_TAG_EX = "ex";
+    public static final String NBT_TAG_MAT = "mat";
+    public static final String NBT_TAG_LOGIC = "logic";
+    public static final String NBT_TAG_EX = "ex";
 
     private static ArrayList<ItemStack> allGates;
 

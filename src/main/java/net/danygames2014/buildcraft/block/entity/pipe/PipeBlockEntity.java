@@ -4,15 +4,18 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.api.core.SynchedBlockEntity;
+import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
 import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateFactory;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
+import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.fabricmc.api.EnvType;
@@ -59,6 +62,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     protected boolean neighbourUpdate = false;
     protected boolean refreshRenderState = false;
     protected boolean sendClientUpdate = false;
+    protected boolean resyncGateExpansions = false;
     private boolean internalUpdateScheduled = false;
 
     // Empty constructor for loading
@@ -149,6 +153,12 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
                     gate.resolveActions();
                     gate.tick();
                 }
+            }
+        }
+
+        if(world.isRemote) {
+            if(resyncGateExpansions) {
+                syncGateExpansions();
             }
         }
     }
@@ -464,6 +474,15 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         for (int i = 0; i < 4; ++i) {
             nbt.putBoolean("wireSet[" + i + "]", wireSet[i]);
         }
+        for(int i = 0; i < Direction.values().length; i++){
+            final String key = "Gate[" + i + "]";
+            Gate gate = gates[i];
+            if (gate != null) {
+                NbtCompound gateNBT = new NbtCompound();
+                gate.writeToNBT(gateNBT);
+                nbt.put(key, gateNBT);
+            }
+        }
         sideProperties.writeNbt(nbt);
     }
 
@@ -486,6 +505,11 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
         for (int i = 0; i < 4; ++i) {
             wireSet[i] = nbt.getBoolean("wireSet[" + i + "]");
+        }
+
+        for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
+            final String key = "Gate[" + i + "]";
+            gates[i] = nbt.contains(key) ? GateFactory.makeGate(this, nbt.getCompound(key)) : null;
         }
 
         sideProperties.readNbt(nbt);
@@ -635,23 +659,42 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             }
             sideProperties.pluggables = newPluggables.clone();
 
-            // TODO: support gates
+            for (int i = 0; i < Direction.values().length; i++) {
+                final PipePluggable pluggable = getPipePluggable(Direction.byId(i));
+                if (pluggable instanceof GatePluggable) {
+                    final GatePluggable gatePluggable = (GatePluggable) pluggable;
+                    Gate gate = gates[i];
+                    if (gate == null || gate.logic != gatePluggable.getLogic() || gate.material != gatePluggable.getMaterial()) {
+                        gates[i] = GateFactory.makeGate(this, gatePluggable.getMaterial(), gatePluggable.getLogic(), Direction.byId(i));
+                    }
+                } else {
+                    gates[i] = null;
+                }
+            }
 
-//            for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
-//                final PipePluggable pluggable = getPipePluggable(ForgeDirection.getOrientation(i));
-//                if (pluggable != null && pluggable instanceof GatePluggable) {
-//                    final GatePluggable gatePluggable = (GatePluggable) pluggable;
-//                    Gate gate = pipe.gates[i];
-//                    if (gate == null || gate.logic != gatePluggable.getLogic() || gate.material != gatePluggable.getMaterial()) {
-//                        pipe.gates[i] = GateFactory.makeGate(pipe, gatePluggable.getMaterial(), gatePluggable.getLogic(), ForgeDirection.getOrientation(i));
-//                    }
-//                } else {
-//                    pipe.gates[i] = null;
-//                }
-//            }
-//
-//            syncGateExpansions();
-            return;
+            syncGateExpansions();
+        }
+    }
+
+    private void syncGateExpansions() {
+        resyncGateExpansions = false;
+        for (int i = 0; i < Direction.values().length; i++) {
+            Gate gate = gates[i];
+            if (gate == null) {
+                continue;
+            }
+            GatePluggable gatePluggable = (GatePluggable) sideProperties.pluggables[i];
+            if (gatePluggable.getExpansions().length > 0) {
+                for (GateExpansion expansion : gatePluggable.getExpansions()) {
+                    if (expansion != null) {
+                        if (!gate.expansions.containsKey(expansion)) {
+                            gate.addGateExpansion(expansion);
+                        }
+                    } else {
+                        resyncGateExpansions = true;
+                    }
+                }
+            }
         }
     }
 

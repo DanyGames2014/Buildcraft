@@ -169,6 +169,9 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
 
     // / SAVING & LOADING
     public void writeToNBT(NbtCompound data) {
+        if(material == null){
+            return;
+        }
         data.putString("material", material.name());
         data.putString("logic", logic.name());
         data.putInt("direction", direction.ordinal());

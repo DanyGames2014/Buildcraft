@@ -1,17 +1,23 @@
 package net.danygames2014.buildcraft.pluggable;
 
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
+import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateDefinition;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
+import net.danygames2014.buildcraft.item.GateItem;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.util.math.Box;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.io.DataInputStream;
@@ -83,12 +89,27 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public void readNbt(NbtCompound nbt) {
+        material = GateMaterial.fromOrdinal(nbt.getByte(GateItem.NBT_TAG_MAT));
+        logic = GateLogic.fromOrdinal(nbt.getByte(GateItem.NBT_TAG_LOGIC));
 
+        NbtList expansionsList = nbt.getList(GateItem.NBT_TAG_EX);
+        final int expansionsSize = expansionsList.size();
+        expansions = new GateExpansion[expansionsSize];
+        for (int i = 0; i < expansionsSize; i++) {
+            expansions[i] = GateExpansions.getExpansion(Identifier.tryParse(((NbtString) expansionsList.get(i)).value));
+        }
     }
 
     @Override
     public void writeNbt(NbtCompound nbt) {
+        nbt.putByte(GateItem.NBT_TAG_MAT, (byte) material.ordinal());
+        nbt.putByte(GateItem.NBT_TAG_LOGIC, (byte) logic.ordinal());
 
+        NbtList expansionsList = nbt.getList(GateItem.NBT_TAG_EX);
+        for (GateExpansion expansion : expansions) {
+            expansionsList.add(new NbtString(expansion.getIdentifier().toString()));
+        }
+        nbt.put(GateItem.NBT_TAG_EX, expansionsList);
     }
 
     @Override
@@ -183,11 +204,29 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public void writeData(DataOutputStream stream) throws IOException {
+        stream.writeByte(material.ordinal());
+        stream.writeByte(logic.ordinal());
+        stream.writeBoolean(realGate != null ? realGate.isGateActive() : false);
+        stream.writeBoolean(realGate != null ? realGate.isGatePulsing() : false);
 
+        final int expansionsSize = expansions.length;
+        stream.writeInt(expansionsSize);
+        for (GateExpansion expansion : expansions) {
+            stream.writeShort(GateExpansions.getExpansionID(expansion));
+        }
     }
 
     @Override
     public void readData(DataInputStream stream) throws IOException {
+        material = GateMaterial.fromOrdinal(stream.readByte());
+        logic = GateLogic.fromOrdinal(stream.readByte());
+        isLit = stream.readBoolean();
+        isPulsing = stream.readBoolean();
 
+        final int expansionsSize = stream.readInt();
+        expansions = new GateExpansion[expansionsSize];
+        for (int i = 0; i < expansionsSize; i++) {
+            expansions[i] = GateExpansions.getExpansionByID(stream.readUnsignedShort());
+        }
     }
 }
