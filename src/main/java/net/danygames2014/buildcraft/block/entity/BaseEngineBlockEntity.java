@@ -55,6 +55,8 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public void tick() {
         super.tick();
 
+        facing = getFacing();
+        
         // Client side
         if (world.isRemote) {
             if (stage != EngineStage.RETRACTED) {
@@ -71,7 +73,6 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             return;
         }
 
-        facing = getFacing();
         init();
         
         if (checkOrienation) {
