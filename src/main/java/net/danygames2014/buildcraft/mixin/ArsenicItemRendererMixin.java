@@ -22,14 +22,18 @@ public class ArsenicItemRendererMixin {
             ),
             remap = false
     )
-    void renderModel(ArsenicItemRenderer instance, ItemEntity item, float x, float y, float z, float delta, ItemStack stack, float var11, float var12, byte renderedAmount, SpriteAtlasTexture atlas, BakedModel model, Operation<Void> original){
+    void renderModel(ArsenicItemRenderer instance, ItemEntity item, float x, float y, float z, float delta, ItemStack stack, float var11, float var12, byte renderedAmount, SpriteAtlasTexture atlas, BakedModel model, Operation<Void> original) {
         float f1 = var11;
         float f2 = var12;
-        if(item instanceof TravellingItemEntity){
-            if(stack.getItem() instanceof BlockItem){
+        if (item instanceof TravellingItemEntity) {
+            if (stack.getItem() instanceof BlockItem) {
                 f1 = 0.25F;
             } else {
                 f1 = 0;
+            }
+
+            if (item.world.isRemote) {
+                y -= 0.5F;
             }
         }
         original.call(instance, item, x, y, z, delta, stack, f1, f2, renderedAmount, atlas, model);
@@ -43,16 +47,20 @@ public class ArsenicItemRendererMixin {
             ),
             remap = false
     )
-    void renderVanilla(ArsenicItemRenderer instance, ItemEntity item, float x, float y, float z, float delta, ItemStack stack, float var11, float var12, byte renderedAmount, SpriteAtlasTexture atlas, Operation<Void> original){
+    void renderVanilla(ArsenicItemRenderer instance, ItemEntity item, float x, float y, float z, float delta, ItemStack stack, float var11, float var12, byte renderedAmount, SpriteAtlasTexture atlas, Operation<Void> original) {
         float f1 = var11;
         float f2 = var12;
-        if(item instanceof TravellingItemEntity){
-            if(stack.getItem() instanceof BlockItem){
+        if (item instanceof TravellingItemEntity) {
+            if (stack.getItem() instanceof BlockItem) {
                 f1 = 0.25F;
             } else {
                 f1 = 0;
             }
             f2 = 0;
+
+            if (item.world.isRemote) {
+                y -= 0.5F;
+            }
         }
         original.call(instance, item, x, y, z, delta, stack, f1, f2, renderedAmount, atlas);
     }

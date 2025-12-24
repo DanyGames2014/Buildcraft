@@ -1,7 +1,8 @@
 package net.danygames2014.buildcraft.entity;
 
-import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
@@ -10,14 +11,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.network.packet.MessagePacket;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
 import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.TriState;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-// TODO: Somehow rectify the random y offset and animation that ItemRenderer/ArsenicItemRenderer keeps adding
-
-@HasTrackingParameters(updatePeriod = 1, sendVelocity = TriState.TRUE, trackingDistance = 32)
-public class TravellingItemEntity extends ItemEntity {
+@HasTrackingParameters(updatePeriod = 1, sendVelocity = TriState.FALSE, trackingDistance = 32)
+public class TravellingItemEntity extends ItemEntity implements EntitySpawnDataProvider {
     public static final double MINIMUM_SPEED = 0.01D;
     public static final double DEFAULT_SPEED = 0.01D;
     public static final double MAXIMUM_SPEED = 0.25D;
@@ -47,7 +49,14 @@ public class TravellingItemEntity extends ItemEntity {
         super(world);
         this.noClip = true;
     }
-    
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        dataTracker.startTracking(10, -1);
+        dataTracker.startTracking(11, 0);
+    }
+
     public void addToTransporter() {
         BlockEntity pipeBlockEntity = world.getBlockEntity(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z));
         
@@ -57,14 +66,13 @@ public class TravellingItemEntity extends ItemEntity {
         }
     }
 
-    // Item Logic
-    public void reset() {
-        
-    }
-    
     // Entity Logic
     @Override
     public void baseTick() {
+        if (world.isRemote) {
+            return;
+        }
+        
         this.age++;
         
         this.prevHorizontalSpeed = this.horizontalSpeed;
@@ -81,55 +89,80 @@ public class TravellingItemEntity extends ItemEntity {
 
     @Override
     public void tick() {
-        if (transporter == null) {
+        if (!world.isRemote && transporter == null) {
             addToTransporter();
         }
         
         this.baseTick();
 
-        if (transporter != null) {
-            double pipeSpeed = transporter.blockEntity.behavior.modifyItemSpeed(this);
-            
-            if (speed < pipeSpeed) {
-                speed = Math.min(pipeSpeed, speed * ACCELERATION_MODIFIER);
-            } else if (speed > pipeSpeed) {
-                speed *= DECCELERATION_MODIFIER;
+        if (!world.isRemote) {
+            if (transporter != null) {
+                double pipeSpeed = transporter.blockEntity.behavior.modifyItemSpeed(this);
+
+                if (speed < pipeSpeed) {
+                    speed = Math.min(pipeSpeed, speed * ACCELERATION_MODIFIER);
+                } else if (speed > pipeSpeed) {
+                    speed *= DECCELERATION_MODIFIER;
+                }
+
+                if (speed < MINIMUM_SPEED) {
+                    speed = MINIMUM_SPEED;
+                } else if (speed > MAXIMUM_SPEED) {
+                    speed = MAXIMUM_SPEED;
+                }
+            }
+
+            if (travelDirection != null) {
+                if (travelDirection != lastTravelDirection || speed != lastSpeed) {
+                    dataTracker.set(10, travelDirection.ordinal());
+                    dataTracker.set(11, (int) (speed * 10000));
+                    this.velocityX = travelDirection.getOffsetX() * speed;
+                    this.velocityY = travelDirection.getOffsetY() * speed;
+                    this.velocityZ = travelDirection.getOffsetZ() * speed;
+                }
+            } else {
+                invalidTimer++;
             }
             
-            if (speed < MINIMUM_SPEED) {
-                speed = MINIMUM_SPEED;
-            } else if (speed > MAXIMUM_SPEED) {
-                speed = MAXIMUM_SPEED;
-            }
+            lastTravelDirection = travelDirection;
+            lastSpeed = speed;
         }
 
-//        if (toMiddle && travelDirection != lastTravelDirection && transporter != null) {
-//            this.setPosition(transporter.blockEntity.x + 0.5D, transporter.blockEntity.y + 0.25D, transporter.blockEntity.z + 0.5D);
-//            toMiddle = false;
-//        }
-        
-        if (travelDirection != null) {
-            if (travelDirection != lastTravelDirection || speed != lastSpeed) {
+        // Client velocity code
+        if (world.isRemote) {
+            if (dataTracker.getInt(10) != -1) {
+                travelDirection = Direction.values()[dataTracker.getInt(10)];
+            }
+            
+            if (dataTracker.getInt(11) != 0) {
+                speed = dataTracker.getInt(11) / 10000.0D;
+            }
+            
+            if (travelDirection != null) {
                 this.velocityX = travelDirection.getOffsetX() * speed;
                 this.velocityY = travelDirection.getOffsetY() * speed;
                 this.velocityZ = travelDirection.getOffsetZ() * speed;
             }
-        } else {
-            invalidTimer++;
+
+            lastTravelDirection = travelDirection;
         }
-
-        lastTravelDirection = travelDirection;
-        lastSpeed = speed;
-
-        this.move(this.velocityX, this.velocityY, this.velocityZ);
         
-        if (this.invalidTimer >= 50) {
-            drop();
+        this.move(this.velocityX, this.velocityY, this.velocityZ);
+
+        if (!world.isRemote) {
+            if (this.invalidTimer >= 50) {
+                drop();
+            }
         }
     }
 
     @Override
     public boolean checkWaterCollisions() {
+        return false;
+    }
+
+    @Override
+    protected boolean pushOutOfBlock(double x, double y, double z) {
         return false;
     }
 
@@ -163,10 +196,43 @@ public class TravellingItemEntity extends ItemEntity {
     }
 
     @Override
-    public void read(NbtCompound nbt) {
-        super.read(nbt);
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
         speed = nbt.getDouble("speed");
         input = Direction.byId(nbt.getInt("input"));
         travelDirection = Direction.byId(nbt.getInt("travelDirection"));
+    }
+
+    @Override
+    public boolean syncTrackerAtSpawn() {
+        return true;
+    }
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Buildcraft.NAMESPACE.id("travelling_item");
+    }
+
+    @Override
+    public void writeToMessage(MessagePacket message) {
+        message.ints = new int[] {
+                message.ints[0], 
+                message.ints[1], 
+                message.ints[2], 
+                message.ints[3], 
+                message.ints[4], 
+                this.stack.itemId, 
+                this.stack.count, 
+                this.stack.getDamage()
+        };
+    }
+
+    @Override
+    public void readFromMessage(MessagePacket message) {
+        this.stack = new ItemStack(
+                message.ints[5], 
+                message.ints[6], 
+                message.ints[7]
+        );
     }
 }
