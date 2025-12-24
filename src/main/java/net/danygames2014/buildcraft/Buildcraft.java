@@ -92,6 +92,7 @@ public class Buildcraft {
     public static SandstonePipeBehavior sandstonePipeBehavior;
     public static GoldenPipeBehavior goldenPipeBehavior;
     public static DiamondPipeBehavior diamondPipeBehavior;
+    public static ObsidianPipeBehavior obsidianPipeBehavior;
     public static ClayPipeBehavior clayPipeBehavior;
     public static VoidPipeBehavior voidPipeBehavior;
     
@@ -102,6 +103,7 @@ public class Buildcraft {
     public static Block sandstoneItemPipe;
     public static Block goldenItemPipe;
     public static Block diamondItemPipe;
+    public static Block obsidianItemPipe;
     public static Block clayItemPipe;
     public static Block voidItemPipe;
     
@@ -228,6 +230,7 @@ public class Buildcraft {
         sandstonePipeBehavior = new SandstonePipeBehavior();
         goldenPipeBehavior = new GoldenPipeBehavior();
         diamondPipeBehavior = new DiamondPipeBehavior();
+        obsidianPipeBehavior = new ObsidianPipeBehavior();
         clayPipeBehavior = new ClayPipeBehavior();
         voidPipeBehavior = new VoidPipeBehavior();
 
@@ -333,6 +336,17 @@ public class Buildcraft {
                 ItemPipeTransporter::new,
                 DiamondPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "diamond_item_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
+
+        obsidianItemPipe = new PipeBlock(
+                NAMESPACE.id("obsidian_item_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/obsidian_item_pipe"),
+                null,
+                PipeType.ITEM,
+                obsidianPipeBehavior,
+                ItemPipeTransporter::new,
+                ObsidianPipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "obsidian_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
 
         clayItemPipe = new PipeBlock(
                 NAMESPACE.id("clay_item_pipe"),

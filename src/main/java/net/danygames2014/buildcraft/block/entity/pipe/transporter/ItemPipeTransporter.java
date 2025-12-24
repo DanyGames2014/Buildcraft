@@ -154,6 +154,7 @@ public class ItemPipeTransporter extends PipeTransporter {
     public void addItem(ItemStack stack) {
         TravellingItemEntity itemEntity = new TravellingItemEntity(world, x + 0.5D, y + 0.25D, z + 0.5D, stack);
         addItem(itemEntity);
+        world.spawnEntity(itemEntity);
     }
 
     public void injectItem(ItemStack stack, Direction side) {

@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.init;
 import net.danygames2014.buildcraft.block.entity.*;
 import net.danygames2014.buildcraft.block.entity.TankBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.ObsidianPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -39,5 +40,6 @@ public class BlockEntityListener {
         event.register(PipeBlockEntity.class, NAMESPACE.id("pipe").toString());
         event.register(DiamondPipeBlockEntity.class, NAMESPACE.id("diamond_pipe").toString());
         event.register(PoweredPipeBlockEntity.class, NAMESPACE.id("powered_pipe").toString());
+        event.register(ObsidianPipeBlockEntity.class, NAMESPACE.id("obsidian_pipe").toString());
     }
 }
