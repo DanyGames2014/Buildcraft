@@ -50,11 +50,11 @@ public class Buildcraft {
     public static Item greenPipeWire;
     public static Item yellowPipeWire;
     
-    public static Item redstoneChipset; // NYI
-    public static Item redstoneIronChipset; // NYI
-    public static Item redstoneGoldenChipset; // NYI
-    public static Item redstoneDiamondChipset; // NYI
-    public static Item pulsatingChipset; // NYI
+    public static Item redstoneChipset;
+    public static Item redstoneIronChipset;
+    public static Item redstoneGoldenChipset;
+    public static Item redstoneDiamondChipset;
+    public static Item pulsatingChipset;
 
     public static Item plug;
     public static Item facade;
@@ -64,20 +64,20 @@ public class Buildcraft {
     public static Material pipeMaterial;
 
     public static Block chuteBlock;
-    public static Block autoWorkbench; // NYI
-    public static Block miningWell; // NYI
+    public static Block autoWorkbench;
+    public static Block miningWell;
     public static Block quarry; // NYI
     public static Block pump; // NYI
     public static Block tank;
     public static Block refinery; // NYI
-    public static Block laser; // NYI
-    public static Block assemblyTable; // NYI
+    public static Block laser;
+    public static Block assemblyTable;
     public static Block filler; // NYI
     public static Block builder; // NYI
     public static Block architectTable; // NYI
     public static Block blueprintLibrary; // NYI
-    public static Block landMarker; // NYI
-    public static Block pathMarker; // NYI
+    public static Block landMarker;
+    public static Block pathMarker;
     public static Block redstoneEngine;
     public static Block stirlingEngine;
     public static Block combustionEngine;
