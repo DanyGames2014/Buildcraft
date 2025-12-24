@@ -20,6 +20,7 @@ import net.danygames2014.uniwrench.api.Wrenchable;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -31,6 +32,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
@@ -107,7 +109,15 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     private int getRedstoneInputToPipe(World world, int x, int y, int z, Direction d) {
         BlockPos blockPos = new BlockPos(x, y, z);
         BlockPos offset = blockPos.offset(d);
-        return world.isEmittingRedstonePowerInDirection(offset.getX(), offset.getY(), offset.getZ(), d.ordinal()) ? 15 : 0;
+        boolean power = world.isEmittingRedstonePowerInDirection(offset.getX(), offset.getY(), offset.getZ(), d.ordinal());
+        BlockState blockState = world.getBlockState(offset);
+        if(power) {
+            if(blockState.getBlock() == PipeBlock.REDSTONE_WIRE){
+                return world.getBlockMeta(offset.getX(), offset.getY(), offset.getZ());
+            }
+            return 15;
+        }
+        return 0;
     }
 
     @Override
@@ -185,7 +195,14 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Override
     public boolean isEmittingRedstonePowerInDirection(BlockView blockView, int x, int y, int z, int direction) {
         if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
-            return pipeBlockEntity.isPoweringTo(direction) > 0;
+            int powerInDirection = pipeBlockEntity.isPoweringTo(direction);
+//            BlockPos blockPos = new BlockPos(x, y, z);
+//            BlockPos offset = blockPos.offset(Direction.byId(direction).getOpposite());
+//            int id = blockView.getBlockId(offset.getX(), offset.getY(), offset.getZ());
+//            if(id == PipeBlock.REDSTONE_WIRE.id){
+//                return powerInDirection == 15;
+//            }
+            return powerInDirection > 0;
         }
         return super.isEmittingRedstonePowerInDirection(blockView, x, y, z, direction);
     }

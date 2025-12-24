@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionPulsar;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionRedstoneFader;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionTimer;
 import net.danygames2014.buildcraft.block.entity.pipe.parameter.ActionParameterSignal;
 import net.danygames2014.buildcraft.statements.ActionSignalOutput;
@@ -133,6 +134,7 @@ public class Buildcraft {
     public static TriggerInternal[] triggerPipeWireInactive = new TriggerInternal[PipeWire.values().length];
     public static TriggerInternal[] triggerPipe = new TriggerInternal[TriggerPipeContents.PipeContents.values().length];
     public static TriggerInternal[] triggerTimer = new TriggerInternal[TriggerClockTimer.Time.VALUES.length];
+    public static TriggerInternal[] triggerRedstoneLevel = new TriggerInternal[15];
 
     public static TriggerExternal triggerEmptyInventory;
     public static TriggerExternal triggerContainsInventory;
@@ -146,6 +148,7 @@ public class Buildcraft {
     public static ActionInternal actionEnergyPulser;
     public static ActionInternal actionSingleEnergyPulse;
     public static ActionInternal actionRedstone;
+    public static ActionInternal[] actionRedstoneLevel = new ActionInternal[15];
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         // Register triggers actions and parameters
@@ -171,6 +174,11 @@ public class Buildcraft {
         triggerRedstoneActive = new TriggerRedstoneInput(true);
         triggerRedstoneInactive = new TriggerRedstoneInput(false);
 
+        for (int level = 0; level < triggerRedstoneLevel.length; level++) {
+            triggerRedstoneLevel[level] = new TriggerRedstoneFaderInput(level + 1);
+            actionRedstoneLevel[level] = new ActionRedstoneFaderOutput(level + 1);
+        }
+
         triggerEmptyInventory = new TriggerInventory(TriggerInventory.State.Empty);
         triggerContainsInventory = new TriggerInventory(TriggerInventory.State.Contains);
         triggerSpaceInventory = new TriggerInventory(TriggerInventory.State.Space);
@@ -191,6 +199,7 @@ public class Buildcraft {
 
         GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
         GateExpansions.registerExpansion(GateExpansionTimer.INSTANCE);
+        GateExpansions.registerExpansion(GateExpansionRedstoneFader.INSTANCE);
 
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");
         woodenGear = new TemplateItem(NAMESPACE.id("wooden_gear")).setTranslationKey(NAMESPACE, "wooden_gear");

@@ -9,9 +9,15 @@ import net.danygames2014.buildcraft.api.transport.statement.container.SidedState
 import net.danygames2014.buildcraft.block.entity.pipe.statement.BCStatement;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class ActionRedstoneOutput extends BCStatement implements ActionInternal {
+
+    public ActionRedstoneOutput(Identifier identifier) {
+        // Used by fader output
+        super(identifier);
+    }
 
     public ActionRedstoneOutput() {
         super(Buildcraft.NAMESPACE.id("redstone.output"));
