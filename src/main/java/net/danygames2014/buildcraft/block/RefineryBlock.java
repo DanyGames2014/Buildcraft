@@ -10,7 +10,7 @@ import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class RefineryBlock extends TemplateMachineBlock{
+public class RefineryBlock extends TemplateMachineBlock {
     public RefineryBlock(Identifier identifier, Material material) {
         super(identifier, material);
     }

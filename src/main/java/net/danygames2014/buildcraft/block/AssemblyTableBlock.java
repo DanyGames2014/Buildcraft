@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.block;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.AssemblyTableBlockEntity;
 import net.danygames2014.buildcraft.screen.handler.AssemblyTableScreenHandler;
+import net.danygames2014.nyalib.block.DropInventoryOnBreak;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,7 +11,7 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class AssemblyTableBlock extends TemplateMachineBlock {
+public class AssemblyTableBlock extends TemplateMachineBlock implements DropInventoryOnBreak {
     public AssemblyTableBlock(Identifier identifier, Material material) {
         super(identifier, material);
         this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.5625F, 1.0F);

@@ -5,7 +5,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-public class BlueprintLibraryBlock extends TemplateMachineBlock{
+public class BlueprintLibraryBlock extends TemplateMachineBlock {
     public BlueprintLibraryBlock(Identifier identifier, Material material) {
         super(identifier, material);
     }

@@ -34,9 +34,4 @@ public class StirlingEngineBlock extends BaseEngineBlock implements DropInventor
         
         return false;
     }
-
-    @Override
-    public boolean shouldDropInventory(World world, int x, int y, int z) {
-        return true;
-    }
 }

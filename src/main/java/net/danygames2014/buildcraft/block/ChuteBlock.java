@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.ChuteBlockEntity;
 import net.danygames2014.buildcraft.client.render.block.ChuteRenderer;
 import net.danygames2014.buildcraft.screen.handler.ChuteScreenHandler;
+import net.danygames2014.nyalib.block.DropInventoryOnBreak;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -11,29 +12,22 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.gui.screen.container.GuiHelper;
-import net.modificationstation.stationapi.api.template.block.TemplateBlockWithEntity;
 import net.modificationstation.stationapi.api.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
-import java.util.Random;
-
 @SuppressWarnings("deprecation")
-public class ChuteBlock extends TemplateMachineBlock implements BlockWithWorldRenderer, BlockWithInventoryRenderer {
+public class ChuteBlock extends TemplateMachineBlock implements BlockWithWorldRenderer, BlockWithInventoryRenderer, DropInventoryOnBreak {
     @Environment(EnvType.CLIENT)
     private ChuteRenderer chuteRenderer;
-    private final Random random;
 
     public ChuteBlock(Identifier identifier) {
         super(identifier, Material.METAL);
-        random = new Random();
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             chuteRenderer = new ChuteRenderer();
         }
@@ -80,36 +74,5 @@ public class ChuteBlock extends TemplateMachineBlock implements BlockWithWorldRe
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void onBreak(World world, int x, int y, int z) {
-        ChuteBlockEntity chuteBlockEntity = (ChuteBlockEntity)world.getBlockEntity(x, y, z);
-
-        for(int i = 0; i < chuteBlockEntity.size(); ++i) {
-            ItemStack stack = chuteBlockEntity.getStack(i);
-            if (stack != null) {
-                float xOffset = this.random.nextFloat() * 0.8F + 0.1F;
-                float yOffset = this.random.nextFloat() * 0.8F + 0.1F;
-                float zOffset = this.random.nextFloat() * 0.8F + 0.1F;
-
-                while(stack.count > 0) {
-                    int stackCount = this.random.nextInt(21) + 10;
-                    if (stackCount > stack.count) {
-                        stackCount = stack.count;
-                    }
-
-                    stack.count -= stackCount;
-                    ItemEntity itemEntity = new ItemEntity(world, (float)x + xOffset, (float)y + yOffset, (float)z + zOffset, new ItemStack(stack.itemId, stackCount, stack.getDamage()));
-                    float var13 = 0.05F;
-                    itemEntity.velocityX = ((float)this.random.nextGaussian() * var13);
-                    itemEntity.velocityY = ((float)this.random.nextGaussian() * var13 + 0.2F);
-                    itemEntity.velocityZ = ((float)this.random.nextGaussian() * var13);
-                    world.spawnEntity(itemEntity);
-                }
-            }
-        }
-
-        super.onBreak(world, x, y, z);
     }
 }

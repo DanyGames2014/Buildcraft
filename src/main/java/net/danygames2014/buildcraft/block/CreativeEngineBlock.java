@@ -8,7 +8,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.Random;
 
-public class CreativeEngineBlock extends BaseEngineBlock{
+public class CreativeEngineBlock extends BaseEngineBlock {
     public CreativeEngineBlock(Identifier identifier) {
         super(identifier);
     }
@@ -39,8 +39,8 @@ public class CreativeEngineBlock extends BaseEngineBlock{
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        if(!world.isRemote && player.getHand() == null){
-            if(world.getBlockEntity(x, y, z) instanceof CreativeEngineBlockEntity creativeEngineBlockEntity){
+        if (!world.isRemote && player.getHand() == null) {
+            if (world.getBlockEntity(x, y, z) instanceof CreativeEngineBlockEntity creativeEngineBlockEntity) {
                 creativeEngineBlockEntity.switchPowerMode(false, player);
             }
             return true;
@@ -50,8 +50,8 @@ public class CreativeEngineBlock extends BaseEngineBlock{
 
     @Override
     public void onBlockBreakStart(World world, int x, int y, int z, PlayerEntity player) {
-        if(!world.isRemote && player.getHand() == null){
-            if(world.getBlockEntity(x, y, z) instanceof CreativeEngineBlockEntity creativeEngineBlockEntity){
+        if (!world.isRemote && player.getHand() == null) {
+            if (world.getBlockEntity(x, y, z) instanceof CreativeEngineBlockEntity creativeEngineBlockEntity) {
                 creativeEngineBlockEntity.switchPowerMode(true, player);
             }
         }
