@@ -325,7 +325,14 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
         ItemStack insertedStack = stack.copy();
 
         for (int i = 0; i < this.getItemSlots(side); ++i) {
-            insertedStack = insertItem(insertedStack, i, side);
+            if (getItem(i, side) == null) {
+                continue;
+            }
+            
+            if (insertedStack.isItemEqual(getItem(i, side))) {
+                insertedStack = insertItem(insertedStack, i, side);
+            }
+
             if (insertedStack == null) {
                 return insertedStack;
             }
