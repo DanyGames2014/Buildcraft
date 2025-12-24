@@ -191,16 +191,27 @@ public class TravellingItemEntity extends ItemEntity implements EntitySpawnDataP
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         nbt.putDouble("speed", speed);
-        nbt.putInt("input", input.getId());
-        nbt.putInt("travelDirection", travelDirection.getId());
+        if (input != null) {
+            nbt.putInt("input", input.getId());
+        }
+        
+        if (travelDirection != null) {
+            nbt.putInt("travelDirection", travelDirection.getId());
+        }
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         speed = nbt.getDouble("speed");
-        input = Direction.byId(nbt.getInt("input"));
-        travelDirection = Direction.byId(nbt.getInt("travelDirection"));
+        
+        if (nbt.contains("input")) {
+            input = Direction.byId(nbt.getInt("input"));
+        }
+        
+        if (nbt.contains("travelDirection")) {
+            travelDirection = Direction.byId(nbt.getInt("travelDirection"));
+        }
     }
 
     @Override
