@@ -37,6 +37,11 @@ public class TriggerRedstoneInput extends BCStatement implements TriggerInternal
     }
 
     @Override
+    public int maxParameters() {
+        return 1;
+    }
+
+    @Override
     public boolean isTriggerActive(StatementContainer container, StatementParameter[] parameters) {
         if (container instanceof RedstoneStatementContainer) {
             // TODO: check if side should be null

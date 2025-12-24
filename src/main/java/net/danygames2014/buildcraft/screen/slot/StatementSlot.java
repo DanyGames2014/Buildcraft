@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public abstract class StatementSlot extends AdvancedSlot{
     public int slot;
-    public ArrayList<StatementParameterSlot> parameters = new ArrayList<StatementParameterSlot>();
+    public ArrayList<StatementParameterSlot> parameters = new ArrayList<>();
     public StatementSlot(AdvancedInterfaceScreen screen, int x, int y, int slot) {
         super(screen, x, y);
 

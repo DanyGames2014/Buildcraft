@@ -1,10 +1,7 @@
 package net.danygames2014.buildcraft;
 
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
-import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
-import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
-import net.danygames2014.buildcraft.api.transport.statement.TriggerExternal;
-import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
+import net.danygames2014.buildcraft.api.transport.statement.*;
 import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
@@ -176,6 +173,9 @@ public class Buildcraft {
         StatementManager.registerTriggerProvider(new DefaultTriggerProvider());
 
         StatementManager.registerActionProvider(new PipeActionProvider());
+
+        StatementManager.registerParameterClass(StatementParameterRedstoneGateSideOnly.class);
+        StatementManager.registerParameterClass(StatementParameterItemStack.class);
 
         GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
 
