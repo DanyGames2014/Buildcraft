@@ -90,7 +90,23 @@ public class PipeBehavior {
         return PipeConnectionType.NONE;
     }
 
+    /**
+     * Fires at the end of the transporter tick method
+     * 
+     * @param blockEntity The block entity of the pipe
+     * @param transporter The transporter of the pipe
+     */
     public void transporterTick(PipeBlockEntity blockEntity, PipeTransporter transporter) {
+        
+    }
+
+    /**
+     * Fires at the end of the block entity tick method
+     *
+     * @param blockEntity The block entity of the pipe
+     * @param transporter The transporter of the pipe
+     */
+    public void blockEntityTick(PipeBlockEntity blockEntity, PipeTransporter transporter) {
         
     }
     

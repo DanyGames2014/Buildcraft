@@ -172,6 +172,10 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
                 syncGateExpansions();
             }
         }
+        
+        if (!world.isRemote) {
+            behavior.blockEntityTick(this, transporter);
+        }
     }
 
     public void updateConnections() {
