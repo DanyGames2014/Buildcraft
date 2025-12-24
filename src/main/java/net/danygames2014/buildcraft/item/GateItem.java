@@ -9,15 +9,23 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.*;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.glasslauncher.mods.alwaysmoreitems.api.SubItemProvider;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
+import net.minecraft.client.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
+import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
+import net.modificationstation.stationapi.api.client.model.item.ItemWithRenderer;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -26,7 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem {
+public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem, ItemWithRenderer {
     public static final String NBT_TAG_MAT = "mat";
     public static final String NBT_TAG_LOGIC = "logic";
     public static final String NBT_TAG_EX = "ex";
@@ -190,5 +198,34 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
     @Override
     public PipePluggable createPipePluggable(PipeBlockEntity pipe, Direction side, ItemStack stack) {
         return new GatePluggable(GateFactory.makeGate(pipe, stack, side));
+    }
+
+    @Override
+    public void renderItemOnGui(ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, int itemId, int damage, int textureIndex, int x, int y) {
+
+    }
+
+    @Override
+    public void renderItemOnGui(ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
+        ArsenicItemRenderer arsenic = new ArsenicItemRenderer(itemRenderer);
+        StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+        Atlas.Sprite logic = GateItem.getLogic(stack).getItemTexture();
+        renderSprite(arsenic, x, y, logic);
+
+        Atlas.Sprite material = GateItem.getMaterial(stack).getItemTexture();
+        if(material != null){
+            renderSprite(arsenic, x, y, material);
+        }
+
+        for (GateExpansion expansion : GateItem.getInstalledExpansions(stack)) {
+            Atlas.Sprite overlay = expansion.getOverlayItemSprite();
+            if (overlay != null) {
+                renderSprite(arsenic, x, y, overlay);
+            }
+        }
+    }
+
+    public void renderSprite(ArsenicItemRenderer arsenicItemRenderer, int x, int y, Atlas.Sprite sprite){
+        arsenicItemRenderer.renderItemQuad(x, y, sprite.getStartU(), sprite.getStartV(), sprite.getEndU(), sprite.getEndV());
     }
 }
