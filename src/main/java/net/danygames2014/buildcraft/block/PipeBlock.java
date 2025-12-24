@@ -176,6 +176,20 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return 0;
     }
 
+
+    @Override
+    public boolean canTransferPowerInDirection(World world, int x, int y, int z, int direction) {
+        return isEmittingRedstonePowerInDirection(world, x, y, z, direction);
+    }
+
+    @Override
+    public boolean isEmittingRedstonePowerInDirection(BlockView blockView, int x, int y, int z, int direction) {
+        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+            return pipeBlockEntity.isPoweringTo(direction) > 0;
+        }
+        return super.isEmittingRedstonePowerInDirection(blockView, x, y, z, direction);
+    }
+
     public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
         if (direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE) {
             return alternativeTexture;

@@ -743,6 +743,43 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         }
     }
 
+    public int isPoweringTo(int side) {
+        Direction o = Direction.byId(side).getOpposite();
+
+        BlockEntity tile = getBlockEntity(o);
+
+        if (tile instanceof PipeBlockEntity && connections.get(o) != PipeConnectionType.NONE) {
+            return 0;
+        } else {
+            return getMaxRedstoneOutput(o);
+        }
+    }
+
+    public int getMaxRedstoneOutput(Direction dir) {
+        int output = 0;
+
+        for (Direction side : Direction.values()) {
+            output = Math.max(output, getRedstoneOutput(side));
+            if (side == dir) {
+                output = Math.max(output, getRedstoneOutputSide(side));
+            }
+        }
+
+        return output;
+    }
+
+    private int getRedstoneOutput(Direction dir) {
+        Gate gate = gates[dir.ordinal()];
+
+        return gate != null ? gate.getRedstoneOutput() : 0;
+    }
+
+    private int getRedstoneOutputSide(Direction dir) {
+        Gate gate = gates[dir.ordinal()];
+
+        return gate != null ? gate.getSidedRedstoneOutput() : 0;
+    }
+
     // Dummy Inventory
     @Override
     public int size() {
