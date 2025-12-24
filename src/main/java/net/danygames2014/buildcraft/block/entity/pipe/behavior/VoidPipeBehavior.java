@@ -4,6 +4,7 @@ import com.google.common.collect.Multiset;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.block.entity.pipe.ForgeDirection;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
@@ -13,6 +14,15 @@ import net.danygames2014.nyalib.fluid.FluidStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class VoidPipeBehavior extends PipeBehavior {
+    @Override
+    public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior, Direction side) {
+        if (otherPipeBehavior instanceof VoidPipeBehavior) {
+            return PipeConnectionType.NONE;
+        }
+        
+        return super.canConnectToPipe(blockEntity, otherBlockEntity, otherPipeBehavior, side);
+    }
+
     @Override
     public Direction routeItem(PipeBlockEntity blockEntity, ObjectArrayList<Direction> validOutputDirections, TravellingItemEntity item) {
         return null;
