@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionPulsar;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionTimer;
 import net.danygames2014.buildcraft.block.entity.pipe.parameter.ActionParameterSignal;
 import net.danygames2014.buildcraft.statements.ActionSignalOutput;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
@@ -129,6 +130,7 @@ public class Buildcraft {
     public static TriggerInternal[] triggerPipeWireActive = new TriggerInternal[PipeWire.values().length];
     public static TriggerInternal[] triggerPipeWireInactive = new TriggerInternal[PipeWire.values().length];
     public static TriggerInternal[] triggerPipe = new TriggerInternal[TriggerPipeContents.PipeContents.values().length];
+    public static TriggerInternal[] triggerTimer = new TriggerInternal[TriggerClockTimer.Time.VALUES.length];
 
     public static TriggerExternal triggerEmptyInventory;
     public static TriggerExternal triggerContainsInventory;
@@ -160,6 +162,10 @@ public class Buildcraft {
             triggerPipe[kind.ordinal()] = new TriggerPipeContents(kind);
         }
 
+        for (TriggerClockTimer.Time time : TriggerClockTimer.Time.VALUES) {
+            triggerTimer[time.ordinal()] = new TriggerClockTimer(time);
+        }
+
         triggerRedstoneActive = new TriggerRedstoneInput(true);
         triggerRedstoneInactive = new TriggerRedstoneInput(false);
 
@@ -182,6 +188,7 @@ public class Buildcraft {
         StatementManager.registerParameterClass(ActionParameterSignal.class);
 
         GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
+        GateExpansions.registerExpansion(GateExpansionTimer.INSTANCE);
 
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");
         woodenGear = new TemplateItem(NAMESPACE.id("wooden_gear")).setTranslationKey(NAMESPACE, "wooden_gear");

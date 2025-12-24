@@ -20,7 +20,7 @@ import java.util.List;
 public class GateExpansionPulsar extends GateExpansionBuildcraft implements GateExpansion {
     public static GateExpansionPulsar INSTANCE = new GateExpansionPulsar();
 
-    public GateExpansionPulsar() {
+    private GateExpansionPulsar() {
         super(Buildcraft.NAMESPACE.id("pulsar"));
     }
 
