@@ -31,6 +31,20 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
 
     public static final HashMap<Block, Integer> fluidCapacities = new HashMap<net.minecraft.block.Block, Integer>();
 
+    static {
+        fluidCapacities.put(Buildcraft.woodenFluidPipe, 1 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.cobblestoneFluidPipe, 1 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.stoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.sandstoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.goldenFluidPipe, 8 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.ironFluidPipe, 4 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.diamondFluidPipe, 8 * pipeFluidsBaseFlowRate);
+        fluidCapacities.put(Buildcraft.voidFluidPipe, 1 * pipeFluidsBaseFlowRate);
+//        fluidCapacities.put(PipeFluidsClay.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
+//        fluidCapacities.put(PipeFluidsEmerald.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
+//        fluidCapacities.put(PipeFluidsQuartz.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
+    }
+
     /**
      * The amount of liquid contained by a pipe section. For simplicity, all
      * pipe sections are assumed to be of the same volume.
@@ -266,6 +280,8 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                 // TODO BuildCraftTransport.instance.sendToPlayers(packet, blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, DefaultProps.PIPE_CONTENTS_RENDER_DIST);
             }
         }
+        
+        blockEntity.behavior.transporterTick(blockEntity, this);
     }
 
     private void moveFluids() {
@@ -356,6 +372,10 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         if (!realDirections.isEmpty()) {
             realDirections = this.blockEntity.behavior.routeFluid(this.blockEntity, realDirections, new FluidStack(fluidType, pushAmount));
 
+            if (realDirections.isEmpty()) {
+                return;
+            }
+            
             float min = Math.min(flowRate * realDirections.size(), totalAvailable) / (float) flowRate / realDirections.size();
 
             for (ForgeDirection direction : realDirections.elementSet()) {
@@ -775,20 +795,6 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
 //        }
 //
 //        return tile instanceof IPipeTile;
-    }
-
-    static {
-        fluidCapacities.put(Buildcraft.woodenFluidPipe, 1 * pipeFluidsBaseFlowRate);
-        fluidCapacities.put(Buildcraft.cobblestoneFluidPipe, 1 * pipeFluidsBaseFlowRate);
-        fluidCapacities.put(Buildcraft.stoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
-        fluidCapacities.put(Buildcraft.sandstoneFluidPipe, 2 * pipeFluidsBaseFlowRate);
-        fluidCapacities.put(Buildcraft.goldenFluidPipe, 8 * pipeFluidsBaseFlowRate);
-        fluidCapacities.put(Buildcraft.ironFluidPipe, 4 * pipeFluidsBaseFlowRate);
-        fluidCapacities.put(Buildcraft.diamondFluidPipe, 8 * pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsClay.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsEmerald.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsQuartz.class, 4 * BuildCraftTransport.pipeFluidsBaseFlowRate);
-//        fluidCapacities.put(PipeFluidsVoid.class, 1 * BuildCraftTransport.pipeFluidsBaseFlowRate);
     }
 
     @Override

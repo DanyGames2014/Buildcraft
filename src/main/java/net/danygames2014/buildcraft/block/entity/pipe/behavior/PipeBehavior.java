@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter.FailedPathingResult;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter.HandOffResult;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
@@ -89,6 +90,10 @@ public class PipeBehavior {
         return PipeConnectionType.NONE;
     }
 
+    public void transporterTick(PipeBlockEntity blockEntity, PipeTransporter transporter) {
+        
+    }
+    
     /**
      * Pick a direction in which the item will continue travelling
      *
@@ -114,6 +119,10 @@ public class PipeBehavior {
     
     public HandOffResult getFailedInsertResult(PipeBlockEntity blockEntity, ItemPipeTransporter transporter, TravellingItemEntity item) {
         return Config.PIPE_CONFIG.failedInsertResult;
+    }
+    
+    public FailedPathingResult getFailedPathingResult(PipeBlockEntity blockEntity, ItemPipeTransporter transporter, TravellingItemEntity item) {
+        return FailedPathingResult.DROP;
     }
 
     public double modifyItemSpeed(TravellingItemEntity item) {

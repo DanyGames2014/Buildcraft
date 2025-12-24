@@ -92,6 +92,7 @@ public class Buildcraft {
     public static GoldenPipeBehavior goldenPipeBehavior;
     public static DiamondPipeBehavior diamondPipeBehavior;
     public static ClayPipeBehavior clayPipeBehavior;
+    public static VoidPipeBehavior voidPipeBehavior;
     
     public static Block woodenItemPipe;
     public static Block cobblestoneItemPipe;
@@ -101,6 +102,7 @@ public class Buildcraft {
     public static Block goldenItemPipe;
     public static Block diamondItemPipe;
     public static Block clayItemPipe;
+    public static Block voidItemPipe;
     
     public static Block woodenFluidPipe;
     public static Block cobblestoneFluidPipe;
@@ -109,6 +111,7 @@ public class Buildcraft {
     public static Block sandstoneFluidPipe;
     public static Block goldenFluidPipe;
     public static Block diamondFluidPipe;
+    public static Block voidFluidPipe;
     
     public static Block woodenEnergyPipe;
     public static Block cobblestoneEnergyPipe;
@@ -120,7 +123,6 @@ public class Buildcraft {
 
     //TODO: figure out how to avoid registering the renderblock
     public static RenderBlock renderBlock;
-
 
     public static TriggerInternal triggerRedstoneActive;
     public static TriggerInternal triggerRedstoneInactive;
@@ -142,7 +144,6 @@ public class Buildcraft {
     public static ActionInternal actionRedstone;
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
-
         // Register triggers actions and parameters
         // TODO: maybe move to its own event?
         for(PipeWire wire : PipeWire.values()){
@@ -150,6 +151,7 @@ public class Buildcraft {
             triggerPipeWireInactive[wire.ordinal()] = new TriggerPipeSignal(false, wire);
             actionPipeWire[wire.ordinal()] = new ActionSignalOutput(wire);
         }
+        
         actionEnergyPulser = new ActionEnergyPulsar();
         actionSingleEnergyPulse = new ActionSingleEnergyPulse();
         actionRedstone = new ActionRedstoneOutput();
@@ -180,7 +182,6 @@ public class Buildcraft {
         StatementManager.registerParameterClass(ActionParameterSignal.class);
 
         GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
-
 
         wrench = new BuildcraftWrenchItem(NAMESPACE.id("wrench")).setTranslationKey(NAMESPACE, "wrench");
         woodenGear = new TemplateItem(NAMESPACE.id("wooden_gear")).setTranslationKey(NAMESPACE, "wooden_gear");
@@ -221,6 +222,7 @@ public class Buildcraft {
         goldenPipeBehavior = new GoldenPipeBehavior();
         diamondPipeBehavior = new DiamondPipeBehavior();
         clayPipeBehavior = new ClayPipeBehavior();
+        voidPipeBehavior = new VoidPipeBehavior();
 
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         autoWorkbench = new AutocraftingTableBlock(NAMESPACE.id("autocrafting_table"), Material.WOOD).setTranslationKey(NAMESPACE, "auto_workbench").setHardness(2.5F);
@@ -336,6 +338,17 @@ public class Buildcraft {
                 PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "clay_item_pipe").setHardness(0.1F).setSoundGroup(Block.DIRT_SOUND_GROUP);
 
+        voidItemPipe = new PipeBlock(
+                NAMESPACE.id("void_item_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/void_item_pipe"),
+                null,
+                PipeType.ITEM,
+                voidPipeBehavior,
+                ItemPipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "void_item_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
+
         // Fluid Pipes
         woodenFluidPipe = new PipeBlock(
                 NAMESPACE.id("wooden_fluid_pipe"),
@@ -413,6 +426,17 @@ public class Buildcraft {
                 FluidPipeTransporter::new,
                 DiamondPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "diamond_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
+
+        voidFluidPipe = new PipeBlock(
+                NAMESPACE.id("void_fluid_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/void_fluid_pipe"),
+                null,
+                PipeType.FLUID,
+                voidPipeBehavior,
+                FluidPipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "void_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
 
         // Energy Pipes
         woodenEnergyPipe = new PipeBlock(

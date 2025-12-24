@@ -54,8 +54,23 @@ public class ItemPipeTransporter extends PipeTransporter {
             if (item.toMiddle && reachedMiddle(item)) {
                 Direction dir = routeItem(item);
                 if (dir == null) {
-                    dropItem(item);
-                    iterator.remove();
+                    switch (blockEntity.behavior.getFailedPathingResult(blockEntity, this, item)) {
+                        case DROP -> {
+                            dropItem(item);
+                            iterator.remove();
+                        }
+                        
+                        case VOID -> {
+                            iterator.remove();
+                            item.markDead();
+                        }
+                        
+                        case BOUNCE -> {
+                            iterator.remove();
+                            injectItem(item.stack, item.travelDirection);
+                            item.markDead();
+                        }
+                    }
                 } else {
                     item.travelDirection = dir;
                     item.toMiddle = false;
@@ -83,6 +98,8 @@ public class ItemPipeTransporter extends PipeTransporter {
                 }
             }
         }
+        
+        blockEntity.behavior.transporterTick(blockEntity, this);
     }
 
     public void dropItem(TravellingItemEntity item) {
@@ -221,5 +238,11 @@ public class ItemPipeTransporter extends PipeTransporter {
         BOUNCE,
         DROP,
         REMOVE
+    }
+    
+    public enum FailedPathingResult {
+        DROP,
+        VOID,
+        BOUNCE
     }
 }

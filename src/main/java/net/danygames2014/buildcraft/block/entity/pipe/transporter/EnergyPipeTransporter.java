@@ -260,6 +260,7 @@ public class EnergyPipeTransporter extends PipeTransporter {
             //BuildCraftTransport.instance.sendToPlayers(packet, container.getWorldObj(), container.xCoord, container.yCoord, container.zCoord, DefaultProps.PIPE_CONTENTS_RENDER_DIST);
         }
 
+        blockEntity.behavior.transporterTick(blockEntity, this);        
     }
 
     private PowerHandler.PowerReceiver getReceiverOnSide(ForgeDirection side) {
