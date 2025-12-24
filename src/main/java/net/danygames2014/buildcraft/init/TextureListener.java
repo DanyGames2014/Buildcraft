@@ -11,9 +11,7 @@ import net.modificationstation.stationapi.api.client.event.render.model.ItemMode
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
-import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Identifier;
-import net.modificationstation.stationapi.api.util.Namespace;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +23,19 @@ public class TextureListener {
     public static Atlas.Sprite energySprite;
 
     // Pipes
-    public static Atlas.Sprite cobblestoneItemPipe;
-    public static Atlas.Sprite cobblestoneFluidPipe;
-    public static Atlas.Sprite cobblestoneEnergyPipe;
+    public static Identifier diamondItemPipeUp = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_up");
+    public static Identifier diamondItemPipeDown = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_down");
+    public static Identifier diamondItemPipeNorth = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_north");
+    public static Identifier diamondItemPipeSouth = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_south");
+    public static Identifier diamondItemPipeEast = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_east");
+    public static Identifier diamondItemPipeWest = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_west");
 
-    public static Atlas.Sprite woodenItemPipe;
-    public static Atlas.Sprite woodenFluidPipe;
-    public static Atlas.Sprite woodenEnergyPipe;
-    public static Atlas.Sprite goldenItemPipe;
+    public static Identifier diamondFluidPipeUp = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_up");
+    public static Identifier diamondFluidPipeDown = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_down");
+    public static Identifier diamondFluidPipeNorth = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_north");
+    public static Identifier diamondFluidPipeSouth = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_south");
+    public static Identifier diamondFluidPipeEast = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_east");
+    public static Identifier diamondFluidPipeWest = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_west");
 
     public static Identifier redPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire");
     public static Identifier redPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire_lit");
@@ -57,23 +60,28 @@ public class TextureListener {
 
 
     @EventListener
-    public void registerTextures(TextureRegisterEvent event){
+    public void registerTextures(TextureRegisterEvent event) {
 
-        for(Identifier identifier : dynamicBlockTextures){
+        for (Identifier identifier : dynamicBlockTextures) {
             Atlases.getTerrain().addTexture(identifier);
         }
 
         energySprite = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/energy_icon"));
 
-//        cobblestoneItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_item_pipe"));
-//        cobblestoneFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_fluid_pipe"));
-//        cobblestoneEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/cobblestone_energy_pipe"));
-//
-//        woodenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_item_pipe"));
-//        woodenFluidPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_fluid_pipe"));
-//        woodenEnergyPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/wooden_energy_pipe"));
-//        goldenItemPipe = Atlases.getTerrain().addTexture(NAMESPACE.id("block/pipe/golden_item_pipe"));
-
+        Atlases.getTerrain().addTexture(diamondItemPipeUp);
+        Atlases.getTerrain().addTexture(diamondItemPipeDown);
+        Atlases.getTerrain().addTexture(diamondItemPipeNorth);
+        Atlases.getTerrain().addTexture(diamondItemPipeSouth);
+        Atlases.getTerrain().addTexture(diamondItemPipeEast);
+        Atlases.getTerrain().addTexture(diamondItemPipeWest);
+        
+        Atlases.getTerrain().addTexture(diamondFluidPipeUp);
+        Atlases.getTerrain().addTexture(diamondFluidPipeDown);
+        Atlases.getTerrain().addTexture(diamondFluidPipeNorth);
+        Atlases.getTerrain().addTexture(diamondFluidPipeSouth);
+        Atlases.getTerrain().addTexture(diamondFluidPipeEast);
+        Atlases.getTerrain().addTexture(diamondFluidPipeWest);
+        
         Atlases.getTerrain().addTexture(redPipeWire);
         Atlases.getTerrain().addTexture(redPipeWireLit);
 
@@ -100,15 +108,15 @@ public class TextureListener {
 
         StatementManager.registerTextures();
 
-        for(GateMaterial material : GateMaterial.VALUES) {
+        for (GateMaterial material : GateMaterial.VALUES) {
             material.registerTextures();
         }
 
-        for(GateLogic logic : GateLogic.VALUES) {
+        for (GateLogic logic : GateLogic.VALUES) {
             logic.registerTextures();
         }
 
-        for(GateExpansion expansion : GateExpansions.getExpansions()) {
+        for (GateExpansion expansion : GateExpansions.getExpansions()) {
             expansion.registerTextures();
         }
     }

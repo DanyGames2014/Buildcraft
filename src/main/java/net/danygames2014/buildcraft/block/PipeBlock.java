@@ -45,6 +45,7 @@ import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
+    public final PipeType type;
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
     public final PipeBlockEntityFactory blockEntityFactory;
@@ -59,9 +60,10 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Nullable
     private Identifier alternativeTexture;
 
-    public PipeBlock(Identifier identifier, Material material, Identifier texture, @Nullable Identifier alternativeTexture, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter, PipeBlockEntityFactory blockEntityFactory) {
+    public PipeBlock(Identifier identifier, Material material, Identifier texture, @Nullable Identifier alternativeTexture, PipeType type, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter, PipeBlockEntityFactory blockEntityFactory) {
         super(identifier, material);
         this.blockEntityFactory = blockEntityFactory;
+        this.type = type;
         this.behavior = behavior;
         if (behavior == null) {
             throw new NullPointerException("PipeBehavior on PipeBlock with Identifier " + identifier + " is null!");

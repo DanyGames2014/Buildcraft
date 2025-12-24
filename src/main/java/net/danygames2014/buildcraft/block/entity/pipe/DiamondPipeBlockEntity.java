@@ -11,6 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory {
@@ -162,14 +164,49 @@ public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory
     public String getName() {
         return "Filter";
     }
-    
+
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        NbtList itemList = nbt.getList("Items");
+        this.filterInventory = new ItemStack[this.size()];
+
+        for(int slot = 0; slot < itemList.size(); ++slot) {
+            NbtCompound itemNbt = (NbtCompound)itemList.get(slot);
+            int slotId = itemNbt.getByte("Slot") & 255;
+            if (slotId < this.filterInventory.length) {
+                this.filterInventory[slotId] = new ItemStack(itemNbt);
+            }
+        }
+        
+        filterMeta = nbt.getBoolean("filterMeta");
+        filterTags = nbt.getBoolean("filterTags");
+    }
+
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        NbtList itemList = new NbtList();
+
+        for(int slot = 0; slot < this.filterInventory.length; ++slot) {
+            if (this.filterInventory[slot] != null) {
+                NbtCompound itemNbt = new NbtCompound();
+                itemNbt.putByte("Slot", (byte)slot);
+                this.filterInventory[slot].writeNbt(itemNbt);
+                itemList.add(itemNbt);
+            }
+        }
+
+        nbt.put("Items", itemList);
+        nbt.putBoolean("filterMeta", filterMeta);
+        nbt.putBoolean("filterTags", filterTags);
+    }
+
     public enum FilterDirection {
         BLACK(Direction.DOWN, 0, 8),
         WHITE(Direction.UP, 9, 17),
         RED(Direction.NORTH, 18, 26),
         BLUE(Direction.SOUTH, 27, 35),
-        GREEN(Direction.EAST, 36, 44),
-        YELLOW(Direction.WEST, 45, 53);
+        GREEN(Direction.WEST, 36, 44),
+        YELLOW(Direction.EAST, 45, 53);
 
         public final Direction side;
         public final int startIndex;

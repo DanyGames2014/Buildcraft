@@ -6,10 +6,7 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerExternal;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.*;
-import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
-import net.danygames2014.buildcraft.block.entity.pipe.PoweredPipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionPulsar;
 import net.danygames2014.buildcraft.statements.ActionSignalOutput;
@@ -251,6 +248,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_item_pipe"),
                 NAMESPACE.id("block/pipe/wooden_item_pipe_alternative"),
+                PipeType.ITEM,
                 woodenPipeBehavior,
                 ItemPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -261,6 +259,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_item_pipe"),
                 null,
+                PipeType.ITEM,
                 cobblestonePipeBehavior,
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
@@ -271,6 +270,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/stone_item_pipe"),
                 null,
+                PipeType.ITEM,
                 stonePipeBehavior,
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
@@ -281,6 +281,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/iron_item_pipe"),
                 NAMESPACE.id("block/pipe/iron_item_pipe_alternative"),
+                PipeType.ITEM,
                 ironPipeBehavior,
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
@@ -291,6 +292,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/sandstone_item_pipe"),
                 null,
+                PipeType.ITEM,
                 sandstonePipeBehavior,
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
@@ -301,6 +303,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/golden_item_pipe"),
                 null,
+                PipeType.ITEM,
                 goldenPipeBehavior,
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
@@ -311,6 +314,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/diamond_item_pipe"),
                 null,
+                PipeType.ITEM,
                 diamondPipeBehavior,
                 ItemPipeTransporter::new,
                 DiamondPipeBlockEntity::new
@@ -321,6 +325,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/clay_item_pipe"),
                 null,
+                PipeType.ITEM,
                 clayPipeBehavior,
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
@@ -332,6 +337,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_fluid_pipe"),
                 NAMESPACE.id("block/pipe/wooden_fluid_pipe_alternative"),
+                PipeType.FLUID,
                 woodenPipeBehavior,
                 FluidPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -342,6 +348,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_fluid_pipe"),
                 null,
+                PipeType.FLUID,
                 cobblestonePipeBehavior,
                 FluidPipeTransporter::new,
                 PipeBlockEntity::new
@@ -352,6 +359,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/stone_fluid_pipe"),
                 null,
+                PipeType.FLUID,
                 stonePipeBehavior,
                 FluidPipeTransporter::new,
                 PipeBlockEntity::new
@@ -362,6 +370,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/iron_fluid_pipe"),
                 NAMESPACE.id("block/pipe/iron_fluid_pipe_alternative"),
+                PipeType.FLUID,
                 ironPipeBehavior,
                 FluidPipeTransporter::new,
                 PipeBlockEntity::new
@@ -372,6 +381,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/sandstone_fluid_pipe"),
                 null,
+                PipeType.FLUID,
                 sandstonePipeBehavior,
                 FluidPipeTransporter::new,
                 PipeBlockEntity::new
@@ -382,6 +392,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/golden_fluid_pipe"),
                 null,
+                PipeType.FLUID,
                 goldenPipeBehavior,
                 FluidPipeTransporter::new,
                 PipeBlockEntity::new
@@ -392,6 +403,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/diamond_fluid_pipe"),
                 null,
+                PipeType.FLUID,
                 diamondPipeBehavior,
                 FluidPipeTransporter::new,
                 DiamondPipeBlockEntity::new
@@ -403,6 +415,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/wooden_energy_pipe"),
                 NAMESPACE.id("block/pipe/wooden_energy_pipe_alternative"),
+                PipeType.ENERGY,
                 woodenPipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -413,6 +426,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/cobblestone_energy_pipe"),
                 null,
+                PipeType.ENERGY,
                 cobblestonePipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -423,6 +437,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/stone_energy_pipe"),
                 null,
+                PipeType.ENERGY,
                 stonePipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -433,6 +448,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/sandstone_energy_pipe"),
                 null,
+                PipeType.ENERGY,
                 sandstonePipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -443,6 +459,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/golden_energy_pipe"),
                 null,
+                PipeType.ENERGY,
                 goldenPipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new
@@ -453,6 +470,7 @@ public class Buildcraft {
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/diamond_energy_pipe"),
                 null,
+                PipeType.ENERGY,
                 diamondPipeBehavior,
                 EnergyPipeTransporter::new,
                 PoweredPipeBlockEntity::new

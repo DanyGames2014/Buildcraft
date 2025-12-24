@@ -62,8 +62,6 @@ public class DiamondPipeScreen extends HandledScreen {
         mouseX -= var4;
         mouseY -= var5;
 
-        System.err.println(mouseX + " | " + mouseY);
-
         byte filterIndex = -1;
         boolean filterValue = false;
         
