@@ -478,6 +478,11 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         super.writeNbt(nbt);
         nbt.putString("pipeId", String.valueOf(BlockRegistry.INSTANCE.getId(pipeBlock)));
 
+        for (int i = 0; i < Direction.values().length; i++) {
+            final String key = "redstoneInputSide[" + i + "]";
+            nbt.putByte(key, (byte) redstoneInputSide[i]);
+        }
+
         // Connections
         NbtList connections = new NbtList();
         for (var side : this.connections.entrySet()) {
@@ -509,6 +514,21 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         
         if (this.pipeBlock == null) {
             throw new IllegalStateException("PipeBlockEntity does not have any pipe block");
+        }
+
+        redstoneInput = 0;
+
+        for (int i = 0; i < Direction.values().length; i++) {
+            final String key = "redstoneInputSide[" + i + "]";
+            if (nbt.contains(key)) {
+                redstoneInputSide[i] = nbt.getByte(key);
+
+                if (redstoneInputSide[i] > redstoneInput) {
+                    redstoneInput = redstoneInputSide[i];
+                }
+            } else {
+                redstoneInputSide[i] = 0;
+            }
         }
         
         // Connections

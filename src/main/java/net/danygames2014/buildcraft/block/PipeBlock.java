@@ -26,6 +26,7 @@ import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
@@ -90,7 +91,21 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         updateConnections(world, x, y, z);
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
             pipeBlockEntity.neighborUpdate();
+            pipeBlockEntity.redstoneInput = 0;
+            for (int i = 0; i < Direction.values().length; i++) {
+                Direction d = Direction.values()[i];
+                pipeBlockEntity.redstoneInputSide[i] = getRedstoneInputToPipe(world, x, y, z, d);
+                if (pipeBlockEntity.redstoneInput < pipeBlockEntity.redstoneInputSide[i]) {
+                    pipeBlockEntity.redstoneInput = pipeBlockEntity.redstoneInputSide[i];
+                }
+            }
         }
+    }
+
+    private int getRedstoneInputToPipe(World world, int x, int y, int z, Direction d) {
+        BlockPos blockPos = new BlockPos(x, y, z);
+        BlockPos offset = blockPos.offset(d);
+        return world.isEmittingRedstonePowerInDirection(offset.getX(), offset.getY(), offset.getZ(), d.ordinal()) ? 15 : 0;
     }
 
     @Override
