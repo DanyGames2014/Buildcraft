@@ -118,6 +118,15 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
             slots.add(new TriggerSlot(62, 44, pipe, 1));
             slots.add(new ActionSlot(98, 26, pipe, 0));
             slots.add(new ActionSlot(98, 44, pipe, 1));
+        } else if (gate.material == GateMaterial.GLOWSTONE) {
+            for (int i = 0; i < 2; i++) {
+                TriggerSlot ts = new TriggerSlot(44, 26 + (i * 18), pipe, i);
+                ActionSlot as = new ActionSlot(98, 26 + (i * 18), pipe, i);
+                slots.add(ts);
+                slots.add(as);
+                slots.add(new TriggerParameterSlot(62, 26 + (i * 18), pipe, 0, ts));
+                slots.add(new ActionParameterSlot(116, 26 + (i * 18), pipe, 0, as));
+            }
         } else if (gate.material == GateMaterial.GOLD) {
             for (int k = 0; k < 4; ++k) {
                 slots.add(new TriggerSlot(53, 26 + 18 * k, pipe, position));
@@ -156,6 +165,39 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 slots.add(new TriggerParameterSlot(116, 26 + 18 * k, pipe, 0,
                         (TriggerSlot) slots.get(position - 16)));
                 position++;
+            }
+        } else if (gate.material == GateMaterial.EMERALD) {
+            int lastPos;
+
+            for (int y = 0; y < 4; ++y) {
+                slots.add(new TriggerSlot(8, 26 + 18 * y, pipe, y));
+                lastPos = position;
+                position++;
+
+                for (int x = 0; x < 3; ++x) {
+                    slots.add(new TriggerParameterSlot(
+                            8 + 18 * (x + 1),
+                            26 + 18 * y,
+                            pipe,
+                            x,
+                            (TriggerSlot) slots.get(lastPos)));
+
+                    position++;
+                }
+
+                slots.add(new ActionSlot(98, 26 + 18 * y, pipe, y));
+                lastPos = position;
+                position++;
+
+                for (int x = 0; x < 3; ++x) {
+                    slots.add(new ActionParameterSlot(
+                            98 + 18 * (x + 1),
+                            26 + 18 * y,
+                            pipe,
+                            x,
+                            (ActionSlot) slots.get(lastPos)));
+                    position++;
+                }
             }
         }
         // TODO: what is this?

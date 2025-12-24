@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionPulsar;
+import net.danygames2014.buildcraft.block.entity.pipe.parameter.ActionParameterSignal;
 import net.danygames2014.buildcraft.statements.ActionSignalOutput;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
@@ -138,6 +139,7 @@ public class Buildcraft {
     public static ActionInternal[] actionPipeWire = new ActionSignalOutput[PipeWire.values().length];
     public static ActionInternal actionEnergyPulser;
     public static ActionInternal actionSingleEnergyPulse;
+    public static ActionInternal actionRedstone;
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
 
@@ -150,6 +152,7 @@ public class Buildcraft {
         }
         actionEnergyPulser = new ActionEnergyPulsar();
         actionSingleEnergyPulse = new ActionSingleEnergyPulse();
+        actionRedstone = new ActionRedstoneOutput();
 
         for (TriggerPipeContents.PipeContents kind : TriggerPipeContents.PipeContents.values()) {
             triggerPipe[kind.ordinal()] = new TriggerPipeContents(kind);
@@ -170,9 +173,11 @@ public class Buildcraft {
         StatementManager.registerTriggerProvider(new DefaultTriggerProvider());
 
         StatementManager.registerActionProvider(new PipeActionProvider());
+        StatementManager.registerActionProvider(new DefaultActionProvider());
 
         StatementManager.registerParameterClass(StatementParameterRedstoneGateSideOnly.class);
         StatementManager.registerParameterClass(StatementParameterItemStack.class);
+        StatementManager.registerParameterClass(ActionParameterSignal.class);
 
         GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
 

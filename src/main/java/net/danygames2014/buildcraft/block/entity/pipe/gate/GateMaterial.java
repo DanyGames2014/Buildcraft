@@ -12,8 +12,9 @@ public enum GateMaterial {
     REDSTONE("gate_interface_1.png", 146, 1, 0, 0),
     IRON("gate_interface_2.png", 164, 2, 0, 0),
     GOLD("gate_interface_3.png", 200, 4, 1, 0),
-    DIAMOND("gate_interface_4.png", 200, 8, 1, 0);
-
+    DIAMOND("gate_interface_4.png", 200, 8, 1, 0),
+    EMERALD("gate_interface_5.png", 200, 4, 3, 3),
+    GLOWSTONE("gate_interface_6.png", 164, 2, 1, 1);
     public static final GateMaterial[] VALUES = values();
     public final String backgroundTexture;
     public final int guiHeight;

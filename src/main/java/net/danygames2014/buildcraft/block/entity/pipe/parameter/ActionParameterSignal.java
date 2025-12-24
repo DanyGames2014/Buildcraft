@@ -11,6 +11,7 @@ import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.io.DataInputStream;
@@ -59,7 +60,12 @@ public class ActionParameterSignal implements StatementParameter {
 
     @Override
     public void registerTextures() {
-
+        icons = new Atlas.Sprite[] {
+            Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/trigger_pipesignal_red_active")),
+            Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/trigger_pipesignal_blue_active")),
+            Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/trigger_pipesignal_green_active")),
+            Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/trigger_pipesignal_yellow_active"))
+        };
     }
 
     @Override
