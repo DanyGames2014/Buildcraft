@@ -47,6 +47,10 @@ public class TextureListener {
     public static Identifier yellowPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/yellow_pipe_wire_lit");
 
     public static Identifier plug = Buildcraft.NAMESPACE.id("block/pluggable/plug");
+    public static Identifier lens = Buildcraft.NAMESPACE.id("block/pluggable/lens_frame");
+    public static Identifier filter = Buildcraft.NAMESPACE.id("block/pluggable/filter_frame");
+    public static Identifier lens_transparent = Buildcraft.NAMESPACE.id("block/pluggable/transparent");
+
     public static Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/structure_pipe");
 
     public static Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
@@ -95,6 +99,9 @@ public class TextureListener {
         Atlases.getTerrain().addTexture(yellowPipeWireLit);
 
         Atlases.getTerrain().addTexture(plug);
+        Atlases.getTerrain().addTexture(lens);
+        Atlases.getTerrain().addTexture(filter);
+        Atlases.getTerrain().addTexture(lens_transparent);
         Atlases.getTerrain().addTexture(structurePipe);
 
         Atlases.getTerrain().addTexture(missingTexture);

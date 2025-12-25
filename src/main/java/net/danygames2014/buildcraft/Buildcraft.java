@@ -57,6 +57,7 @@ public class Buildcraft {
     public static Item pulsatingChipset;
 
     public static Item plug;
+    public static Item lens;
     public static Item facade;
 
     public static Item gateItem;
@@ -245,6 +246,7 @@ public class Buildcraft {
         pulsatingChipset = new TemplateItem(NAMESPACE.id("pulsating_chipset")).setTranslationKey(NAMESPACE, "pulsating_chipset");
 
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
+        lens = new LensItem(NAMESPACE.id("lens")).setTranslationKey(NAMESPACE, "lens");
         facade = new FacadeItem(NAMESPACE.id("facade")).setTranslationKey(NAMESPACE, "facade");
 
         gateItem = new GateItem(NAMESPACE.id("gate"));
