@@ -6,11 +6,19 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 public class BlueprintData {
+    public boolean written;
+    public String name = "Unnamed";
+    public String author = "Unknown";
+    public Direction facing;
+    public int sizeX;
+    public int sizeY;
+    public int sizeZ;
     public ArrayList<BlueprintEntry> entries;
 
     public BlueprintData() {
@@ -31,6 +39,14 @@ public class BlueprintData {
     }
     
     public void writeNbt(NbtCompound nbt) {
+        nbt.putBoolean("written", written);
+        nbt.putString("name", name);
+        nbt.putString("author", author);
+        nbt.putInt("facing", facing.ordinal());
+        nbt.putInt("sizeX", sizeX);
+        nbt.putInt("sizeY", sizeY);
+        nbt.putInt("sizeZ", sizeZ);
+        
         NbtList entries = new NbtList();
         for (BlueprintEntry entry : this.entries) {
             NbtCompound entryNbt = new NbtCompound();
@@ -41,6 +57,18 @@ public class BlueprintData {
     }
     
     public void readNbt(NbtCompound nbt) {
+        if (!nbt.contains("written")) {
+            return;
+        }
+        
+        written = nbt.getBoolean("written");
+        name = nbt.getString("name");
+        author = nbt.getString("author");
+        facing = Direction.byId(nbt.getInt("facing"));
+        sizeX = nbt.getInt("sizeX");
+        sizeY = nbt.getInt("sizeY");
+        sizeZ = nbt.getInt("sizeZ");
+        
         NbtList entries = nbt.getList("entries");
         for (int i = 0; i < entries.size(); i++) {
             BlueprintEntry entry = new BlueprintEntry();

@@ -2,10 +2,7 @@ package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
-import net.danygames2014.buildcraft.packet.AssemblyTableUpdateS2CPacket;
-import net.danygames2014.buildcraft.packet.CommandPacket;
-import net.danygames2014.buildcraft.packet.SelectAssemblyRecipeC2SPacket;
-import net.danygames2014.buildcraft.packet.ToggleDiamondPipeFilterC2SPacket;
+import net.danygames2014.buildcraft.packet.*;
 import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
 import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.mine_diver.unsafeevents.listener.EventListener;
@@ -27,6 +24,7 @@ public class PacketTypeListener {
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("assembly_table_recipes_update"), AssemblyTableUpdateS2CPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("command"), CommandPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("toggle_diamond_pipe_filter"), ToggleDiamondPipeFilterC2SPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("architect_table_name_field"), ArchitectTableNameFieldPacket.TYPE);
 
         StateRegistry.register(PipeRenderState.class);
         StateRegistry.register(PipePluggableState.class);

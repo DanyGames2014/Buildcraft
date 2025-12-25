@@ -6,3 +6,9 @@ accessible field net/minecraft/entity/ItemEntity health I
 accessible field net/minecraft/entity/data/DataTracker entries Ljava/util/Map;
 accessible field net/minecraft/client/render/block/BlockRenderManager flipTextureHorizontally Z
 accessible field net/minecraft/inventory/CraftingInventory stacks [Lnet/minecraft/item/ItemStack;
+accessible field net/minecraft/client/gui/widget/TextFieldWidget focusedTicks I
+accessible field net/minecraft/client/gui/widget/TextFieldWidget textRenderer Lnet/minecraft/client/font/TextRenderer;
+accessible field net/minecraft/client/gui/widget/TextFieldWidget text Ljava/lang/String;
+accessible field net/minecraft/client/gui/widget/TextFieldWidget x I
+accessible field net/minecraft/client/gui/widget/TextFieldWidget y I
+accessible field net/minecraft/client/gui/widget/TextFieldWidget height I

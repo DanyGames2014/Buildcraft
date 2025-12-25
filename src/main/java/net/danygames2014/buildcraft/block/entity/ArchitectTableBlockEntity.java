@@ -10,11 +10,14 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.block.BlockState;
+import net.modificationstation.stationapi.api.state.property.Properties;
 
 public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements Inventory {
     public SimpleInventory inventory = new SimpleInventory(2, "Architect Table", this::markDirty);
     public int progress = 0;
     public int maxProgress = 20;
+    public String blueprintName = "";
+    public String lastTouchedBy = "";
     
     public ArchitectTableBlockEntity() {
         
@@ -61,15 +64,14 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
         BlueprintData blueprintData = blueprint.data;
         blueprintData.entries.clear();
         
-        int sizeX = workingArea.maxX - workingArea.minX + 1;
-        int sizeY = workingArea.maxY - workingArea.minY;
-        int sizeZ = workingArea.maxZ - workingArea.minZ + 1;
+        int sizeX = (workingArea.maxX - workingArea.minX) + 1;
+        int sizeY = (workingArea.maxY - workingArea.minY) + 1;
+        int sizeZ = (workingArea.maxZ - workingArea.minZ) + 1;
         
         for (int x = 0; x < sizeX; x++) {
-            for (int y = 0; y <= sizeY; y++) {
+            for (int y = 0; y < sizeY; y++) {
                 for (int z = 0; z < sizeZ; z++) {
                     BlockState state = world.getBlockState(x + workingArea.minX,y + workingArea.minY,z + workingArea.minZ);
-                    System.err.println(state);
                     
                     if (state.isAir()) {
                         continue;
@@ -80,7 +82,22 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
             }
         }
         
+        blueprintData.name = "Nyaaa";
+        blueprintData.author = lastTouchedBy;
+        blueprintData.sizeX = sizeX;
+        blueprintData.sizeY = sizeY;
+        blueprintData.sizeZ = sizeZ;
+        blueprintData.facing = world.getBlockState(x,y,z).get(Properties.HORIZONTAL_FACING);
+        blueprintData.written = true;
         blueprint.markDirty();
+
+        NbtCompound nbt = inputStack.getStationNbt();
+        nbt.putString("name", blueprintData.name);
+        nbt.putString("author", blueprintData.author);
+        nbt.putInt("sizeX", blueprintData.sizeX);
+        nbt.putInt("sizeY", blueprintData.sizeY);
+        nbt.putInt("sizeZ", blueprintData.sizeZ);
+        
         inputStack.setDamage(blueprint.rawId);
         
         inventory.setStack(1, inputStack);

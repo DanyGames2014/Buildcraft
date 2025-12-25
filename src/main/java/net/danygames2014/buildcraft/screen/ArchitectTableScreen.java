@@ -1,18 +1,81 @@
 package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.ArchitectTableBlockEntity;
+import net.danygames2014.buildcraft.packet.ArchitectTableNameFieldPacket;
 import net.danygames2014.buildcraft.screen.handler.ArchitectTableScreenHandler;
+import net.danygames2014.buildcraft.screen.widget.TransparentTextFieldWidget;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.entity.player.PlayerEntity;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class ArchitectTableScreen extends HandledScreen {
     public ArchitectTableBlockEntity blockEntity;
+    public PlayerEntity player;
+    
+    public TextFieldWidget nameField;
 
     public ArchitectTableScreen(PlayerEntity player, ArchitectTableBlockEntity blockEntity) {
         super(new ArchitectTableScreenHandler(player, blockEntity));
         this.blockEntity = blockEntity;
+        this.player = player;
         this.backgroundHeight = 165;
+    }
+
+    @Override
+    public void init() {
+        super.init();
+        this.nameField = new TransparentTextFieldWidget(this, this.textRenderer, this.width / 2 - 54, this.height / 2 - 21, 88, 9, "");
+        this.nameField.setMaxLength(16);
+        
+//        if (player.world.isRemote) {
+//            PacketHelper.send(new ArchitectTableNameFieldPacket("", true));
+//        }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        nameField.tick();
+    }
+
+    @Override
+    public void render(int mouseX, int mouseY, float delta) {
+        super.render(mouseX, mouseY, delta);
+        nameField.render();
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int button) {
+        super.mouseClicked(mouseX, mouseY, button);
+        nameField.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    protected void keyPressed(char character, int keyCode) {
+        if (keyCode == Keyboard.KEY_ESCAPE) {
+            super.keyPressed(character, keyCode);
+            return;
+        }
+        
+        if (keyCode == Keyboard.KEY_RETURN) {
+            nameField.setFocused(false);
+        }
+        
+        if (nameField.focused) {
+            nameField.keyPressed(character, keyCode);
+            PacketHelper.send(new ArchitectTableNameFieldPacket(nameField.getText(), false));
+            return;
+        }
+        
+        super.keyPressed(character, keyCode);
+    }
+
+    @Override
+    public void handleTab() {
+        nameField.setFocused(true);
     }
 
     @Override
@@ -31,7 +94,7 @@ public class ArchitectTableScreen extends HandledScreen {
 
         if (blockEntity.progress > 0) {
             int cookProgress = (int) (((float) blockEntity.progress / blockEntity.maxProgress) * 22F);
-            drawTexture(x + 80, y + 35, 177, 14, cookProgress, 16);
+            drawTexture(x + 79, y + 35, 177, 14, cookProgress, 16);
         }
     }
 }
