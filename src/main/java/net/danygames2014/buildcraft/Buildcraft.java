@@ -144,6 +144,17 @@ public class Buildcraft {
     public static TriggerExternal triggerInventoryBelow50;
     public static TriggerExternal triggerInventoryBelow75;
 
+    public static TriggerExternal triggerEmptyFluid;
+    public static TriggerExternal triggerContainsFluid;
+    public static TriggerExternal triggerSpaceFluid;
+    public static TriggerExternal triggerFullFluid;
+    public static TriggerExternal triggerFluidContainerBelow25;
+    public static TriggerExternal triggerFluidContainerBelow50;
+    public static TriggerExternal triggerFluidContainerBelow75;
+
+    public static TriggerExternal triggerMachineActive;
+    public static TriggerExternal triggerMachineInactive;
+
     public static ActionInternal[] actionPipeWire = new ActionSignalOutput[PipeWire.values().length];
     public static ActionInternal actionEnergyPulser;
     public static ActionInternal actionSingleEnergyPulse;
@@ -186,6 +197,17 @@ public class Buildcraft {
         triggerInventoryBelow25 = new TriggerInventoryLevel(TriggerInventoryLevel.TriggerType.BELOW25);
         triggerInventoryBelow50 = new TriggerInventoryLevel(TriggerInventoryLevel.TriggerType.BELOW50);
         triggerInventoryBelow75 = new TriggerInventoryLevel(TriggerInventoryLevel.TriggerType.BELOW75);
+
+        triggerEmptyFluid = new TriggerFluidContainer(TriggerFluidContainer.State.Empty);
+        triggerContainsFluid = new TriggerFluidContainer(TriggerFluidContainer.State.Contains);
+        triggerSpaceFluid = new TriggerFluidContainer(TriggerFluidContainer.State.Space);
+        triggerFullFluid = new TriggerFluidContainer(TriggerFluidContainer.State.Full);
+        triggerFluidContainerBelow25 = new TriggerFluidContainerLevel(TriggerFluidContainerLevel.TriggerType.BELOW25);
+        triggerFluidContainerBelow50 = new TriggerFluidContainerLevel(TriggerFluidContainerLevel.TriggerType.BELOW50);
+        triggerFluidContainerBelow75 = new TriggerFluidContainerLevel(TriggerFluidContainerLevel.TriggerType.BELOW75);
+
+        triggerMachineActive = new TriggerMachine(true);
+        triggerMachineInactive = new TriggerMachine(false);
 
         StatementManager.registerTriggerProvider(new PipeTriggerProvider());
         StatementManager.registerTriggerProvider(new DefaultTriggerProvider());
