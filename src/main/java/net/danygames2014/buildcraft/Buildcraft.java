@@ -230,7 +230,7 @@ public class Buildcraft {
         goldGear = new TemplateItem(NAMESPACE.id("golden_gear")).setTranslationKey(NAMESPACE, "golden_gear");
         diamondGear = new TemplateItem(NAMESPACE.id("diamond_gear")).setTranslationKey(NAMESPACE, "diamond_gear");
         template = new BuilderTemplateItem(NAMESPACE.id("template")).setTranslationKey(NAMESPACE, "template");
-        blueprint = new BuilderTemplateItem(NAMESPACE.id("blueprint")).setTranslationKey(NAMESPACE, "blueprint");
+        blueprint = new BuilderBlueprintItem(NAMESPACE.id("blueprint")).setTranslationKey(NAMESPACE, "blueprint");
         pipeWaterproof = new TemplateItem(NAMESPACE.id("pipe_waterproof")).setTranslationKey(NAMESPACE, "pipe_waterproof");
         
         redPipeWire = new PipeWireItem(NAMESPACE.id("red_pipe_wire")).setTranslationKey(NAMESPACE, "red_pipe_wire");

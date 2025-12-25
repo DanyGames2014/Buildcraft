@@ -27,6 +27,11 @@ public class ScreenHandlerListener {
         event.register(NAMESPACE.id("assembly_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAssemblyTableScreen, AssemblyTableBlockEntity::new));
         event.register(NAMESPACE.id("gate"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openGateScreen, PipeBlockEntity::new));
         event.register(NAMESPACE.id("diamond_pipe"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openDiamondPipeScreen, DiamondPipeBlockEntity::new));
+        event.register(NAMESPACE.id("architect_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openArchitectTableScreen, ArchitectTableBlockEntity::new));
+    }
+
+    private Screen openArchitectTableScreen(PlayerEntity player, Inventory inventory) {
+        return new ArchitectTableScreen(player, (ArchitectTableBlockEntity) inventory);
     }
 
     public Screen openDiamondPipeScreen(PlayerEntity player, Inventory inventory) {

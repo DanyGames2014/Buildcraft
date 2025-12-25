@@ -20,5 +20,6 @@ public class BlockEntityRendererListener {
         event.renderers.put(PipeBlockEntity.class, PipeBlockEntityRenderer.INSTANCE);
         event.renderers.put(LaserBlockEntity.class, LaserBlockEntityRenderer.INSTANCE);
         event.renderers.put(PathMarkerBlockEntity.class, new PathMarkerBlockEntityRenderer());
+        event.renderers.put(ArchitectTableBlockEntity.class, new AreaWorkerBlockEntityRenderer());
     }
 }
