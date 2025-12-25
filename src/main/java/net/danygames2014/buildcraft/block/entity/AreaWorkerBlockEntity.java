@@ -63,8 +63,8 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
             this.maxY = maxY;
             this.maxZ = maxZ;
 
-            if (this.minY + areaWorker.minHeight > this.maxY) {
-                this.maxY = this.minY + areaWorker.minHeight;
+            if (this.minY + (areaWorker.minHeight - 1) > this.maxY) {
+                this.maxY = this.minY + (areaWorker.minHeight - 1);
             }
             
             constructLasers();
