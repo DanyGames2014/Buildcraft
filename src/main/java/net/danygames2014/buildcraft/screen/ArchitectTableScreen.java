@@ -66,6 +66,7 @@ public class ArchitectTableScreen extends HandledScreen {
         
         if (nameField.focused) {
             nameField.keyPressed(character, keyCode);
+            blockEntity.blueprintName = nameField.getText();
             PacketHelper.send(new ArchitectTableNameFieldPacket(nameField.getText(), false));
             return;
         }
@@ -94,7 +95,7 @@ public class ArchitectTableScreen extends HandledScreen {
 
         if (blockEntity.progress > 0) {
             int cookProgress = (int) (((float) blockEntity.progress / blockEntity.maxProgress) * 22F);
-            drawTexture(x + 79, y + 35, 177, 14, cookProgress, 16);
+            drawTexture(x + 73, y + 35, 177, 14, cookProgress, 16);
         }
     }
 }

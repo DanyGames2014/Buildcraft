@@ -82,7 +82,7 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
             }
         }
         
-        blueprintData.name = "Nyaaa";
+        blueprintData.name = blueprintName;
         blueprintData.author = lastTouchedBy;
         blueprintData.sizeX = sizeX;
         blueprintData.sizeY = sizeY;

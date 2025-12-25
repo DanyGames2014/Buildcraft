@@ -57,10 +57,10 @@ public class ArchitectTableScreenHandler extends ScreenHandler {
         }
         
         // Input
-        this.addSlot(new ArchitectTableInputSlot(blockEntity, 0, 55, 35));
+        this.addSlot(new ArchitectTableInputSlot(blockEntity, 0, 48, 35));
         
         // Output
-        this.addSlot(new ArchitectTableOutputSlot(blockEntity, 1, 114, 35));
+        this.addSlot(new ArchitectTableOutputSlot(blockEntity, 1, 108, 35));
     }
 
     @Environment(EnvType.SERVER)
