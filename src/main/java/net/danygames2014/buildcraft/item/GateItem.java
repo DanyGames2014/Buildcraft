@@ -8,6 +8,9 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.*;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
 import net.glasslauncher.mods.alwaysmoreitems.api.SubItemProvider;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -28,12 +31,13 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("deprecation")
+@EnvironmentInterface(itf = ItemWithRenderer.class, value = EnvType.CLIENT)
 public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem, ItemWithRenderer {
     public static final String NBT_TAG_MAT = "mat";
     public static final String NBT_TAG_LOGIC = "logic";
@@ -200,11 +204,13 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         return new GatePluggable(GateFactory.makeGate(pipe, stack, side));
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderItemOnGui(ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, int itemId, int damage, int textureIndex, int x, int y) {
 
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderItemOnGui(ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         ArsenicItemRenderer arsenic = new ArsenicItemRenderer(itemRenderer);

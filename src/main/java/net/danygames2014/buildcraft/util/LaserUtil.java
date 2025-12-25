@@ -2,9 +2,10 @@ package net.danygames2014.buildcraft.util;
 
 import net.danygames2014.buildcraft.api.core.LaserKind;
 import net.danygames2014.buildcraft.api.core.Position;
-import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.entity.EntityBlock;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.World;
 
 public class LaserUtil {
@@ -46,7 +47,9 @@ public class LaserUtil {
 
         EntityBlock block = new EntityBlock(world, i, j, k, iSize, jSize, kSize);
         block.setBrightness(210);
-        block.texture = getLaserTexture(kind);
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            block.texture = getLaserTexture(kind);
+        }
 
         world.spawnEntity(block);
 
