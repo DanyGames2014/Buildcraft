@@ -38,6 +38,12 @@ public class PipeBehavior {
      * @return If we can connect to the other pipe
      */
     public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior, Direction side) {
+        if (otherBlockEntity.getPipeColor() >= 0 && blockEntity.getPipeColor() >= 0) {
+            if (otherBlockEntity.getPipeColor() != blockEntity.getPipeColor()) {
+                return PipeConnectionType.NONE;
+            }
+        }
+        
         if (otherBlockEntity.transporter.getType() == blockEntity.transporter.getType()) {
             return PipeConnectionType.NORMAL;
         }
