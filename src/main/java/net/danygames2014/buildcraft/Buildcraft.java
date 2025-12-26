@@ -344,7 +344,7 @@ public class Buildcraft {
         ).setTranslationKey(NAMESPACE, "stone_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
 
         ironItemPipe = new PipeBlock(
-                NAMESPACE.id("iton_item_pipe"),
+                NAMESPACE.id("iron_item_pipe"),
                 pipeMaterial,
                 NAMESPACE.id("block/pipe/iron_item_pipe"),
                 NAMESPACE.id("block/pipe/iron_item_pipe_alternative"),
