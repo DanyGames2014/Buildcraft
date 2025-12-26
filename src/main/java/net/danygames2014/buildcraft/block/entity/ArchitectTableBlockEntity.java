@@ -92,6 +92,7 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
         blueprint.markDirty();
 
         NbtCompound nbt = inputStack.getStationNbt();
+        nbt.putBoolean("written", true);
         nbt.putString("name", blueprintData.name);
         nbt.putString("author", blueprintData.author);
         nbt.putInt("sizeX", blueprintData.sizeX);

@@ -138,7 +138,7 @@ public class TextureListener {
                 Buildcraft.blueprint,
                 Buildcraft.NAMESPACE.id("blueprint_used"),
                 (stack, world, entity, seed) -> {
-                    return stack.getStationNbt().getInt("used");
+                    return stack.getStationNbt().getBoolean("written") ? 1 : 0;
                 }
         );
 
@@ -146,7 +146,7 @@ public class TextureListener {
                 Buildcraft.template,
                 Buildcraft.NAMESPACE.id("template_used"),
                 (stack, world, entity, seed) -> {
-                    return stack.getStationNbt().getInt("used");
+                    return stack.getStationNbt().getBoolean("written") ? 1 : 0;
                 }
         );
     }
