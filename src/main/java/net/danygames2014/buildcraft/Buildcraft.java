@@ -12,6 +12,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.parameter.ActionParameterS
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.StructurePipeTransporter;
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
 import net.danygames2014.buildcraft.item.*;
 import net.danygames2014.buildcraft.statements.*;
@@ -102,7 +103,10 @@ public class Buildcraft {
     public static ObsidianPipeBehavior obsidianPipeBehavior;
     public static ClayPipeBehavior clayPipeBehavior;
     public static VoidPipeBehavior voidPipeBehavior;
+    public static StructurePipeBehavior structurePipeBehavior;
 
+    public static Block cobblestoneStructurePipe;
+    
     public static Block woodenItemPipe;
     public static Block cobblestoneItemPipe;
     public static Block stoneItemPipe;
@@ -283,6 +287,7 @@ public class Buildcraft {
         obsidianPipeBehavior = new ObsidianPipeBehavior();
         clayPipeBehavior = new ClayPipeBehavior();
         voidPipeBehavior = new VoidPipeBehavior();
+        structurePipeBehavior = new StructurePipeBehavior();
 
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         autoWorkbench = new AutocraftingTableBlock(NAMESPACE.id("autocrafting_table"), Material.WOOD).setTranslationKey(NAMESPACE, "auto_workbench").setHardness(2.5F);
@@ -309,6 +314,18 @@ public class Buildcraft {
 
         renderBlock = new RenderBlock(NAMESPACE.id("render_block"));
 
+        // Structure Pipes
+        cobblestoneStructurePipe = new PipeBlock(
+                NAMESPACE.id("cobblestone_structure_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/cobblestone_structure_pipe"),
+                null,
+                PipeType.STRUCTURE,
+                structurePipeBehavior,
+                StructurePipeTransporter::new,
+                PipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "cobblestone_structure_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
+        
         // Item Pipes
         woodenItemPipe = new PipeBlock(
                 NAMESPACE.id("wooden_item_pipe"),

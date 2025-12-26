@@ -24,7 +24,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 /**
  * This class governs the behavior of a pipe
- * T
  */
 public class PipeBehavior {
     public PipeBehavior() {

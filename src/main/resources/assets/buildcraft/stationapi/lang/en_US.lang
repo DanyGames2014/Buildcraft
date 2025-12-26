@@ -95,6 +95,9 @@ tile.buildcraft.creative_engine.name=Creative Engine
 
 tile.buildcraft.mining_pipe.name=Mining Pipe
 tile.buildcraft.frame.name=Frame
+
+tile.buildcraft.cobblestone_structure_pipe.name=Cobblestone Structure Pipe
+
 tile.buildcraft.wooden_item_pipe.name=Wooden Transport Pipe
 tile.buildcraft.cobblestone_item_pipe.name=Cobblestone Transport Pipe
 tile.buildcraft.stone_item_pipe.name=Stone Transport Pipe

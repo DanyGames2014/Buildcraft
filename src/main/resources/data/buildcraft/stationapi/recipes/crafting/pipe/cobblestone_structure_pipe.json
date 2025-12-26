@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "pg"
+  ],
+  "key": {
+    "p": {
+      "item": "buildcraft:cobblestone_item_pipe"
+    },
+    "g": {
+      "item": "minecraft:gravel"
+    }
+  },
+  "result": {
+    "item": "buildcraft:cobblestone_structure_pipe",
+    "count": 1
+  }
+}
