@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "pr"
+  ],
+  "key": {
+    "p": {
+      "item": "buildcraft:sandstone_item_pipe"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "buildcraft:sandstone_energy_pipe",
+    "count": 1
+  }
+}

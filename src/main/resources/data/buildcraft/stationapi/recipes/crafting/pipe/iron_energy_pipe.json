@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "pr"
+  ],
+  "key": {
+    "p": {
+      "item": "buildcraft:iron_item_pipe"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "buildcraft:iron_energy_pipe",
+    "count": 1
+  }
+}

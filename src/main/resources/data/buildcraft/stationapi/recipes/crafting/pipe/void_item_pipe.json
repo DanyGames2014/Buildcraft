@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "igr"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:dye",
+      "damage": 0
+    },
+    "g": {
+      "item": "minecraft:glass"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "buildcraft:void_item_pipe",
+    "count": 8
+  }
+}

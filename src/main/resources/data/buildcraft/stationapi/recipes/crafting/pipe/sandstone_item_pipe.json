@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sgs"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:sandstone"
+    },
+    "g": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "buildcraft:sandstone_item_pipe",
+    "count": 8
+  }
+}

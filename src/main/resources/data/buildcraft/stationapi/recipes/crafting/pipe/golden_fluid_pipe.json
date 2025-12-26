@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ps"
+  ],
+  "key": {
+    "p": {
+      "item": "buildcraft:golden_item_pipe"
+    },
+    "s": {
+      "item": "buildcraft:pipe_sealant"
+    }
+  },
+  "result": {
+    "item": "buildcraft:golden_fluid_pipe",
+    "count": 1
+  }
+}

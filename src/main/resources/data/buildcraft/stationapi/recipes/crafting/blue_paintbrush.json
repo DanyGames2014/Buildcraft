@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "buildcraft:clean_paintbrush"
+    },
+    {
+      "item": "minecraft:dye",
+      "damage": 4
+    }
+  ],
+  "result": {
+    "item": "buildcraft:blue_paintbrush"
+  }
+}

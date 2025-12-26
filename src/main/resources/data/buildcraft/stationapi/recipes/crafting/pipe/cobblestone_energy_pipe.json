@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "pr"
+  ],
+  "key": {
+    "p": {
+      "item": "buildcraft:cobblestone_item_pipe"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "buildcraft:cobblestone_energy_pipe",
+    "count": 1
+  }
+}

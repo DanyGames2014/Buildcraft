@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ps"
+  ],
+  "key": {
+    "p": {
+      "item": "buildcraft:iron_item_pipe"
+    },
+    "s": {
+      "item": "buildcraft:pipe_sealant"
+    }
+  },
+  "result": {
+    "item": "buildcraft:iron_fluid_pipe",
+    "count": 1
+  }
+}
