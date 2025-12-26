@@ -7,7 +7,9 @@ import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipe;
 import net.danygames2014.buildcraft.recipe.machine.input.ItemRecipeInput;
 import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutput;
 import net.danygames2014.buildcraft.recipe.refinery.RefineryRecipe;
+import net.danygames2014.buildcraft.util.ColorUtil;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
@@ -93,6 +95,34 @@ public class RecipeListener {
                         .addInput(new ItemRecipeInput(Item.DYE, 1, 11))
                         .addOutput(new RecipeOutput(new ItemStack(Buildcraft.yellowPipeWire, 8)))
         );
+        
+//        event.register(
+//                NAMESPACE.id("pipe_plug"),
+//                (AssemblyTableRecipe) new AssemblyTableRecipe(1000)
+//                        .addInput(new ItemRecipeInput(Buildcraft.structurePipe))
+//                        .addOutput(new RecipeOutput(new ItemStack(Buildcraft.plug, 8)))
+//        );
+
+        for (int i = 0; i < 16; i++) {
+            event.register(
+                    NAMESPACE.id(ColorUtil.getName(i) + "_lens"),
+                    (AssemblyTableRecipe) new AssemblyTableRecipe(1000)
+                            .addInput(new ItemRecipeInput(Block.GLASS.asItem()))
+                            .addInput(new ItemRecipeInput(Item.DYE, 1, i))
+                            .addOutput(new RecipeOutput(new ItemStack(Buildcraft.lens[i], 2)))
+            );
+        }
+
+        for (int i = 0; i < 16; i++) {
+            event.register(
+                    NAMESPACE.id(ColorUtil.getName(i) + "_filter"),
+                    (AssemblyTableRecipe) new AssemblyTableRecipe(1000)
+                            .addInput(new ItemRecipeInput(Item.IRON_INGOT))
+                            .addInput(new ItemRecipeInput(Block.GLASS.asItem()))
+                            .addInput(new ItemRecipeInput(Item.DYE, 1, i))
+                            .addOutput(new RecipeOutput(new ItemStack(Buildcraft.filter[i], 2)))
+            );
+        }
     }
     
     @EventListener
