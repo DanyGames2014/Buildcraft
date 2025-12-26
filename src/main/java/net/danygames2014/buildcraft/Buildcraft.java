@@ -9,7 +9,6 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansi
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionRedstoneFader;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionTimer;
 import net.danygames2014.buildcraft.block.entity.pipe.parameter.ActionParameterSignal;
-import net.danygames2014.buildcraft.statements.ActionSignalOutput;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
@@ -21,7 +20,6 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
@@ -29,8 +27,6 @@ import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Namespace;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Locale;
 
 public class Buildcraft {
     @Entrypoint.Namespace
@@ -53,14 +49,15 @@ public class Buildcraft {
     public static Item bluePipeWire;
     public static Item greenPipeWire;
     public static Item yellowPipeWire;
-    
+
     public static Item redstoneChipset;
     public static Item redstoneIronChipset;
     public static Item redstoneGoldenChipset;
     public static Item redstoneDiamondChipset;
     public static Item pulsatingChipset;
 
-    public static Item[] paintbrush = new Item[16];
+    public static Item paintbrush;
+    public static Item[] paintbrushes = new Item[16];
 
     public static Item[] lens = new Item[16];
     public static Item[] filter = new Item[16];
@@ -105,7 +102,7 @@ public class Buildcraft {
     public static ObsidianPipeBehavior obsidianPipeBehavior;
     public static ClayPipeBehavior clayPipeBehavior;
     public static VoidPipeBehavior voidPipeBehavior;
-    
+
     public static Block woodenItemPipe;
     public static Block cobblestoneItemPipe;
     public static Block stoneItemPipe;
@@ -116,7 +113,7 @@ public class Buildcraft {
     public static Block obsidianItemPipe;
     public static Block clayItemPipe;
     public static Block voidItemPipe;
-    
+
     public static Block woodenFluidPipe;
     public static Block cobblestoneFluidPipe;
     public static Block stoneFluidPipe;
@@ -125,7 +122,7 @@ public class Buildcraft {
     public static Block goldenFluidPipe;
     public static Block diamondFluidPipe;
     public static Block voidFluidPipe;
-    
+
     public static Block woodenEnergyPipe;
     public static Block cobblestoneEnergyPipe;
     public static Block stoneEnergyPipe;
@@ -169,16 +166,17 @@ public class Buildcraft {
     public static ActionInternal actionSingleEnergyPulse;
     public static ActionInternal actionRedstone;
     public static ActionInternal[] actionRedstoneLevel = new ActionInternal[15];
+
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
         // Register triggers actions and parameters
         // TODO: maybe move to its own event?
-        for(PipeWire wire : PipeWire.values()){
+        for (PipeWire wire : PipeWire.values()) {
             triggerPipeWireActive[wire.ordinal()] = new TriggerPipeSignal(true, wire);
             triggerPipeWireInactive[wire.ordinal()] = new TriggerPipeSignal(false, wire);
             actionPipeWire[wire.ordinal()] = new ActionSignalOutput(wire);
         }
-        
+
         actionEnergyPulser = new ActionEnergyPulsar();
         actionSingleEnergyPulse = new ActionSingleEnergyPulse();
         actionRedstone = new ActionRedstoneOutput();
@@ -241,7 +239,7 @@ public class Buildcraft {
         template = new BuilderTemplateItem(NAMESPACE.id("template")).setTranslationKey(NAMESPACE, "template");
         blueprint = new BuilderBlueprintItem(NAMESPACE.id("blueprint")).setTranslationKey(NAMESPACE, "blueprint");
         pipeWaterproof = new TemplateItem(NAMESPACE.id("pipe_waterproof")).setTranslationKey(NAMESPACE, "pipe_waterproof");
-        
+
         redPipeWire = new PipeWireItem(NAMESPACE.id("red_pipe_wire")).setTranslationKey(NAMESPACE, "red_pipe_wire");
         bluePipeWire = new PipeWireItem(NAMESPACE.id("blue_pipe_wire")).setTranslationKey(NAMESPACE, "blue_pipe_wire");
         greenPipeWire = new PipeWireItem(NAMESPACE.id("green_pipe_wire")).setTranslationKey(NAMESPACE, "green_pipe_wire");
@@ -253,14 +251,15 @@ public class Buildcraft {
         redstoneDiamondChipset = new TemplateItem(NAMESPACE.id("redstone_diamond_chipset")).setTranslationKey(NAMESPACE, "redstone_diamond_chipset");
         pulsatingChipset = new TemplateItem(NAMESPACE.id("pulsating_chipset")).setTranslationKey(NAMESPACE, "pulsating_chipset");
 
-        for(int i = 0; i < ColorUtil.colors.length; i++){
-            paintbrush[i] = new PaintBrushItem(i).setTranslationKey(NAMESPACE, ColorUtil.getName(i) + "_paintbrush");
+        paintbrush = new PaintBrushItem(NAMESPACE.id("clean_paintbrush"), -1).setTranslationKey(NAMESPACE, "clean_paintbrush");
+        for (int i = 0; i < ColorUtil.colors.length; i++) {
+            paintbrushes[i] = new PaintBrushItem(i).setTranslationKey(NAMESPACE, ColorUtil.getName(i) + "_paintbrush");
         }
 
-        for(int i = 0; i < ColorUtil.colors.length; i++){
+        for (int i = 0; i < ColorUtil.colors.length; i++) {
             lens[i] = new LensItem(i, false).setTranslationKey(NAMESPACE, ColorUtil.getName(i) + "_lens");
         }
-        for(int i = 0; i < ColorUtil.colors.length; i++){
+        for (int i = 0; i < ColorUtil.colors.length; i++) {
             filter[i] = new LensItem(i, true).setTranslationKey(NAMESPACE, ColorUtil.getName(i) + "_filter");
         }
 
@@ -365,7 +364,7 @@ public class Buildcraft {
                 ItemPipeTransporter::new,
                 PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "sandstone_item_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
-        
+
         goldenItemPipe = new PipeBlock(
                 NAMESPACE.id("golden_item_pipe"),
                 pipeMaterial,
@@ -454,7 +453,7 @@ public class Buildcraft {
                 FluidPipeTransporter::new,
                 PipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "stone_fluid_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
-        
+
         ironFluidPipe = new PipeBlock(
                 NAMESPACE.id("iron_fluid_pipe"),
                 pipeMaterial,

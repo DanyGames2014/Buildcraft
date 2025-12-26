@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " sw",
+    " gs",
+    "t  "
+  ],
+  "key": {
+    "w": {
+      "item": "minecraft:wool"
+    },
+    "g": {
+      "item": "buildcraft:wooden_gear"
+    },
+    "t": {
+      "item": "minecraft:stick"
+    },
+    "s": {
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "item": "buildcraft:clean_paintbrush"
+  }
+}
