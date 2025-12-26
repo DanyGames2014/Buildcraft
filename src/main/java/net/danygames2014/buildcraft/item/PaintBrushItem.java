@@ -5,6 +5,7 @@ import net.danygames2014.buildcraft.api.core.PaintableBlock;
 import net.danygames2014.buildcraft.util.ColorUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stat.Stats;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
@@ -33,7 +34,12 @@ public class PaintBrushItem extends TemplateItem {
         if (blockState.getBlock() instanceof PaintableBlock paintableBlock) {
             if (color >= 0) {
                 if (paintableBlock.recolorBlock(world, x, y, z, Direction.byId(side), color)) {
-                    stack.damage(1, user);
+                    stack.setDamage(stack.getDamage() + 1);
+                    if(stack.getDamage() > stack.getMaxDamage()){
+                        user.increaseStat(Stats.BROKEN[this.id], 1);
+                        stack.itemId = Buildcraft.paintbrush.id;
+                        stack.setDamage(0);
+                    }
                     return true;
                 }
             } else {
