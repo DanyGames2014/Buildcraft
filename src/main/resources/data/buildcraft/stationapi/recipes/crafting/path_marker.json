@@ -10,7 +10,7 @@
       "damage": 2
     },
     "t": {
-      "item": "minecraft:redstone_torch"
+      "item": "minecraft:redstone_torch_lit"
     }
   },
   "result": {
