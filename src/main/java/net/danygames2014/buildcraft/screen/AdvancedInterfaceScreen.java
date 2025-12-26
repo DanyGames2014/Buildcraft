@@ -7,7 +7,6 @@ import net.minecraft.client.render.platform.Lighting;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
-import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -104,12 +103,17 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
         Minecraft mc = Minecraft.INSTANCE;
 
         if (item != null) {
-//            Lighting.turnOn();
-//            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glPushMatrix();
+            GL11.glRotatef(120.0F, 1.0F, 0.0F, 0.0F);
+            Lighting.turnOn();
+            GL11.glPopMatrix();
+            GL11.glPushMatrix();
+            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             AdvancedInterfaceScreen.getItemRenderer().renderGuiItem(mc.textRenderer, mc.textureManager, item, x, y);
             AdvancedInterfaceScreen.getItemRenderer().renderGuiItemDecoration(mc.textRenderer, mc.textureManager, item, x, y);
-//            GL11.glEnable(GL11.GL_LIGHTING);
-//            Lighting.turnOff();
+            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+            Lighting.turnOff();
+            GL11.glPopMatrix();
         }
     }
 
