@@ -543,6 +543,17 @@ public class Buildcraft {
                 PoweredPipeBlockEntity::new
         ).setTranslationKey(NAMESPACE, "stone_energy_pipe").setHardness(0.1F).setSoundGroup(Block.STONE_SOUND_GROUP);
 
+        ironEnergyPipe = new PipeBlock(
+                NAMESPACE.id("iron_energy_pipe"),
+                pipeMaterial,
+                NAMESPACE.id("block/pipe/iron_energy_pipe"),
+                null,
+                PipeType.ENERGY,
+                ironPipeBehavior,
+                EnergyPipeTransporter::new,
+                PoweredPipeBlockEntity::new
+        ).setTranslationKey(NAMESPACE, "iron_energy_pipe").setHardness(0.1F).setSoundGroup(Block.METAL_SOUND_GROUP);
+
         sandstoneEnergyPipe = new PipeBlock(
                 NAMESPACE.id("sandstone_energy_pipe"),
                 pipeMaterial,
