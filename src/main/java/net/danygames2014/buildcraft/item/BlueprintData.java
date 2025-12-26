@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class BlueprintData {
     public boolean written;
-    public String name = "Unnamed";
+    public String name = "unnamed";
     public String author = "Unknown";
     public Direction facing;
     public int sizeX;
@@ -25,12 +25,13 @@ public class BlueprintData {
         entries = new ArrayList<>();
     }
     
-    public void addEntry(int x, int y, int z, BlockState state) {
+    public void addEntry(int x, int y, int z, BlockState state, int meta) {
         BlueprintEntry entry = new BlueprintEntry();
         entry.x = x;
         entry.y = y;
         entry.z = z;
         entry.id = String.valueOf(BlockRegistry.INSTANCE.getId(state.getBlock()));
+        entry.meta = meta;
         for (var property : state.getProperties()) {
             entry.properties.put(property.getName(), String.valueOf(state.get(property)));
         }
@@ -73,12 +74,15 @@ public class BlueprintData {
         for (int i = 0; i < entries.size(); i++) {
             BlueprintEntry entry = new BlueprintEntry();
             entry.readNbt((NbtCompound) entries.get(i));
-            this.entries.add(entry);
+            if (!entry.id.isEmpty()) {
+                this.entries.add(entry);
+            }
         }
     }
 
     public static class BlueprintEntry {
         public String id;
+        public int meta;
         public int x;
         public int y;
         public int z;
@@ -86,6 +90,7 @@ public class BlueprintData {
         
         public void writeNbt(NbtCompound nbt) {
             nbt.putString("id", id);
+            nbt.putInt("meta", meta);
             nbt.putInt("x", x);
             nbt.putInt("y", y);
             nbt.putInt("z", z);
@@ -98,6 +103,7 @@ public class BlueprintData {
         
         public void readNbt(NbtCompound nbt) {
             id = nbt.getString("id");
+            meta = nbt.getInt("meta");
             x = nbt.getInt("x");
             y = nbt.getInt("y");
             z = nbt.getInt("z");

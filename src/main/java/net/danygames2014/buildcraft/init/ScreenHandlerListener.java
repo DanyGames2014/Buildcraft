@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.init;
 
+import net.danygames2014.buildcraft.block.BuilderBlock;
 import net.danygames2014.buildcraft.block.entity.*;
 import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
@@ -28,6 +29,11 @@ public class ScreenHandlerListener {
         event.register(NAMESPACE.id("gate"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openGateScreen, PipeBlockEntity::new));
         event.register(NAMESPACE.id("diamond_pipe"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openDiamondPipeScreen, DiamondPipeBlockEntity::new));
         event.register(NAMESPACE.id("architect_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openArchitectTableScreen, ArchitectTableBlockEntity::new));
+        event.register(NAMESPACE.id("builder"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openBuilderScreen, BuilderBlockEntity::new));
+    }
+
+    private Screen openBuilderScreen(PlayerEntity player, Inventory inventory) {
+        return new BuilderScreen(player, (BuilderBlockEntity) inventory);
     }
 
     private Screen openArchitectTableScreen(PlayerEntity player, Inventory inventory) {

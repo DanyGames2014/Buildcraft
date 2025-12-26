@@ -23,6 +23,8 @@ public class ArchitectTableScreenHandler extends ScreenHandler {
     private int progress;
     private String lastName = "";
     
+    
+    
     public ArchitectTableScreenHandler(PlayerEntity player, ArchitectTableBlockEntity blockEntity) {
         this.player = player;
         this.playerInventory = player.inventory;

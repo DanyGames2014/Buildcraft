@@ -25,6 +25,7 @@ public class PacketTypeListener {
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("command"), CommandPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("toggle_diamond_pipe_filter"), ToggleDiamondPipeFilterC2SPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("architect_table_name_field"), ArchitectTableNameFieldPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("builder_command"), BuilderCommandPacket.TYPE);
 
         StateRegistry.register(PipeRenderState.class);
         StateRegistry.register(PipePluggableState.class);

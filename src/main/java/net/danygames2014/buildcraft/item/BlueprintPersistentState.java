@@ -7,7 +7,11 @@ import net.minecraft.world.World;
 public class BlueprintPersistentState extends PersistentState {
     public BlueprintData data = new BlueprintData();
     public int rawId;
-    
+
+    public BlueprintPersistentState(String id) {
+        super(id);
+    }
+
     public BlueprintPersistentState(int id) {
         super("blueprint_" + id);
         this.rawId = id;

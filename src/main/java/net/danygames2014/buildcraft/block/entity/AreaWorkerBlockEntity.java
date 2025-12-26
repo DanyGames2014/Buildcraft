@@ -19,7 +19,15 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
     }
     
     public void constructWorkingArea(LandMarkerBlockEntity.Origin origin) {
-        workingArea = new WorkingArea(this, origin.xMin, origin.yMin, origin.zMin, origin.xMax, origin.yMax, origin.zMax);
+        this.constructWorkingArea(origin.xMin, origin.yMin, origin.zMin, origin.xMax, origin.yMax, origin.zMax);
+    }
+    
+    public void constructWorkingArea(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        workingArea = new WorkingArea(this, minX, minY, minZ, maxX, maxY, maxZ);
+    }
+    
+    public void destroyWorkingArea() {
+        workingArea = null;
     }
 
     @Override

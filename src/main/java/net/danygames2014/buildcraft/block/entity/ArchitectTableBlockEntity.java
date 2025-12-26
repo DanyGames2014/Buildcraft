@@ -77,7 +77,7 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
                         continue;
                     }
                     
-                    blueprintData.addEntry(x,y,z, state);
+                    blueprintData.addEntry(x,y,z, state, world.getBlockMeta(x + workingArea.minX,y + workingArea.minY,z + workingArea.minZ));
                 }
             }
         }
