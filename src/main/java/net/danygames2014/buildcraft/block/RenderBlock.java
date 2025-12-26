@@ -29,6 +29,11 @@ public class RenderBlock extends TemplateBlock {
         return colorMultiplier;
     }
 
+    @Override
+    public int getColorMultiplier(BlockView blockView, int x, int y, int z) {
+        return colorMultiplier;
+    }
+
     public void setTextureIdentifier(Identifier identifier){
         for(Direction direction : DirectionUtil.directionsWithInvalid){
             textureMatrix.setTextureIdentifier(direction, identifier);

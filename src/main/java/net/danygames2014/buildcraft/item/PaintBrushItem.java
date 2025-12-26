@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.item;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.core.PaintableBlock;
+import net.danygames2014.buildcraft.util.ColorUtil;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,7 @@ public class PaintBrushItem extends TemplateItem {
     public final int color;
 
     public PaintBrushItem(int color) {
-        super(Buildcraft.NAMESPACE.id("paintbrush_" + DyeItem.names[color].toLowerCase(Locale.ENGLISH)));
+        super(Buildcraft.NAMESPACE.id(ColorUtil.getName(color) + "_paintbrush"));
         this.color = color;
 
         setMaxCount(1);

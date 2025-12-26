@@ -61,8 +61,10 @@ public class Buildcraft {
 
     public static Item[] paintbrush = new Item[16];
 
+    public static Item[] lens = new Item[16];
+    public static Item[] filter = new Item[16];
+
     public static Item plug;
-    public static Item lens;
     public static Item facade;
 
     public static Item gateItem;
@@ -254,8 +256,14 @@ public class Buildcraft {
             paintbrush[i] = new PaintBrushItem(i).setTranslationKey(NAMESPACE, "paintbrush_" + DyeItem.names[i].toLowerCase(Locale.ENGLISH));
         }
 
+        for(int i = 0; i < DyeItem.colors.length; i++){
+            lens[i] = new LensItem(i, false).setTranslationKey(NAMESPACE, "lens_" + DyeItem.names[i].toLowerCase(Locale.ENGLISH));
+        }
+        for(int i = 0; i < DyeItem.colors.length; i++){
+            filter[i] = new LensItem(i, true).setTranslationKey(NAMESPACE, "filter_" + DyeItem.names[i].toLowerCase(Locale.ENGLISH));
+        }
+
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
-        lens = new LensItem(NAMESPACE.id("lens")).setTranslationKey(NAMESPACE, "lens");
         facade = new FacadeItem(NAMESPACE.id("facade")).setTranslationKey(NAMESPACE, "facade");
 
         gateItem = new GateItem(NAMESPACE.id("gate"));

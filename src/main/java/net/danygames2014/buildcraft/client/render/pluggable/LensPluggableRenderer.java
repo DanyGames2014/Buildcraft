@@ -41,8 +41,8 @@ public class LensPluggableRenderer implements PipePluggableRenderer {
                 zeroState[i][0] += zFightOffset;
                 zeroState[i][1] -= zFightOffset;
             }
-            renderBlock.setTextureIdentifier(TextureListener.lens_transparent);
-            renderBlock.setColor(DyeItem.colors[15 - ((LensPluggable) pluggable).color]);
+            renderBlock.setTextureIdentifier(TextureListener.lensOverlay);
+            renderBlock.setColor(DyeItem.colors[((LensPluggable) pluggable).color]);
 
             renderBlock.setRenderAllSides();
         } else {

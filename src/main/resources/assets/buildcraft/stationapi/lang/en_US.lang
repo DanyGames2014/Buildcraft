@@ -36,6 +36,40 @@ item.buildcraft.paintbrush_magenta.name=Magenta Paintbrush
 item.buildcraft.paintbrush_orange.name=Orange Paintbrush
 item.buildcraft.paintbrush_white.name=White Paintbrush
 
+item.buildcraft.lens_black.name=Black Lens
+item.buildcraft.lens_red.name=Red Lens
+item.buildcraft.lens_green.name=Green Lens
+item.buildcraft.lens_brown.name=Brown Lens
+item.buildcraft.lens_blue.name=Blue Lens
+item.buildcraft.lens_purple.name=Purple Lens
+item.buildcraft.lens_cyan.name=Cyan Lens
+item.buildcraft.lens_silver.name=Light Gray Lens
+item.buildcraft.lens_gray.name=Gray Lens
+item.buildcraft.lens_pink.name=Pink Lens
+item.buildcraft.lens_lime.name=Lime Lens
+item.buildcraft.lens_yellow.name=Yellow Lens
+item.buildcraft.lens_lightblue.name=Light Blue Lens
+item.buildcraft.lens_magenta.name=Magenta Lens
+item.buildcraft.lens_orange.name=Orange Lens
+item.buildcraft.lens_white.name=White Lens
+
+item.buildcraft.filter_black.name=Black Filter
+item.buildcraft.filter_red.name=Red Filter
+item.buildcraft.filter_green.name=Green Filter
+item.buildcraft.filter_brown.name=Brown Filter
+item.buildcraft.filter_blue.name=Blue Filter
+item.buildcraft.filter_purple.name=Purple Filter
+item.buildcraft.filter_cyan.name=Cyan Filter
+item.buildcraft.filter_silver.name=Light Gray Filter
+item.buildcraft.filter_gray.name=Gray Filter
+item.buildcraft.filter_pink.name=Pink Filter
+item.buildcraft.filter_lime.name=Lime Filter
+item.buildcraft.filter_yellow.name=Yellow Filter
+item.buildcraft.filter_lightblue.name=Light Blue Filter
+item.buildcraft.filter_magenta.name=Magenta Filter
+item.buildcraft.filter_orange.name=Orange Filter
+item.buildcraft.filter_white.name=White Filter
+
 item.buildcraft.plug.name=Pipe Plug
 
 tile.buildcraft.chute.name=Chute

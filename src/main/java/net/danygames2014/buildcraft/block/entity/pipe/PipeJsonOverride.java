@@ -26,6 +26,14 @@ public class PipeJsonOverride {
         JsonOverrideRegistry.registerBlockstateOverride(blockIdentifier, pipeState); 
     }
 
+    public static void registerLensJsonOverride(Identifier itemIdentifier, Identifier frameTexture){
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            return;
+        }
+        JsonOverrideRegistry.registerItemModelOverride(itemIdentifier, lensJson);
+        JsonOverrideRegistry.registerItemModelTextureOverride(itemIdentifier, "layer1", frameTexture);
+    }
+
     private static String getBlockModelPath(String blockIdentifier) {
         return getBlockModelPath(Identifier.of(blockIdentifier));
     }
@@ -40,6 +48,17 @@ public class PipeJsonOverride {
               "parent": "PATH"
             }"""
     );
+
+    // Lens
+    private static final String lensJson = ("""
+            {
+              "parent": "item/generated",
+              "textures": {
+                "layer0": "buildcraft:item/lens_overlay",
+                "layer1": "TEXTURE"
+              }
+            }
+    """);
     
     // texture, particle
     private static final String pipeMiddleModelJson = ("""

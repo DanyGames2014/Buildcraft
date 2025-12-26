@@ -6,7 +6,12 @@ import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
+import net.danygames2014.buildcraft.item.LensItem;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.item.DyeItem;
+import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.client.color.item.ItemColorProvider;
+import net.modificationstation.stationapi.api.client.event.color.item.ItemColorsRegisterEvent;
 import net.modificationstation.stationapi.api.client.event.render.model.ItemModelPredicateProviderRegistryEvent;
 import net.modificationstation.stationapi.api.client.event.texture.TextureRegisterEvent;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
@@ -51,7 +56,7 @@ public class TextureListener {
     public static Identifier plug = Buildcraft.NAMESPACE.id("block/pluggable/plug");
     public static Identifier lens = Buildcraft.NAMESPACE.id("block/pluggable/lens_frame");
     public static Identifier filter = Buildcraft.NAMESPACE.id("block/pluggable/filter_frame");
-    public static Identifier lens_transparent = Buildcraft.NAMESPACE.id("block/pluggable/transparent");
+    public static Identifier lensOverlay = Buildcraft.NAMESPACE.id("block/pluggable/lens_overlay");
 
     public static Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/structure_pipe");
 
@@ -105,7 +110,7 @@ public class TextureListener {
         Atlases.getTerrain().addTexture(plug);
         Atlases.getTerrain().addTexture(lens);
         Atlases.getTerrain().addTexture(filter);
-        Atlases.getTerrain().addTexture(lens_transparent);
+        Atlases.getTerrain().addTexture(lensOverlay);
         Atlases.getTerrain().addTexture(structurePipe);
 
         Atlases.getTerrain().addTexture(missingTexture);
@@ -149,5 +154,21 @@ public class TextureListener {
                     return stack.getStationNbt().getBoolean("written") ? 1 : 0;
                 }
         );
+    }
+
+    @EventListener
+    public void registerItemColorProvider(ItemColorsRegisterEvent event) {
+        ItemColorProvider lensColorProvider = new ItemColorProvider() {
+            @Override
+            public int getColor(ItemStack stack, int layer) {
+                if(layer == 0 && stack.getItem() instanceof LensItem lensItem){
+                    return DyeItem.colors[lensItem.color];
+                }
+                return 0;
+            }
+        };
+        for(int i = 0; i < 15; i++){
+            event.itemColors.register(lensColorProvider, Buildcraft.lens[i], Buildcraft.filter[i]);
+        }
     }
 }

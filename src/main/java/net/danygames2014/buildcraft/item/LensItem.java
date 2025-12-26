@@ -1,36 +1,38 @@
 package net.danygames2014.buildcraft.item;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeJsonOverride;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
 import net.danygames2014.buildcraft.pluggable.LensPluggable;
+import net.danygames2014.buildcraft.util.ColorUtil;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.Locale;
+
 public class LensItem extends TemplateItem implements PipePluggableItem {
-    public LensItem(Identifier identifier) {
-        super(identifier);
+    public final int color;
+    public final boolean isFilter;
+
+    public LensItem(int color, boolean isFilter) {
+        super(Buildcraft.NAMESPACE.id(ColorUtil.getName(color) + "_" + (isFilter ? "filter" : "lens")));
+        this.color = color;
+        this.isFilter = isFilter;
+        PipeJsonOverride.registerLensJsonOverride(Buildcraft.NAMESPACE.id(ColorUtil.getColor(color) + "_" + (isFilter ? "filter" : "lens")), Buildcraft.NAMESPACE.id("item/" + (isFilter ? "filter" : "lens")));
     }
 
     @Override
     public PipePluggable createPipePluggable(PipeBlockEntity pipe, Direction side, ItemStack stack) {
         if(pipe.transporter.getType() == PipeType.ITEM){
-            return new LensPluggable(stack);
+            return new LensPluggable(color, isFilter);
         } else {
             return null;
         }
-    }
-
-    public int getDye(ItemStack stack) {
-        return 15 - (stack.getDamage() & 15);
-    }
-
-    // TODO: add color name to translation key
-    @Override
-    public String getTranslationKey(ItemStack stack) {
-        return stack.getDamage() >= 16 ? "item.Filter.name" : "item.Lens.name";
     }
 }

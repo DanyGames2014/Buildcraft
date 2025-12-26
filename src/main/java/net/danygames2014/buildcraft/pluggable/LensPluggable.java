@@ -25,9 +25,9 @@ public class LensPluggable extends PipePluggable {
     public LensPluggable() {
     }
 
-    public LensPluggable(ItemStack stack){
-        color = stack.getDamage() & 15;
-        isFilter = stack.getDamage() >= 16;
+    public LensPluggable(int color, boolean isFilter){
+        this.color = color;
+        this.isFilter = isFilter;
     }
 
     @Override
