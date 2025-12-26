@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "buildcraft:item/pipe_waterproof"
+    "layer0": "buildcraft:item/pipe_sealant"
   }
 }

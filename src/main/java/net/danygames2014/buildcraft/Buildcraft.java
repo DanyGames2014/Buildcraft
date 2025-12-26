@@ -43,7 +43,7 @@ public class Buildcraft {
     public static Item diamondGear;
     public static Item template;
     public static Item blueprint;
-    public static Item pipeWaterproof;
+    public static Item pipeSealant;
 
     public static Item redPipeWire;
     public static Item bluePipeWire;
@@ -238,7 +238,7 @@ public class Buildcraft {
         diamondGear = new TemplateItem(NAMESPACE.id("diamond_gear")).setTranslationKey(NAMESPACE, "diamond_gear");
         template = new BuilderTemplateItem(NAMESPACE.id("template")).setTranslationKey(NAMESPACE, "template");
         blueprint = new BuilderBlueprintItem(NAMESPACE.id("blueprint")).setTranslationKey(NAMESPACE, "blueprint");
-        pipeWaterproof = new TemplateItem(NAMESPACE.id("pipe_waterproof")).setTranslationKey(NAMESPACE, "pipe_waterproof");
+        pipeSealant = new TemplateItem(NAMESPACE.id("pipe_sealant")).setTranslationKey(NAMESPACE, "pipe_sealant");
 
         redPipeWire = new PipeWireItem(NAMESPACE.id("red_pipe_wire")).setTranslationKey(NAMESPACE, "red_pipe_wire");
         bluePipeWire = new PipeWireItem(NAMESPACE.id("blue_pipe_wire")).setTranslationKey(NAMESPACE, "blue_pipe_wire");
