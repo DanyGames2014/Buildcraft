@@ -9,6 +9,7 @@ import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.util.ColorUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -32,7 +33,7 @@ public class PipeWorldRenderer {
             float[] dim = new float[6];
 
             if(renderPass == 1){
-                renderBlock.setColor(DyeItem.colors[glassColor]);
+                renderBlock.setColor(ColorUtil.getColor(glassColor));
             }
 
             if(connectivity != 0x3F){

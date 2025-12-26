@@ -24,7 +24,7 @@ public class LensItem extends TemplateItem implements PipePluggableItem {
         super(Buildcraft.NAMESPACE.id(ColorUtil.getName(color) + "_" + (isFilter ? "filter" : "lens")));
         this.color = color;
         this.isFilter = isFilter;
-        PipeJsonOverride.registerLensJsonOverride(Buildcraft.NAMESPACE.id(ColorUtil.getColor(color) + "_" + (isFilter ? "filter" : "lens")), Buildcraft.NAMESPACE.id("item/" + (isFilter ? "filter" : "lens")));
+        PipeJsonOverride.registerLensJsonOverride(Buildcraft.NAMESPACE.id(ColorUtil.getName(color) + "_" + (isFilter ? "filter" : "lens")), Buildcraft.NAMESPACE.id("item/" + (isFilter ? "filter" : "lens")));
     }
 
     @Override

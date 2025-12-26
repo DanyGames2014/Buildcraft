@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.item.LensItem;
+import net.danygames2014.buildcraft.util.ColorUtil;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
@@ -162,7 +163,7 @@ public class TextureListener {
             @Override
             public int getColor(ItemStack stack, int layer) {
                 if(layer == 0 && stack.getItem() instanceof LensItem lensItem){
-                    return DyeItem.colors[lensItem.color];
+                    return ColorUtil.getColor(lensItem.color);
                 }
                 return 0;
             }

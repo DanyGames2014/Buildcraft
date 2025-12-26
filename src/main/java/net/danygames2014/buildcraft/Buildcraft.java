@@ -16,6 +16,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransp
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
 import net.danygames2014.buildcraft.item.*;
 import net.danygames2014.buildcraft.statements.*;
+import net.danygames2014.buildcraft.util.ColorUtil;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
@@ -252,15 +253,15 @@ public class Buildcraft {
         redstoneDiamondChipset = new TemplateItem(NAMESPACE.id("redstone_diamond_chipset")).setTranslationKey(NAMESPACE, "redstone_diamond_chipset");
         pulsatingChipset = new TemplateItem(NAMESPACE.id("pulsating_chipset")).setTranslationKey(NAMESPACE, "pulsating_chipset");
 
-        for(int i = 0; i < DyeItem.colors.length; i++){
-            paintbrush[i] = new PaintBrushItem(i).setTranslationKey(NAMESPACE, "paintbrush_" + DyeItem.names[i].toLowerCase(Locale.ENGLISH));
+        for(int i = 0; i < ColorUtil.colors.length; i++){
+            paintbrush[i] = new PaintBrushItem(i).setTranslationKey(NAMESPACE, ColorUtil.getName(i) + "_paintbrush");
         }
 
-        for(int i = 0; i < DyeItem.colors.length; i++){
-            lens[i] = new LensItem(i, false).setTranslationKey(NAMESPACE, "lens_" + DyeItem.names[i].toLowerCase(Locale.ENGLISH));
+        for(int i = 0; i < ColorUtil.colors.length; i++){
+            lens[i] = new LensItem(i, false).setTranslationKey(NAMESPACE, ColorUtil.getName(i) + "_lens");
         }
-        for(int i = 0; i < DyeItem.colors.length; i++){
-            filter[i] = new LensItem(i, true).setTranslationKey(NAMESPACE, "filter_" + DyeItem.names[i].toLowerCase(Locale.ENGLISH));
+        for(int i = 0; i < ColorUtil.colors.length; i++){
+            filter[i] = new LensItem(i, true).setTranslationKey(NAMESPACE, ColorUtil.getName(i) + "_filter");
         }
 
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");

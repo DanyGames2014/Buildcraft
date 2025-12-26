@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.pluggable.LensPluggable;
+import net.danygames2014.buildcraft.util.ColorUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.item.DyeItem;
@@ -42,7 +43,7 @@ public class LensPluggableRenderer implements PipePluggableRenderer {
                 zeroState[i][1] -= zFightOffset;
             }
             renderBlock.setTextureIdentifier(TextureListener.lensOverlay);
-            renderBlock.setColor(DyeItem.colors[((LensPluggable) pluggable).color]);
+            renderBlock.setColor(ColorUtil.getColor(((LensPluggable) pluggable).color));
 
             renderBlock.setRenderAllSides();
         } else {
