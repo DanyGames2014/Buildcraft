@@ -20,6 +20,7 @@ import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.material.Material;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.Item;
 import net.modificationstation.stationapi.api.event.registry.BlockRegistryEvent;
 import net.modificationstation.stationapi.api.event.registry.ItemRegistryEvent;
@@ -27,6 +28,8 @@ import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Namespace;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Locale;
 
 public class Buildcraft {
     @Entrypoint.Namespace
@@ -55,6 +58,8 @@ public class Buildcraft {
     public static Item redstoneGoldenChipset;
     public static Item redstoneDiamondChipset;
     public static Item pulsatingChipset;
+
+    public static Item[] paintbrush = new Item[16];
 
     public static Item plug;
     public static Item lens;
@@ -244,6 +249,10 @@ public class Buildcraft {
         redstoneGoldenChipset = new TemplateItem(NAMESPACE.id("redstone_golden_chipset")).setTranslationKey(NAMESPACE, "redstone_golden_chipset");
         redstoneDiamondChipset = new TemplateItem(NAMESPACE.id("redstone_diamond_chipset")).setTranslationKey(NAMESPACE, "redstone_diamond_chipset");
         pulsatingChipset = new TemplateItem(NAMESPACE.id("pulsating_chipset")).setTranslationKey(NAMESPACE, "pulsating_chipset");
+
+        for(int i = 0; i < DyeItem.colors.length; i++){
+            paintbrush[i] = new PaintBrushItem(i).setTranslationKey(NAMESPACE, "paintbrush_" + DyeItem.names[i].toLowerCase(Locale.ENGLISH));
+        }
 
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
         lens = new LensItem(NAMESPACE.id("lens")).setTranslationKey(NAMESPACE, "lens");

@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.client.render.pluggable;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
@@ -18,7 +19,7 @@ public class LensPluggableRenderer implements PipePluggableRenderer {
 
     @Override
     public void renderPluggable(BlockRenderManager blockRenderManager, PipeBlockEntity pipe, Direction side, PipePluggable pluggable, int x, int y, int z) {
-        int renderPass = 0;
+        int renderPass = PipeBlock.currentRenderPass;
         RenderBlock renderBlock = Buildcraft.renderBlock;
 
         float[][] zeroState = new float[3][2];

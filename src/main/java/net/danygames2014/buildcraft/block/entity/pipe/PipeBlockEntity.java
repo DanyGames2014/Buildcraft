@@ -48,6 +48,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     public boolean[] wireSet = new boolean[]{false, false, false, false};
     public int[] signalStrength = new int[]{0, 0, 0, 0};
     public final Gate[] gates = new Gate[Direction.values().length];
+    private int glassColor = -1;
 
     public PipeEventBus eventBus = new PipeEventBus();
 
@@ -361,6 +362,30 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         return sideProperties.pluggables[side.ordinal()] != null;
     }
 
+    public int getPipeColor() {
+        return world.isRemote ? renderState.getGlassColor() : this.glassColor;
+    }
+
+    public boolean setPipeColor(int color) {
+        if (!world.isRemote && color >= -1 && color < 16 && glassColor != color) {
+            renderState.glassColorDirty = true;
+            glassColor = color;
+            notifyBlockChanged(); // TODO: check what this does
+            return true;
+        }
+        return false;
+    }
+
+    protected void notifyBlockChanged() {
+        world.notifyNeighbors(x, y, z, pipeBlock.id);
+        scheduleRenderUpdate();
+        sendUpdateToClient();
+        world.setBlockDirty(x, y, z);
+//        if (pipe != null) {
+//            BlockGenericPipe.updateNeighbourSignalState(pipe);
+//        }
+    }
+
     @Override
     public void markDirty() {
         updateConnections();
@@ -482,6 +507,10 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         super.writeNbt(nbt);
         nbt.putString("pipeId", String.valueOf(BlockRegistry.INSTANCE.getId(pipeBlock)));
 
+        if(glassColor >= 0) {
+            nbt.putByte("stainedColor", (byte) glassColor);
+        }
+
         for (int i = 0; i < Direction.values().length; i++) {
             final String key = "redstoneInputSide[" + i + "]";
             nbt.putByte(key, (byte) redstoneInputSide[i]);
@@ -519,6 +548,8 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         if (this.pipeBlock == null) {
             throw new IllegalStateException("PipeBlockEntity does not have any pipe block");
         }
+
+        glassColor = nbt.contains("stainedColor") ? nbt.getByte("stainedColor") : -1;
 
         redstoneInput = 0;
 
@@ -588,6 +619,8 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         if (world == null || world.isRemote) {
             return;
         }
+
+        renderState.setGlassColor((byte) glassColor);
         
         // Pipe connections:
         for (Direction direction : Direction.values()) {

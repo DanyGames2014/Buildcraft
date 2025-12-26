@@ -1,0 +1,18 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "buildcraft:item/paintbrush/gray"
+  },
+  "display": {
+    "thirdperson_righthand": {
+      "rotation": [0, -90, -133],
+      "translation": [0, 3, 1],
+      "scale": [0.55, 0.55, 0.55]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, -90, -141],
+      "translation": [1.13, 3.2, 1.13],
+      "scale": [0.68, 0.68, 0.68]
+    }
+  }
+}

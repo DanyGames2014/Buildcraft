@@ -8,9 +8,11 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.config.Config;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.item.DyeItem;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -18,75 +20,98 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 public class PipeWorldRenderer {
     public static final float PIPE_MIN_POS = 0.25F;
     public static final float PIPE_MAX_POS = 0.75F;
+    public static float zFightOffset = 1F / 4096F;
     public void renderPipe(BlockRenderManager blockRenderManager, BlockView blockView, PipeBlockEntity pipeBlockEntity, int x, int y, int z){
         PipeRenderState state = pipeBlockEntity.renderState;
         RenderBlock renderBlock = Buildcraft.renderBlock;
+        int renderPass = PipeBlock.currentRenderPass;
+        int glassColor = pipeBlockEntity.getPipeColor();
 
-        int connectivity = state.pipeConnectionMatrix.getMask();
-        float[] dim = new float[6];
+        if(renderPass == 0 || glassColor >= 0){
+            int connectivity = state.pipeConnectionMatrix.getMask();
+            float[] dim = new float[6];
 
-        if(connectivity != 0x3F){
-            resetToCenterDimensions(dim);
-
-            renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(Direction.UP));
-
-            renderTwoWayBlock(blockRenderManager, renderBlock, x, y, z, dim, connectivity ^ 0x3F);
-        }
-
-        for(int dir = 0; dir < 6; dir++){
-            int mask = 1 << dir;
-
-            if((connectivity & mask) == 0){
-                continue;
+            if(renderPass == 1){
+                renderBlock.setColor(DyeItem.colors[glassColor]);
             }
 
-            resetToCenterDimensions(dim);
+            if(connectivity != 0x3F){
+                resetToCenterDimensions(dim);
 
-            dim[dir / 2] = dir % 2 == 0 ? 0 : PIPE_MAX_POS;
-            dim[dir / 2 + 3] = dir % 2 == 0 ? PIPE_MIN_POS : 1;
+                if(renderPass == 0){
+                    renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(Direction.UP));
+                } else {
+                    renderBlock.setTextureIdentifier(TextureListener.pipeStainedOverlay);
+                }
 
-            int renderMask = (3 << (dir & 0x6)) ^ 0x3f;
+                fixForRenderPass(dim, renderPass);
 
-            renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(Direction.byId(dir)));
+                renderTwoWayBlock(blockRenderManager, renderBlock, x, y, z, dim, connectivity ^ 0x3F);
+            }
 
-            renderTwoWayBlock(blockRenderManager, renderBlock, x, y, z, dim, renderMask);
+            for(int dir = 0; dir < 6; dir++){
+                int mask = 1 << dir;
 
-            if(Minecraft.INSTANCE.options.fancyGraphics){
-                Direction side = Direction.byId(dir);
-                int px = x + side.getOffsetX();
-                int py = y + side.getOffsetY();
-                int pz = z + side.getOffsetZ();
-                Block block = Block.BLOCKS[blockView.getBlockId(px, py, pz)];
-                if(!(block instanceof PipeBlock) && !block.isOpaque()){
-                    double[] blockBB;
-                    block.updateBoundingBox(blockView, px, py, pz);
+                if((connectivity & mask) == 0){
+                    continue;
+                }
 
-                    blockBB = new double[]{
-                            block.minX,
-                            block.minX,
-                            block.minZ,
-                            block.maxY,
-                            block.maxX,
-                            block.maxZ
-                    };
+                resetToCenterDimensions(dim);
 
-                    if((dir % 2 == 1 && blockBB[dir / 2] != 0) || (dir % 2 == 0 && blockBB[dir / 2 + 3] != 1)){
-                        resetToCenterDimensions(dim);
+                dim[dir / 2] = dir % 2 == 0 ? 0 : PIPE_MAX_POS;
+                dim[dir / 2 + 3] = dir % 2 == 0 ? PIPE_MIN_POS : 1;
 
-                        if (dir % 2 == 1) {
-                            dim[dir / 2] = 0;
-                            dim[dir / 2 + 3] = (float) blockBB[dir / 2];
-                        } else {
-                            dim[dir / 2] = (float) blockBB[dir / 2 + 3];
-                            dim[dir / 2 + 3] = 1;
+                int renderMask = (3 << (dir & 0x6)) ^ 0x3f;
+
+                fixForRenderPass(dim, renderPass);
+
+                if(renderPass == 0){
+                    renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(Direction.byId(dir)));
+                } else {
+                    renderBlock.setTextureIdentifier(TextureListener.pipeStainedOverlay);
+                }
+
+                renderTwoWayBlock(blockRenderManager, renderBlock, x, y, z, dim, renderMask);
+
+                if(Minecraft.INSTANCE.options.fancyGraphics){
+                    Direction side = Direction.byId(dir);
+                    int px = x + side.getOffsetX();
+                    int py = y + side.getOffsetY();
+                    int pz = z + side.getOffsetZ();
+                    Block block = Block.BLOCKS[blockView.getBlockId(px, py, pz)];
+                    if(!(block instanceof PipeBlock) && !block.isOpaque()){
+                        double[] blockBB;
+                        block.updateBoundingBox(blockView, px, py, pz);
+
+                        blockBB = new double[]{
+                                block.minX,
+                                block.minX,
+                                block.minZ,
+                                block.maxY,
+                                block.maxX,
+                                block.maxZ
+                        };
+
+                        if((dir % 2 == 1 && blockBB[dir / 2] != 0) || (dir % 2 == 0 && blockBB[dir / 2 + 3] != 1)){
+                            resetToCenterDimensions(dim);
+
+                            if (dir % 2 == 1) {
+                                dim[dir / 2] = 0;
+                                dim[dir / 2 + 3] = (float) blockBB[dir / 2];
+                            } else {
+                                dim[dir / 2] = (float) blockBB[dir / 2 + 3];
+                                dim[dir / 2 + 3] = 1;
+                            }
+
+                            fixForRenderPass(dim, renderPass);
+
+                            renderTwoWayBlock(blockRenderManager, renderBlock, px, py, pz, dim, renderMask);
                         }
-
-                        renderTwoWayBlock(blockRenderManager, renderBlock, px, py, pz, dim, renderMask);
                     }
                 }
             }
+            renderBlock.setColor(0xFFFFFF);
         }
-        renderBlock.setColor(0xFFFFFF);
         renderBlock.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 
         for(Direction direction : Direction.values()){
@@ -107,6 +132,18 @@ public class PipeWorldRenderer {
         }
     }
 
+    private void fixForRenderPass(float[] dim, int renderPass) {
+        if (renderPass == 1) {
+            for (int i = 0; i < 3; i++) {
+                dim[i] += zFightOffset;
+            }
+
+            for (int i = 3; i < 6; i++) {
+                dim[i] -= zFightOffset;
+            }
+        }
+    }
+
     private void renderTwoWayBlock(BlockRenderManager blockRenderManager, RenderBlock stateHost, int x, int y, int z, float[] dim, int mask) {
         assert mask != 0;
 
@@ -119,7 +156,7 @@ public class PipeWorldRenderer {
         stateHost.setBoundingBox(dim[2], dim[0], dim[1], dim[5], dim[3], dim[4]);
         blockRenderManager.renderFlat(stateHost, x, y, z, r, g, b);
 
-        if(Config.PIPE_CONFIG.renderInnerPipe){
+        if(Config.PIPE_CONFIG.renderInnerPipe && PipeBlock.currentRenderPass == 0){
             stateHost.setRenderMask((mask & 0x15) << 1 | (mask & 0x2a) >> 1); // pairwise swapped mask
             stateHost.setBoundingBox(dim[5], dim[3], dim[4], dim[2], dim[0], dim[1]);
             blockRenderManager.renderFlat(stateHost, x, y, z, r * 0.67f, g * 0.67f, b * 0.67f);

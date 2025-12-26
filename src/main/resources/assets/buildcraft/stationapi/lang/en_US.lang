@@ -19,6 +19,23 @@ item.buildcraft.redstone_golden_chipset.name=Redston Golden Chipset
 item.buildcraft.redstone_diamond_chipset.name=Redstone Diamond Chipset
 item.buildcraft.pulsating_chipset.name=Pulsating Chipset
 
+item.buildcraft.paintbrush_black.name=Black Paintbrush
+item.buildcraft.paintbrush_red.name=Red Paintbrush
+item.buildcraft.paintbrush_green.name=Green Paintbrush
+item.buildcraft.paintbrush_brown.name=Brown Paintbrush
+item.buildcraft.paintbrush_blue.name=Blue Paintbrush
+item.buildcraft.paintbrush_purple.name=Purple Paintbrush
+item.buildcraft.paintbrush_cyan.name=Cyan Paintbrush
+item.buildcraft.paintbrush_silver.name=Light Gray Paintbrush
+item.buildcraft.paintbrush_gray.name=Gray Paintbrush
+item.buildcraft.paintbrush_pink.name=Pink Paintbrush
+item.buildcraft.paintbrush_lime.name=Lime Paintbrush
+item.buildcraft.paintbrush_yellow.name=Yellow Paintbrush
+item.buildcraft.paintbrush_lightblue.name=Light Blue Paintbrush
+item.buildcraft.paintbrush_magenta.name=Magenta Paintbrush
+item.buildcraft.paintbrush_orange.name=Orange Paintbrush
+item.buildcraft.paintbrush_white.name=White Paintbrush
+
 item.buildcraft.plug.name=Pipe Plug
 
 tile.buildcraft.chute.name=Chute

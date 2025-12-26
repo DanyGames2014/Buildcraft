@@ -13,6 +13,7 @@
   "client": [
     "ArsenicItemRendererMixin",
     "BlockRenderManagerMixin",
+    "ChunkBuilderMixin",
     "InteractionManagerMixin",
     "WorldRendererMixin"
   ],

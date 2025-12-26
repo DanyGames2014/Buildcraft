@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.block;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.api.core.Debuggable;
+import net.danygames2014.buildcraft.api.core.PaintableBlock;
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
@@ -20,7 +21,6 @@ import net.danygames2014.uniwrench.api.Wrenchable;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -46,7 +46,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
-public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer {
+public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer, PaintableBlock {
     public final PipeType type;
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
@@ -54,6 +54,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     public static int lastSideUsed;
     public static float tickDelta;
+    public static int currentRenderPass = 0;
     @Environment(EnvType.CLIENT)
     private PipeWorldRenderer pipeWorldRenderer;
     @Environment(EnvType.CLIENT)
@@ -81,6 +82,11 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             this.pipeWorldRenderer = new PipeWorldRenderer();
             this.pipeItemRenderer = new PipeItemRenderer();
         }
+    }
+
+    @Override
+    public int getRenderLayer() {
+        return 1;
     }
 
     // Connecting Logic
@@ -437,9 +443,11 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Environment(EnvType.CLIENT)
     @Override
-    public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {
+    public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {;
         if (blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipeWorldRenderer.renderPipe(blockRenderManager, blockView, pipe, x, y, z);
+        } else {
+            System.out.println(currentRenderPass);
         }
         return false;
     }
@@ -644,5 +652,30 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
         MatrixTransformation.transform(bounds, side);
         return Box.createCached(bounds[0][0], bounds[1][0], bounds[2][0], bounds[0][1], bounds[1][1], bounds[2][1]);
+    }
+
+    @Override
+    public boolean recolorBlock(World world, int x, int y, int z, Direction side, int color) {
+        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+            if(!pipeBlockEntity.hasBlockingPluggable(side)) {
+                return pipeBlockEntity.setPipeColor(color);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean canRemoveColor(World world, int x, int y, int z, Direction side) {
+        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+            if(!pipeBlockEntity.hasBlockingPluggable(side)) {
+                return pipeBlockEntity.setPipeColor(-1);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeColorFromBlock(World world, int x, int y, int z, Direction side) {
+        return false;
     }
 }

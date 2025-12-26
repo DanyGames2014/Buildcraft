@@ -37,6 +37,8 @@ public class TextureListener {
     public static Identifier diamondFluidPipeEast = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_east");
     public static Identifier diamondFluidPipeWest = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_west");
 
+    public static Identifier pipeStainedOverlay = Buildcraft.NAMESPACE.id("block/pipe/pipe_stained_overlay");
+
     public static Identifier redPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire");
     public static Identifier redPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire_lit");
     public static Identifier bluePipeWire = Buildcraft.NAMESPACE.id("block/pipewire/blue_pipe_wire");
@@ -85,7 +87,9 @@ public class TextureListener {
         Atlases.getTerrain().addTexture(diamondFluidPipeSouth);
         Atlases.getTerrain().addTexture(diamondFluidPipeEast);
         Atlases.getTerrain().addTexture(diamondFluidPipeWest);
-        
+
+        Atlases.getTerrain().addTexture(pipeStainedOverlay);
+
         Atlases.getTerrain().addTexture(redPipeWire);
         Atlases.getTerrain().addTexture(redPipeWireLit);
 
