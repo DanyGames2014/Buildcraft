@@ -20,12 +20,14 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
+import net.modificationstation.stationapi.api.client.texture.Sprite;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -37,7 +39,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-@SuppressWarnings("deprecation")
 @EnvironmentInterface(itf = CustomItemRenderer.class, value = EnvType.CLIENT)
 public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem, CustomItemRenderer {
     public static final String NBT_TAG_MAT = "mat";
@@ -220,6 +221,11 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
                 renderSprite(arsenic, x, y, overlay);
             }
         }
+    }
+
+    @Override
+    public void renderInHand(SpriteAtlasTexture atlas, Sprite texture, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
+        
     }
 
     @Override
