@@ -1,12 +1,14 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.blockentity.ControlMode;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.api.transport.statement.StatementManager;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.item.LensItem;
+import net.danygames2014.buildcraft.registry.ControlModeRegistry;
 import net.danygames2014.buildcraft.util.ColorUtil;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.ItemStack;
@@ -134,6 +136,10 @@ public class TextureListener {
 
         for (GateExpansion expansion : GateExpansions.getExpansions()) {
             expansion.registerTextures();
+        }
+        
+        for (ControlMode controlMode : ControlModeRegistry.getRegistry().values()) {
+            controlMode.sprite = Atlases.getTerrain().addTexture(controlMode.texture);
         }
     }
 

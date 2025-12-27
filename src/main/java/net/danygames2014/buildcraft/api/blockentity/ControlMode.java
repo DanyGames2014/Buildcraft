@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.api.blockentity;
 
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class ControlMode {
@@ -8,17 +9,10 @@ public class ControlMode {
     
     public final Identifier identifier;
     public final Identifier texture;
-    public final int u;
-    public final int v;
+    public Atlas.Sprite sprite;
 
-    public ControlMode(Identifier identifier, Identifier texture, int u, int v) {
+    public ControlMode(Identifier identifier, Identifier texture) {
         this.identifier = identifier;
         this.texture = texture;
-        this.u = u;
-        this.v = v;
-    }
-    
-    public ControlMode(Identifier identifier, Identifier texture) {
-        this(identifier, texture, 0, 0);
     }
 }
