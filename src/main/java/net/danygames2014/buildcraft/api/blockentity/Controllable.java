@@ -1,28 +1,26 @@
 package net.danygames2014.buildcraft.api.blockentity;
 
-public interface Controllable {
-    public enum Mode {
-        Unknown, On, Off, Mode, Loop
-    }
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
+public interface Controllable {
     /**
      * Get the current control mode of the Tile Entity.
-     * @return
      */
-    Mode getControlMode();
+    ControlMode getControlMode();
 
     /**
      * Set the mode of the Tile Entity.
-     * @param mode
      */
-    void setControlMode(Mode mode);
+    void setControlMode(ControlMode mode);
 
     /**
      * Check if a given control mode is accepted.
-     * If you query IControllable tiles, you MUST check with
-     * acceptsControlMode first.
-     * @param mode
-     * @return True if this control mode is accepted.
+     * <p><bold>You MUST check this if you are querying or setting control modes</bold>
+     * @return <code>true</code> if this control mode is accepted.
      */
-    boolean acceptsControlMode(Mode mode);
+    default boolean supportsControlMode(ControlMode mode) {
+        return getSupportedControlModes().contains(mode);
+    }
+    
+    ObjectArrayList<ControlMode> getSupportedControlModes();
 }

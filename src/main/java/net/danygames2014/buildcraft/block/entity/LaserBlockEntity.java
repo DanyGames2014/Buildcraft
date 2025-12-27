@@ -1,5 +1,7 @@
 package net.danygames2014.buildcraft.block.entity;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.buildcraft.api.blockentity.ControlMode;
 import net.danygames2014.buildcraft.api.blockentity.Controllable;
 import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.api.core.SafeTimeTracker;
@@ -8,11 +10,13 @@ import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.client.render.LaserRenderer;
+import net.danygames2014.buildcraft.registry.ControlModeRegistry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.state.property.Properties;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.LinkedList;
@@ -37,7 +41,13 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
 
     private ILaserTarget laserTarget;
     public PowerHandler powerHandler;
-    protected Controllable.Mode mode = Mode.On;
+    protected ControlMode mode = ControlMode.ON;
+    private static final ObjectArrayList<ControlMode> SUPPORTED_CONTROL_MODES = new ObjectArrayList<>() {
+        {
+            add(ControlMode.ON);
+            add(ControlMode.OFF);
+        }
+    }; 
     private static final PowerHandler.PerditionCalculator PERDITION = new PowerHandler.PerditionCalculator(0.5F);
 
     public LaserBlockEntity(){
@@ -76,7 +86,7 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
         }
 
         // If a gate disabled us, remove laser and do nothing.
-        if (mode == Controllable.Mode.Off) {
+        if (mode == ControlMode.OFF) {
             removeLaser();
             return;
         }
@@ -303,7 +313,7 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         powerHandler.readFromNBT(nbt);
-        mode = Mode.values()[nbt.getByte("mode")];
+        mode = ControlModeRegistry.get(Identifier.of(nbt.getString("mode")));
         initPowerProvider();
     }
 
@@ -311,21 +321,21 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         powerHandler.writeToNBT(nbt);
-        nbt.putByte("mode", (byte) mode.ordinal());
+        nbt.putString("mode", mode.identifier.toString());
     }
 
     @Override
-    public Mode getControlMode() {
+    public ControlMode getControlMode() {
         return mode;
     }
 
     @Override
-    public void setControlMode(Mode mode) {
+    public void setControlMode(ControlMode mode) {
         this.mode = mode;
     }
 
     @Override
-    public boolean acceptsControlMode(Mode mode) {
-        return mode == Controllable.Mode.On || mode == Controllable.Mode.Off;
+    public ObjectArrayList<ControlMode> getSupportedControlModes() {
+        return SUPPORTED_CONTROL_MODES;
     }
 }
