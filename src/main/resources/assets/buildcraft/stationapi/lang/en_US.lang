@@ -147,6 +147,11 @@ gate.buildcraft.material.emerald=Emerald
 gate.buildcraft.logic.and=AND
 gate.buildcraft.logic.or=OR
 
+controlmode.buildcraft.on.name=On
+controlmode.buildcraft.on.description=Turn on the machine
+controlmode.buildcraft.off.name=Off
+controlmode.buildcraft.off.description=Turn off the machine
+
 gui.buildcraft.engine.energy=Energy
 gui.buildcraft.engine.current_output=Current output
 gui.buildcraft.engine.stored=Stored

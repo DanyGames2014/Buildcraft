@@ -13,6 +13,7 @@ public class InitListener {
         FabricLoader.getInstance().getEntrypointContainers("buildcraft:event_bus", Object.class).forEach(EntrypointManager::setup);
     }
     
+    @EventListener
     public void initListener(InitEvent event) {
         StationAPI.EVENT_BUS.post(new ControlModeRegisterEvent());
     }
