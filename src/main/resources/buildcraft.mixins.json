@@ -11,6 +11,7 @@
     "ServerPlayerInteractionManagerMixin"
   ],
   "client": [
+    "ArsenicOverlayRendererMixin",
     "ArsenicItemRendererMixin",
     "BlockRenderManagerMixin",
     "ChunkBuilderMixin",
