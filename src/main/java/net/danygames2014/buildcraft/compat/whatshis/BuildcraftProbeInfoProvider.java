@@ -2,10 +2,7 @@ package net.danygames2014.buildcraft.compat.whatshis;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.energy.EnergyStage;
-import net.danygames2014.buildcraft.block.entity.AssemblyTableBlockEntity;
-import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
-import net.danygames2014.buildcraft.block.entity.LaserBlockEntity;
-import net.danygames2014.buildcraft.block.entity.MiningWellBlockEntity;
+import net.danygames2014.buildcraft.block.entity.*;
 import net.danygames2014.whatsthis.api.*;
 import net.danygames2014.whatsthis.apiimpl.styles.LayoutStyle;
 import net.danygames2014.whatsthis.config.Config;
@@ -136,6 +133,43 @@ public class BuildcraftProbeInfoProvider implements IProbeInfoProvider {
                                 .prefix("Temperature ")
                                 .suffix("°C")
                 );
+            }
+
+            // Mining Well
+            if (blockEntity instanceof BuilderBlockEntity builder) {
+                IProbeInfo vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().spacing(3));
+
+                vertical.progress(
+                        (int) builder.powerHandler.getEnergyStored(),
+                        (int) builder.powerHandler.getMaxEnergyStored(),
+                        probeInfo.defaultProgressStyle()
+                                .borderColor(borderColor)
+                                .filledColor(filledColor)
+                                .alternateFilledColor(alternateFilledColor)
+                                .prefix("Energy ")
+                                .suffix("MJ")
+                );
+
+                switch (builder.state) {
+                    case IDLE -> {
+                        vertical.text(TextStyleClass.INFO + "Idle");
+                    }
+                    case READY -> {
+                        vertical.text(TextStyleClass.OK + "Ready");
+                        if (mode == ProbeMode.EXTENDED) {
+                            vertical.text(builder.remainingBlocks + " blocks remaining");
+                        }
+                    }
+                    case BUILDING -> {
+                        vertical.text(TextStyleClass.OK + "Building");
+                        if (mode == ProbeMode.EXTENDED) {
+                            vertical.text(builder.remainingBlocks + " blocks remaining");
+                        }
+                    }
+                    case STOPPED -> {
+                        vertical.text(TextStyleClass.WARNING + "Stopped");
+                    }
+                }
             }
         }
     }
