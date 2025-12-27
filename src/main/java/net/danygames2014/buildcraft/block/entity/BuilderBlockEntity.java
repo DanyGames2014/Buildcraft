@@ -2,7 +2,11 @@ package net.danygames2014.buildcraft.block.entity;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
+import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.BuilderBlock;
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.inventory.SimpleInventory;
 import net.danygames2014.buildcraft.item.BlueprintData;
 import net.danygames2014.buildcraft.item.BlueprintData.BlueprintEntry;
@@ -18,15 +22,18 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.LeavesBlockItem;
 import net.minecraft.item.SecondaryBlockItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Inventory {
+public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Inventory, IPowerReceptor {
     public SimpleInventory inventory = new SimpleInventory(28, "Builder", this::markDirty);
     public BlueprintData blueprint = null;
+    
+    public PowerHandler powerHandler;
     
     // Status
     public ObjectArrayList<BlueprintEntry> remainingEntries = new ObjectArrayList<>();
@@ -42,6 +49,10 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
     public boolean pauseOnBlockedBlock = true;
     
     public BuilderBlockEntity() {
+        powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
+
+        powerHandler.configure(10, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2);
+        powerHandler.configurePowerPerdition(1, 1);
     }
 
     public void stopConstruction() {
@@ -77,6 +88,7 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         }
 
         remainingBlocks = remainingEntries.size();
+        powerHandler.update();
         
         if (hasBlueprint()) {
             if (state == BuilderState.STOPPED) {
@@ -151,35 +163,66 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
                 return;
             }
 
-            tickConstruction();
+            if (Config.MACHINE_CONFIG.builder.mjPerBlock <= 0) {
+                tickConstruction();
+            }
+
+            cooldown--;
         } else {
             stopConstruction();
             state = BuilderState.IDLE;
         }
     }
-    
-    public void tickConstruction() {
+
+    @Override
+    public void doWork(PowerHandler workProvider) {
+        if (!Config.MACHINE_CONFIG.builder.enabled) {
+            return;
+        }
+        
+        if (world.isRemote) {
+            return;
+        }
+        
         if (state != BuilderState.BUILDING) {
             return;
         }
         
+        int mjPerBlock = Config.MACHINE_CONFIG.builder.mjPerBlock;
+        
+        if (powerHandler.getEnergyStored() >= mjPerBlock) {
+            if (tickConstruction()) {
+                if (powerHandler.useEnergy(mjPerBlock, mjPerBlock, true) < mjPerBlock) {
+                    Buildcraft.LOGGER.warn("The energy was there 2 lines ago, but it's not now ._.");
+                }
+            }
+        }
+    }
+    
+    public boolean tickConstruction() {
+        if (state != BuilderState.BUILDING) {
+            return false;
+        }
+        
         if (blueprint == null || workingArea == null) {
-            return;
+            return false;
         }
         
         if (remainingEntries.isEmpty()) {
             state = BuilderState.STOPPED;
             destroyWorkingArea();
-            return;
+            return true;
         }
         
         if (cooldown <= 0) {
             PlaceResult result = placeEntry(remainingEntries.get(0));
+            boolean requiresEnergy = Config.MACHINE_CONFIG.builder.mjPerBlock > 0;
             
             switch (result) {
                 case SUCCESS -> {
                     remainingEntries.remove(0);
-                    cooldown = 10;
+                    cooldown = requiresEnergy ? 1 : 5;
+                    return true;
                 }
                 case ERROR -> {
                     remainingEntries.remove(0);
@@ -187,6 +230,7 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
                 }
                 case ALREADY_EXISTS -> {
                     remainingEntries.remove(0);
+                    cooldown = requiresEnergy ? 1 : 2;
                 }
                 case BLOCKED -> {
                     markBlockedBlock(workingArea.minX + remainingEntries.get(0).x, workingArea.minY + remainingEntries.get(0).y, workingArea.minZ + remainingEntries.get(0).z);
@@ -197,11 +241,9 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
                     cooldown = 20;
                 }
             }
-
-            return;
         } 
         
-        cooldown--;
+        return false;
     }
     
     public PlaceResult placeEntry(BlueprintEntry entry) {
@@ -301,7 +343,7 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
     }
     
     public void markBlockedBlock(int x, int y, int z) {
-        double density = 0.05D;
+        double density = 0.2D;
         
         for (double xPos = x; xPos <= x + 1; xPos += density) {
             ParticleHelper.addParticle(world, "reddust", xPos, y, z, 1.0D, 0.0D, 0.0D, 16);
@@ -418,7 +460,18 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         super.readNbt(nbt);
         inventory.readNbt(nbt);
     }
-    
+
+    // IPowerReceptor
+    @Override
+    public PowerHandler.PowerReceiver getPowerReceiver(Direction side) {
+        return powerHandler.getPowerReceiver();
+    }
+
+    @Override
+    public World getWorld() {
+        return world;
+    }
+
     public enum BuilderState {
         IDLE,
         READY,
