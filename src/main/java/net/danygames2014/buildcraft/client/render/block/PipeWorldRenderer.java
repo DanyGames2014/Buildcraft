@@ -5,6 +5,7 @@ import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.behavior.StructurePipeBehavior;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.config.Config;
@@ -28,11 +29,12 @@ public class PipeWorldRenderer {
         int renderPass = PipeBlock.currentRenderPass;
         int glassColor = pipeBlockEntity.getPipeColor();
 
-        if(renderPass == 0 || glassColor >= 0){
+        if(renderPass == 0 || (glassColor >= 0 && !(pipeBlockEntity.behavior instanceof StructurePipeBehavior))){
             int connectivity = state.pipeConnectionMatrix.getMask();
             float[] dim = new float[6];
 
-            if(renderPass == 1){
+            // TODO: Pipe behavior is probably null in multiplayer
+            if(renderPass == 1 || (pipeBlockEntity.behavior instanceof StructurePipeBehavior && glassColor >= 0)){
                 renderBlock.setColor(ColorUtil.getColor(glassColor));
             }
 
