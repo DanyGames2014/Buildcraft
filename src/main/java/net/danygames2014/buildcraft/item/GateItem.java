@@ -36,6 +36,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.opengl.GL11;
 
 import java.util.*;
 
@@ -225,7 +226,119 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
 
     @Override
     public void renderInHand(SpriteAtlasTexture atlas, Sprite texture, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
-        
+        GL11.glTranslatef(-1f, 0f, 0f);
+        renderIn3D(tessellator, stack);
+    }
+
+    private void renderIn3D(Tessellator tessellator, ItemStack stack) {
+        GL11.glPushMatrix();
+
+        renderLayerIn3D(tessellator, GateItem.getLogic(stack).getItemTexture());
+        GL11.glScalef(1, 1, 1.05f);
+        renderLayerIn3D(tessellator, GateItem.getMaterial(stack).getItemTexture());
+
+        for (GateExpansion expansion : GateItem.getInstalledExpansions(stack)) {
+            renderLayerIn3D(tessellator, expansion.getOverlayItemSprite());
+        }
+
+        GL11.glPopMatrix();
+    }
+
+    private void renderLayerIn3D(Tessellator tessellator, Atlas.Sprite sprite) {
+        if (sprite == null) {
+            return;
+        }
+        GL11.glPushMatrix();
+
+        double uv1 = sprite.getStartU();
+        double uv2 = sprite.getEndU();
+        double uv3 = sprite.getStartV();
+        double uv4 = sprite.getEndV();
+
+        renderHeldItem(tessellator, (float) uv2, (float) uv3, (float) uv1, (float) uv4, sprite.getWidth(), sprite.getHeight(), 0.0625F);
+        GL11.glPopMatrix();
+    }
+
+    public static void renderHeldItem(Tessellator tessellator, float uv2, float uv3, float uv1, float uv4, int width, int height, float zOffset)
+    {
+        tessellator.startQuads();
+        tessellator.normal(0.0F, 0.0F, 1.0F);
+        tessellator.vertex(0.0D, 0.0D, 0.0D, uv2, uv4);
+        tessellator.vertex(1.0D, 0.0D, 0.0D, uv1, uv4);
+        tessellator.vertex(1.0D, 1.0D, 0.0D, uv1, uv3);
+        tessellator.vertex(0.0D, 1.0D, 0.0D, uv2, uv3);
+        tessellator.draw();
+        tessellator.startQuads();
+        tessellator.normal(0.0F, 0.0F, -1.0F);
+        tessellator.vertex(0.0D, 1.0D, (0.0F - zOffset), uv2, uv3);
+        tessellator.vertex(1.0D, 1.0D, (0.0F - zOffset), uv1, uv3);
+        tessellator.vertex(1.0D, 0.0D, (0.0F - zOffset), uv1, uv4);
+        tessellator.vertex(0.0D, 0.0D, (0.0F - zOffset), uv2, uv4);
+        tessellator.draw();
+        float var8 = 0.5F * (uv2 - uv1) / (float)width;
+        float var9 = 0.5F * (uv4 - uv3) / (float)height;
+        tessellator.startQuads();
+        tessellator.normal(-1.0F, 0.0F, 0.0F);
+        int var10;
+        float var11;
+        float var12;
+
+        for (var10 = 0; var10 < width; ++var10)
+        {
+            var11 = (float)var10 / (float)width;
+            var12 = uv2 + (uv1 - uv2) * var11 - var8;
+            tessellator.vertex(var11, 0.0D, (0.0F - zOffset), var12, uv4);
+            tessellator.vertex(var11, 0.0D, 0.0D, var12, uv4);
+            tessellator.vertex(var11, 1.0D, 0.0D, var12, uv3);
+            tessellator.vertex(var11, 1.0D, (0.0F - zOffset), var12, uv3);
+        }
+
+        tessellator.draw();
+        tessellator.startQuads();
+        tessellator.normal(1.0F, 0.0F, 0.0F);
+        float var13;
+
+        for (var10 = 0; var10 < width; ++var10)
+        {
+            var11 = (float)var10 / (float)width;
+            var12 = uv2 + (uv1 - uv2) * var11 - var8;
+            var13 = var11 + 1.0F / (float)width;
+            tessellator.vertex(var13, 1.0D, (0.0F - zOffset), var12, uv3);
+            tessellator.vertex(var13, 1.0D, 0.0D, var12, uv3);
+            tessellator.vertex(var13, 0.0D, 0.0D, var12, uv4);
+            tessellator.vertex(var13, 0.0D, (0.0F - zOffset), var12, uv4);
+        }
+
+        tessellator.draw();
+        tessellator.startQuads();
+        tessellator.normal(0.0F, 1.0F, 0.0F);
+
+        for (var10 = 0; var10 < height; ++var10)
+        {
+            var11 = (float)var10 / (float)height;
+            var12 = uv4 + (uv3 - uv4) * var11 - var9;
+            var13 = var11 + 1.0F / (float)height;
+            tessellator.vertex(0.0D, var13, 0.0D, uv2, var12);
+            tessellator.vertex(1.0D, var13, 0.0D, uv1, var12);
+            tessellator.vertex(1.0D, var13, (0.0F - zOffset), uv1, var12);
+            tessellator.vertex(0.0D, var13, (0.0F - zOffset), uv2, var12);
+        }
+
+        tessellator.draw();
+        tessellator.startQuads();
+        tessellator.normal(0.0F, -1.0F, 0.0F);
+
+        for (var10 = 0; var10 < height; ++var10)
+        {
+            var11 = (float)var10 / (float)height;
+            var12 = uv4 + (uv3 - uv4) * var11 - var9;
+            tessellator.vertex(1.0D, var11, 0.0D, uv1, var12);
+            tessellator.vertex(0.0D, var11, 0.0D, uv2, var12);
+            tessellator.vertex(0.0D, var11, (0.0F - zOffset), uv2, var12);
+            tessellator.vertex(1.0D, var11, (0.0F - zOffset), uv1, var12);
+        }
+
+        tessellator.draw();
     }
 
     @Override
