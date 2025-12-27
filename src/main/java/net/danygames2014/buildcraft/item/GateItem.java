@@ -6,10 +6,12 @@ import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
-import net.danygames2014.buildcraft.block.entity.pipe.gate.*;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateFactory;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.api.EnvironmentInterface;
 import net.glasslauncher.mods.alwaysmoreitems.api.SubItemProvider;
 import net.minecraft.client.font.TextRenderer;
@@ -24,7 +26,6 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtString;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
-import net.modificationstation.stationapi.api.client.model.item.ItemWithRenderer;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
@@ -61,29 +62,29 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         setMaxDamage(0);
     }
 
-    public static GateItem getGateItem(GateMaterial gateMaterial, GateLogic gateLogic){
+    public static GateItem getGateItem(GateMaterial gateMaterial, GateLogic gateLogic) {
         Identifier gateIdentifier = getIdentifier(gateMaterial, gateLogic);
-        if(!gateItems.containsKey(gateIdentifier)){
+        if (!gateItems.containsKey(gateIdentifier)) {
             return null;
         }
         return gateItems.get(gateIdentifier);
     }
 
-    public static GateMaterial getMaterial(ItemStack stack){
-        if(stack.getItem() instanceof GateItem gateItem){
+    public static GateMaterial getMaterial(ItemStack stack) {
+        if (stack.getItem() instanceof GateItem gateItem) {
             return gateItem.gateMaterial;
         }
         return GateMaterial.REDSTONE;
     }
 
-    public static GateLogic getLogic(ItemStack stack){
-        if(stack.getItem() instanceof GateItem gateItem){
+    public static GateLogic getLogic(ItemStack stack) {
+        if (stack.getItem() instanceof GateItem gateItem) {
             return gateItem.gateLogic;
         }
         return GateLogic.AND;
     }
 
-    public static Identifier getIdentifier(GateMaterial gateMaterial, GateLogic gateLogic){
+    public static Identifier getIdentifier(GateMaterial gateMaterial, GateLogic gateLogic) {
         return Buildcraft.NAMESPACE.id(gateMaterial.name().toLowerCase(Locale.ENGLISH) + "_" + gateLogic.name().toLowerCase(Locale.ENGLISH) + "_gate");
     }
 
@@ -161,35 +162,29 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
     }
 
     @SubItemProvider
-    public List<ItemStack> getSubItems(){
+    public List<ItemStack> getSubItems() {
         List<ItemStack> items = new ArrayList<>();
-        for (GateMaterial material : GateMaterial.VALUES) {
-            for (GateLogic logic : GateLogic.VALUES) {
-                if (material == GateMaterial.REDSTONE && logic == GateLogic.OR) {
-                    continue;
-                }
 
-                items.add(makeGateItem(material, logic));
-
-                for (GateExpansion exp : GateExpansions.getExpansions()) {
-                    ItemStack stackExpansion = makeGateItem(material, logic);
-                    addGateExpansion(stackExpansion, exp);
-                    items.add(stackExpansion);
-                }
-            }
+        items.add(makeGateItem(this.gateMaterial, this.gateLogic));
+        for (GateExpansion exp : GateExpansions.getExpansions()) {
+            ItemStack stackExpansion = makeGateItem(this.gateMaterial, this.gateLogic);
+            addGateExpansion(stackExpansion, exp);
+            items.add(stackExpansion);
         }
+        
         return items;
     }
 
     @Override
-    public @NotNull String[] getTooltip(ItemStack itemStack, String s) {
+    public @NotNull String[] getTooltip(ItemStack itemStack, String originalTooltip) {
         TranslationStorage translationStorage = TranslationStorage.getInstance();
         List<String> lines = new ArrayList<>();
 
+        lines.add(originalTooltip);
         Set<GateExpansion> expansions = getInstalledExpansions(itemStack);
 
         if (!expansions.isEmpty()) {
-            lines.add(translationStorage.get("tip.gate.expansions"));
+            lines.add(translationStorage.get("tooltip.buildcraft.gate.expansions"));
 
             for (GateExpansion expansion : expansions) {
                 lines.add(expansion.getDisplayName());
@@ -204,7 +199,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         return new GatePluggable(GateFactory.makeGate(pipe, stack, side));
     }
 
-    public void renderSprite(ArsenicItemRenderer arsenicItemRenderer, int x, int y, Atlas.Sprite sprite){
+    public void renderSprite(ArsenicItemRenderer arsenicItemRenderer, int x, int y, Atlas.Sprite sprite) {
         arsenicItemRenderer.renderItemQuad(x, y, sprite.getStartU(), sprite.getStartV(), sprite.getEndU(), sprite.getEndV());
     }
 
@@ -215,7 +210,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         renderSprite(arsenic, x, y, logic);
 
         Atlas.Sprite material = GateItem.getMaterial(stack).getItemTexture();
-        if(material != null){
+        if (material != null) {
             renderSprite(arsenic, x, y, material);
         }
 
@@ -234,7 +229,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         addQuad(tessellator, logic);
 
         Atlas.Sprite material = GateItem.getMaterial(stack).getItemTexture();
-        if(material != null){
+        if (material != null) {
             addQuad(tessellator, material);
         }
 
@@ -247,7 +242,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         return true;
     }
 
-    private void addQuad(Tessellator tessellator, Atlas.Sprite sprite){
+    private void addQuad(Tessellator tessellator, Atlas.Sprite sprite) {
         tessellator.vertex((0.0F - 0.5F), (0.0F - 0.25F), 0.0F, sprite.getStartU(), sprite.getEndV());
         tessellator.vertex((1.0F - 0.5F), (0.0F - 0.25F), 0.0F, sprite.getEndU(), sprite.getEndV());
         tessellator.vertex((1.0F - 0.5F), (1.0F - 0.25F), 0.0F, sprite.getEndU(), sprite.getStartV());

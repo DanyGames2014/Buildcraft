@@ -26,7 +26,7 @@ public class GateExpansionBuildcraft implements GateExpansion {
 
     @Override
     public String getDisplayName() {
-        return TranslationStorage.getInstance().get("gate.expansion." + identifier.path);
+        return TranslationStorage.getInstance().get("gate.buildcraft.expansion." + identifier.path);
     }
 
     @Override

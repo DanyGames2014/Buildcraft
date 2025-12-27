@@ -129,6 +129,11 @@ tile.buildcraft.diamond_energy_pipe.name=Diamond Kinesis Pipe
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel
 
+tooltip.buildcraft.gate.expansions=Installed Expansions:
+gate.buildcraft.expansion.pulsar=Autarchic Pulsar
+gate.buildcraft.expansion.timer=Clock Timer
+gate.buildcraft.expansion.fader=Redstone Fader
+
 gui.buildcraft.engine.energy=Energy
 gui.buildcraft.engine.current_output=Current output
 gui.buildcraft.engine.stored=Stored
