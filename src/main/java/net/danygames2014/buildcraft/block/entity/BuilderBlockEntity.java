@@ -179,6 +179,11 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         if (!Config.MACHINE_CONFIG.builder.enabled) {
             return;
         }
+
+        int mjPerBlock = Config.MACHINE_CONFIG.builder.mjPerBlock;
+        if (mjPerBlock <= 0) {
+            return;
+        }
         
         if (world.isRemote) {
             return;
@@ -187,8 +192,6 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         if (state != BuilderState.BUILDING) {
             return;
         }
-        
-        int mjPerBlock = Config.MACHINE_CONFIG.builder.mjPerBlock;
         
         if (powerHandler.getEnergyStored() >= mjPerBlock) {
             if (tickConstruction()) {
