@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.ArchitectTableBlockEntity;
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.packet.ArchitectTableNameFieldPacket;
 import net.danygames2014.buildcraft.screen.handler.ArchitectTableScreenHandler;
 import net.danygames2014.buildcraft.screen.widget.TransparentTextFieldWidget;
@@ -29,10 +30,6 @@ public class ArchitectTableScreen extends HandledScreen {
         super.init();
         this.nameField = new TransparentTextFieldWidget(this, this.textRenderer, this.width / 2 - 54, this.height / 2 - 21, 88, 9, "");
         this.nameField.setMaxLength(16);
-        
-//        if (player.world.isRemote) {
-//            PacketHelper.send(new ArchitectTableNameFieldPacket("", true));
-//        }
     }
 
     @Override
@@ -94,7 +91,7 @@ public class ArchitectTableScreen extends HandledScreen {
         drawTexture(x, y, 0, 0, backgroundWidth, backgroundHeight);
 
         if (blockEntity.progress > 0) {
-            int cookProgress = (int) (((float) blockEntity.progress / blockEntity.maxProgress) * 22F);
+            int cookProgress = (int) (((float) blockEntity.progress / Config.MACHINE_CONFIG.architectTable.blueprintTime) * 22F);
             drawTexture(x + 73, y + 35, 177, 14, cookProgress, 16);
         }
     }

@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.block.entity;
 
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.inventory.SimpleInventory;
 import net.danygames2014.buildcraft.item.BlueprintData;
 import net.danygames2014.buildcraft.item.BlueprintPersistentState;
@@ -15,7 +16,6 @@ import net.modificationstation.stationapi.api.state.property.Properties;
 public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements Inventory {
     public SimpleInventory inventory = new SimpleInventory(2, "Architect Table", this::markDirty);
     public int progress = 0;
-    public int maxProgress = 20;
     public String blueprintName = "";
     public String lastTouchedBy = "";
     
@@ -27,8 +27,12 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
     public void tick() {
         super.tick();
         
+        if (!Config.MACHINE_CONFIG.architectTable.enabled) {
+            return;
+        }
+        
         if (canOperate()) {
-            if (progress >= maxProgress) {
+            if (progress >= Config.MACHINE_CONFIG.architectTable.blueprintTime) {
                 writeBlueprint();
                 progress = 0;
             }

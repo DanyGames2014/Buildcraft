@@ -67,6 +67,10 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
     @Override
     public void tick() {
         super.tick();
+
+        if (!Config.MACHINE_CONFIG.builder.enabled) {
+            return;
+        }
         
         if (world.isRemote) {
             return;
