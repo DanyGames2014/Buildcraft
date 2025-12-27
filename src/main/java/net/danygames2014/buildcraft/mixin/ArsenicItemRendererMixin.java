@@ -50,7 +50,7 @@ public class ArsenicItemRendererMixin {
     @Unique
     boolean cancelVanillaVertex = false;
     
-    @Inject(method = "renderVanilla", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;normal(FFF)V"))
+    @Inject(method = "renderVanilla", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;normal(FFF)V", shift = At.Shift.AFTER))
     public void renderOnGround(ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas, CallbackInfo ci, @Local(name = "var15") Tessellator tessellator) {
         cancelVanillaVertex = false;
         if (stack.getItem() instanceof CustomItemRenderer customItemRenderer) {
