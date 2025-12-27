@@ -47,7 +47,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
 
 //    private static ArrayList<ItemStack> allGates;
 
-    private static final Map<Identifier, GateItem> gateItems = new HashMap<>();
+    public static final Map<Identifier, GateItem> gateItems = new HashMap<>();
 
     public final GateMaterial gateMaterial;
     public final GateLogic gateLogic;

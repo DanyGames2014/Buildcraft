@@ -13,3 +13,5 @@ accessible field net/minecraft/client/gui/widget/TextFieldWidget x I
 accessible field net/minecraft/client/gui/widget/TextFieldWidget y I
 accessible field net/minecraft/client/gui/widget/TextFieldWidget height I
 accessible field net/minecraft/client/gui/screen/ingame/HandledScreen itemRenderer Lnet/minecraft/client/render/item/ItemRenderer;
+accessible field net/minecraft/client/resource/language/TranslationStorage INSTANCE Lnet/minecraft/client/resource/language/TranslationStorage;
+accessible field net/minecraft/client/resource/language/TranslationStorage translations Ljava/util/Properties;

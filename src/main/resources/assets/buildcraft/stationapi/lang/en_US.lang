@@ -134,21 +134,22 @@ gate.buildcraft.expansion.pulsar=Autarchic Pulsar
 gate.buildcraft.expansion.timer=Clock Timer
 gate.buildcraft.expansion.fader=Redstone Fader
 
+gate.buildcraft.name=%s %s Gate
+gate.buildcraft.basic.name=%s Gate
+
+gate.buildcraft.material.redstone=Basic
+gate.buildcraft.material.iron=Iron
+gate.buildcraft.material.gold=Gold
+gate.buildcraft.material.diamond=Diamond
+gate.buildcraft.material.glowstone=Glowstone
+gate.buildcraft.material.emerald=Emerald
+
+gate.buildcraft.logic.and=AND
+gate.buildcraft.logic.or=OR
+
 gui.buildcraft.engine.energy=Energy
 gui.buildcraft.engine.current_output=Current output
 gui.buildcraft.engine.stored=Stored
 gui.buildcraft.engine.heat=Heat
-
-gate.logic.and=AND
-gate.logic.or=OR
-
-gate.material.iron=Iron
-gate.material.gold=Gold
-gate.material.diamond=Diamond
-gate.material.glowstone=Glowstone
-gate.material.emerald=Emerald
-
-gate.name=%s %s Gate
-gate.name.basic=Basic Gate
 
 chat.engine.creative.mode=Switched to %d MJ/t limit
