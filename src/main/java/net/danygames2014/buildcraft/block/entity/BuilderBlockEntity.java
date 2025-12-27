@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.block.entity;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.blockentity.HasWork;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.BuilderBlock;
@@ -29,7 +30,7 @@ import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Inventory, IPowerReceptor {
+public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Inventory, IPowerReceptor, HasWork {
     public SimpleInventory inventory = new SimpleInventory(28, "Builder", this::markDirty);
     public BlueprintData blueprint = null;
     
@@ -473,6 +474,12 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
     @Override
     public World getWorld() {
         return world;
+    }
+
+    // HasWork
+    @Override
+    public boolean hasWork() {
+        return state == BuilderState.BUILDING;
     }
 
     public enum BuilderState {
