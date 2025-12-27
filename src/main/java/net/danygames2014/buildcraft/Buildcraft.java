@@ -5,6 +5,8 @@ import net.danygames2014.buildcraft.api.transport.statement.*;
 import net.danygames2014.buildcraft.block.*;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.*;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionPulsar;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionRedstoneFader;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionTimer;
@@ -66,7 +68,7 @@ public class Buildcraft {
     public static Item plug;
     public static Item facade;
 
-    public static Item gateItem;
+    public static Item[] gates;
 
     public static Material pipeMaterial;
 
@@ -270,7 +272,12 @@ public class Buildcraft {
         plug = new PlugItem(NAMESPACE.id("plug")).setTranslationKey(NAMESPACE, "plug");
         facade = new FacadeItem(NAMESPACE.id("facade")).setTranslationKey(NAMESPACE, "facade");
 
-        gateItem = new GateItem(NAMESPACE.id("gate"));
+        gates = new Item[GateMaterial.VALUES.length * GateLogic.VALUES.length];
+        for(int i = 0; i < GateMaterial.VALUES.length; i++){
+            for(int j = 0; j < GateLogic.VALUES.length; j++){
+                gates[i + j] = new GateItem(GateMaterial.fromOrdinal(i), GateLogic.fromOrdinal(j)).setTranslationKey(NAMESPACE, GateItem.getIdentifier(GateMaterial.fromOrdinal(i), GateLogic.fromOrdinal(j)).path);
+            }
+        }
     }
 
     @EventListener

@@ -17,11 +17,11 @@ public final class GateFactory {
     }
 
     public static Gate makeGate(PipeBlockEntity pipe, ItemStack stack, Direction direction) {
-        if (stack == null || stack.count <= 0 || !(stack.getItem() instanceof GateItem)) {
+        if (stack == null || stack.count <= 0 || !(stack.getItem() instanceof GateItem gateItem)) {
             return null;
         }
 
-        Gate gate = makeGate(pipe, GateItem.getMaterial(stack), GateItem.getLogic(stack), direction);
+        Gate gate = makeGate(pipe, gateItem.gateMaterial, gateItem.gateLogic, direction);
 
         for (GateExpansion expansion : GateItem.getInstalledExpansions(stack)) {
             gate.addGateExpansion(expansion);

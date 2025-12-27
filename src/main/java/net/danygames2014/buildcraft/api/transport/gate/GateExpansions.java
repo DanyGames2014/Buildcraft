@@ -7,9 +7,12 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import java.util.*;
 
 public class GateExpansions {
-    private static final Map<Identifier, GateExpansion> expansions = new HashMap<>();
-    private static final ArrayList<GateExpansion> expansionIDs = new ArrayList<>();
+    private static final Map<Identifier, GateExpansion> IDENTIFIER_TO_EXPANSION = new HashMap<>();
+    private static final ArrayList<GateExpansion> expansions = new ArrayList<>();
     private static final Map<GateExpansion, ItemStack> recipes = HashBiMap.create();
+    public static final Map<GateExpansion, Integer> indexMap = new HashMap<>();
+
+    private static int nextId = 0;
 
     private GateExpansions() {
     }
@@ -19,8 +22,9 @@ public class GateExpansions {
     }
 
     public static void registerExpansion(Identifier identifier, GateExpansion expansion) {
-        expansions.put(identifier, expansion);
-        expansionIDs.add(expansion);
+        IDENTIFIER_TO_EXPANSION.put(identifier, expansion);
+        expansions.add(expansion);
+        indexMap.computeIfAbsent(expansion, c -> nextId++);
     }
 
     public static void registerExpansion(GateExpansion expansion, ItemStack addedRecipe) {
@@ -29,12 +33,12 @@ public class GateExpansions {
     }
 
     public static GateExpansion getExpansion(Identifier identifier) {
-        return expansions.get(identifier);
+        return IDENTIFIER_TO_EXPANSION.get(identifier);
     }
 
     public static Set<GateExpansion> getExpansions() {
         Set<GateExpansion> set = new HashSet<>();
-        set.addAll(expansionIDs);
+        set.addAll(expansions);
         return set;
     }
 
@@ -45,10 +49,10 @@ public class GateExpansions {
     // The code below is used by networking.
 
     public static GateExpansion getExpansionByID(int id) {
-        return expansionIDs.get(id);
+        return expansions.get(id);
     }
 
     public static int getExpansionID(GateExpansion expansion) {
-        return expansionIDs.indexOf(expansion);
+        return expansions.indexOf(expansion);
     }
 }

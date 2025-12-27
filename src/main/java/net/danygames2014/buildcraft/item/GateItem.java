@@ -13,9 +13,11 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.api.EnvironmentInterface;
 import net.glasslauncher.mods.alwaysmoreitems.api.SubItemProvider;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -23,6 +25,7 @@ import net.minecraft.nbt.NbtString;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import net.modificationstation.stationapi.api.client.model.item.ItemWithRenderer;
+import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
@@ -31,50 +34,57 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
-@EnvironmentInterface(itf = ItemWithRenderer.class, value = EnvType.CLIENT)
-public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem, ItemWithRenderer {
+@EnvironmentInterface(itf = CustomItemRenderer.class, value = EnvType.CLIENT)
+public class GateItem extends TemplateItem implements CustomTooltipProvider, PipePluggableItem, CustomItemRenderer {
     public static final String NBT_TAG_MAT = "mat";
     public static final String NBT_TAG_LOGIC = "logic";
     public static final String NBT_TAG_EX = "ex";
 
-    private static ArrayList<ItemStack> allGates;
+//    private static ArrayList<ItemStack> allGates;
 
-    public GateItem(Identifier identifier) {
-        super(identifier);
+    private static final Map<Identifier, GateItem> gateItems = new HashMap<>();
+
+    public final GateMaterial gateMaterial;
+    public final GateLogic gateLogic;
+
+    public GateItem(GateMaterial gateMaterial, GateLogic gateLogic) {
+        super(getIdentifier(gateMaterial, gateLogic));
+        this.gateMaterial = gateMaterial;
+        this.gateLogic = gateLogic;
+
+        gateItems.put(getIdentifier(gateMaterial, gateLogic), this);
+
         setHasSubtypes(false);
         setMaxDamage(0);
     }
 
-    public static void setMaterial(ItemStack stack, GateMaterial material){
-        stack.getStationNbt().putByte(NBT_TAG_MAT, (byte) material.ordinal());
+    public static GateItem getGateItem(GateMaterial gateMaterial, GateLogic gateLogic){
+        Identifier gateIdentifier = getIdentifier(gateMaterial, gateLogic);
+        if(!gateItems.containsKey(gateIdentifier)){
+            return null;
+        }
+        return gateItems.get(gateIdentifier);
     }
 
-    public static GateMaterial getMaterial(ItemStack stack) {
-        NbtCompound nbt = stack.getStationNbt();
-
-        if (nbt == null) {
-            return GateMaterial.REDSTONE;
-        } else {
-            return GateMaterial.fromOrdinal(nbt.getByte(NBT_TAG_MAT));
+    public static GateMaterial getMaterial(ItemStack stack){
+        if(stack.getItem() instanceof GateItem gateItem){
+            return gateItem.gateMaterial;
         }
+        return GateMaterial.REDSTONE;
     }
 
     public static GateLogic getLogic(ItemStack stack){
-        if(!stack.getStationNbt().contains(NBT_TAG_LOGIC)){
-            return GateLogic.AND;
-        } else {
-            return GateLogic.fromOrdinal(stack.getStationNbt().getByte(NBT_TAG_LOGIC));
+        if(stack.getItem() instanceof GateItem gateItem){
+            return gateItem.gateLogic;
         }
+        return GateLogic.AND;
     }
 
-    public static void setLogic(ItemStack stack, GateLogic logic){
-        stack.getStationNbt().putByte(NBT_TAG_LOGIC, (byte) logic.ordinal());
+    public static Identifier getIdentifier(GateMaterial gateMaterial, GateLogic gateLogic){
+        return Buildcraft.NAMESPACE.id(gateMaterial.name().toLowerCase(Locale.ENGLISH) + "_" + gateLogic.name().toLowerCase(Locale.ENGLISH) + "_gate");
     }
 
     public static void addGateExpansion(ItemStack stack, GateExpansion expansion) {
@@ -136,19 +146,12 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
     }
 
     public static ItemStack makeGateItem(GateMaterial material, GateLogic logic) {
-        ItemStack stack = new ItemStack(Buildcraft.gateItem);
-        NbtCompound nbt = stack.getStationNbt();
-        nbt.putByte(NBT_TAG_MAT, (byte) material.ordinal());
-        nbt.putByte(NBT_TAG_LOGIC, (byte) logic.ordinal());
-
+        ItemStack stack = new ItemStack(GateItem.getGateItem(material, logic));
         return stack;
     }
 
     public static ItemStack makeGateItem(Gate gate) {
-        ItemStack stack = new ItemStack(Buildcraft.gateItem);
-        NbtCompound nbt = stack.getStationNbt();
-        nbt.putByte(NBT_TAG_MAT, (byte) gate.material.ordinal());
-        nbt.putByte(NBT_TAG_LOGIC, (byte) gate.logic.ordinal());
+        ItemStack stack = new ItemStack(GateItem.getGateItem(gate.material, gate.logic));
 
         for (GateExpansion expansion : gate.expansions.keySet()) {
             addGateExpansion(stack, expansion);
@@ -182,9 +185,6 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
     public @NotNull String[] getTooltip(ItemStack itemStack, String s) {
         TranslationStorage translationStorage = TranslationStorage.getInstance();
         List<String> lines = new ArrayList<>();
-        lines.add(GateDefinition.getLocalizedName(getMaterial(itemStack), getLogic(itemStack)));
-//        lines.add(translationStorage.get("tip.gate.wires"));
-//        lines.add(translationStorage.get("tip.gate.wires." + getMaterial(itemStack).getTag()));
 
         Set<GateExpansion> expansions = getInstalledExpansions(itemStack);
 
@@ -204,16 +204,12 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         return new GatePluggable(GateFactory.makeGate(pipe, stack, side));
     }
 
-    @Environment(EnvType.CLIENT)
-    @Override
-    public void renderItemOnGui(ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, int itemId, int damage, int textureIndex, int x, int y) {
-
+    public void renderSprite(ArsenicItemRenderer arsenicItemRenderer, int x, int y, Atlas.Sprite sprite){
+        arsenicItemRenderer.renderItemQuad(x, y, sprite.getStartU(), sprite.getStartV(), sprite.getEndU(), sprite.getEndV());
     }
 
-    @Environment(EnvType.CLIENT)
     @Override
-    public void renderItemOnGui(ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
-        ArsenicItemRenderer arsenic = new ArsenicItemRenderer(itemRenderer);
+    public void renderInGui(ArsenicItemRenderer arsenic, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
         Atlas.Sprite logic = GateItem.getLogic(stack).getItemTexture();
         renderSprite(arsenic, x, y, logic);
@@ -231,7 +227,30 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         }
     }
 
-    public void renderSprite(ArsenicItemRenderer arsenicItemRenderer, int x, int y, Atlas.Sprite sprite){
-        arsenicItemRenderer.renderItemQuad(x, y, sprite.getStartU(), sprite.getStartV(), sprite.getEndU(), sprite.getEndV());
+    @Override
+    public boolean renderOnGround(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
+
+        Atlas.Sprite logic = GateItem.getLogic(stack).getItemTexture();
+        addQuad(tessellator, logic);
+
+        Atlas.Sprite material = GateItem.getMaterial(stack).getItemTexture();
+        if(material != null){
+            addQuad(tessellator, material);
+        }
+
+        for (GateExpansion expansion : GateItem.getInstalledExpansions(stack)) {
+            Atlas.Sprite overlay = expansion.getOverlayItemSprite();
+            if (overlay != null) {
+                addQuad(tessellator, overlay);
+            }
+        }
+        return true;
+    }
+
+    private void addQuad(Tessellator tessellator, Atlas.Sprite sprite){
+        tessellator.vertex((0.0F - 0.5F), (0.0F - 0.25F), 0.0F, sprite.getStartU(), sprite.getEndV());
+        tessellator.vertex((1.0F - 0.5F), (0.0F - 0.25F), 0.0F, sprite.getEndU(), sprite.getEndV());
+        tessellator.vertex((1.0F - 0.5F), (1.0F - 0.25F), 0.0F, sprite.getEndU(), sprite.getStartV());
+        tessellator.vertex((0.0F - 0.5F), (1.0F - 0.25F), 0.0F, sprite.getStartU(), sprite.getStartV());
     }
 }
