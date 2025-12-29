@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class AreaWorkerBlockEntity extends BlockEntity {
     public WorkingArea workingArea;
-    int minHeight = 1;
+    public int minHeight = 1;
     
     public AreaWorkerBlockEntity() {
     }

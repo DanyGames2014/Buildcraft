@@ -22,5 +22,6 @@ public class BlockEntityRendererListener {
         event.renderers.put(PathMarkerBlockEntity.class, new PathMarkerBlockEntityRenderer());
         event.renderers.put(ArchitectTableBlockEntity.class, new AreaWorkerBlockEntityRenderer());
         event.renderers.put(BuilderBlockEntity.class, new AreaWorkerBlockEntityRenderer());
+        event.renderers.put(QuarryBlockEntity.class, new AreaWorkerBlockEntityRenderer());
     }
 }

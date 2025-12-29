@@ -135,7 +135,7 @@ public class BuildcraftProbeInfoProvider implements IProbeInfoProvider {
                 );
             }
 
-            // Mining Well
+            // Builder
             if (blockEntity instanceof BuilderBlockEntity builder) {
                 IProbeInfo vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().spacing(3));
 
@@ -168,6 +168,40 @@ public class BuildcraftProbeInfoProvider implements IProbeInfoProvider {
                     }
                     case STOPPED -> {
                         vertical.text(TextStyleClass.WARNING + "Stopped");
+                    }
+                }
+            }
+
+            // Quarry
+            if (blockEntity instanceof QuarryBlockEntity quarry) {
+                IProbeInfo vertical = probeInfo.vertical(probeInfo.defaultLayoutStyle().spacing(3));
+
+                vertical.progress(
+                        (int) quarry.powerHandler.getEnergyStored(),
+                        (int) quarry.powerHandler.getMaxEnergyStored(),
+                        probeInfo.defaultProgressStyle()
+                                .borderColor(borderColor)
+                                .filledColor(filledColor)
+                                .alternateFilledColor(alternateFilledColor)
+                                .prefix("Energy ")
+                                .suffix("MJ")
+                );
+
+                switch (quarry.status) {
+                    case IDLE -> {
+                        vertical.text(TextStyleClass.WARNING + "Idle");
+                    }
+                    case CLEARING_AREA -> {
+                        vertical.text(TextStyleClass.OK + "Clearing area");
+                    }
+                    case BUILDING_FRAME -> {
+                        vertical.text(TextStyleClass.OK + "Building frame");
+                    }
+                    case MINING -> {
+                        vertical.text(TextStyleClass.OK + "Mining");
+                    }
+                    case FINISHED -> {
+                        vertical.text(TextStyleClass.INFO + "Finished");
                     }
                 }
             }

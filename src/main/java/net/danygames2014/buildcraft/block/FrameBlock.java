@@ -66,16 +66,21 @@ public class FrameBlock extends TemplateBlock {
         return 0;
     }
 
+    @Override
+    public void onTick(World world, int x, int y, int z, Random random) {
+        super.onTick(world, x, y, z, random);
+        
+        // Check for decay
+        if (world.getBlockMeta(x, y, z) == 1 && random.nextInt(2) == 0) {
+            world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+        }
+    }
+
     // Connecting Logic
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
         super.neighborUpdate(world, x, y, z, id);
         updateConnections(world, x, y, z);
-
-        // Check for decay
-        if (world.getBlockMeta(x, y, z) == 1 && random.nextInt(2) == 0) {
-            world.setBlockStateWithNotify(x, y, z, States.AIR.get());
-        }
     }
 
     @Override
@@ -91,7 +96,7 @@ public class FrameBlock extends TemplateBlock {
             state = state.with(PROPERTY_LOOKUP.get(side), this.canConnectTo(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
         }
 
-        world.setBlockState(x, y, z, state);
+        world.setBlockStateWithMetadata(x, y, z, state, world.getBlockMeta(x, y, z));
     }
 
     public boolean canConnectTo(World world, int x, int y, int z) {
