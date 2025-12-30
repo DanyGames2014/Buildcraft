@@ -71,6 +71,9 @@ public class TextureListener {
     public static Atlas.Sprite blueLaser;
     public static Atlas.Sprite stripesLaser;
 
+    public static Atlas.Sprite drill;
+    public static Atlas.Sprite drillHead;
+
 
     @EventListener
     public void registerTextures(TextureRegisterEvent event) {
@@ -123,6 +126,9 @@ public class TextureListener {
         redLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/block_red"));
         blueLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/block_blue"));
         stripesLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/stripes"));
+
+        drill = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill"));
+        drillHead = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill_head"));
 
         StatementManager.registerTextures();
 

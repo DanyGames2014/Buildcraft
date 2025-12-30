@@ -123,5 +123,17 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
             
             constructLasers();
         }
+
+        public int sizeX() {
+            return maxX - minX + 1;
+        }
+
+        public int sizeY() {
+            return maxY - minY + 1;
+        }
+
+        public int sizeZ() {
+            return maxZ - minZ + 1;
+        }
     }
 }

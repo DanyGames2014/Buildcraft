@@ -6,6 +6,8 @@ import net.danygames2014.buildcraft.api.blockentity.ControlMode;
 import net.danygames2014.buildcraft.api.blockentity.Controllable;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
+import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
+import net.danygames2014.buildcraft.entity.MechanicalArmEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -15,6 +17,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerReceptor, Controllable {
     public PowerHandler powerHandler;
+    public MechanicalArmEntity arm;
 
     // State
     public QuarryStatus status = QuarryStatus.IDLE;
@@ -41,6 +44,22 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
         this.powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
         this.powerHandler.configure(50, 200, 25, 10000);
         this.powerHandler.configurePowerPerdition(2, 1);
+    }
+
+    private void createArm() {
+        world.spawnEntity(
+                new MechanicalArmEntity(world,
+                                workingArea.minX + PipeWorldRenderer.PIPE_MAX_POS,
+                                y + workingArea.sizeY() - 1 + PipeWorldRenderer.PIPE_MIN_POS,
+                        workingArea.minZ + PipeWorldRenderer.PIPE_MAX_POS,
+                        workingArea.sizeX() - 2 + PipeWorldRenderer.PIPE_MIN_POS * 2,
+                        workingArea.sizeZ() - 2 + PipeWorldRenderer.PIPE_MIN_POS * 2,
+                                this));
+    }
+
+    // Callback from the arm once it's created
+    public void setArm(MechanicalArmEntity arm) {
+        this.arm = arm;
     }
 
     @Override
@@ -88,6 +107,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
 
                 if (currentJob.isEmpty()) {
                     status = QuarryStatus.MINING;
+                    createArm();
                     break;
                 }
 
