@@ -19,7 +19,9 @@ public class MechanicalArmEntity extends Entity {
     private double zRoot;
 
     private int headX, headY, headZ;
-    private EntityBlock xArm, yArm, zArm, head;
+    private EntityBlockWithParent xArm, yArm, zArm, head;
+
+    private boolean initialized = false;
 
     public MechanicalArmEntity(World world) {
         super(world);
@@ -70,13 +72,25 @@ public class MechanicalArmEntity extends Entity {
 
     @Override
     public void tick() {
+        if(!initialized && parent != null) {
+            setPositionAndAngles(parent.x, parent.y, parent.z, 0, 0);
+            setArmSize(armSizeX, armSizeZ);
+            setHead(xRoot, yRoot - 2, zRoot);
+            updatePosition();
+            world.spawnEntity(xArm);
+            world.spawnEntity(yArm);
+            world.spawnEntity(zArm);
+            world.spawnEntity(head);
+            initialized = true;
+        }
         super.tick();
+
         updatePosition();
         if (parent == null) {
             findAndJoinQuarry();
         }
 
-        if (parent == null) {
+        if (parent == null || parent.isRemoved()) {
             markDead();
         }
     }
@@ -88,11 +102,6 @@ public class MechanicalArmEntity extends Entity {
 
         head = newDrillHead(world, 0, 0, 0, 0.2, 1, 0.2);
         head.shadowSize = 1.0F;
-
-        world.spawnEntity(xArm);
-        world.spawnEntity(yArm);
-        world.spawnEntity(zArm);
-        world.spawnEntity(head);
     }
 
     private void findAndJoinQuarry() {
@@ -142,16 +151,16 @@ public class MechanicalArmEntity extends Entity {
         updatePosition();
     }
 
-    private EntityBlock newDrill(World w, double i, double j, double k, double l, double d, double e){
-        EntityBlock entityBlock = new EntityBlock(w, i, j, k, l, d, e);
+    private EntityBlockWithParent newDrill(World w, double i, double j, double k, double l, double d, double e){
+        EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, i, j, k, l, d, e, this);
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
             entityBlock.texture = TextureListener.drill.index;
         }
         return entityBlock;
     }
 
-    private EntityBlock newDrillHead(World w, double i, double j, double k, double l, double d, double e){
-        EntityBlock entityBlock = new EntityBlock(w, i, j, k, l, d, e);
+    private EntityBlockWithParent newDrillHead(World w, double i, double j, double k, double l, double d, double e){
+        EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, i, j, k, l, d, e, this);
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
             entityBlock.texture = TextureListener.drillHead.index;
         }
