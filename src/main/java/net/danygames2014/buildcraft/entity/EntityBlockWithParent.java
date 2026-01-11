@@ -21,7 +21,7 @@ public class EntityBlockWithParent extends EntityBlock{
     @Override
     public void tick() {
         super.tick();
-        if(parent == null){
+        if(parent == null || parent.dead){
             invalidTimer++;
             if(invalidTimer > 20){
                 markDead();
