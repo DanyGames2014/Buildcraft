@@ -88,6 +88,16 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
             return;
         }
 
+        if(state == BuilderState.BUILDING){
+            if(robot == null){
+                createRobot();
+            }
+        } else {
+            if(robot != null){
+                destroyRobot();
+            }
+        }
+
         remainingBlocks = remainingEntries.size();
         powerHandler.update();
         
@@ -217,6 +227,10 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
             destroyWorkingArea();
             return true;
         }
+
+        BlueprintEntry nextBlock = remainingEntries.get(0);
+
+        setRobotTarget(workingArea.minX + nextBlock.x, workingArea.minY + nextBlock.y, workingArea.minZ + nextBlock.z);
         
         if (cooldown <= 0) {
             PlaceResult result = placeEntry(remainingEntries.get(0));

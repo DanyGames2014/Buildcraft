@@ -2,13 +2,16 @@ package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
+import net.danygames2014.buildcraft.entity.RobotEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 
 public abstract class AreaWorkerBlockEntity extends BlockEntity {
     public WorkingArea workingArea;
+    public RobotEntity robot;
     public int minHeight = 1;
     
     public AreaWorkerBlockEntity() {
@@ -48,6 +51,40 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
         if (nbt.contains("workingArea")) {
             workingArea = new WorkingArea();
             workingArea.readNbt(nbt.getCompound("workingArea"));
+        }
+    }
+
+    public void setRobot(RobotEntity robot){
+        this.robot = robot;
+    }
+
+    public void createRobot(){
+        double posX = (double) (workingArea.maxX - workingArea.minX) / 2;
+        double posY = (double) (workingArea.maxY - workingArea.minY) / 2;
+        double posZ = (double) (workingArea.maxZ - workingArea.minZ) / 2;
+
+        RobotEntity robotEntity = new RobotEntity(world, this);
+
+        robotEntity.setPositionAndAngles(workingArea.minX + posX, workingArea.minY + posY, workingArea.minZ +  posZ, 0f, 0f);
+
+        world.spawnEntity(robotEntity);
+        setRobot(robotEntity);
+    }
+
+    public void destroyRobot(){
+        if(robot != null){
+            robot.markDead();
+        }
+        robot = null;
+    }
+
+    public void setRobotTarget(BlockPos blockPos){
+        setRobotTarget(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+    }
+
+    public void setRobotTarget(int x, int y, int z){
+        if(this.robot != null){
+            robot.setLaserTarget(x, y, z);
         }
     }
 

@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.api.blockentity.ControlMode;
 import net.danygames2014.buildcraft.api.blockentity.Controllable;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
+import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.entity.MechanicalArmEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -75,6 +76,9 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
         }
 
         powerHandler.update();
+        if(robot != null){
+            robot.setLaserTexture(getRobotLaserTexture(powerHandler.getPowerReceiver()));
+        }
 
         if (controlMode == ControlMode.OFF) {
             return;
@@ -120,6 +124,16 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
             case FINISHED:
                 break;
         }
+
+        if(status == QuarryStatus.CLEARING_AREA || status == QuarryStatus.BUILDING_FRAME){
+            if(robot == null){
+                createRobot();
+            }
+        } else {
+            if(robot != null){
+                destroyRobot();
+            }
+        }
     }
 
     public void performClearing() {
@@ -128,6 +142,8 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
             currentJob.pop();
             return;
         }
+
+        setRobotTarget(nextPeek);
 
         if (powerHandler.getEnergyStored() >= clearingCost) {
             if (powerHandler.useEnergy(clearingCost, clearingCost, false) >= clearingCost) {
@@ -141,6 +157,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
     public void performFrameBuilding() {
         BlockPos peek = currentJob.peek();
         if (world.getBlockState(peek).isAir()) {
+            setRobotTarget(peek);
             if (powerHandler.getEnergyStored() < frameCost) {
                 return;
             }
@@ -175,6 +192,21 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
 
         world.setBlockStateWithNotify(pos, States.AIR.get());
         return true;
+    }
+
+
+    public String getRobotLaserTexture(PowerHandler.PowerReceiver powerReceiver) {
+        double avg = powerReceiver.getAveragePowerUsed();
+
+        if (avg <= 10.0) {
+            return LaserRenderer.LASER_TEXTURES[0];
+        } else if (avg <= 20.0) {
+            return LaserRenderer.LASER_TEXTURES[1];
+        } else if (avg <= 30.0) {
+            return LaserRenderer.LASER_TEXTURES[2];
+        } else {
+            return LaserRenderer.LASER_TEXTURES[3];
+        }
     }
 
     // IPowerReceptor
