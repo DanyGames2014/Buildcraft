@@ -107,7 +107,7 @@ public class BuilderScreen extends HandledScreen {
         textRenderer.draw("Builder", 8, 6, 4210752);
         textRenderer.draw("Inventory", 8, this.backgroundHeight - 96 + 2, 4210752);
         
-        if (blockEntity.getStack(0) != null) {
+        if (blockEntity.hasBlueprint()) {
             textRenderer.draw("Remaining", -68, 6, 4210752);
         }
         
@@ -125,7 +125,7 @@ public class BuilderScreen extends HandledScreen {
         int y = (height - backgroundHeight) / 2;
         drawTexture(x, y, 0, 0, backgroundWidth, backgroundHeight);
 
-        if (blockEntity.getStack(0) != null) {
+        if (blockEntity.hasBlueprint()) {
             drawTexture(x - 76, y, 176, 0, 80, 151);
         }
     }

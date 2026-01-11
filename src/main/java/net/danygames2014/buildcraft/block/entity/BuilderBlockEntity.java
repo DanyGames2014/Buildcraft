@@ -418,13 +418,9 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         if (inputStack == null) {
             return false;
         }
-        
-        if (inputStack.getDamage() == 0) {
-            return false;
-        }
-        
+
         if (inputStack.getItem() instanceof BuilderBlueprintItem || inputStack.getItem() instanceof BuilderTemplateItem) {
-            return true;
+            return inputStack.getStationNbt().getBoolean("written");
         }
         
         return false;
