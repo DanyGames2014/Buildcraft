@@ -127,7 +127,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
 
     public void updateSignals() {
         if (!world.isRemote) {
-            showSignals = world.isEmittingRedstonePower(x, y, z);
+            showSignals = world.isPowered(x, y, z);
             //sendNetworkUpdate();
         }
     }

@@ -83,7 +83,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
     public GateInterfaceScreen(Inventory inventory, PipeBlockEntity pipe) {
         super(new GateInterfaceScreenHandler(inventory, pipe), null);
 
-        screenHandler = (GateInterfaceScreenHandler) this.container;
+        screenHandler = (GateInterfaceScreenHandler) this.handler;
         screenHandler.gateCallback = this;
         this.pipe = pipe;
         this.playerInventory = inventory;

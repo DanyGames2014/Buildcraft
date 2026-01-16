@@ -115,7 +115,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     private int getRedstoneInputToPipe(World world, int x, int y, int z, Direction d) {
         BlockPos blockPos = new BlockPos(x, y, z);
         BlockPos offset = blockPos.offset(d);
-        boolean power = world.isEmittingRedstonePowerInDirection(offset.getX(), offset.getY(), offset.getZ(), d.ordinal());
+        boolean power = world.isPoweringSide(offset.getX(), offset.getY(), offset.getZ(), d.ordinal());
         BlockState blockState = world.getBlockState(offset);
         if(power) {
             if(blockState.getBlock() == PipeBlock.REDSTONE_WIRE){
@@ -194,12 +194,12 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
 
     @Override
-    public boolean canTransferPowerInDirection(World world, int x, int y, int z, int direction) {
-        return isEmittingRedstonePowerInDirection(world, x, y, z, direction);
+    public boolean isStrongPoweringSide(World world, int x, int y, int z, int direction) {
+        return isPoweringSide(world, x, y, z, direction);
     }
 
     @Override
-    public boolean isEmittingRedstonePowerInDirection(BlockView blockView, int x, int y, int z, int direction) {
+    public boolean isPoweringSide(BlockView blockView, int x, int y, int z, int direction) {
         if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
             int powerInDirection = pipeBlockEntity.isPoweringTo(direction);
 //            BlockPos blockPos = new BlockPos(x, y, z);
@@ -210,7 +210,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 //            }
             return powerInDirection > 0;
         }
-        return super.isEmittingRedstonePowerInDirection(blockView, x, y, z, direction);
+        return super.isPoweringSide(blockView, x, y, z, direction);
     }
 
     public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType) {

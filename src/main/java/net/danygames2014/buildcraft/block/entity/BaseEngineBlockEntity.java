@@ -388,7 +388,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
     // Redstone
     public void checkRedstonePower() {
-        isRedstonePowered = world.isEmittingRedstonePower(x, y, z);
+        isRedstonePowered = world.isPowered(x, y, z);
     }
 
     // IPowerReceptor
