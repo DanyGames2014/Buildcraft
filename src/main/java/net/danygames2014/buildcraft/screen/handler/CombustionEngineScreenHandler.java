@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
 import net.danygames2014.buildcraft.screen.slot.CombustionEngineFuelSlot;
+import net.danygames2014.buildcraft.screen.slot.InvisibleFluidSlot;
 import net.danygames2014.nyalib.fluid.FluidSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
@@ -58,20 +59,24 @@ public class CombustionEngineScreenHandler extends ScreenHandler {
         );
 
         this.addFluidSlot(
-                new FluidSlot(
+                new InvisibleFluidSlot(
                         engine,
                         0,
-                        104,
-                        0
+                        122,
+                        19,
+                        16,
+                        59
                 )
         );
 
         this.addFluidSlot(
-                new FluidSlot(
+                new InvisibleFluidSlot(
                         engine,
                         1,
-                        122,
-                        0
+                        104,
+                        19,
+                        16,
+                        59
                 )
         );
     }
