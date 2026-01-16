@@ -7,7 +7,6 @@ import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.block.BlockState;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -160,8 +159,8 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
     }
 
     @Override
-    public void init(BlockState blockState) {
-        super.init(blockState);
+    public void init() {
+        super.init();
         if (!world.isRemote && !isFullyConnected()) {
             availableMarkers.add(this);
         }

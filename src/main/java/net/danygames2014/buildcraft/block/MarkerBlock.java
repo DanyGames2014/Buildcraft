@@ -81,13 +81,33 @@ public abstract class MarkerBlock extends TemplateBlockWithEntity {
         return false;
     }
 
+    public static boolean canPlaceTorch(World world, int x, int y, int z, Direction side) {
+        Block block = world.getBlockState(x, y, z).getBlock();
+        return block != null && (block.isFullCube() && block.isOpaque());
+    }
+
     @Override
-    public void onBreak(World world, int x, int y, int z) {
-        if(world.getBlockEntity(x, y, z) instanceof LandMarkerBlockEntity landMarkerBlockEntity){
-            landMarkerBlockEntity.destroy();
-            landMarkerBlockEntity.removeFromWorld();
+    public boolean canPlaceAt(World world, int x, int y, int z, int side) {
+        Direction direction = Direction.byId(side);
+        return canPlaceTorch(world, x - direction.getOffsetX(), y - direction.getOffsetY(), z - direction.getOffsetZ(), direction);
+    }
+
+    private void dropTorchIfCantStay(World world, int x, int y, int z) {
+        BlockState blockState = world.getBlockState(x, y, z);
+        if (!canPlaceAt(world, x, y, z, blockState.get(Properties.FACING).getId())) {
+            dropStacks(world, x, y, z, 0, 0);
+            world.setBlock(x, y, z, 0);
         }
-        super.onBreak(world, x, y, z);
+    }
+
+    @Override
+    public void neighborUpdate(World world, int x, int y, int z, int id) {
+        super.neighborUpdate(world, x, y, z, id);
+        if(world.getBlockEntity(x, y, z) instanceof LandMarkerBlockEntity blockEntity){
+            blockEntity.updateSignals();
+            blockEntity.switchSignals();
+        }
+        dropTorchIfCantStay(world, x, y, z);
     }
 
     @Override

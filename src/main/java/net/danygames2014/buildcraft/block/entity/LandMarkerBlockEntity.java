@@ -7,18 +7,15 @@ import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.entity.EntityBlock;
 import net.danygames2014.buildcraft.util.LaserUtil;
-import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.block.BlockState;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAreaProvider, BlockEntityInit {
+public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAreaProvider {
     public static int MARKER_RANGE = 64;
     public static class TileWrapper implements Serializable {
 
@@ -126,6 +123,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
     private Position[] initVect;
     private EntityBlock[] lasers;
     private EntityBlock[] signals;
+    private boolean hasInit = false;
 
     public void updateSignals() {
         if (!world.isRemote) {
@@ -134,7 +132,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         }
     }
 
-    private void switchSignals() {
+    public void switchSignals() {
         if (signals != null) {
             for (EntityBlock b : signals) {
                 if (b != null) {
@@ -162,7 +160,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         }
     }
 
-    public void init(BlockState blockState){
+    public void init(){
         updateSignals();
 
         if (initVectO != null) {
@@ -309,13 +307,22 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if(!hasInit){
+            hasInit = true;
+            init();
+        }
+    }
+
+    @Override
     public boolean isValidFromLocation(int x, int y, int z) {
         // Rules:
         // - one or two, but not three, of the coordinates must be equal to the marker's location
         // - one of the coordinates must be either -1 or 1 away
         // - it must be physically touching the box
         // - however, it cannot be INSIDE the box
-        int equal = (x == x ? 1 : 0) + (y == y ? 1 : 0) + (z == z ? 1 : 0);
+        int equal = (x == this.x ? 1 : 0) + (y == this.y ? 1 : 0) + (z == this.z ? 1 : 0);
         int touching = 0;
 
         if (equal == 0 || equal == 3) {
@@ -394,6 +401,12 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         return z;
     }
 
+    @Override
+    public void markRemoved() {
+        super.markRemoved();
+        destroy();
+    }
+
     public void destroy() {
         LandMarkerBlockEntity markerOrigin = null;
 
@@ -461,6 +474,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         }
     }
 
+    @Override
     public void removeFromWorld() {
         if (!origin.isSet()) {
             return;

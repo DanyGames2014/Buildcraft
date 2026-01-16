@@ -29,7 +29,7 @@ public abstract class AreaWorkerBlock extends TemplateMachineBlock {
                 }
 
                 areaWorker.constructWorkingArea(landMarker.origin);
-                landMarker.destroy();
+                landMarker.removeFromWorld();
             }
         }
     }
