@@ -8,14 +8,16 @@ import net.danygames2014.buildcraft.block.BaseEngineBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.ForgeDirection;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
+import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowerReceptor, IPowerEmitter {
+public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowerReceptor, IPowerEmitter, BlockEntityInit {
     // Constants
     public static final float MIN_HEAT = 20.0F;
     public static final float IDEAL_HEAT = 100.0F;
@@ -37,16 +39,11 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         powerHandler.configurePowerPerdition(1, 100);
     }
 
-    private boolean hasInit = false;
-    public void init() {
+    @Override
+    public void init(BlockState blockState) {
         if (!world.isRemote) {
-            if (hasInit) {
-                return;
-            }
             
             powerHandler.configure(getMinEnergyReceived(), getMaxEnergyReceived(), 1, getMaxEnergy());
-            checkRedstonePower();
-            hasInit = true;
         }
     }
 
@@ -54,6 +51,8 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     @Override
     public void tick() {
         super.tick();
+
+        checkRedstonePower();
 
         facing = getFacing();
         
@@ -72,8 +71,6 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
             return;
         }
-
-        init();
         
         if (checkOrienation) {
             checkOrienation = false;
@@ -446,7 +443,6 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
                 ", facing=" + facing +
                 ", stage=" + stage +
                 ", checkOrienation=" + checkOrienation +
-                ", hasInit=" + hasInit +
                 ", world=" + world +
                 ", x=" + x +
                 ", y=" + y +

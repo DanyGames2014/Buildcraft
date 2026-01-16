@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.inventory.SimpleInventory;
 import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipe;
 import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipeRegistry;
 import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutputType;
+import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
@@ -17,12 +18,12 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarget, Inventory {
+public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarget, Inventory, BlockEntityInit {
     protected SimpleInventory inventory = new SimpleInventory(12, "Assembly Table", this::inventoryChanged);
     public ArrayList<RecipeEntry> recipes = new ArrayList<>();
     public ArrayList<RecipeEntry> selectedRecipes = new ArrayList<>();
@@ -30,7 +31,6 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
     public double progress;
     public int scaledProgress = 0;
     public Random random = new Random();
-    public boolean hasInit = false;
 
     @Override
     public void tick() {
@@ -39,15 +39,15 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         if (world.isRemote) {
             return;
         }
-        
-        if (!hasInit) {
-            hasInit = true;
-            inventoryChanged();
-        }
 
         updateCurrentRecipe();
 
         scaledProgress = getProgressScaled(70);
+    }
+
+    @Override
+    public void init(BlockState blockState) {
+        inventoryChanged();
     }
 
     public void updateCurrentRecipe() {
@@ -313,6 +313,7 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         return inventory.canPlayerUse(player);
     }
 
+    // TODO: save the current craft / progress
     // NBT
     @Override
     public void writeNbt(NbtCompound nbt) {

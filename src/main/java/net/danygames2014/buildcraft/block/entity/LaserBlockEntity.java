@@ -11,6 +11,7 @@ import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.registry.ControlModeRegistry;
+import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -22,13 +23,11 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Controllable {
+public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Controllable, BlockEntityInit {
     private static final float LASER_OFFSET = 2.0F / 16.0F;
     private static final short POWER_AVERAGING = 100;
 
     public LaserData laser = new LaserData();
-
-    private boolean hasInit = false;
 
     private final SafeTimeTracker laserTickTracker = new SafeTimeTracker(10);
     private final SafeTimeTracker searchTracker = new SafeTimeTracker(100, 100);
@@ -60,7 +59,7 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
         powerHandler.setPerdition(PERDITION);
     }
 
-    public void init(){
+    public void init(BlockState blockState){
         if (laser == null) {
             laser = new LaserData();
         }
@@ -79,11 +78,6 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
 
         if (world.isRemote)
             return;
-
-        if(!hasInit){
-            init();
-            hasInit = true;
-        }
 
         // If a gate disabled us, remove laser and do nothing.
         if (mode == ControlMode.OFF) {

@@ -7,15 +7,18 @@ import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.entity.EntityBlock;
 import net.danygames2014.buildcraft.util.LaserUtil;
+import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.block.BlockState;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAreaProvider {
+public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAreaProvider, BlockEntityInit {
     public static int MARKER_RANGE = 64;
     public static class TileWrapper implements Serializable {
 
@@ -123,7 +126,6 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
     private Position[] initVect;
     private EntityBlock[] lasers;
     private EntityBlock[] signals;
-    private boolean hasInit = false;
 
     public void updateSignals() {
         if (!world.isRemote) {
@@ -160,7 +162,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         }
     }
 
-    public void init(){
+    public void init(BlockState blockState){
         updateSignals();
 
         if (initVectO != null) {
@@ -304,15 +306,6 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         }
 
         lasers = LaserUtil.createLaserBox(world, o.xMin, o.yMin, o.zMin, o.xMax, o.yMax, o.zMax, LaserKind.RED);
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if(!hasInit){
-            hasInit = true;
-            init();
-        }
     }
 
     @Override

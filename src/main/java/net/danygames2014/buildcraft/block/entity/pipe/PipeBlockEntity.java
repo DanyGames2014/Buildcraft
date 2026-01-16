@@ -18,6 +18,7 @@ import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.danygames2014.buildcraft.util.DirectionUtil;
+import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
@@ -27,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.network.packet.Packet;
+import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -36,7 +38,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.Collection;
 import java.util.Random;
 
-public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, Inventory {
+public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, Inventory, BlockEntityInit {
     public PipeBlock pipeBlock;
     public PipeBehavior behavior;
     public PipeTransporter transporter;
@@ -74,34 +76,25 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     public PipeBlockEntity(PipeBlock pipeBlock) {
         this.pipeBlock = pipeBlock;
         //eventBus.registerHandler(this);
-        init();
     }
 
-    // Init
-    private boolean hasInit = false;
-
-    public void init() {
-        if (pipeBlock == null) {
-            if (world != null && y != 0 && world.getBlockState(x,y,z).getBlock() instanceof PipeBlock block) {
+    public void init(BlockState blockState) {
+        if(pipeBlock == null){
+            if(blockState.getBlock() instanceof PipeBlock block) {
                 pipeBlock = block;
             }
         }
-        
         behavior = pipeBlock.behavior;
         transporter = pipeBlock.transporterFactory.create(this);
         transporter.init();
+        updateValidOutputDirections();
         scheduleRenderUpdate();
-        hasInit = true;
     }
 
     // Tick
     @Override
     public void tick() {
         super.tick();
-
-        if (!hasInit) {
-            init();
-        }
 
         if (connections == null) {
             updateConnections();
@@ -589,8 +582,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         }
 
         sideProperties.readNbt(nbt);
-        init();
-        updateValidOutputDirections();
         
         attachPluggables = true;
     }
