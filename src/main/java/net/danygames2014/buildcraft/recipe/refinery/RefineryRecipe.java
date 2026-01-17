@@ -3,15 +3,21 @@ package net.danygames2014.buildcraft.recipe.refinery;
 import net.danygames2014.nyalib.fluid.Fluid;
 
 public class RefineryRecipe {
-    public Fluid inputFluid;
-    public int inputAmount;
+    public Fluid[] inputFluids;
+    public int[] inputAmounts;
     public Fluid outputFluid;
     public int outputAmount;
 
-    public RefineryRecipe(Fluid inputFluid, int inputAmount, Fluid outputFluid, int outputAmount) {
-        this.inputFluid = inputFluid;
-        this.inputAmount = inputAmount;
+    public int energyCost;
+    public long craftingTime;
+
+    public RefineryRecipe(Fluid[] inputFluids, int[] inputAmounts, Fluid outputFluid, int outputAmount, int energyCost, long craftingTime) {
+        this.inputFluids = inputFluids;
+        this.inputAmounts = inputAmounts;
         this.outputFluid = outputFluid;
         this.outputAmount = outputAmount;
+
+        this.energyCost = energyCost;
+        this.craftingTime = craftingTime;
     }
 }

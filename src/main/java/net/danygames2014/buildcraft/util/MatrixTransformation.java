@@ -21,6 +21,23 @@ public class MatrixTransformation {
         }
     }
 
+    public static void transformHorizontalFacing(float[][] matrix, Direction direction){
+        switch (direction){
+            case NORTH -> {
+                rotateYClockwise(matrix);
+                rotateYClockwise(matrix);
+                rotateYClockwise(matrix);
+            }
+            case EAST -> {
+                rotateYClockwise(matrix);
+                rotateYClockwise(matrix);
+            }
+            case SOUTH -> {
+                rotateYClockwise(matrix);
+            }
+        }
+    }
+
     public static void rotate(float[][] matrix) {
         for (int i = 0; i < 2; i++) {
             float temp = matrix[2][i];
@@ -28,6 +45,20 @@ public class MatrixTransformation {
             matrix[1][i] = matrix[0][i];
             matrix[0][i] = temp;
         }
+    }
+
+    public static void rotateYClockwise(float[][] matrix) {
+        float minX = matrix[0][0];
+        float maxX = matrix[0][1];
+
+        float minZ = matrix[2][0];
+        float maxZ = matrix[2][1];
+
+        matrix[0][0] = minZ;
+        matrix[0][1] = maxZ;
+
+        matrix[2][0] = 1-maxX;
+        matrix[2][1] = 1-minX;
     }
 
     public static float[][] deepClone(float[][] source) {

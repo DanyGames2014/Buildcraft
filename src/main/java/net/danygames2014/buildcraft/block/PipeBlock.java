@@ -15,7 +15,7 @@ import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
-import net.danygames2014.buildcraft.util.RaycastResult;
+import net.danygames2014.buildcraft.util.raycast.PipeRaycastResult;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.fabricmc.api.EnvType;
@@ -234,7 +234,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     public Box getBoundingBox(World world, int x, int y, int z) {
         PlayerEntity player = PlayerHelper.getPlayerFromGame();
 
-        RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
+        PipeRaycastResult raycastResult = raycastPipe(world, x, y, z, player);
         if (raycastResult == null) {
             return Box.createCached(x + minX, y + minY, z + minZ, x + maxX, y + maxY, z + maxZ);
         } else {
@@ -318,7 +318,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public HitResult raycast(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
-        RaycastResult raycastResult = raycastPipe(world, x, y, z, startPos, endPos);
+        PipeRaycastResult raycastResult = raycastPipe(world, x, y, z, startPos, endPos);
         if (raycastResult == null) {
             return null;
         } else {
@@ -327,7 +327,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     }
 
-    public RaycastResult raycastPipe(World world, int x, int y, int z, PlayerEntity player) {
+    public PipeRaycastResult raycastPipe(World world, int x, int y, int z, PlayerEntity player) {
         double distance = 5d;
 
         double eyeHeight = 0;
@@ -348,7 +348,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return raycastPipe(world, x, y, z, positionVector, endVector);
     }
 
-    private RaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
+    private PipeRaycastResult raycastPipe(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
         if (!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)) {
             return null;
         }
@@ -407,15 +407,15 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (minIndex == -1) {
             return null;
         } else {
-            RaycastResult.Part hitPart;
+            PipeRaycastResult.Part hitPart;
 
             if (minIndex < 7) {
-                hitPart = RaycastResult.Part.Pipe;
+                hitPart = PipeRaycastResult.Part.Pipe;
             } else {
-                hitPart = RaycastResult.Part.Pluggable;
+                hitPart = PipeRaycastResult.Part.Pluggable;
             }
 
-            return new RaycastResult(hitPart, hits[minIndex], boxes[minIndex], sideHit[minIndex]);
+            return new PipeRaycastResult(hitPart, hits[minIndex], boxes[minIndex], sideHit[minIndex]);
         }
     }
 
@@ -509,9 +509,9 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
         Gate clickedGate = null;
 
-        RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
+        PipeRaycastResult raycastResult = raycastPipe(world, x, y, z, player);
 
-        if (raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pluggable
+        if (raycastResult != null && raycastResult.hitPart == PipeRaycastResult.Part.Pluggable
                 && pipe.getPipePluggable(raycastResult.sideHit) instanceof GatePluggable) {
             clickedGate = pipe.gates[raycastResult.sideHit.ordinal()];
         }
@@ -542,8 +542,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (!world.isRemote) {
             Direction nSide = side;
 
-            RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
-            if (raycastResult != null && raycastResult.hitPart != RaycastResult.Part.Pipe) {
+            PipeRaycastResult raycastResult = raycastPipe(world, x, y, z, player);
+            if (raycastResult != null && raycastResult.hitPart != PipeRaycastResult.Part.Pipe) {
                 nSide = raycastResult.sideHit;
             }
             if (pipe.hasPipePluggable(nSide)) {
@@ -560,7 +560,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     }
 
     private boolean addOrStripPipePluggable(World world, int x, int y, int z, ItemStack stack, PlayerEntity player, Direction side, PipeBlockEntity pipe) {
-        RaycastResult raycastResult = raycastPipe(world, x, y, z, player);
+        PipeRaycastResult raycastResult = raycastPipe(world, x, y, z, player);
 
         Direction placementSide = raycastResult != null && raycastResult.sideHit != null ? raycastResult.sideHit : side;
 
@@ -572,13 +572,13 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
 
         if (player.isSneaking()) {
-            if (pipe.hasPipePluggable(side) && raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pluggable
+            if (pipe.hasPipePluggable(side) && raycastResult != null && raycastResult.hitPart == PipeRaycastResult.Part.Pluggable
                     && pluggable.getClass().isInstance(pipe.getPipePluggable(side))) {
                 return pipe.setPluggable(side, null, player);
             }
         }
 
-        if (raycastResult != null && raycastResult.hitPart == RaycastResult.Part.Pipe) {
+        if (raycastResult != null && raycastResult.hitPart == PipeRaycastResult.Part.Pipe) {
             if (!pipe.hasPipePluggable(side)) {
                 if (pipe.setPluggable(placementSide, pluggable, player)) {
                     stack.count--;

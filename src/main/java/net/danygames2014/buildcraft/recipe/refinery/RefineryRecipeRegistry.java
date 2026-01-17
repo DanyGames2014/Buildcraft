@@ -29,12 +29,12 @@ public class RefineryRecipeRegistry {
             return false;
         }
 
-        if (getInstance().fluidToRecipe.containsKey(recipe.inputFluid)) {
-            Buildcraft.LOGGER.warn("There is already a refinery recipe with " + recipe.inputFluid.getIdentifier() + " as input when registering " + identifier + "!");
-        }
+//        if (getInstance().fluidToRecipe.containsKey(recipe.inputFluid)) {
+//            Buildcraft.LOGGER.warn("There is already a refinery recipe with " + recipe.inputFluid.getIdentifier() + " as input when registering " + identifier + "!");
+//        }
 
         getInstance().registry.put(identifier, recipe);
-        getInstance().fluidToRecipe.put(recipe.inputFluid, recipe);
+//        getInstance().fluidToRecipe.put(recipe.inputFluid, recipe);
         return true;
     }
 

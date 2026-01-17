@@ -87,7 +87,8 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         behavior = pipeBlock.behavior;
         transporter = pipeBlock.transporterFactory.create(this);
         transporter.init();
-        updateValidOutputDirections();
+        // TODO: dany pls fix
+//        updateConnections();
         scheduleRenderUpdate();
     }
 

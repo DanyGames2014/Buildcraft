@@ -8,6 +8,8 @@ import net.danygames2014.buildcraft.recipe.machine.input.ItemRecipeInput;
 import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutput;
 import net.danygames2014.buildcraft.recipe.refinery.RefineryRecipe;
 import net.danygames2014.buildcraft.util.ColorUtil;
+import net.danygames2014.nyalib.fluid.Fluid;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -129,7 +131,7 @@ public class RecipeListener {
     public void registerRefineryRecipes(RefineryRecipeRegisterEvent event) {
         event.register(
                 NAMESPACE.id("oil_to_fuel"),
-                new RefineryRecipe(FluidListener.oil, 1, FluidListener.fuel, 1)
+                new RefineryRecipe(new Fluid[]{FluidListener.oil, null}, new int[]{1, 0}, FluidListener.fuel, 1, 120, 1)
         );
     }
 }
