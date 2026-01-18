@@ -74,6 +74,8 @@ public class TextureListener {
     public static Atlas.Sprite drill;
     public static Atlas.Sprite drillHead;
 
+    public static Atlas.Sprite itemColorBox;
+
 
     @EventListener
     public void registerTextures(TextureRegisterEvent event) {
@@ -129,6 +131,8 @@ public class TextureListener {
 
         drill = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill"));
         drillHead = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill_head"));
+
+        itemColorBox = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/item_color_box"));
 
         StatementManager.registerTextures();
 

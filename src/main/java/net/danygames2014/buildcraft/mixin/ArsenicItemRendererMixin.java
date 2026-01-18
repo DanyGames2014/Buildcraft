@@ -4,8 +4,11 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.item.CustomItemRenderer;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -13,9 +16,12 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.render.model.BakedModel;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
+import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -113,5 +119,38 @@ public class ArsenicItemRendererMixin {
             }
         }
         original.call(instance, item, x, y, z, delta, stack, f1, f2, renderedAmount, atlas);
+    }
+
+    @Inject(method = "render", at = @At(value = "HEAD"))
+    void test(ItemEntity item, double x, double y, double z, float rotation, float delta, CallbackInfo ci){
+        if(item instanceof TravellingItemEntity travellingItem){
+            if (travellingItem.getColor() >= 0) { //color != null
+                GL11.glPushMatrix();
+                GL11.glTranslatef((float) x, (float) y + 0.25f, (float) z);
+                GL11.glScalef(0.9f, 0.9f, 0.9f);
+
+                StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+                EntityBlockRenderer.RenderInfo block = new EntityBlockRenderer.RenderInfo();
+
+                block.texture = TextureListener.itemColorBox.index;
+
+                float pix = 0.0625F;
+                float min = -4 * pix;
+                float max = 4 * pix;
+
+                block.minY = min;
+                block.maxY = max;
+
+                block.minZ = min;
+                block.maxZ = max;
+
+                block.minX = min;
+                block.maxX = max;
+
+                RenderHelper.setGLColorFromInt(0xFFFFFF);
+                EntityBlockRenderer.INSTANCE.renderBlock(block);
+                GL11.glPopMatrix();
+            }
+        }
     }
 }

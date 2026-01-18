@@ -55,6 +55,15 @@ public class TravellingItemEntity extends ItemEntity implements EntitySpawnDataP
         super.initDataTracker();
         dataTracker.startTracking(10, -1);
         dataTracker.startTracking(11, 0);
+        dataTracker.startTracking(12, -1);
+    }
+
+    public int getColor(){
+        return dataTracker.getInt(12);
+    }
+
+    public void setColor(int color){
+        dataTracker.set(12, color);
     }
 
     public void addToTransporter() {
