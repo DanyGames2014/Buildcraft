@@ -6,7 +6,7 @@ import net.danygames2014.buildcraft.inventory.SimpleInventory;
 import net.danygames2014.buildcraft.inventory.UnhandledAutocraftingTableInventory;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
-import net.danygames2014.nyalib.item.ItemHandler;
+import net.danygames2014.nyalib.item.block.ItemHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;

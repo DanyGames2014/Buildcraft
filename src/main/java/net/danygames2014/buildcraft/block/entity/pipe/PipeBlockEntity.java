@@ -79,6 +79,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     }
 
     public void init(BlockState blockState) {
+        eventBus.registerHandler(this);
         if(pipeBlock == null){
             if(blockState.getBlock() instanceof PipeBlock block) {
                 pipeBlock = block;

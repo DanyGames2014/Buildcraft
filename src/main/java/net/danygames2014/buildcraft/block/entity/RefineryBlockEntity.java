@@ -9,7 +9,7 @@ import net.danygames2014.buildcraft.recipe.refinery.RefineryRecipeRegistry;
 import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidStack;
-import net.danygames2014.nyalib.fluid.ManagedFluidHandler;
+import net.danygames2014.nyalib.fluid.block.ManagedFluidHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -40,9 +40,9 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
         powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
         initPowerProvider();
 
-        this.addSlot(CAPACITY_PER_SLOT);
-        this.addSlot(CAPACITY_PER_SLOT);
-        this.addSlot(CAPACITY_PER_SLOT);
+        this.addFluidSlot(CAPACITY_PER_SLOT);
+        this.addFluidSlot(CAPACITY_PER_SLOT);
+        this.addFluidSlot(CAPACITY_PER_SLOT);
     }
 
     private void initPowerProvider() {
@@ -236,6 +236,9 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
     public void init(BlockState blockState) {
         if(blockState.contains(Properties.HORIZONTAL_FACING)){
             facing = blockState.get(Properties.HORIZONTAL_FACING);
+            getFluidSlot(0, null).setAllowedSides(facing.rotateYClockwise(), facing.getOpposite());
+            getFluidSlot(1, null).setAllowedSides(facing.rotateYCounterclockwise(), facing.getOpposite());
+            getFluidSlot(2, null).setAllowedSides(facing);
         }
     }
 }

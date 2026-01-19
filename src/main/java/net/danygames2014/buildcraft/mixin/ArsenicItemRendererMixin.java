@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.item.CustomItemRenderer;
+import net.danygames2014.buildcraft.util.ColorUtil;
 import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.Tessellator;
@@ -147,7 +148,7 @@ public class ArsenicItemRendererMixin {
                 block.minX = min;
                 block.maxX = max;
 
-                RenderHelper.setGLColorFromInt(0xFFFFFF);
+                RenderHelper.setGLColorFromInt(ColorUtil.getColor(travellingItem.getColor()));
                 EntityBlockRenderer.INSTANCE.renderBlock(block);
                 GL11.glPopMatrix();
             }

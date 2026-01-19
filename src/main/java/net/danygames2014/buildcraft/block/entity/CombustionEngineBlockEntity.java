@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.api.energy.EngineFuelRegistry;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.item.fluidhandler.FluidHandlerItemCapability;
 import net.danygames2014.nyalib.fluid.*;
+import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;

@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.inventory.SimpleInventory;
-import net.danygames2014.nyalib.item.ItemHandler;
+import net.danygames2014.nyalib.item.block.ItemHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
