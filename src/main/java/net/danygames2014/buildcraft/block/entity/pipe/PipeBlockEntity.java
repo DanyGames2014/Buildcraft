@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
 import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
+import net.danygames2014.buildcraft.block.entity.pipe.event.LensFilterHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateFactory;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
@@ -80,6 +81,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
     public void init(BlockState blockState) {
         eventBus.registerHandler(this);
+        eventBus.registerHandler(new LensFilterHandler());
         if(pipeBlock == null){
             if(blockState.getBlock() instanceof PipeBlock block) {
                 pipeBlock = block;
@@ -606,6 +608,15 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
     public BlockEntity getBlockEntity(Direction direction){
         return world.getBlockEntity(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
+    }
+
+    public PipeBlockEntity getNeighborPipe(Direction direction){
+        BlockEntity neighbor = getBlockEntity(direction);
+        if(neighbor instanceof PipeBlockEntity pipeBlockEntity){
+            return pipeBlockEntity;
+        } else {
+            return null;
+        }
     }
 
     protected void refreshRenderState() {

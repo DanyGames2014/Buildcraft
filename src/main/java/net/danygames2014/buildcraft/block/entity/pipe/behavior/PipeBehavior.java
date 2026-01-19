@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.block.entity.pipe.event.ItemPipeEvent;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter.FailedPathingResult;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter.HandOffResult;
@@ -21,6 +22,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
+
+import java.util.Collections;
 
 /**
  * This class governs the behavior of a pipe
@@ -126,6 +129,13 @@ public class PipeBehavior {
     public Direction routeItem(PipeBlockEntity blockEntity, ObjectArrayList<Direction> validOutputDirections, TravellingItemEntity item) {
         ObjectArrayList<Direction> directions = new ObjectArrayList<>(validOutputDirections);
         directions.remove(item.input);
+
+        ItemPipeEvent.FindDest event = new ItemPipeEvent.FindDest(blockEntity, item, directions);
+        blockEntity.eventBus.handleEvent(ItemPipeEvent.FindDest.class, event);
+
+        if (event.shuffle) {
+            Collections.shuffle(directions);
+        }
 
         if (directions.isEmpty()) {
             return null;

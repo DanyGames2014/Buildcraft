@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
+import net.danygames2014.buildcraft.block.entity.pipe.event.ItemPipeEvent;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
@@ -80,20 +81,28 @@ public class ItemPipeTransporter extends PipeTransporter {
             }
 
             if (reachedEnd(item)) {
-                switch (handOffItem(item)) {
-                    case DROP -> {
-                        dropItem(item);
-                        iterator.remove();
-                    }
-                    
-                    case REMOVE -> {
-                        iterator.remove();
-                    }
-                    
-                    case BOUNCE -> {
-                        iterator.remove();
-                        injectItem(item.stack, item.travelDirection);
-                        item.markDead();
+
+                BlockEntity neighbor = this.blockEntity.getBlockEntity(item.travelDirection);
+                ItemPipeEvent.ReachedEnd event = new ItemPipeEvent.ReachedEnd(this.blockEntity, item, neighbor);
+                this.blockEntity.eventBus.handleEvent(ItemPipeEvent.ReachedEnd.class, event);
+                boolean handleItem = !event.handled;
+
+                if(handleItem){
+                    switch (handOffItem(item)) {
+                        case DROP -> {
+                            dropItem(item);
+                            iterator.remove();
+                        }
+
+                        case REMOVE -> {
+                            iterator.remove();
+                        }
+
+                        case BOUNCE -> {
+                            iterator.remove();
+                            injectItem(item.stack, item.travelDirection);
+                            item.markDead();
+                        }
                     }
                 }
             }
@@ -162,6 +171,13 @@ public class ItemPipeTransporter extends PipeTransporter {
         itemEntity.input = side;
         itemEntity.travelDirection = side.getOpposite();
         itemEntity.lastTravelDirection = itemEntity.travelDirection;
+
+        ItemPipeEvent.Entered event = new ItemPipeEvent.Entered(this.blockEntity, itemEntity);
+        this.blockEntity.eventBus.handleEvent(ItemPipeEvent.Entered.class, event);
+        if(event.cancelled){
+            return;
+        }
+
         addItem(itemEntity);
         world.spawnEntity(itemEntity);
     }
@@ -178,6 +194,13 @@ public class ItemPipeTransporter extends PipeTransporter {
         item.input = side;
         item.transporter = this;
         item.toMiddle = true;
+
+        ItemPipeEvent.Entered event = new ItemPipeEvent.Entered(this.blockEntity, item);
+        this.blockEntity.eventBus.handleEvent(ItemPipeEvent.Entered.class, event);
+        if(event.cancelled){
+            return;
+        }
+
         if (!contents.contains(item)) {
             contents.add(item);
         }

@@ -3,8 +3,10 @@ package net.danygames2014.buildcraft.pluggable;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.event.ItemPipeEvent;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.pluggable.LensPluggableRenderer;
+import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -102,5 +104,24 @@ public class LensPluggable extends PipePluggable {
     public boolean requiresRenderUpdate(PipePluggable old) {
         LensPluggable other = (LensPluggable) old;
         return other.color != color || other.isFilter != isFilter;
+    }
+
+    private void color(TravellingItemEntity item) {
+        if ((item.toMiddle && item.input == side)
+                    || (!item.toMiddle && item.travelDirection == side)) {
+            item.setColor(color);
+        }
+    }
+
+    public void eventHandler(ItemPipeEvent.ReachedEnd event) {
+        if (!isFilter) {
+            color(event.item);
+        }
+    }
+
+    public void eventHandler(ItemPipeEvent.Entered event) {
+        if (!isFilter) {
+            color(event.item);
+        }
     }
 }

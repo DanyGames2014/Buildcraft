@@ -61,7 +61,7 @@ public class PipeEventBus {
 
     private List<EventHandler> getHandlerList(Class<? extends PipeEvent> event) {
         if (!eventHandlers.containsKey(event)) {
-            eventHandlers.put(event, new ArrayList<EventHandler>());
+            eventHandlers.put(event, new ArrayList<>());
         }
         return eventHandlers.get(event);
     }
