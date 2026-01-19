@@ -101,7 +101,7 @@ public class RefineryBlock extends TemplateMachineBlock {
                 ItemStack hand = player.getHand();
                 if(hand.getItem() instanceof FluidBucket fluidBucket){
                     Fluid bucketFluid = fluidBucket.getFluid();
-                    if(bucketFluid != null){
+                    if(bucketFluid != null && raycastResult.index != 2){
                         if((tankStack == null || tankStack.fluid == bucketFluid) && remainingCapacity >= bucketFluid.getBucketSize()){
                             blockEntity.insertFluid(new FluidStack(bucketFluid, bucketFluid.getBucketSize()), raycastResult.index, null);
                             player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;

@@ -125,10 +125,10 @@ public class ArsenicItemRendererMixin {
     @Inject(method = "render", at = @At(value = "HEAD"))
     void test(ItemEntity item, double x, double y, double z, float rotation, float delta, CallbackInfo ci){
         if(item instanceof TravellingItemEntity travellingItem){
-            if (travellingItem.getColor() >= 0) { //color != null
+            if (travellingItem.getColor() >= 0) {
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float) x, (float) y + 0.25f, (float) z);
-                GL11.glScalef(0.9f, 0.9f, 0.9f);
+                GL11.glScalef(0.8f, 0.8f, 0.8f);
 
                 StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
                 EntityBlockRenderer.RenderInfo block = new EntityBlockRenderer.RenderInfo();
