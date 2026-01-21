@@ -47,7 +47,6 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
             add(ControlMode.OFF);
         }
     }; 
-    private static final PowerHandler.PerditionCalculator PERDITION = new PowerHandler.PerditionCalculator(0.5F);
 
     public LaserBlockEntity(){
         powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
@@ -55,8 +54,7 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
     }
 
     private void initPowerProvider() {
-        powerHandler.configure(25, 150, 25, 1000);
-        powerHandler.setPerdition(PERDITION);
+        powerHandler.configure(25, 200, 25, 1000);
     }
 
     public void init(BlockState blockState){

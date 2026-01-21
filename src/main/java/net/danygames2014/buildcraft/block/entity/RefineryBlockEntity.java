@@ -46,8 +46,7 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
     }
 
     private void initPowerProvider() {
-        powerHandler.configure(50, 150, 25, 1000);
-        powerHandler.configurePowerPerdition(1, 1);
+        powerHandler.configure(25, 100, 25, 1000);
     }
 
     @Override

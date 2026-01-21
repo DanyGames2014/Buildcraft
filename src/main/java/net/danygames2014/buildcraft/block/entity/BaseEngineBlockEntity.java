@@ -36,7 +36,6 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
     public BaseEngineBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.ENGINE);
-        powerHandler.configurePowerPerdition(1, 100);
     }
 
     @Override
@@ -321,7 +320,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     public abstract double getMaxEnergy();
 
     public double getMinEnergyReceived() {
-        return 2D;
+        return 1;
     }
 
     public abstract double getMaxEnergyReceived();

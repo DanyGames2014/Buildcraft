@@ -48,7 +48,7 @@ public class MachineConfig {
     
     public static class MiningWellConfig {
         @ConfigEntry(name = "MJ per block", minValue = 2, maxValue = 128, multiplayerSynced = true)
-        public Integer mjPerBlock = 64;
+        public Integer mjPerBlock = 25;
     }
     
     public static class RefineryConfig {

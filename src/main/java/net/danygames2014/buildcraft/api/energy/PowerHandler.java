@@ -96,7 +96,7 @@ public final class PowerHandler {
 		}
 	}
     
-	public static final PerditionCalculator DEFAULT_PERDITION = new PerditionCalculator();
+	public static final PerditionCalculator DEFAULT_PERDITION = new PerditionCalculator(0.01D);
 	public static final double ROLLING_AVERAGE_WEIGHT = 100.0;
 	public static final double ROLLING_AVERAGE_NUMERATOR = ROLLING_AVERAGE_WEIGHT - 1;
 	public static final double ROLLING_AVERAGE_DENOMINATOR  = 1.0 / ROLLING_AVERAGE_WEIGHT;

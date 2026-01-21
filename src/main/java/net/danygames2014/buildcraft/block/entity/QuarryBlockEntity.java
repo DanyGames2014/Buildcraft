@@ -43,8 +43,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
         this.minHeight = 5;
 
         this.powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-        this.powerHandler.configure(50, 200, 25, 10000);
-        this.powerHandler.configurePowerPerdition(2, 1);
+        this.powerHandler.configure(25, 200, 25, 10000);
     }
 
     private void createArm() {

@@ -52,8 +52,7 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
     public BuilderBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
 
-        powerHandler.configure(10, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2);
-        powerHandler.configurePowerPerdition(1, 1);
+        powerHandler.configure(Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
     }
 
     public void stopConstruction() {
