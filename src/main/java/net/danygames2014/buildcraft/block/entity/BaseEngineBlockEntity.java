@@ -1,5 +1,7 @@
 package net.danygames2014.buildcraft.block.entity;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectListIterator;
 import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
@@ -16,6 +18,8 @@ import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.math.Direction;
+
+import java.util.Arrays;
 
 public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowerReceptor, IPowerEmitter, BlockEntityInit {
     // Constants
@@ -41,7 +45,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     @Override
     public void init(BlockState blockState) {
         if (!world.isRemote) {
-            
+
             powerHandler.configure(getMinEnergyReceived(), getMaxEnergyReceived(), 1, getMaxEnergy());
         }
     }
@@ -54,7 +58,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         checkRedstonePower();
 
         facing = getFacing();
-        
+
         // Client side
         if (world.isRemote) {
             if (stage != EngineStage.RETRACTED) {
@@ -70,12 +74,12 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
             return;
         }
-        
+
         if (checkOrienation) {
             checkOrienation = false;
 
-            if (!isOrientationValid()) {
-                switchOrientation(true);
+            if (!isOrientationValid(getFacing())) {
+                rotate(true);
             }
         }
 
@@ -127,7 +131,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
                 energy = 0;
             }
         }
-        
+
         powerHandler.update();
     }
 
@@ -177,27 +181,67 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     }
 
     // Orientation
-    public boolean isOrientationValid() {
-        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+    public boolean isOrientationValid(Direction side) {
+        BlockEntity tile = world.getBlockEntity(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ());
 
-        return isPoweredTile(tile, facing);
+        return isPoweredTile(tile, side);
     }
 
-    public boolean switchOrientation(boolean preferPipe) {
-        if (preferPipe && switchOrientation_do(true)) {
+    public boolean rotate(boolean preferPipe) {
+        if (preferPipe && internalRotate(true)) {
             return true;
         } else {
-            return switchOrientation_do(false);
+            return internalRotate(false);
         }
     }
 
-    private boolean switchOrientation_do(boolean pipesOnly) {
+    private boolean internalRotate(boolean pipesOnly) {
+        ObjectArrayList<Direction> possibleRotations = new ObjectArrayList<>(6);
+        ObjectArrayList<Direction> loopedDirections = new ObjectArrayList<>(12);
+
+        // Fill up possible rotations
         for (Direction direction : Direction.values()) {
             BlockEntity tile = world.getBlockEntity(x + direction.getOffsetX(), y + direction.getOffsetY(), z + direction.getOffsetZ());
 
             if ((!pipesOnly || tile instanceof PipeBlockEntity) && isPoweredTile(tile, direction)) {
-                setFacing(direction);
+                possibleRotations.add(direction);
+            }
+        }
+        
+        loopedDirections.addAll(Arrays.asList(Direction.values()));
+        loopedDirections.addAll(Arrays.asList(Direction.values()));
+
+        switch (possibleRotations.size()) {
+            case 0 -> {
+                return false;
+            }
+            
+            case 1 -> {
+                setFacing(possibleRotations.get(0));
                 return true;
+            }
+            
+            default -> {
+                ObjectListIterator<Direction> dirs = loopedDirections.listIterator(0);
+                while (dirs.hasNext()) {
+                    Direction dir = dirs.next();
+                    
+                    if (getFacing() == dir) {
+                        if (dirs.hasNext()) {
+                            Direction next;
+                            while (dirs.hasNext()) {
+                                next = dirs.next();
+                                if (possibleRotations.contains(next)) {
+                                    setFacing(next);
+                                    return true;
+                                }
+                            }
+                        } else {
+                            setFacing(possibleRotations.get(0));
+                            return true;
+                        }
+                    }
+                }
             }
         }
 
@@ -337,7 +381,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
     private void sendPower() {
         BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
-        
+
         if (tile instanceof PipeBlockEntity pipe && pipe.transporter instanceof EnergyPipeTransporter energyTransporter) {
             float extracted = (float) getPowerToExtract();
             if (extracted > 0) {
@@ -346,7 +390,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             }
             return;
         }
-        
+
         if (isPoweredTile(tile, getFacing())) {
             PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
 

@@ -81,7 +81,7 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
         if (wrenchMode == WrenchMode.MODE_ROTATE || wrenchMode == WrenchMode.MODE_WRENCH) {
             if (world.getBlockState(x, y, z).isOf(this)) {
                 if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
-                    world.setBlockStateWithNotify(x, y, z, world.getBlockState(x, y, z).cycle(Properties.FACING));
+                    engine.rotate(player.isSneaking());
                     engine.checkOrienation = true;
                     return true;
                 }
