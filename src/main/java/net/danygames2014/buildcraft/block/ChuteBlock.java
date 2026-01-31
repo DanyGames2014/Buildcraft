@@ -13,6 +13,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.model.block.BlockWithInventoryRenderer;
@@ -61,15 +63,20 @@ public class ChuteBlock extends TemplateMachineBlock implements BlockWithWorldRe
         return true;
     }
 
-    // TODO: dont open gui when player is holding pipe
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         super.onUse(world, x, y, z, player);
 
-        if(player.isSneaking()){
+        if (player.isSneaking()) {
             return false;
         }
-        if(world.getBlockEntity(x, y, z) instanceof ChuteBlockEntity chuteBlockEntity){
+
+        ItemStack hand = player.getHand();
+        if (hand != null && hand.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof PipeBlock) {
+            return false;
+        }
+
+        if (world.getBlockEntity(x, y, z) instanceof ChuteBlockEntity chuteBlockEntity) {
             GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("chute_screen"), chuteBlockEntity, new ChuteScreenHandler(player.inventory, chuteBlockEntity));
             return true;
         }
