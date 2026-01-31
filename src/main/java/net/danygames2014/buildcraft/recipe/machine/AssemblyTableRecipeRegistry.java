@@ -55,4 +55,18 @@ public class AssemblyTableRecipeRegistry {
 
         return recipes;
     }
+    
+    public static Identifier getIdentifier(AssemblyTableRecipe recipe) {
+        AssemblyTableRecipeRegistry r = getInstance();
+        
+        if (r.registry.containsValue(recipe)) {
+            for (var entry : r.registry.entrySet()) {
+                if (entry.getValue().equals(recipe)) {
+                    return entry.getKey();
+                }
+            }
+        }
+
+        return null;
+    }
 }

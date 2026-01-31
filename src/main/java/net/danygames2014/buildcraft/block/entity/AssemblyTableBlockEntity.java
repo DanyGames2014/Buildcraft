@@ -8,7 +8,6 @@ import net.danygames2014.buildcraft.inventory.SimpleInventory;
 import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipe;
 import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipeRegistry;
 import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutputType;
-import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,12 +17,13 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.modificationstation.stationapi.api.block.BlockState;
+import net.minecraft.nbt.NbtList;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.Random;
-public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarget, Inventory, BlockEntityInit {
+public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarget, Inventory {
     protected SimpleInventory inventory = new SimpleInventory(12, "Assembly Table", this::inventoryChanged);
     public ArrayList<RecipeEntry> recipes = new ArrayList<>();
     public ArrayList<RecipeEntry> selectedRecipes = new ArrayList<>();
@@ -43,11 +43,6 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         updateCurrentRecipe();
 
         scaledProgress = getProgressScaled(70);
-    }
-
-    @Override
-    public void init(BlockState blockState) {
-        inventoryChanged();
     }
 
     public void updateCurrentRecipe() {
@@ -156,7 +151,7 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
     }
 
     public void inventoryChanged() {
-        if (world == null || world.isRemote) {
+        if (world != null && world.isRemote) {
             return;
         }
 
@@ -223,6 +218,12 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
 
         RecipeEntry recipe = recipes.get(index);
         recipe.selected = !recipe.selected;
+        
+        if (recipe.selected) {
+            selectedRecipes.add(recipe);
+        } else {
+            selectedRecipes.remove(recipe);
+        }
 
         if (currentRecipe == null || currentRecipe == recipe) {
             switchRecipe();
@@ -313,18 +314,60 @@ public class AssemblyTableBlockEntity extends BlockEntity implements ILaserTarge
         return inventory.canPlayerUse(player);
     }
 
-    // TODO: save the current craft / progress
     // NBT
     @Override
     public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         inventory.writeNbt(nbt);
+
+        nbt.putDouble("progress", this.progress);
+        
+        if (!selectedRecipes.isEmpty()) {
+            NbtList selectedRecipesList = new NbtList();
+            for (RecipeEntry recipe : selectedRecipes) {
+                Identifier identifier = AssemblyTableRecipeRegistry.getIdentifier(recipe.recipe);
+                if (identifier != null) {
+                    NbtCompound selectedRecipeNbt = new NbtCompound();
+                    selectedRecipeNbt.putString("id", identifier.toString());
+                    selectedRecipeNbt.putBoolean("selected", recipe.selected);
+                    selectedRecipeNbt.putBoolean("active", recipe.active);
+                    selectedRecipesList.add(selectedRecipeNbt);
+                }
+            }
+            nbt.put("selectedRecipes", selectedRecipesList);
+        }
     }
 
     @Override
     public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         inventory.readNbt(nbt);
+        
+        inventoryChanged();
+        
+        progress = nbt.getDouble("progress");
+        
+        if (nbt.contains("selectedRecipes")) {
+            NbtList selectedRecipesList = nbt.getList("selectedRecipes");
+
+            for (int i = 0; i < selectedRecipesList.size(); i++) {
+                NbtCompound selectedRecipeNbt = (NbtCompound) selectedRecipesList.get(i);
+                
+                Identifier identifier = Identifier.of(selectedRecipeNbt.getString("id"));
+                for (var recipe : recipes) {
+                    if (recipe.recipe.equals(AssemblyTableRecipeRegistry.get(identifier))) {
+                        recipe.selected = selectedRecipeNbt.getBoolean("selected");
+                        recipe.active = selectedRecipeNbt.getBoolean("active");
+
+                        if (recipe.active) {
+                            currentRecipe = recipe;
+                        }
+                        
+                        selectedRecipes.add(recipe);
+                    }
+                }
+            }
+        }
     }
 
     public static class RecipeEntry {
