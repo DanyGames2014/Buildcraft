@@ -7,6 +7,9 @@ public class MachineConfig {
     @ConfigCategory(name = "Chute")
     public ChuteConfig chute = new ChuteConfig();
     
+    @ConfigCategory(name = "Golden Chute")
+    public GoldenChuteConfig goldenChute = new GoldenChuteConfig();
+    
     @ConfigCategory(name = "Architect Table")
     public ArchitectTableConfig architectTable = new ArchitectTableConfig();
     
@@ -26,6 +29,17 @@ public class MachineConfig {
         @ConfigEntry(name = "Allow Item pickup from World")
         public Boolean allowItemPickup = true;
         
+        @ConfigEntry(name = "Allow extraction from Inventories above")
+        public Boolean allowInventoryExtraction = true;
+    }
+    
+    public static class GoldenChuteConfig {
+        @ConfigEntry(name = "Tick Delay", minValue = 1, maxValue = 100, description = "Will work every x ticks")
+        public Integer tickDelay = 2;
+
+        @ConfigEntry(name = "Allow Item pickup from World")
+        public Boolean allowItemPickup = true;
+
         @ConfigEntry(name = "Allow extraction from Inventories above")
         public Boolean allowInventoryExtraction = true;
     }

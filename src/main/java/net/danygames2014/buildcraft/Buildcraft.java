@@ -73,6 +73,7 @@ public class Buildcraft {
     public static Material pipeMaterial;
 
     public static Block chuteBlock;
+    public static Block goldenChuteBlock;
     public static Block autoWorkbench;
     public static Block miningWell;
     public static Block quarry; // NYI
@@ -297,6 +298,7 @@ public class Buildcraft {
         structurePipeBehavior = new StructurePipeBehavior();
 
         chuteBlock = new ChuteBlock(NAMESPACE.id("chute")).setTranslationKey(NAMESPACE, "chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        goldenChuteBlock = new GoldenChuteBlock(NAMESPACE.id("golden_chute")).setTranslationKey(NAMESPACE, "golden_chute").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         autoWorkbench = new AutocraftingTableBlock(NAMESPACE.id("autocrafting_table"), Material.WOOD).setTranslationKey(NAMESPACE, "auto_workbench").setHardness(2.5F);
         miningWell = new MiningWellBlock(NAMESPACE.id("mining_well"), Material.METAL).setTranslationKey(NAMESPACE, "mining_well").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         quarry = new QuarryBlock(NAMESPACE.id("quarry"), Material.METAL).setTranslationKey(NAMESPACE, "quarry").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);

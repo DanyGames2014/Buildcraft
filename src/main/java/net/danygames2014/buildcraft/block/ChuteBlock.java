@@ -26,12 +26,12 @@ import org.lwjgl.opengl.GL11;
 @SuppressWarnings("deprecation")
 public class ChuteBlock extends TemplateMachineBlock implements BlockWithWorldRenderer, BlockWithInventoryRenderer, DropInventoryOnBreak {
     @Environment(EnvType.CLIENT)
-    private ChuteRenderer chuteRenderer;
+    protected ChuteRenderer chuteRenderer;
 
     public ChuteBlock(Identifier identifier) {
         super(identifier, Material.METAL);
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            chuteRenderer = new ChuteRenderer();
+            chuteRenderer = new ChuteRenderer("/assets/buildcraft/stationapi/textures/block/chute_top.png", "/assets/buildcraft/stationapi/textures/block/chute_side.png");
         }
     }
 

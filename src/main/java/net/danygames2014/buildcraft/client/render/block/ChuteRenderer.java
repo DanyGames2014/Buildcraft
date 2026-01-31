@@ -14,7 +14,13 @@ public class ChuteRenderer {
     private final ModelFrustum middle;
     private final ModelPart bottom;
 
-    public ChuteRenderer(){
+    private final String topTexture;
+    private final String sideTexture;
+    
+    public ChuteRenderer(String topTexture, String sideTexture){
+        this.topTexture = topTexture;
+        this.sideTexture = sideTexture;
+        
         top = new ModelPart(0, 0);
         top.addCuboid(-8F, 1F, -8F, 16, 7, 16);
         top.pivotX = 8F;
@@ -35,10 +41,10 @@ public class ChuteRenderer {
         GL11.glDisable(GL11.GL_LIGHTING);
 
         GL11.glTranslated(x, y, z);
-        textureManager.bindTexture(textureManager.getTextureId("/assets/buildcraft/stationapi/textures/block/chute_top.png"));
+        textureManager.bindTexture(textureManager.getTextureId(topTexture));
         top.render((float) (1.0 / 16.0));
         bottom.render((float) (1.0 / 16.0));
-        textureManager.bindTexture(textureManager.getTextureId("/assets/buildcraft/stationapi/textures/block/chute_side.png"));
+        textureManager.bindTexture(textureManager.getTextureId(sideTexture));
         middle.render(Tessellator.INSTANCE, 1F / 16F);
 
         GL11.glEnable(GL11.GL_LIGHTING);

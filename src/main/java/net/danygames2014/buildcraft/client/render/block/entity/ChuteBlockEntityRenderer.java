@@ -8,8 +8,8 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 public class ChuteBlockEntityRenderer extends BlockEntityRenderer {
     private final ChuteRenderer chuteRenderer;
 
-    public ChuteBlockEntityRenderer(){
-        chuteRenderer = new ChuteRenderer();
+    public ChuteBlockEntityRenderer(String topTexture, String sideTexture){
+        chuteRenderer = new ChuteRenderer(topTexture, sideTexture);
     }
 
     @Override

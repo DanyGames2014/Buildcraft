@@ -11,7 +11,8 @@ import net.modificationstation.stationapi.api.client.event.block.entity.BlockEnt
 public class BlockEntityRendererListener {
     @EventListener
     public void registerBlockEntityRenderers(BlockEntityRendererRegisterEvent event){
-        event.renderers.put(ChuteBlockEntity.class, new ChuteBlockEntityRenderer());
+        event.renderers.put(ChuteBlockEntity.class, new ChuteBlockEntityRenderer("/assets/buildcraft/stationapi/textures/block/chute_top.png", "/assets/buildcraft/stationapi/textures/block/chute_side.png"));
+        event.renderers.put(GoldenChuteBlockEntity.class, new ChuteBlockEntityRenderer("/assets/buildcraft/stationapi/textures/block/golden_chute_top.png", "/assets/buildcraft/stationapi/textures/block/golden_chute_side.png"));
         event.renderers.put(RedstoneEngineBlockEntity.class, new EngineBlockEntityRenderer(((BaseEngineBlock)Buildcraft.redstoneEngine).getBaseTexturePath(), ((BaseEngineBlock)Buildcraft.redstoneEngine).getChamberTexturePath(), ((BaseEngineBlock)Buildcraft.redstoneEngine).getTrunkTexturePath()));
         event.renderers.put(StirlingEngineBlockEntity.class, new EngineBlockEntityRenderer(((BaseEngineBlock)Buildcraft.stirlingEngine).getBaseTexturePath(), ((BaseEngineBlock)Buildcraft.stirlingEngine).getChamberTexturePath(), ((BaseEngineBlock)Buildcraft.stirlingEngine).getTrunkTexturePath()));
         event.renderers.put(CombustionEngineBlockEntity.class, new EngineBlockEntityRenderer(((BaseEngineBlock)Buildcraft.combustionEngine).getBaseTexturePath(), ((BaseEngineBlock)Buildcraft.combustionEngine).getChamberTexturePath(), ((BaseEngineBlock)Buildcraft.combustionEngine).getTrunkTexturePath()));

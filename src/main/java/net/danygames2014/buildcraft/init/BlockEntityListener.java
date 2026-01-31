@@ -19,6 +19,7 @@ public class BlockEntityListener {
     @EventListener
     public void registerBlockEntities(BlockEntityRegisterEvent event){
         event.register(ChuteBlockEntity.class, NAMESPACE.id("chute").toString());
+        event.register(GoldenChuteBlockEntity.class, NAMESPACE.id("golden_chute").toString());
         event.register(AutocraftingTableBlockEntity.class, NAMESPACE.id("autocrafting_table").toString());
         event.register(MiningWellBlockEntity.class, NAMESPACE.id("mining_well").toString());
         event.register(QuarryBlockEntity.class, NAMESPACE.id("quarry").toString());

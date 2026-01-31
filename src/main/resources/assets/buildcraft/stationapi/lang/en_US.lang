@@ -74,6 +74,7 @@ item.buildcraft.white_filter.name=White Filter
 item.buildcraft.plug.name=Pipe Plug
 
 tile.buildcraft.chute.name=Chute
+tile.buildcraft.golden_chute.name=Golden Chute
 tile.buildcraft.auto_workbench.name=Auto Workbench
 tile.buildcraft.mining_well.name=Mining Well
 tile.buildcraft.quarry.name=Quarry
