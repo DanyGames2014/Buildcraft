@@ -7,7 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class BlockIndex implements Comparable<BlockIndex>{
+public class BlockIndex implements Comparable<BlockIndex> {
     public int x;
     public int y;
     public int z;
@@ -96,7 +96,7 @@ public class BlockIndex implements Comparable<BlockIndex>{
 
     public boolean nextTo(BlockIndex blockIndex) {
         return (Math.abs(blockIndex.x - x) <= 1 && blockIndex.y == y && blockIndex.z == z)
-                       || (blockIndex.x == x && Math.abs(blockIndex.y - y) <= 1 && blockIndex.z == z)
-                       || (blockIndex.x == x && blockIndex.y == y && Math.abs(blockIndex.z - z) <= 1);
+                || (blockIndex.x == x && Math.abs(blockIndex.y - y) <= 1 && blockIndex.z == z)
+                || (blockIndex.x == x && blockIndex.y == y && Math.abs(blockIndex.z - z) <= 1);
     }
 }

@@ -9,5 +9,5 @@ import net.modificationstation.stationapi.api.util.math.Direction;
  * from a specific side.
  */
 public interface IPowerEmitter {
-	boolean canEmitPowerFrom(Direction side);
+    boolean canEmitPowerFrom(Direction side);
 }

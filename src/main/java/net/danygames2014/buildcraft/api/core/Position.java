@@ -10,7 +10,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Position implements Serializable{
+public class Position implements Serializable {
     public double x, y, z;
     @Nullable
     public Direction orientation;

@@ -12,7 +12,7 @@ public enum EnergyStage implements StringIdentifiable {
     final String name;
     public final int primaryColor;
     public final int secondaryColor;
-    
+
     EnergyStage(String name, int primaryColor, int secondaryColor) {
         this.name = name;
         this.primaryColor = primaryColor;

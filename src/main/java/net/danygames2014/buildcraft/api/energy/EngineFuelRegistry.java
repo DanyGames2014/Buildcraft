@@ -1,7 +1,6 @@
 package net.danygames2014.buildcraft.api.energy;
 
 import net.danygames2014.nyalib.fluid.Fluid;
-import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.HashMap;
 
@@ -28,7 +27,7 @@ public class EngineFuelRegistry {
         getInstance().registry.put(fluid, engineFuel);
     }
 
-    
+
     public static EngineFuel get(Fluid fluid) {
         return getInstance().registry.getOrDefault(fluid, null);
     }

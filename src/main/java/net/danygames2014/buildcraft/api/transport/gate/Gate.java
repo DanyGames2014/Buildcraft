@@ -13,10 +13,12 @@ public interface Gate {
     PipeBlockEntity getPipe();
 
     List<Statement> getTriggers();
+
     List<Statement> getActions();
 
     List<StatementSlot> getActiveActions();
 
     List<StatementParameter> getTriggerParameters(int index);
+
     List<StatementParameter> getActionParameters(int index);
 }
