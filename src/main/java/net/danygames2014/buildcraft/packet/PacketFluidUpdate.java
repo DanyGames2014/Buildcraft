@@ -4,7 +4,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidRenderDat
 
 import java.util.BitSet;
 
-// TODO: Remove
+// TODO: implement fluid in pipes in multiplayer
 public class PacketFluidUpdate {
     public FluidRenderData renderCache = new FluidRenderData();
     public BitSet delta;
