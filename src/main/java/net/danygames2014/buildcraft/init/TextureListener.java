@@ -10,6 +10,8 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.item.LensItem;
 import net.danygames2014.buildcraft.registry.ControlModeRegistry;
 import net.danygames2014.buildcraft.util.ColorUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.color.item.ItemColorProvider;
@@ -24,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TextureListener {
-
     public static final List<Identifier> dynamicBlockTextures = new ArrayList<>();
 
     public static Atlas.Sprite energySprite;
@@ -174,6 +175,7 @@ public class TextureListener {
     }
 
     @SuppressWarnings("Convert2Lambda")
+    @Environment(EnvType.CLIENT)
     @EventListener
     public void registerItemColorProvider(ItemColorsRegisterEvent event) {
         ItemColorProvider lensColorProvider = new ItemColorProvider() {

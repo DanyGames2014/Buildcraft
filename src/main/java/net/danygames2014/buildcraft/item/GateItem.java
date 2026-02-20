@@ -12,6 +12,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.api.EnvironmentInterface;
 import net.glasslauncher.mods.alwaysmoreitems.api.SubItemProvider;
 import net.minecraft.client.font.TextRenderer;
@@ -210,10 +211,13 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         return new GatePluggable(GateFactory.makeGate(pipe, stack, side));
     }
 
+    // Rendering
+    @Environment(EnvType.CLIENT)
     public void renderSprite(ArsenicItemRenderer arsenicItemRenderer, int x, int y, Atlas.Sprite sprite) {
         arsenicItemRenderer.renderItemQuad(x, y, sprite.getStartU(), sprite.getStartV(), sprite.getEndU(), sprite.getEndV());
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInGui(ArsenicItemRenderer arsenic, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
@@ -233,12 +237,14 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         }
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInHand(SpriteAtlasTexture atlas, Sprite texture, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
         GL11.glTranslatef(-1f, 0f, 0f);
         renderIn3D(tessellator, stack);
     }
 
+    @Environment(EnvType.CLIENT)
     private void renderIn3D(Tessellator tessellator, ItemStack stack) {
         GL11.glPushMatrix();
 
@@ -253,6 +259,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         GL11.glPopMatrix();
     }
 
+    @Environment(EnvType.CLIENT)
     private void renderLayerIn3D(Tessellator tessellator, Atlas.Sprite sprite) {
         if (sprite == null) {
             return;
@@ -268,6 +275,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         GL11.glPopMatrix();
     }
 
+    @Environment(EnvType.CLIENT)
     public static void renderHeldItem(Tessellator tessellator, float uv2, float uv3, float uv1, float uv4, int width, int height, float zOffset)
     {
         tessellator.startQuads();
@@ -350,6 +358,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         tessellator.draw();
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderOnGround(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
 
@@ -370,6 +379,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         return true;
     }
 
+    @Environment(EnvType.CLIENT)
     private void addQuad(Tessellator tessellator, Atlas.Sprite sprite) {
         tessellator.vertex((0.0F - 0.5F), (0.0F - 0.25F), 0.0F, sprite.getStartU(), sprite.getEndV());
         tessellator.vertex((1.0F - 0.5F), (0.0F - 0.25F), 0.0F, sprite.getEndU(), sprite.getEndV());

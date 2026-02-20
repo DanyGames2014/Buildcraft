@@ -149,6 +149,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
             PacketHelper.send(new CommandPacket(this, "initRequest", null));
         }
 
+        // TODO: pipe.world can be null
         if (!isSynchronized && pipe.world.isRemote && gate != null) {
             isSynchronized = true;
             PacketHelper.send(new CommandPacket(this, "selectionRequest", null));
