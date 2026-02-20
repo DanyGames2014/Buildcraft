@@ -1,7 +1,6 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.block.entity.*;
-import net.danygames2014.buildcraft.block.entity.TankBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.ObsidianPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;

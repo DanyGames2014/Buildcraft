@@ -10,7 +10,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class PathMarkerBlockEntityRenderer extends BlockEntityRenderer {
-    private ModelPart box;
+    private ModelPart box; // TODO: What is this used for?
 
     public PathMarkerBlockEntityRenderer() {
         box = new ModelPart(0, 1);

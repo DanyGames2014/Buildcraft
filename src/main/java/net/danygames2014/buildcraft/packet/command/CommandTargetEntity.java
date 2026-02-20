@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class CommandTargetEntity extends CommandTarget{
     @Override
-    public Class getHandledClass() {
+    public Class<?> getHandledClass() {
         return Entity.class;
     }
 
@@ -19,7 +19,7 @@ public class CommandTargetEntity extends CommandTarget{
         try {
             int id = data.readInt();
             Entity entity = (Entity) world.entities.get(id);
-            if(entity != null && entity instanceof CommandReceiver){
+            if(entity instanceof CommandReceiver){
                 return (CommandReceiver) entity;
             }
         } catch (IOException e) {

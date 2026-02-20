@@ -12,13 +12,12 @@ public class BitSetCodec {
     }
 
     public void decode(byte data, BitSet target) {
-        byte localData = data;
         int t = 1;
 
         target.clear();
 
         for (byte i = 0; i < 8; i++) {
-            target.set(i, (localData & t) != 0);
+            target.set(i, (data & t) != 0);
             t <<= 1;
         }
     }

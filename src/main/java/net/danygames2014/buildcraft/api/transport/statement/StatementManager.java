@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.api.transport.statement;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
@@ -136,16 +137,15 @@ public class StatementManager {
     }
 
     public static StatementParameter createParameter(String kind) {
+        // TODO: That hashmap is Identifier -> Statement, not String -> Statement. -Dany
         return createParameter(parameters.get(kind));
     }
 
     private static StatementParameter createParameter(Class<? extends StatementParameter> param) {
         try {
-            return param.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            return param.newInstance(); // TODO: Switch to either a factory pattern or getDeclaredConstructor
+        } catch (InstantiationException | IllegalAccessException e) {
+            Buildcraft.LOGGER.error("Failed to create parameter " + param.getName(), e);
         }
 
         return null;

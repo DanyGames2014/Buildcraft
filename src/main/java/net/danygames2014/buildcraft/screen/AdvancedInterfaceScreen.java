@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class AdvancedInterfaceScreen extends BuildcraftScreen{
     private static final ItemRenderer itemRenderer = new ItemRenderer();
-    public ArrayList<AdvancedSlot> slots = new ArrayList<>();
+    public final ArrayList<AdvancedSlot> slots = new ArrayList<>();
 
     public AdvancedInterfaceScreen(ScreenHandler container, Inventory inventory) {
         super(container, inventory);
@@ -78,11 +78,9 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
     }
 
     public void drawTooltip(String caption, int mouseX, int mouseY) {
-        if (caption.length() > 0) {
-            int i2 = mouseX - 0;
-            int k2 = mouseY - 0;
+        if (!caption.isEmpty()) {
             minecraft.textRenderer.drawWithShadow(caption, mouseX, mouseY, 0xFFFFFF);
-            //drawCreativeTabHoveringText(caption, i2, k2);
+            //drawCreativeTabHoveringText(caption, mouseX, mouseY);
             //RenderHelper.enableGUIStandardItemLighting();
         }
     }

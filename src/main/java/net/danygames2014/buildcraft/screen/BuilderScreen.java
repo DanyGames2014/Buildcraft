@@ -30,6 +30,7 @@ public class BuilderScreen extends HandledScreen {
         this.backgroundWidth = 176;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void init() {
         super.init();
@@ -50,7 +51,7 @@ public class BuilderScreen extends HandledScreen {
         super.tick();
         
         switch (blockEntity.state) {
-            case IDLE -> {
+            case IDLE, STOPPED -> {
                 startButton.active = false;
                 pauseButton.active = false;
                 stopButton.active = false;
@@ -64,11 +65,6 @@ public class BuilderScreen extends HandledScreen {
                 startButton.active = false;
                 pauseButton.active = true;
                 stopButton.active = true;
-            }
-            case STOPPED -> {
-                startButton.active = false;
-                pauseButton.active = false;
-                stopButton.active = false;
             }
         }
     }

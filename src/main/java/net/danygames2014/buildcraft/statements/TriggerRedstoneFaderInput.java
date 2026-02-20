@@ -25,11 +25,10 @@ public class TriggerRedstoneFaderInput extends BCStatement implements TriggerInt
 
     @Override
     public boolean isTriggerActive(StatementContainer source, StatementParameter[] parameters) {
-        if (!(source instanceof Gate)) {
+        if (!(source instanceof Gate gate)) {
             return false;
         }
 
-        Gate gate = (Gate) source;
         PipeBlockEntity tile = gate.getPipe();
         int inputLevel = tile.redstoneInput;
         if (parameters.length > 0 && parameters[0] instanceof StatementParameterRedstoneGateSideOnly &&

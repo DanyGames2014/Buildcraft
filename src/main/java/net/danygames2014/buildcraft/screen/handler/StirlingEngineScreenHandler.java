@@ -10,12 +10,12 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.screen.slot.Slot;
 
-@SuppressWarnings("SwitchStatementWithTooFewBranches")
+@SuppressWarnings({"SwitchStatementWithTooFewBranches", "FieldCanBeLocal"})
 public class StirlingEngineScreenHandler extends ScreenHandler {
-    private PlayerEntity player;
-    private Inventory playerInventory;
+    private final PlayerEntity player;
+    private final Inventory playerInventory;
     
-    private StirlingEngineBlockEntity engine;
+    private final StirlingEngineBlockEntity engine;
     
     private int burnTime;
 

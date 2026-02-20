@@ -11,7 +11,6 @@ import net.danygames2014.buildcraft.pluggable.LensPluggable;
 import net.danygames2014.buildcraft.util.ColorUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.item.DyeItem;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class LensPluggableRenderer implements PipePluggableRenderer {

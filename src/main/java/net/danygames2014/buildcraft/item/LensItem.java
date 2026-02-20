@@ -8,13 +8,9 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
 import net.danygames2014.buildcraft.pluggable.LensPluggable;
 import net.danygames2014.buildcraft.util.ColorUtil;
-import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
-import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
-
-import java.util.Locale;
 
 public class LensItem extends TemplateItem implements PipePluggableItem {
     public final int color;

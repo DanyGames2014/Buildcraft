@@ -470,6 +470,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         signals = null;
 
         if (!world.isRemote && markerOrigin != null && markerOrigin != this) {
+            // TODO: is this needed ?
             //markerOrigin.sendNetworkUpdate();
         }
     }

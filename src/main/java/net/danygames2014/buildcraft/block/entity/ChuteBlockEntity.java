@@ -83,6 +83,7 @@ public class ChuteBlockEntity extends BlockEntity implements Inventory {
     }
 
     private void extractItemsFromWorld() {
+        @SuppressWarnings("unchecked") 
         List<ItemEntity> itemEntities = world.collectEntitiesByClass(ItemEntity.class, itemBox);
         ItemStack[] stacks = inventory.stacks;
         

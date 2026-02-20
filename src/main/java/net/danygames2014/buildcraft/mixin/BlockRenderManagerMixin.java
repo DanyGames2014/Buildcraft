@@ -6,13 +6,11 @@ import net.danygames2014.buildcraft.block.RenderBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -30,7 +28,6 @@ public abstract class BlockRenderManagerMixin {
             original.call(instance, x, y, z, u, v);
             return;
         }
-        RenderBlock renderBlock = (RenderBlock) block;
         if(tesselatorIndexSouth > 3){
             tesselatorIndexSouth = 0;
         }
@@ -40,7 +37,7 @@ public abstract class BlockRenderManagerMixin {
         float uSize = 1f / atlas.getWidth();
         float vSize = 1f / atlas.getHeight();
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(renderBlock.getTexture(0));
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(rb.getTexture(0));
 
         double startU = sprite.getStartU() + ((1 - block.minZ) * 16) * uSize;
         double endU = sprite.getStartU() + ((1 - block.maxZ) * 16) * uSize;
@@ -72,7 +69,6 @@ public abstract class BlockRenderManagerMixin {
             original.call(instance, x, y, z, u, v);
             return;
         }
-        RenderBlock renderBlock = (RenderBlock) block;
         if(tesselatorIndexEast > 3){
             tesselatorIndexEast = 0;
         }
@@ -82,7 +78,7 @@ public abstract class BlockRenderManagerMixin {
         float uSize = 1f / atlas.getWidth();
         float vSize = 1f / atlas.getHeight();
 
-        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(renderBlock.getTexture(0));
+        Atlas.Sprite sprite = Atlases.getTerrain().getTexture(rb.getTexture(0));
 
         double startU = sprite.getStartU() + ((1 - block.maxX) * 16) * uSize;
         double endU   = sprite.getStartU() + ((1 - block.minX) * 16) * uSize;

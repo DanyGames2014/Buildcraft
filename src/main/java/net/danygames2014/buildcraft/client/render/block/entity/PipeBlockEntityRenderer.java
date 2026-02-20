@@ -44,13 +44,13 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
     public int[] displayPowerList = new int[POWER_STAGES];
     public int[] displayPowerListOverload = new int[POWER_STAGES];
 
-    private final Int2ObjectOpenHashMap displayFluidLists = new Int2ObjectOpenHashMap();
+    private final Int2ObjectOpenHashMap<PipeBlockEntityRenderer.DisplayFluidList> displayFluidLists = new Int2ObjectOpenHashMap<>();
     private final int[] angleY = {0, 0, 270, 90, 0, 180};
     private final int[] angleZ = {90, 270, 0, 0, 0, 0};
 
     private boolean initialized = false;
 
-    private class DisplayFluidList {
+    private static class DisplayFluidList {
         public int[] sideHorizontal = new int[LIQUID_STAGES];
         public int[] sideVertical = new int[LIQUID_STAGES];
         public int[] centerHorizontal = new int[LIQUID_STAGES];
@@ -124,7 +124,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         block.texture = TextureListener.energyRedSprite.index;
 
-        size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
+        //size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
 
         for (int s = 0; s < POWER_STAGES; ++s) {
             displayPowerListOverload[s] = GL11.glGenLists(1);
@@ -285,7 +285,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         int finalBlockLight = Math.max(flags & 31, blocklight);
         int listId = (fluid.getIdentifier().hashCode() & 0x3FFFF) << 13 | (flags & 0xE0 | finalBlockLight) << 5 | (skylight & 31);
         if (displayFluidLists.containsKey(listId)) {
-            return (DisplayFluidList) displayFluidLists.get(listId);
+            return displayFluidLists.get(listId);
         }
 
         if(fluid == null){
@@ -312,7 +312,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
             // SIDE HORIZONTAL
 
-            d.sideHorizontal[s] = GL11.glGenLists(1);;
+            d.sideHorizontal[s] = GL11.glGenLists(1);
             GL11.glNewList(d.sideHorizontal[s], GL11.GL_COMPILE);
 
             block.minX = 0.0F;

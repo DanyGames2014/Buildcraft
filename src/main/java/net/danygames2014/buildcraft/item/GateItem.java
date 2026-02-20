@@ -126,7 +126,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
     }
 
     public static Set<GateExpansion> getInstalledExpansions(ItemStack stack) {
-        Set<GateExpansion> expansions = new HashSet<GateExpansion>();
+        Set<GateExpansion> expansions = new HashSet<>();
         NbtCompound nbt = stack.getStationNbt();
 
         if (nbt == null) {
@@ -149,12 +149,21 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
     }
 
     public static ItemStack makeGateItem(GateMaterial material, GateLogic logic) {
-        ItemStack stack = new ItemStack(GateItem.getGateItem(material, logic));
-        return stack;
+        GateItem gateItem = GateItem.getGateItem(material, logic);
+        if (gateItem == null) {
+            return null;
+        }
+        
+        return new ItemStack(gateItem);
     }
 
     public static ItemStack makeGateItem(Gate gate) {
-        ItemStack stack = new ItemStack(GateItem.getGateItem(gate.material, gate.logic));
+        GateItem gateItem = GateItem.getGateItem(gate.material, gate.logic);
+        if (gateItem == null) {
+            return null;
+        }
+        
+        ItemStack stack = new ItemStack(gateItem);
 
         for (GateExpansion expansion : gate.expansions.keySet()) {
             addGateExpansion(stack, expansion);

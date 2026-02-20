@@ -12,8 +12,8 @@ import java.util.Map;
 
 public final class FluidRenderer {
     public static final int DISPLAY_STAGES = 100;
-    private static Map<Fluid, int[]> flowingRenderCache = new HashMap<Fluid, int[]>();
-    private static Map<Fluid, int[]> stillRenderCache = new HashMap<Fluid, int[]>();
+    private static Map<Fluid, int[]> flowingRenderCache = new HashMap<>();
+    private static Map<Fluid, int[]> stillRenderCache = new HashMap<>();
     private static final EntityBlockRenderer.RenderInfo liquidBlock = new EntityBlockRenderer.RenderInfo();
 
     // TODO: run this when stapi reloads resources
@@ -65,11 +65,10 @@ public final class FluidRenderer {
 
         if (fluid.getStillBlock() != null) {
             liquidBlock.baseBlock = fluid.getStillBlock();
-            liquidBlock.texture = getFluidTexture(fluidStack, flowing);
         } else {
             liquidBlock.baseBlock = Block.WATER;
-            liquidBlock.texture = getFluidTexture(fluidStack, flowing);
         }
+        liquidBlock.texture = getFluidTexture(fluidStack, flowing);
 
         cache.put(fluid, diplayLists);
 

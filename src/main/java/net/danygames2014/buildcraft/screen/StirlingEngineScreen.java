@@ -2,12 +2,11 @@ package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.StirlingEngineBlockEntity;
 import net.danygames2014.buildcraft.screen.handler.StirlingEngineScreenHandler;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerEntity;
 import org.lwjgl.opengl.GL11;
 
 public class StirlingEngineScreen extends EngineScreen {
-    StirlingEngineBlockEntity engine;
+    final StirlingEngineBlockEntity engine;
     
     public StirlingEngineScreen(PlayerEntity player, StirlingEngineBlockEntity engine) {
         super(new StirlingEngineScreenHandler(player, engine), engine);

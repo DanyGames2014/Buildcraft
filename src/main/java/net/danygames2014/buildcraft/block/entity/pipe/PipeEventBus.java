@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 public class PipeEventBus {
-    private class EventHandler {
+    private static class EventHandler {
         public Method method;
         public Object owner;
 
@@ -18,11 +18,10 @@ public class PipeEventBus {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof EventHandler)) {
+            if (!(obj instanceof EventHandler e)) {
                 return false;
             }
 
-            EventHandler e = (EventHandler) obj;
             return e.method.equals(method) && e.owner == owner;
         }
     }
@@ -72,7 +71,7 @@ public class PipeEventBus {
         }
 
         registeredHandlers.add(handler);
-        Map<Method, Class<? extends PipeEvent>> methods = new HashMap<Method, Class<? extends PipeEvent>>();
+        Map<Method, Class<? extends PipeEvent>> methods = new HashMap<>();
 
         for (Method m: handler.getClass().getDeclaredMethods()) {
             if ("eventHandler".equals(m.getName())) {
@@ -91,7 +90,7 @@ public class PipeEventBus {
     }
 
     private void updateEventHandlers(List<EventHandler> eventHandlerList) {
-        Collections.sort(eventHandlerList, COMPARATOR);
+        eventHandlerList.sort(COMPARATOR);
     }
 
     public void unregisterHandler(Object handler) {

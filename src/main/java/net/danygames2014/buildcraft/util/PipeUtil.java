@@ -5,7 +5,9 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+// TODO: What is this, is this still needed?
 public class PipeUtil {
+    @SuppressWarnings({"ExtractMethodRecommender", "RedundantIfStatement"})
     public static boolean checkPipeConnections(BlockEntity blockEntity1, BlockEntity blockEntity2){
         if(blockEntity1 == null || blockEntity2 == null){
             return false;
@@ -41,6 +43,7 @@ public class PipeUtil {
         if(blockEntity2 instanceof PipeBlockEntity pipeBlockEntity2 && pipeBlockEntity2.canConnectTo(pipeBlockEntity2.x, pipeBlockEntity2.y, pipeBlockEntity2.z, direction.getOpposite()) == PipeConnectionType.NONE){
             return false;
         }
+        
         return true;
     }
 }

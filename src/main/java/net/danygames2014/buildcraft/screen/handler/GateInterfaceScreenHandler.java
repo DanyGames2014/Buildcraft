@@ -43,9 +43,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     private int lastTriggerState = 0;
 
     public GateInterfaceScreenHandler(Inventory playerInventory, PipeBlockEntity pipe){
-        for (int i = 0; i < actionsState.length; ++i) {
-            actionsState[i] = ActionActiveState.Deactivated;
-        }
+        Arrays.fill(actionsState, ActionActiveState.Deactivated);
 
         this.pipe = pipe;
         this.playerInventory = playerInventory;
@@ -120,6 +118,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     private static void stringsToStatements(Collection<Statement> statements, String[] strings) {
         statements.clear();
         for (String id : strings) {
+            // TODO: That hashmap is Identifier -> Statement, not String -> Statement. -Dany
             statements.add(StatementManager.statements.get(id));
         }
     }
@@ -205,7 +204,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
      * TRIGGERS *
      */
     public boolean hasTriggers() {
-        return potentialTriggers.size() > 0;
+        return !potentialTriggers.isEmpty();
     }
 
     public Statement getFirstTrigger() {
@@ -335,7 +334,6 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                                     data.writeUTF(action);
                                 }
                             } catch (IOException e){
-
                             }
                         }
                     }));
@@ -379,10 +377,10 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
             } else if ("setActionParameter".equals(command) || "setTriggerParameter".equals(command)) {
                 int slot = stream.readUnsignedByte();
                 int param = stream.readUnsignedByte();
-                String parameterName = stream.readUTF(stream);
+                String parameterName = DataInputStream.readUTF(stream);
                 NbtCompound parameterData = NbtIo.read(stream);
                 StatementParameter parameter = null;
-                if (parameterName != null && parameterName.length() > 0) {
+                if (!parameterName.isEmpty()) {
                     parameter = StatementManager.createParameter(parameterName);
                 }
 

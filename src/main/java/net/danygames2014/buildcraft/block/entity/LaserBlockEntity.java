@@ -169,11 +169,7 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
     }
 
     protected boolean isValidTable() {
-
-        if (laserTarget == null || laserTarget.isInvalidTarget() || !laserTarget.requiresLaserEnergy())
-            return false;
-
-        return true;
+        return laserTarget != null && !laserTarget.isInvalidTarget() && laserTarget.requiresLaserEnergy();
     }
 
     private Direction getFacing(){

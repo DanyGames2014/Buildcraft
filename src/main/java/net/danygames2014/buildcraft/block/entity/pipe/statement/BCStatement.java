@@ -17,8 +17,6 @@ public abstract class BCStatement implements Statement {
      * UniqueTag accepts multiple possible tags, use this feature to migrate to
      * more standardized tags if needed, otherwise just pass a single string.
      * The first passed string will be the one used when saved to disk.
-     *
-     * @param uniqueTag
      */
     public BCStatement(Identifier... uniqueTag) {
         this.uniqueTag = uniqueTag[0];

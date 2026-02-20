@@ -2,15 +2,10 @@ package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.util.ScreenUtil;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
-import net.modificationstation.stationapi.api.client.StationRenderAPI;
-import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
-import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -50,7 +45,7 @@ public abstract class BuildcraftScreen extends HandledScreen {
         ScreenUtil.drawSprite(sprite, x, y, width, height, zOffset);
     }
 
-    protected class LedgerManager {
+    public class LedgerManager {
         private BuildcraftScreen gui;
         @SuppressWarnings("rawtypes")
         private static Class openedLedger;
@@ -86,15 +81,14 @@ public abstract class BuildcraftScreen extends HandledScreen {
             int xShift = ((gui.width - gui.backgroundWidth) / 2) + gui.backgroundWidth;
             int yShift = ((gui.height - gui.backgroundHeight) / 2) + 8;
 
-            for (int i = 0; i < ledgers.size(); i++){
-                Ledger ledger = ledgers.get(i);
+            for (Ledger ledger : ledgers) {
                 if (!ledger.isVisible()) {
                     continue;
                 }
 
                 ledger.currentShiftX = xShift;
                 ledger.currentShiftY = yShift;
-                if (ledger.intersectsWith(mX, mY, xShift, yShift)){
+                if (ledger.intersectsWith(mX, mY, xShift, yShift)) {
                     return ledger;
                 }
 
@@ -149,7 +143,7 @@ public abstract class BuildcraftScreen extends HandledScreen {
         }
     }
 
-    protected abstract class Ledger {
+    public abstract class Ledger {
         private boolean open;
         protected int overlayColor = 0xffffff;
         public int currentShiftX = 0;
@@ -191,12 +185,7 @@ public abstract class BuildcraftScreen extends HandledScreen {
         }
 
         public boolean intersectsWith(int mouseX, int mouseY, int shiftX, int shiftY) {
-
-            if (mouseX >= shiftX && mouseX <= shiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + getHeight()) {
-                return true;
-            }
-
-            return false;
+            return mouseX >= shiftX && mouseX <= shiftX + currentWidth && mouseY >= shiftY && mouseY <= shiftY + getHeight();
         }
 
         public void setFullyOpen() {
@@ -215,6 +204,7 @@ public abstract class BuildcraftScreen extends HandledScreen {
             }
         }
 
+        @SuppressWarnings("BooleanMethodIsAlwaysInverted")
         public boolean isVisible() {
             return true;
         }

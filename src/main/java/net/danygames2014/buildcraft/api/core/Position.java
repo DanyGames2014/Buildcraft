@@ -62,6 +62,10 @@ public class Position implements Serializable {
 //    }
 
     public void moveRight(double step) {
+        if (orientation == null) {
+            return;
+        }
+        
         switch (orientation) {
             case SOUTH:
                 x = x - step;
@@ -84,6 +88,10 @@ public class Position implements Serializable {
     }
 
     public void moveForwards(double step) {
+        if (orientation == null) {
+            return;
+        }
+        
         switch (orientation) {
             case UP:
                 y = y + step;
@@ -112,6 +120,10 @@ public class Position implements Serializable {
     }
 
     public void moveUp(double step) {
+        if (orientation == null) {
+            return;
+        }
+        
         switch (orientation) {
             case SOUTH:
             case NORTH:
@@ -148,11 +160,11 @@ public class Position implements Serializable {
     }
 
     public Position min(Position p) {
-        return new Position(p.x > x ? x : p.x, p.y > y ? y : p.y, p.z > z ? z : p.z);
+        return new Position(Math.min(p.x, x), Math.min(p.y, y), Math.min(p.z, z));
     }
 
     public Position max(Position p) {
-        return new Position(p.x < x ? x : p.x, p.y < y ? y : p.y, p.z < z ? z : p.z);
+        return new Position(Math.max(p.x, x), Math.max(p.y, y), Math.max(p.z, z));
     }
 
     public boolean isClose(Position newPosition, float f) {

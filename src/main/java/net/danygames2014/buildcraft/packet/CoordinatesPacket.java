@@ -49,6 +49,6 @@ public class CoordinatesPacket extends Packet {
 
     @Override
     public int size() {
-        return 0;
+        return 12;
     }
 }

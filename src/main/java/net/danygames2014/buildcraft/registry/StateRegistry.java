@@ -1,11 +1,8 @@
 package net.danygames2014.buildcraft.registry;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
-import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class StateRegistry {

@@ -7,7 +7,6 @@ import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
-import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.Arrays;
 import java.util.List;

@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.Iterator;
 
-public class GateInterfaceScreen extends AdvancedInterfaceScreen{
+public class GateInterfaceScreen extends AdvancedInterfaceScreen {
     Inventory playerInventory;
     private final GateInterfaceScreenHandler screenHandler;
     private final GateInterfaceScreen instance;
@@ -244,8 +244,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
 
                     drawTexture(x + slot.x + 17 + 18 * gate.material.numTriggerParameters, y + slot.y + 6, 176, 18, halfWidth ? 9 : 18, 4);
                 }
-            } else if (slot instanceof StatementParameterSlot) {
-                StatementParameterSlot paramSlot = (StatementParameterSlot) slot;
+            } else if (slot instanceof StatementParameterSlot paramSlot) {
                 StatementSlot statement = paramSlot.statementSlot;
 
                 minecraft.textureManager.bindTexture(minecraft.textureManager.getTextureId(texture));
@@ -266,14 +265,11 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
     }
 
     private void doSlotClick(AdvancedSlot slot, int k) {
-        if (slot instanceof TriggerSlot && screenHandler.hasTriggers()) {
-            TriggerSlot triggerSlot = (TriggerSlot) slot;
+        if (slot instanceof TriggerSlot triggerSlot && screenHandler.hasTriggers()) {
 
             Statement changed = null;
 
-            if (isShiftKeyDown()) {
-                changed = null;
-            } else {
+            if (!isShiftKeyDown()) {
                 if (triggerSlot.getStatement() == null) {
                     if (k == 0) {
                         changed = screenHandler.getFirstTrigger();
@@ -283,11 +279,10 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 } else {
                     Iterator<Statement> it = screenHandler.getTriggerIterator(k != 0);
 
-                    for (; it.hasNext();) {
+                    while (it.hasNext()) {
                         Statement trigger = it.next();
 
                         if (!it.hasNext()) {
-                            changed = null;
                             break;
                         }
 
@@ -312,14 +307,11 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 }
                 screenHandler.setTriggerParameter(triggerSlot.slot, p.slot, parameter, true);
             }
-        } else if (slot instanceof ActionSlot) {
-            ActionSlot actionSlot = (ActionSlot) slot;
+        } else if (slot instanceof ActionSlot actionSlot) {
 
             Statement changed = null;
 
-            if (isShiftKeyDown()) {
-                changed = null;
-            } else {
+            if (!isShiftKeyDown()) {
                 if (actionSlot.getStatement() == null) {
                     if (k == 0) {
                         changed = screenHandler.getFirstAction();
@@ -330,11 +322,10 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 } else {
                     Iterator<Statement> it = screenHandler.getActionIterator(k != 0);
 
-                    for (; it.hasNext();) {
+                    while (it.hasNext()) {
                         Statement action = it.next();
 
                         if (!it.hasNext()) {
-                            changed = null;
                             break;
                         }
 
@@ -360,8 +351,7 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen{
                 }
                 screenHandler.setActionParameter(actionSlot.slot, p.slot, parameter, true);
             }
-        } else if (slot instanceof StatementParameterSlot) {
-            StatementParameterSlot paramSlot = (StatementParameterSlot) slot;
+        } else if (slot instanceof StatementParameterSlot paramSlot) {
             StatementSlot statement = paramSlot.statementSlot;
 
             if (statement.isDefined() && statement.getStatement().maxParameters() != 0) {

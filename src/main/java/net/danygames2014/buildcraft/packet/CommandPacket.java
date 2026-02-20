@@ -14,24 +14,23 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class CommandPacket extends Packet implements ManagedPacket<CommandPacket> {
-    public static final ArrayList<CommandTarget> targets;
+    public static final PacketType<CommandPacket> TYPE = PacketType.builder(true, true, CommandPacket::new).build();
+    
+    public static final ArrayList<CommandTarget> targets = new ArrayList<>() {
+        {
+            add(new CommandTargetBlockEntity());
+            add(new CommandTargetEntity());
+            add(new CommandTargetScreenHandler());
+        }
+    };
+    
     public DataInputStream stream;
     public String command;
     public Object target;
     public CommandTarget handler;
-
-    public static final PacketType<CommandPacket> TYPE = PacketType.builder(true, true, CommandPacket::new).build();
-
     private CommandWriter writer;
-    static {
-        targets = new ArrayList<>();
-        targets.add(new CommandTargetBlockEntity());
-        targets.add(new CommandTargetEntity());
-        targets.add(new CommandTargetScreenHandler());
-    }
 
     public CommandPacket(){}
     public CommandPacket(Object target, String command, CommandWriter writer){

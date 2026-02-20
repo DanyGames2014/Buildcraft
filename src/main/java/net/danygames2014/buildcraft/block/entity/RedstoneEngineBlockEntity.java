@@ -50,7 +50,7 @@ public class RedstoneEngineBlockEntity extends BaseEngineBlockEntity {
 
     @Override
     public double getMinEnergyReceived() {
-        return 1;
+        return super.getMinEnergyReceived();
     }
 
     @Override

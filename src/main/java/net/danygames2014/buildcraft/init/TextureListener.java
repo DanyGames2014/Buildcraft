@@ -25,44 +25,44 @@ import java.util.List;
 
 public class TextureListener {
 
-    public static List<Identifier> dynamicBlockTextures = new ArrayList<>();
+    public static final List<Identifier> dynamicBlockTextures = new ArrayList<>();
 
     public static Atlas.Sprite energySprite;
 
     // Pipes
-    public static Identifier diamondItemPipeUp = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_up");
-    public static Identifier diamondItemPipeDown = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_down");
-    public static Identifier diamondItemPipeNorth = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_north");
-    public static Identifier diamondItemPipeSouth = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_south");
-    public static Identifier diamondItemPipeEast = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_east");
-    public static Identifier diamondItemPipeWest = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_west");
+    public static final Identifier diamondItemPipeUp = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_up");
+    public static final Identifier diamondItemPipeDown = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_down");
+    public static final Identifier diamondItemPipeNorth = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_north");
+    public static final Identifier diamondItemPipeSouth = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_south");
+    public static final Identifier diamondItemPipeEast = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_east");
+    public static final Identifier diamondItemPipeWest = Buildcraft.NAMESPACE.id("block/pipe/diamond_item_pipe_west");
 
-    public static Identifier diamondFluidPipeUp = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_up");
-    public static Identifier diamondFluidPipeDown = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_down");
-    public static Identifier diamondFluidPipeNorth = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_north");
-    public static Identifier diamondFluidPipeSouth = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_south");
-    public static Identifier diamondFluidPipeEast = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_east");
-    public static Identifier diamondFluidPipeWest = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_west");
+    public static final Identifier diamondFluidPipeUp = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_up");
+    public static final Identifier diamondFluidPipeDown = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_down");
+    public static final Identifier diamondFluidPipeNorth = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_north");
+    public static final Identifier diamondFluidPipeSouth = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_south");
+    public static final Identifier diamondFluidPipeEast = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_east");
+    public static final Identifier diamondFluidPipeWest = Buildcraft.NAMESPACE.id("block/pipe/diamond_fluid_pipe_west");
 
-    public static Identifier pipeStainedOverlay = Buildcraft.NAMESPACE.id("block/pipe/pipe_stained_overlay");
+    public static final Identifier pipeStainedOverlay = Buildcraft.NAMESPACE.id("block/pipe/pipe_stained_overlay");
 
-    public static Identifier redPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire");
-    public static Identifier redPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire_lit");
-    public static Identifier bluePipeWire = Buildcraft.NAMESPACE.id("block/pipewire/blue_pipe_wire");
-    public static Identifier bluePipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/blue_pipe_wire_lit");
-    public static Identifier greenPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/green_pipe_wire");
-    public static Identifier greenPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/green_pipe_wire_lit");
-    public static Identifier yellowPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/yellow_pipe_wire");
-    public static Identifier yellowPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/yellow_pipe_wire_lit");
+    public static final Identifier redPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire");
+    public static final Identifier redPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/red_pipe_wire_lit");
+    public static final Identifier bluePipeWire = Buildcraft.NAMESPACE.id("block/pipewire/blue_pipe_wire");
+    public static final Identifier bluePipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/blue_pipe_wire_lit");
+    public static final Identifier greenPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/green_pipe_wire");
+    public static final Identifier greenPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/green_pipe_wire_lit");
+    public static final Identifier yellowPipeWire = Buildcraft.NAMESPACE.id("block/pipewire/yellow_pipe_wire");
+    public static final Identifier yellowPipeWireLit = Buildcraft.NAMESPACE.id("block/pipewire/yellow_pipe_wire_lit");
 
-    public static Identifier plug = Buildcraft.NAMESPACE.id("block/pluggable/plug");
-    public static Identifier lens = Buildcraft.NAMESPACE.id("block/pluggable/lens_frame");
-    public static Identifier filter = Buildcraft.NAMESPACE.id("block/pluggable/filter_frame");
-    public static Identifier lensOverlay = Buildcraft.NAMESPACE.id("block/pluggable/lens_overlay");
+    public static final Identifier plug = Buildcraft.NAMESPACE.id("block/pluggable/plug");
+    public static final Identifier lens = Buildcraft.NAMESPACE.id("block/pluggable/lens_frame");
+    public static final Identifier filter = Buildcraft.NAMESPACE.id("block/pluggable/filter_frame");
+    public static final Identifier lensOverlay = Buildcraft.NAMESPACE.id("block/pluggable/lens_overlay");
 
-    public static Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/structure_pipe");
+    public static final Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/structure_pipe");
 
-    public static Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
+    public static final Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
 
     public static Atlas.Sprite energyRedSprite;
     public static Atlas.Sprite energyCyanSprite;
@@ -153,6 +153,7 @@ public class TextureListener {
         }
     }
 
+    @SuppressWarnings("CodeBlock2Expr")
     @EventListener
     public void registerItemModelPredicates(ItemModelPredicateProviderRegistryEvent event) {
         event.registry.register(
@@ -172,6 +173,7 @@ public class TextureListener {
         );
     }
 
+    @SuppressWarnings("Convert2Lambda")
     @EventListener
     public void registerItemColorProvider(ItemColorsRegisterEvent event) {
         ItemColorProvider lensColorProvider = new ItemColorProvider() {

@@ -54,6 +54,7 @@ public class EngineRenderer {
         chamber.pivotZ = 8F;
     }
 
+    @SuppressWarnings("ExtractMethodRecommender")
     public void render(TextureManager textureManager, EnergyStage energy, float progress, Direction facing, String baseTexture, @Nullable String chamberTexturePath, @Nullable String trunkTexturePath, double x, double y, double z){
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
@@ -128,22 +129,12 @@ public class EngineRenderer {
             GL11.glTranslatef(-translate[2] * chamberf, -translate[1] * chamberf, -translate[0] * chamberf);
         }
 
-        String texture = "";
-
-        switch (energy) {
-            case BLUE:
-                texture = "/assets/buildcraft/stationapi/textures/block/engine_trunk_blue.png";
-                break;
-            case GREEN:
-                texture = "/assets/buildcraft/stationapi/textures/block/engine_trunk_green.png";
-                break;
-            case YELLOW:
-                texture = "/assets/buildcraft/stationapi/textures/block/engine_trunk_yellow.png";
-                break;
-            default:
-                texture = "/assets/buildcraft/stationapi/textures/block/engine_trunk_red.png";
-                break;
-        }
+        String texture = switch (energy) {
+            case BLUE -> "/assets/buildcraft/stationapi/textures/block/engine_trunk_blue.png";
+            case GREEN -> "/assets/buildcraft/stationapi/textures/block/engine_trunk_green.png";
+            case YELLOW -> "/assets/buildcraft/stationapi/textures/block/engine_trunk_yellow.png";
+            default -> "/assets/buildcraft/stationapi/textures/block/engine_trunk_red.png";
+        };
 
         if(trunkTexturePath != null){
             texture = trunkTexturePath;

@@ -117,10 +117,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
                 performFrameBuilding();
                 break;
 
-            case MINING:
-                break;
-
-            case FINISHED:
+            case MINING, FINISHED:
                 break;
         }
 

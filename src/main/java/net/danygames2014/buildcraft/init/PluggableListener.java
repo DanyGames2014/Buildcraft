@@ -1,6 +1,5 @@
 package net.danygames2014.buildcraft.init;
 
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.pluggable.LensPluggable;

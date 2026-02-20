@@ -8,7 +8,6 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
@@ -146,9 +145,9 @@ public class EntityBlockRenderer extends EntityRenderer {
                     double remainY = entity.ySize - yBase;
                     double remainZ = entity.zSize - zBase;
 
-                    util.maxX = (float) (remainX > 1.0 ? 1.0 : remainX);
-                    util.maxY = (float) (remainY > 1.0 ? 1.0 : remainY);
-                    util.maxZ = (float) (remainZ > 1.0 ? 1.0 : remainZ);
+                    util.maxX = (float) (Math.min(remainX, 1.0));
+                    util.maxY = (float) (Math.min(remainY, 1.0));
+                    util.maxZ = (float) (Math.min(remainZ, 1.0));
 
                     GL11.glPushMatrix();
                     GL11.glTranslatef((float) x, (float) y, (float) z);

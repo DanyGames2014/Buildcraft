@@ -1,3 +1,4 @@
+//file:noinspection GrUnresolvedAccess
 plugins {
     id "maven-publish"
     id "fabric-loom" version "1.14.10"

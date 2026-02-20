@@ -7,11 +7,8 @@ import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneStatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.container.SidedStatementContainer;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.BCStatement;
-import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
-
-import java.util.Locale;
 
 public class TriggerRedstoneInput extends BCStatement implements TriggerInternal {
     boolean active;

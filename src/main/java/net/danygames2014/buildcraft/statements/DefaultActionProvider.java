@@ -11,7 +11,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class DefaultActionProvider implements ActionProvider {
     @Override
@@ -27,6 +26,7 @@ public class DefaultActionProvider implements ActionProvider {
 
     @Override
     public Collection<ActionExternal> getExternalActions(Direction side, BlockEntity blockEntity) {
+        @SuppressWarnings("UnnecessaryLocalVariable") 
         LinkedList<ActionExternal> res = new LinkedList<>();
 
 //        try {

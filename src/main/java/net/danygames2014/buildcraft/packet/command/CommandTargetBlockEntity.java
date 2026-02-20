@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class CommandTargetBlockEntity extends CommandTarget{
     @Override
-    public Class getHandledClass() {
+    public Class<?> getHandledClass() {
         return BlockEntity.class;
     }
 

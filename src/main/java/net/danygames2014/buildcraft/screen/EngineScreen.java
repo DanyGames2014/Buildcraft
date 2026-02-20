@@ -3,7 +3,6 @@ package net.danygames2014.buildcraft.screen;
 import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.ScreenUtil;
-import net.danygames2014.uniwrench.init.ItemListener;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
@@ -48,7 +47,7 @@ public abstract class EngineScreen extends BuildcraftScreen{
             textRenderer.drawWithShadow(translationStorage.get("gui.buildcraft.engine.stored") + ":", x + 22, y + 44, subheaderColor);
             textRenderer.draw(String.format("%.1f MJ", engine.getEnergyStored()), x + 22, y + 56, textColor);
             textRenderer.drawWithShadow(translationStorage.get("gui.buildcraft.engine.heat") + ":", x + 22, y + 68, subheaderColor);
-            textRenderer.draw(String.format("%.2f \u00B0C", (engine.getHeat() / 100.0) + 20.0), x + 22, y + 80, textColor);
+            textRenderer.draw(String.format("%.2f °C", (engine.getHeat() / 100.0) + 20.0), x + 22, y + 80, textColor);
         }
 
         @Override

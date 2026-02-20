@@ -30,11 +30,6 @@ public class ChanceRecipeOutput extends RecipeOutput {
     }
 
     @Override
-    public ItemStack getMaxOutput() {
-        return super.getMaxOutput();
-    }
-
-    @Override
     public String toString() {
         return "RecipeOutput { stack=" + getStackString() + ", type=" + type + ", chance=" + chance + " }";
     }

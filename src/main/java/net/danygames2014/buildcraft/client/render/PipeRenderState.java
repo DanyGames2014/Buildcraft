@@ -1,11 +1,9 @@
 package net.danygames2014.buildcraft.client.render;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
-import net.danygames2014.buildcraft.util.ConnectionMatrix;
 import net.danygames2014.buildcraft.util.PipeConnectionMatrix;
 import net.danygames2014.buildcraft.util.TextureMatrix;
 import net.danygames2014.buildcraft.util.WireMatrix;
-import net.minecraft.nbt.NbtCompound;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

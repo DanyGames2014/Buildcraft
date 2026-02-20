@@ -31,6 +31,7 @@ public class ItemRecipeInput extends RecipeInput {
         this(item, 1);
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public boolean matches(ItemStack other) {
         // If item doesn't match, return false

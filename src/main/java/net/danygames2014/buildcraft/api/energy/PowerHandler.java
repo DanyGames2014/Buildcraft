@@ -45,7 +45,6 @@ public final class PowerHandler {
      * <p>
      * NOTE: It is not possible to create a Zero perdition algorithm.
      */
-    @SuppressWarnings("ClassCanBeRecord")
     public static class PerditionCalculator {
         public static final float DEFAULT_POWERLOSS = 1F;
         public static final float MIN_POWERLOSS = 0.01F;

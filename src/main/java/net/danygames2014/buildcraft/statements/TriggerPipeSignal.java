@@ -46,9 +46,7 @@ public class TriggerPipeSignal extends BCStatement implements TriggerInternal {
         }
 
         for (StatementParameter param : parameters) {
-            if (param != null && param instanceof TriggerParameterSignal) {
-                TriggerParameterSignal signal = (TriggerParameterSignal) param;
-
+            if (param instanceof TriggerParameterSignal signal) {
                 if (signal.color != null) {
                     if (signal.active) {
                         if (pipe.signalStrength[signal.color.ordinal()] == 0) {

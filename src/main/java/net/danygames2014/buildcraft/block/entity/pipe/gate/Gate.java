@@ -44,7 +44,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     public StatementParameter[][] actionParameters = new StatementParameter[MAX_STATEMENTS][MAX_PARAMETERS];
 
     public ActionActiveState[] actionsState = new ActionActiveState[MAX_STATEMENTS];
-    public ArrayList<StatementSlot> activeActions = new ArrayList<StatementSlot>();
+    public ArrayList<StatementSlot> activeActions = new ArrayList<>();
 
     public BitSet broadcastSignal = new BitSet(PipeWire.values().length);
     public BitSet prevBroadcastSignal = new BitSet(PipeWire.values().length);
@@ -94,9 +94,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
 //        }
 
         if (action != actions[position]) {
-            for (int i = 0; i < actionParameters[position].length; i++) {
-                actionParameters[position][i] = null;
-            }
+            Arrays.fill(actionParameters[position], null);
         }
 
         actions[position] = action;
@@ -136,7 +134,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
 
     public void addGateExpansion(GateExpansion expansion) {
         if (!expansions.containsKey(expansion)) {
-            expansions.put(expansion, expansion.makeController(pipe != null ? pipe : null));
+            expansions.put(expansion, expansion.makeController(pipe));
         }
     }
 
@@ -356,7 +354,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
         int oldRedstoneOutputSide = redstoneOutputSide;
         redstoneOutputSide = 0;
 
-        boolean wasActive = activeActions.size() > 0;
+        boolean wasActive = !activeActions.isEmpty();
 
         BitSet temp = prevBroadcastSignal;
         temp.clear();
@@ -451,8 +449,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
 
             for (Direction side : Direction.values()) {
                 BlockEntity blockEntity = pipe.getBlockEntity(side);
-                if (blockEntity instanceof ActionReceptor) {
-                    ActionReceptor recept = (ActionReceptor) blockEntity;
+                if (blockEntity instanceof ActionReceptor recept) {
                     recept.actionActivated(action, slot.parameters);
                 }
             }
@@ -468,7 +465,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
             pipe.updateSignalState();
         }
 
-        boolean isActive = activeActions.size() > 0;
+        boolean isActive = !activeActions.isEmpty();
 
         if (wasActive != isActive) {
             pipe.scheduleRenderUpdate();
@@ -538,7 +535,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     }
 
     public List<Statement> getAllValidTriggers() {
-        ArrayList<Statement> allTriggers = new ArrayList<Statement>(64);
+        ArrayList<Statement> allTriggers = new ArrayList<>(64);
         allTriggers.addAll(StatementManager.getInternalTriggers(this));
 
         for (Direction o : Direction.values()) {

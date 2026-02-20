@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 public class PluggableRegistry{
     private static final HashMap<Identifier, PluggableFactory> IDENTIFIER_TO_PLUGGABLE = new HashMap<>();
-    private static final HashMap<Class, Identifier> CLASS_TO_IDENTIFIER = new HashMap<>();
+    private static final HashMap<Class<? extends PipePluggable>, Identifier> CLASS_TO_IDENTIFIER = new HashMap<>();
 
-    public static void register(Identifier identifier, Class plugableClass, PluggableFactory pluggable){
+    public static void register(Identifier identifier, Class<? extends PipePluggable> plugableClass, PluggableFactory pluggable){
 //        if(REGISTRY.containsKey(identifier)){
 //            throw new RuntimeException("Duplicate identifier: " + identifier.toString());
 //        }
@@ -26,7 +26,7 @@ public class PluggableRegistry{
         return IDENTIFIER_TO_PLUGGABLE.get(identifier);
     }
 
-    public static Identifier getIdentifier(Class pluggableClass){
+    public static Identifier getIdentifier(Class<? extends PipePluggable> pluggableClass){
         return CLASS_TO_IDENTIFIER.get(pluggableClass);
     }
 

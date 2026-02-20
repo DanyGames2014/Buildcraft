@@ -37,9 +37,7 @@ public class GateExpansions {
     }
 
     public static Set<GateExpansion> getExpansions() {
-        Set<GateExpansion> set = new HashSet<>();
-        set.addAll(expansions);
-        return set;
+        return new HashSet<>(expansions);
     }
 
     public static Map<GateExpansion, ItemStack> getRecipesForPostInit() {

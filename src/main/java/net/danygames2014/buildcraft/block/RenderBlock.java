@@ -18,7 +18,7 @@ public class RenderBlock extends TemplateBlock {
 
     public boolean applyUVFix = false;
 
-    private TextureMatrix textureMatrix = new TextureMatrix();
+    private final TextureMatrix textureMatrix = new TextureMatrix();
 
     public RenderBlock(Identifier identifier) {
         super(identifier, Material.AIR);

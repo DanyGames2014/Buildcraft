@@ -506,7 +506,7 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         MISSING_RESOURCE
     }
     
-    public class NeededBlockEntry {
+    public static class NeededBlockEntry {
         public Block block;
         public int meta;
         public int count;

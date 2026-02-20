@@ -14,7 +14,7 @@ import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.state.property.Properties;
 
 public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements Inventory {
-    public SimpleInventory inventory = new SimpleInventory(2, "Architect Table", this::markDirty);
+    public final SimpleInventory inventory = new SimpleInventory(2, "Architect Table", this::markDirty);
     public int progress = 0;
     public String blueprintName = "";
     public String lastTouchedBy = "";
@@ -143,11 +143,6 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
     @Override
     public boolean canPlayerUse(PlayerEntity player) {
         return inventory.canPlayerUse(player);
-    }
-
-    @Override
-    public void markDirty() {
-        super.markDirty();
     }
     
     // Nbt

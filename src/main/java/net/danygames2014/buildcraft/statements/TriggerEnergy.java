@@ -5,7 +5,6 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.BCStatement;
-import net.danygames2014.nyalib.energy.EnergyHandler;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.util.math.Direction;

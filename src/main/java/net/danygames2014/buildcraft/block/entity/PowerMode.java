@@ -10,13 +10,11 @@ public enum PowerMode {
     }
 
     public PowerMode getNext() {
-        PowerMode next = VALUES[(ordinal() + 1) % VALUES.length];
-        return next;
+        return VALUES[(ordinal() + 1) % VALUES.length];
     }
 
     public PowerMode getPrevious() {
-        PowerMode previous = VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
-        return previous;
+        return VALUES[(ordinal() + VALUES.length - 1) % VALUES.length];
     }
 
     public static PowerMode fromId(int id) {

@@ -1,6 +1,5 @@
 package net.danygames2014.buildcraft.block.entity;
 
-import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.minecraft.block.entity.BlockEntity;

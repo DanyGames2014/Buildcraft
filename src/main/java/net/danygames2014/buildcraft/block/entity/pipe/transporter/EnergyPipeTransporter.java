@@ -42,7 +42,7 @@ public class EnergyPipeTransporter extends PipeTransporter {
     private long currentDate;
     private float[] internalPower = new float[6];
     public float[] internalNextPower = new float[6];
-    public int maxPower = 8;
+    public int maxPower;
     private double highestPower;
     SafeTimeTracker tracker = new SafeTimeTracker();
 

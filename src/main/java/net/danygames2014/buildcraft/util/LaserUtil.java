@@ -86,16 +86,10 @@ public class LaserUtil {
     }
 
     public static int getLaserTexture(LaserKind kind){
-        switch (kind) {
-            case BLUE:
-                return TextureListener.blueLaser.index;
-
-            case RED:
-                return TextureListener.redLaser.index;
-
-            case STRIPES:
-                return TextureListener.stripesLaser.index;
-        }
-        return 0;
+        return switch (kind) {
+            case BLUE -> TextureListener.blueLaser.index;
+            case RED -> TextureListener.redLaser.index;
+            case STRIPES -> TextureListener.stripesLaser.index;
+        };
     }
 }

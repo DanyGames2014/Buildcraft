@@ -2,9 +2,7 @@ package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
 import net.danygames2014.buildcraft.screen.handler.CombustionEngineScreenHandler;
-import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidStack;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
@@ -39,6 +37,7 @@ public class CombustionEngineScreen extends EngineScreen {
 
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void drawFluid(FluidStack fluidStack, int level, int x, int y, int width, int height){
         if(fluidStack == null || fluidStack.fluid == null) {
             return;

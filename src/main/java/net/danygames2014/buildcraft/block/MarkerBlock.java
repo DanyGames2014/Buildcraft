@@ -1,7 +1,6 @@
 package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.block.entity.LandMarkerBlockEntity;
-import net.danygames2014.buildcraft.block.entity.PathMarkerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -55,20 +54,14 @@ public abstract class MarkerBlock extends TemplateBlockWithEntity {
         double w = 0.10;
         double h = 0.65;
 
-        switch(facing){
-            case DOWN:
-                return Box.createCached(0.5F - w, 1F - h, 0.5F - w, 0.5F + w, 1F, 0.5F + w);
-            case UP:
-                return Box.createCached(0.5F - w, 0F, 0.5F - w, 0.5F + w, h, 0.5F + w);
-            case WEST:
-                return Box.createCached(0.5F - w, 0.5F - w, 0F, 0.5F + w, 0.5F + w, h);
-            case EAST:
-                return Box.createCached(0.5F - w, 0.5F - w, 1 - h, 0.5F + w, 0.5F + w, 1);
-            case SOUTH:
-                return Box.createCached(0F, 0.5F - w, 0.5F - w, h, 0.5F + w, 0.5F + w);
-            default:
-                return Box.createCached(1 - h, 0.5F - w, 0.5F - w, 1F, 0.5F + w, 0.5F + w);
-        }
+        return switch (facing) {
+            case DOWN -> Box.createCached(0.5F - w, 1F - h, 0.5F - w, 0.5F + w, 1F, 0.5F + w);
+            case UP -> Box.createCached(0.5F - w, 0F, 0.5F - w, 0.5F + w, h, 0.5F + w);
+            case WEST -> Box.createCached(0.5F - w, 0.5F - w, 0F, 0.5F + w, 0.5F + w, h);
+            case EAST -> Box.createCached(0.5F - w, 0.5F - w, 1 - h, 0.5F + w, 0.5F + w, 1);
+            case SOUTH -> Box.createCached(0F, 0.5F - w, 0.5F - w, h, 0.5F + w, 0.5F + w);
+            default -> Box.createCached(1 - h, 0.5F - w, 0.5F - w, 1F, 0.5F + w, 0.5F + w);
+        };
     }
 
     @Override

@@ -2,9 +2,7 @@ package net.danygames2014.buildcraft.client.render.block.entity;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.TankBlockEntity;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -30,7 +28,7 @@ public class TankBlockEntityRenderer extends BlockEntityRenderer {
         BlockRenderManager blockRenderManager = Minecraft.INSTANCE.worldRenderer.blockRenderManager;
         GL11.glTranslated(x, y, z);
 
-        float waterMaxY = (float) tankBlockEntity.fluid.amount / tankBlockEntity.CAPACITY;
+        float waterMaxY = (float) tankBlockEntity.fluid.amount / TankBlockEntity.CAPACITY;
 
         Buildcraft.tank.setBoundingBox(0.126F, 0.01F, 0.126F, 0.874F, waterMaxY - 0.01F, 0.874F);
 

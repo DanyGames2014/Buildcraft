@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 public class RenderHelper {
-    public static ItemRenderer itemRenderer = new ItemRenderer();
+    public static final ItemRenderer itemRenderer = new ItemRenderer();
 
     public static void bindTexture(String texturePath) {
         Minecraft.INSTANCE.textureManager.bindTexture(Minecraft.INSTANCE.textureManager.getTextureId(texturePath));

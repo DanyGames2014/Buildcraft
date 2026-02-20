@@ -1,6 +1,5 @@
 package net.danygames2014.buildcraft.pluggable;
 
-import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.event.ItemPipeEvent;

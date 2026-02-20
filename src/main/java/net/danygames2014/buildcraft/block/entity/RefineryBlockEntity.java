@@ -59,6 +59,7 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
         }
 
         if (updateNetworkTime.markTimeIfDelay(world)) {
+            // TODO: is this needed?
 //            sendNetworkUpdate();
         }
 

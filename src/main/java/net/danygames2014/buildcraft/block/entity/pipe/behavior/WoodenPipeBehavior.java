@@ -135,6 +135,10 @@ public class WoodenPipeBehavior extends PipeBehavior implements IPipeTransportPo
 
                 // Check if we can extract from the block
                 if (cap.canExtractFluid(side.getOpposite())) {
+                    if (ForgeDirection.fromDirection(side) == null) {
+                        continue;
+                    }
+                    
                     int avalibleCapacity = fluidTransporter.getSideRemainingCapacity(ForgeDirection.fromDirection(side));
                     if (avalibleCapacity <= 0) {
                         return;

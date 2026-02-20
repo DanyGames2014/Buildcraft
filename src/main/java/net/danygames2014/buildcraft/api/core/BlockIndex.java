@@ -80,9 +80,7 @@ public class BlockIndex implements Comparable<BlockIndex> {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof BlockIndex) {
-            BlockIndex b = (BlockIndex) obj;
-
+        if (obj instanceof BlockIndex b) {
             return b.x == x && b.y == y && b.z == z;
         }
 

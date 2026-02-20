@@ -1,11 +1,7 @@
 package net.danygames2014.buildcraft.mixin;
 
-import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.item.FacadeItem;
-import net.danygames2014.whatsthis.WhatsThis;
-import net.danygames2014.whatsthis.item.ProbeUtil;
 import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

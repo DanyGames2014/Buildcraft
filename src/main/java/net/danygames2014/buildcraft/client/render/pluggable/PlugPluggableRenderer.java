@@ -10,9 +10,10 @@ import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class PlugPluggableRenderer implements PipePluggableRenderer {
     public static final PlugPluggableRenderer INSTANCE = new PlugPluggableRenderer();
-    private float zFightOffset = 1 / 4096.0F;
+    private final float zFightOffset = 1 / 4096.0F;
 
     @Override
     public void renderPluggable(BlockRenderManager blockRenderManager, PipeBlockEntity pipe, Direction side, PipePluggable pluggable, int x, int y, int z) {

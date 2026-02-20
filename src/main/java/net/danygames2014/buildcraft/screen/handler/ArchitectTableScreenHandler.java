@@ -16,10 +16,10 @@ import net.minecraft.screen.slot.Slot;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
 public class ArchitectTableScreenHandler extends ScreenHandler {
-    public PlayerEntity player;
-    public Inventory playerInventory;
+    public final PlayerEntity player;
+    public final Inventory playerInventory;
     
-    public ArchitectTableBlockEntity blockEntity;
+    public final ArchitectTableBlockEntity blockEntity;
     private int progress;
     private String lastName = "";
     

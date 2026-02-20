@@ -6,7 +6,6 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.StatementMouseClick;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
-import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -14,9 +13,6 @@ import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Locale;
 
 public class ActionParameterSignal implements StatementParameter {
@@ -49,9 +45,7 @@ public class ActionParameterSignal implements StatementParameter {
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof ActionParameterSignal) {
-            ActionParameterSignal param = (ActionParameterSignal) object;
-
+        if (object instanceof ActionParameterSignal param) {
             return param.color == color;
         } else {
             return false;

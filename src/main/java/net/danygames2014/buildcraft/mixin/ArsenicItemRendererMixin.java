@@ -81,7 +81,7 @@ public class ArsenicItemRendererMixin {
     )
     void renderModel(ArsenicItemRenderer instance, ItemEntity item, float x, float y, float z, float delta, ItemStack stack, float var11, float var12, byte renderedAmount, SpriteAtlasTexture atlas, BakedModel model, Operation<Void> original) {
         float f1 = var11;
-        float f2 = var12;
+        
         if (item instanceof TravellingItemEntity) {
             if (stack.getItem() instanceof BlockItem) {
                 f1 = 0.25F;
@@ -93,7 +93,8 @@ public class ArsenicItemRendererMixin {
                 y -= 0.5F;
             }
         }
-        original.call(instance, item, x, y, z, delta, stack, f1, f2, renderedAmount, atlas, model);
+        
+        original.call(instance, item, x, y, z, delta, stack, f1, var12, renderedAmount, atlas, model);
     }
 
     @WrapOperation(

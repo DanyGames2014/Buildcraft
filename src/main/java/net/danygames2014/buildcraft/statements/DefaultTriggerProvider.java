@@ -16,7 +16,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class DefaultTriggerProvider implements TriggerProvider {
     @Override

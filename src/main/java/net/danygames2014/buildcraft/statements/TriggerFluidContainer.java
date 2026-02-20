@@ -63,6 +63,7 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
                 return false;
             }
 
+            //noinspection EnhancedSwitchMigration
             switch (state) {
                 case Empty:
                     for (FluidStack c : liquids) {

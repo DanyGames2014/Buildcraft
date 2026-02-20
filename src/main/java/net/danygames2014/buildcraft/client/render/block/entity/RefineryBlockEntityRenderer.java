@@ -42,9 +42,9 @@ public class RefineryBlockEntityRenderer extends BlockEntityRenderer {
         FluidStack fluid1 = null, fluid2 = null, fluidResult = null;
         int color1 = 0xFFFFFF, color2 = 0xFFFFFF, colorResult = 0xFFFFFF;
 
-        float anim = 0;
-        int angle = 0;
-        ModelPart theMagnet = magnet[0];
+        float anim;
+        int angle;
+        ModelPart theMagnet;
         if(blockEntity instanceof RefineryBlockEntity refineryBlockEntity){
             if(refineryBlockEntity.getFluid(0, null) != null){
                 fluid1 = refineryBlockEntity.getFluid(0, null);

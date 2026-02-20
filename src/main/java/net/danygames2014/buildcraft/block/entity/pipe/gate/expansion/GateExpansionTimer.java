@@ -26,8 +26,7 @@ public class GateExpansionTimer extends GateExpansionBuildcraft implements GateE
     }
 
     private class GateExpansionControllerTimer extends GateExpansionController {
-        private class Timer {
-
+        private static class Timer {
             private static final int ACTIVE_TIME = 5;
             private final TriggerClockTimer.Time time;
             private int clock;
@@ -60,8 +59,7 @@ public class GateExpansionTimer extends GateExpansionBuildcraft implements GateE
 
         @Override
         public boolean isTriggerActive(Statement trigger, StatementParameter[] parameters) {
-            if (trigger instanceof TriggerClockTimer) {
-                TriggerClockTimer timerTrigger = (TriggerClockTimer) trigger;
+            if (trigger instanceof TriggerClockTimer timerTrigger) {
                 return timers[timerTrigger.time.ordinal()].isActive();
             }
             return super.isTriggerActive(trigger, parameters);

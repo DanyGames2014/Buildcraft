@@ -11,7 +11,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class PipeTriggerProvider implements TriggerProvider {
     @Override
@@ -55,8 +54,9 @@ public class PipeTriggerProvider implements TriggerProvider {
 
     @Override
     public Collection<TriggerExternal> getExternalTriggers(Direction side, BlockEntity blockEntity) {
+        @SuppressWarnings("UnnecessaryLocalVariable") 
         LinkedList<TriggerExternal> result = new LinkedList<>();
-
+        // TODO: Huh? why does it just return an empty linkedlist
         return result;
     }
 }

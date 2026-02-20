@@ -4,7 +4,6 @@ import net.danygames2014.buildcraft.block.entity.QuarryBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -151,16 +150,18 @@ public class MechanicalArmEntity extends Entity {
         updatePosition();
     }
 
-    private EntityBlockWithParent newDrill(World w, double i, double j, double k, double l, double d, double e){
-        EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, i, j, k, l, d, e, this);
+    @SuppressWarnings("SameParameterValue")
+    private EntityBlockWithParent newDrill(World w, double x, double y, double z, double sizeX, double sizeY, double sizeZ){
+        EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, x, y, z, sizeX, sizeY, sizeZ, this);
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
             entityBlock.texture = TextureListener.drill.index;
         }
         return entityBlock;
     }
 
-    private EntityBlockWithParent newDrillHead(World w, double i, double j, double k, double l, double d, double e){
-        EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, i, j, k, l, d, e, this);
+    @SuppressWarnings("SameParameterValue")
+    private EntityBlockWithParent newDrillHead(World w, double x, double y, double z, double sizeX, double sizeY, double sizeZ){
+        EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, x, y, z, sizeX, sizeY, sizeZ, this);
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
             entityBlock.texture = TextureListener.drillHead.index;
         }

@@ -1,6 +1,5 @@
 package net.danygames2014.buildcraft.util;
 
-import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;

@@ -6,10 +6,9 @@ public class StatementSlot {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof StatementSlot)) {
+        if (!(obj instanceof StatementSlot s)) {
             return false;
         }
-        StatementSlot s = (StatementSlot) obj;
         if (s.statement != statement || parameters.length != s.parameters.length) {
             return false;
         }
@@ -19,6 +18,15 @@ public class StatementSlot {
             if (p1 == null && p2 != null) {
                 return false;
             }
+            
+            if (p1 != null && p2 == null) {
+                return false;
+            }
+            
+            if (p1 == null) {
+                return true;
+            }
+            
             if (!(p1.equals(p2))) {
                 return false;
             }

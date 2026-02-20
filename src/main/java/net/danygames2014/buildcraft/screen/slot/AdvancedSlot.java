@@ -1,9 +1,6 @@
 package net.danygames2014.buildcraft.screen.slot;
 
-import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.screen.AdvancedInterfaceScreen;
-import net.danygames2014.buildcraft.screen.BuildcraftScreen;
-import net.danygames2014.buildcraft.util.ScreenUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
@@ -14,9 +11,10 @@ import org.lwjgl.opengl.GL11;
 
 public class AdvancedSlot {
     private static final String SLOT_TEXTURE = "/assets/buildcraft/stationapi/textures/gui/slot.png";
-    public int x, y;
-    public AdvancedInterfaceScreen screen;
-    public boolean drawBackground = false;
+    public final int x;
+    public final int y;
+    public final AdvancedInterfaceScreen screen;
+    public final boolean drawBackground = false;
 
     public AdvancedSlot(AdvancedInterfaceScreen screen, int x, int y) {
         this.x = x;
@@ -98,9 +96,5 @@ public class AdvancedSlot {
 
         screen.drawStack(item, cornerX + x, cornerY + y);
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    public void selected () {
-
     }
 }

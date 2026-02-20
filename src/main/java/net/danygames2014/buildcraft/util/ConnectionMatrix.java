@@ -1,7 +1,6 @@
 package net.danygames2014.buildcraft.util;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
-import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.io.DataInputStream;

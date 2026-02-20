@@ -10,7 +10,6 @@ import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.resource.language.TranslationStorage;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -57,8 +56,7 @@ public class TriggerInventory extends BCStatement implements TriggerExternal {
 
             ItemStack[] inventory = capability.getInventory(side.getOpposite());
 
-            for(int index = 0; index < inventory.length; index++){
-                ItemStack stack = inventory[index];
+            for (ItemStack stack : inventory) {
                 // TODO: check if buildcraft also tests if the items fit together count wise or if it only checks item type
                 foundItems |= stack != null && (searchedStack == null || searchedStack.isItemEqual(stack));
 
@@ -70,16 +68,12 @@ public class TriggerInventory extends BCStatement implements TriggerExternal {
                 return false;
             }
 
-            switch (state) {
-                case Empty:
-                    return !foundItems;
-                case Contains:
-                    return foundItems;
-                case Space:
-                    return foundSpace;
-                default:
-                    return !foundSpace;
-            }
+            return switch (state) {
+                case Empty -> !foundItems;
+                case Contains -> foundItems;
+                case Space -> foundSpace;
+                default -> !foundSpace;
+            };
         }
 
         return false;

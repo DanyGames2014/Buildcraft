@@ -13,8 +13,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 public class ArchitectTableScreen extends HandledScreen {
-    public ArchitectTableBlockEntity blockEntity;
-    public PlayerEntity player;
+    public final ArchitectTableBlockEntity blockEntity;
+    public final PlayerEntity player;
     
     public TextFieldWidget nameField;
 

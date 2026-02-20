@@ -11,7 +11,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 public class PipeActionProvider implements ActionProvider {
     @Override
@@ -26,6 +25,7 @@ public class PipeActionProvider implements ActionProvider {
             }
         }
 
+        //noinspection IfStatementWithIdenticalBranches
         if (pipe == null) {
             return result;
         }

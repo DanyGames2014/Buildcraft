@@ -29,7 +29,7 @@ import java.util.HashMap;
 public class FluidPipeTransporter extends PipeTransporter implements FluidHandler {
     static final int pipeFluidsBaseFlowRate = 10;
 
-    public static final HashMap<Block, Integer> fluidCapacities = new HashMap<net.minecraft.block.Block, Integer>();
+    public static final HashMap<Block, Integer> fluidCapacities = new HashMap<>();
 
     static {
         fluidCapacities.put(Buildcraft.woodenFluidPipe, 1 * pipeFluidsBaseFlowRate);

@@ -10,11 +10,10 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements PathProvider {
-    private static ArrayList<PathMarkerBlockEntity> availableMarkers = new ArrayList<PathMarkerBlockEntity>();
+    private static ArrayList<PathMarkerBlockEntity> availableMarkers = new ArrayList<>();
 
     public int x0, y0, z0, x1, y1, z1;
     public boolean loadLink0 = false;
@@ -133,8 +132,8 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
 
     @Override
     public List<BlockIndex> getPath() {
-        HashSet<BlockIndex> visitedPaths = new HashSet<BlockIndex>();
-        ArrayList<BlockIndex> res = new ArrayList<BlockIndex>();
+        HashSet<BlockIndex> visitedPaths = new HashSet<>();
+        ArrayList<BlockIndex> res = new ArrayList<>();
 
         PathMarkerBlockEntity nextTile = this;
 
@@ -255,11 +254,6 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
     }
 
     public static void clearAvailableMarkersList(World w) {
-        for (Iterator<PathMarkerBlockEntity> it = availableMarkers.iterator(); it.hasNext();) {
-            PathMarkerBlockEntity t = it.next();
-            if (t.world.dimension.id != w.dimension.id) {
-                it.remove();
-            }
-        }
+        availableMarkers.removeIf(t -> t.world.dimension.id != w.dimension.id);
     }
 }

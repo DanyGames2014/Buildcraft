@@ -61,13 +61,8 @@ public class ToggleDiamondPipeFilterC2SPacket extends Packet implements ManagedP
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
         if (player.currentScreenHandler instanceof DiamondPipeScreenHandler diamondPipeHandler) {
             switch (filterIndex) {
-                case 0 -> {
-                    diamondPipeHandler.pipe.filterMeta = value;
-                }
-                
-                case 1 -> {
-                    diamondPipeHandler.pipe.filterTags = value;
-                }
+                case 0 -> diamondPipeHandler.pipe.filterMeta = value;
+                case 1 -> diamondPipeHandler.pipe.filterTags = value;
             }
         }
     }

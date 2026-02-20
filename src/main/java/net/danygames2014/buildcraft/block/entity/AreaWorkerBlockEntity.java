@@ -95,7 +95,7 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
         public int maxX;
         public int maxY;
         public int maxZ;
-        public ArrayList<LaserData> lasers = new ArrayList<>();
+        public final ArrayList<LaserData> lasers = new ArrayList<>();
 
         public WorkingArea() {
         }

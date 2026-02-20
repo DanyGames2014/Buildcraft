@@ -2,7 +2,6 @@ package net.danygames2014.buildcraft.block.entity.pipe;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.util.math.Direction;
 
 public abstract class PipeTransporter {
     public final PipeBlockEntity blockEntity;

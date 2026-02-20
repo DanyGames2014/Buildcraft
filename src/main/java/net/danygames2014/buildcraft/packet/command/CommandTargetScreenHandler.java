@@ -9,7 +9,7 @@ import java.io.DataOutputStream;
 
 public class CommandTargetScreenHandler extends CommandTarget{
     @Override
-    public Class getHandledClass() {
+    public Class<?> getHandledClass() {
         return ScreenHandler.class;
     }
 

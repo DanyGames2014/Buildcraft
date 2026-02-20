@@ -59,9 +59,9 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     private PipeWorldRenderer pipeWorldRenderer;
     @Environment(EnvType.CLIENT)
     private PipeItemRenderer pipeItemRenderer;
-    private Identifier texture;
+    private final Identifier texture;
     @Nullable
-    private Identifier alternativeTexture;
+    private final Identifier alternativeTexture;
 
     public PipeBlock(Identifier identifier, Material material, Identifier texture, @Nullable Identifier alternativeTexture, PipeType type, PipeBehavior behavior, PipeTransporter.PipeTransporterFactory transporter, PipeBlockEntityFactory blockEntityFactory) {
         super(identifier, material);
@@ -443,11 +443,11 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Environment(EnvType.CLIENT)
     @Override
-    public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {;
+    public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {
         if (blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipeWorldRenderer.renderPipe(blockRenderManager, blockView, pipe, x, y, z);
         } else {
-            System.out.println(currentRenderPass);
+            System.out.println(currentRenderPass); // TODO: Debug prints my beloved
         }
         return false;
     }

@@ -5,8 +5,6 @@ import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
 
 public class PipeItemRenderer {

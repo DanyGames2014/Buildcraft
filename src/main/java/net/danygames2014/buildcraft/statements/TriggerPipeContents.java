@@ -15,8 +15,6 @@ import net.danygames2014.buildcraft.entity.TravellingItemEntity;
 import net.danygames2014.nyalib.fluid.FluidBucket;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.minecraft.client.resource.language.TranslationStorage;
-import net.modificationstation.stationapi.api.client.StationRenderAPI;
-import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 
 import java.util.Locale;
@@ -42,13 +40,10 @@ public class TriggerPipeContents extends BCStatement implements TriggerInternal 
 
     @Override
     public int maxParameters() {
-        switch (kind) {
-            case containsItems:
-            case containsFluids:
-                return 1;
-            default:
-                return 0;
-        }
+        return switch (kind) {
+            case containsItems, containsFluids -> 1;
+            default -> 0;
+        };
     }
 
     @Override
@@ -101,7 +96,7 @@ public class TriggerPipeContents extends BCStatement implements TriggerInternal 
             }
         } else if (pipe.transporter instanceof EnergyPipeTransporter energyTransporter) {
             switch (kind) {
-                case empty:
+                case empty -> {
                     for (double s : energyTransporter.displayPower) {
                         if (s > 1e-4) {
                             return false;
@@ -109,7 +104,9 @@ public class TriggerPipeContents extends BCStatement implements TriggerInternal 
                     }
 
                     return true;
-                case containsEnergy:
+                }
+                
+                case containsEnergy -> {
                     for (double s : energyTransporter.displayPower) {
                         if (s > 1e-4) {
                             return true;
@@ -117,11 +114,18 @@ public class TriggerPipeContents extends BCStatement implements TriggerInternal 
                     }
 
                     return false;
-                case requestsEnergy:
+                }
+                
+                case requestsEnergy -> {
                     return energyTransporter.isQueryingPower();
-                default:
-                case tooMuchEnergy:
+                }
+                
+                case tooMuchEnergy -> {
                     return energyTransporter.isOverloaded();
+                }
+                
+                default -> {
+                }
             }
         }
 

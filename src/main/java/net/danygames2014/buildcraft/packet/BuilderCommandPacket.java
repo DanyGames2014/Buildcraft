@@ -17,7 +17,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class BuilderCommandPacket extends Packet implements ManagedPacket<BuilderCommandPacket> {
-    public static final PacketType<BuilderCommandPacket> TYPE = PacketType.<BuilderCommandPacket>builder(true, true, BuilderCommandPacket::new).build();
+    public static final PacketType<BuilderCommandPacket> TYPE = PacketType.builder(false, true, BuilderCommandPacket::new).build();
 
     /**
      * <p><bold>Client -> Server</bold>
@@ -54,15 +54,9 @@ public class BuilderCommandPacket extends Packet implements ManagedPacket<Builde
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        SideUtil.run(() -> handleClient(networkHandler), () -> handleServer(networkHandler));
+        SideUtil.run(() -> {}, () -> handleServer(networkHandler));
     }
 
-    // This will run on client
-    @Environment(EnvType.CLIENT)
-    public void handleClient(NetworkHandler networkHandler) {
-    }
-
-    // This will run on server
     @Environment(EnvType.SERVER)
     public void handleServer(NetworkHandler networkHandler) {
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);

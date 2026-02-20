@@ -105,10 +105,9 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
                     if(dir == side || dir == side.getOpposite()){
                         renderBlock.setRenderSide(dir, true);
                     } else {
-                        if(!(pipe.getPipePluggable(dir) instanceof FacadePluggable)){
+                        if(!(pipe.getPipePluggable(dir) instanceof FacadePluggable facadePluggable2)){
                             renderBlock.setRenderSide(dir, true);
                         } else {
-                            FacadePluggable facadePluggable2 = (FacadePluggable) pipe.getPipePluggable(dir);
                             renderBlock.setRenderSide(dir, facadePluggable2.getBlock() == null);
                         }
                     }

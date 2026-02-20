@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.api.energy;
 
 import net.danygames2014.nyalib.fluid.Fluid;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class EngineFuel {
     public final Fluid fluid;
     public final float powerPerCycle;

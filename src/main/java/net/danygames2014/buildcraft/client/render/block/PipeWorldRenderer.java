@@ -14,7 +14,6 @@ import net.danygames2014.buildcraft.util.ColorUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.item.DyeItem;
 import net.minecraft.world.BlockView;
 import net.modificationstation.stationapi.api.util.math.Direction;
 

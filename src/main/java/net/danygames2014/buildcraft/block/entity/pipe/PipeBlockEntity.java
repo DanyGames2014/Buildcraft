@@ -491,11 +491,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             return false;
         }
 
-        if(hasBlockingPluggable(direction) || pipe.hasBlockingPluggable(direction.getOpposite())){
-            return false;
-        }
-
-        return true; //PipeUtil.checkPipeConnections(this, pipe);
+        return !hasBlockingPluggable(direction) && !pipe.hasBlockingPluggable(direction.getOpposite());//PipeUtil.checkPipeConnections(this, pipe);
     }
 
     // NBT
@@ -693,7 +689,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
     @Override
     public Serializable getStateInstance(byte stateId) {
-        Class stateClass = StateRegistry.getClass(stateId);
+        Class<? extends Serializable> stateClass = StateRegistry.getClass(stateId);
         if(stateClass == PipeRenderState.class){
             return renderState;
         }
@@ -715,7 +711,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         if(!world.isRemote){
             return;
         }
-        Class stateClass = StateRegistry.getClass(stateId);
+        Class<? extends Serializable> stateClass = StateRegistry.getClass(stateId);
         if(stateClass == PipeRenderState.class){
             if(renderState.needsRenderUpdate()){
                 world.setBlockDirty(x, y, z);
@@ -730,25 +726,24 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
                 PipePluggable old = sideProperties.pluggables[i];
                 PipePluggable newer = newPluggables[i];
-                if (old == null && newer == null) {
-                    continue;
-                } else if (old != null && newer != null && old.getClass() == newer.getClass()) {
-                    if (newer.requiresRenderUpdate(old)) {
+                if (old != null || newer != null) {
+                    if (old != null && newer != null && old.getClass() == newer.getClass()) {
+                        if (newer.requiresRenderUpdate(old)) {
+                            world.setBlockDirty(x, y, z);
+                            break;
+                        }
+                    } else {
+                        // one of them is null but not the other, so update
                         world.setBlockDirty(x, y, z);
                         break;
                     }
-                } else {
-                    // one of them is null but not the other, so update
-                    world.setBlockDirty(x, y, z);
-                    break;
                 }
             }
             sideProperties.pluggables = newPluggables.clone();
 
             for (int i = 0; i < Direction.values().length; i++) {
                 final PipePluggable pluggable = getPipePluggable(Direction.byId(i));
-                if (pluggable instanceof GatePluggable) {
-                    final GatePluggable gatePluggable = (GatePluggable) pluggable;
+                if (pluggable instanceof GatePluggable gatePluggable) {
                     Gate gate = gates[i];
                     if (gate == null || gate.logic != gatePluggable.getLogic() || gate.material != gatePluggable.getMaterial()) {
                         gates[i] = GateFactory.makeGate(this, gatePluggable.getMaterial(), gatePluggable.getLogic(), Direction.byId(i));
@@ -769,16 +764,15 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             if (gate == null) {
                 continue;
             }
+            
             GatePluggable gatePluggable = (GatePluggable) sideProperties.pluggables[i];
-            if (gatePluggable.getExpansions().length > 0) {
-                for (GateExpansion expansion : gatePluggable.getExpansions()) {
-                    if (expansion != null) {
-                        if (!gate.expansions.containsKey(expansion)) {
-                            gate.addGateExpansion(expansion);
-                        }
-                    } else {
-                        resyncGateExpansions = true;
+            for (GateExpansion expansion : gatePluggable.getExpansions()) {
+                if (expansion != null) {
+                    if (!gate.expansions.containsKey(expansion)) {
+                        gate.addGateExpansion(expansion);
                     }
+                } else {
+                    resyncGateExpansions = true;
                 }
             }
         }

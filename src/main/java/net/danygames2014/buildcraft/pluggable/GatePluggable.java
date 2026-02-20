@@ -5,7 +5,6 @@ import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
-import net.danygames2014.buildcraft.block.entity.pipe.gate.GateDefinition;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.client.render.PipePluggableDynamicRenderer;
@@ -51,7 +50,7 @@ public class GatePluggable extends PipePluggable {
         this.logic = gate.logic;
 
         Set<GateExpansion> gateExpansions = gate.expansions.keySet();
-        this.expansions = gateExpansions.toArray(new GateExpansion[gateExpansions.size()]);
+        this.expansions = gateExpansions.toArray(new GateExpansion[0]);
     }
 
     @Override
@@ -125,8 +124,8 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public void update(PipeBlockEntity pipe, Direction direction) {
-        isLit = realGate != null ? realGate.isGateActive() : false;
-        isPulsing = realGate != null ? realGate.isGatePulsing() : false;
+        isLit = realGate != null && realGate.isGateActive();
+        isPulsing = realGate != null && realGate.isGatePulsing();
         if (isPulsing || pulseStage > 0.11F) {
             // if it is moving, or is still in a moved state, then complete
             // the current movement
@@ -170,7 +169,7 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public boolean isBlocking(PipeBlockEntity pipe, Direction direction) {
-        return true;
+        return super.isBlocking(pipe, direction);
     }
 
     @Override
@@ -178,10 +177,9 @@ public class GatePluggable extends PipePluggable {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof GatePluggable)) {
+        if (!(obj instanceof GatePluggable o)) {
             return false;
         }
-        GatePluggable o = (GatePluggable) obj;
         if (o.material.ordinal() != material.ordinal()) {
             return false;
         }
@@ -219,8 +217,8 @@ public class GatePluggable extends PipePluggable {
     public void writeData(DataOutputStream stream) throws IOException {
         stream.writeByte(material.ordinal());
         stream.writeByte(logic.ordinal());
-        stream.writeBoolean(realGate != null ? realGate.isGateActive() : false);
-        stream.writeBoolean(realGate != null ? realGate.isGatePulsing() : false);
+        stream.writeBoolean(realGate != null && realGate.isGateActive());
+        stream.writeBoolean(realGate != null && realGate.isGatePulsing());
 
         final int expansionsSize = expansions.length;
         stream.writeInt(expansionsSize);

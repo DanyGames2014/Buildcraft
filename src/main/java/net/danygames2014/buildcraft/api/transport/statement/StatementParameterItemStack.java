@@ -32,9 +32,7 @@ public class StatementParameterItemStack implements StatementParameter {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof StatementParameterItemStack) {
-            StatementParameterItemStack param = (StatementParameterItemStack) obj;
-
+        if (obj instanceof StatementParameterItemStack param) {
             return ItemStack.areEqual(stack, param.stack);
         } else {
             return false;
@@ -63,13 +61,18 @@ public class StatementParameterItemStack implements StatementParameter {
 
     @Override
     public void readNBT(NbtCompound nbt) {
-        stack = new ItemStack(nbt);
+        if (nbt.contains("stack")) {
+            stack = new ItemStack(nbt.getCompound("stack"));
+        }
     }
 
-    // TODO: null check here
     @Override
     public void writeNBT(NbtCompound nbt) {
-        stack.writeNbt(nbt);
+        if (stack != null) {
+            NbtCompound stackNbt = new NbtCompound();
+            stack.writeNbt(stackNbt);
+            nbt.put("stack", stackNbt);
+        }
     }
 
     @Override

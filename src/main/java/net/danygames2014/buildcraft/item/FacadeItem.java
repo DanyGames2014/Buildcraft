@@ -2,22 +2,15 @@ package net.danygames2014.buildcraft.item;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
-import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
-import org.lwjgl.input.Keyboard;
-
-import java.awt.*;
 
 public class FacadeItem extends TemplateItem implements PipePluggableItem {
     public FacadeItem(Identifier identifier) {

@@ -3,17 +3,17 @@ package net.danygames2014.buildcraft.screen.handler;
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
 import net.danygames2014.buildcraft.screen.slot.CombustionEngineFuelSlot;
 import net.danygames2014.buildcraft.screen.slot.InvisibleFluidSlot;
-import net.danygames2014.nyalib.fluid.FluidSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class CombustionEngineScreenHandler extends ScreenHandler {
-    private PlayerEntity player;
-    private Inventory playerInventory;
+    private final PlayerEntity player;
+    private final Inventory playerInventory;
 
-    private CombustionEngineBlockEntity engine;
+    private final CombustionEngineBlockEntity engine;
 
     public CombustionEngineScreenHandler(PlayerEntity player, CombustionEngineBlockEntity engine) {
         this.player = player;

@@ -71,8 +71,7 @@ public class TriggerInventoryLevel extends BCStatement implements TriggerExterna
             ItemStack[] inventory = capability.getInventory(side.getOpposite());
 
             // TODO: also check if the item is valid in the current slot
-            for(int index = 0; index < inventory.length; index++){
-                ItemStack stackInSlot = inventory[index];
+            for (ItemStack stackInSlot : inventory) {
                 if (stackInSlot == null || searchStack.isItemEqual(stackInSlot)) {
                     stackSpace++;
                     foundItems += stackInSlot == null ? 0 : stackInSlot.count;

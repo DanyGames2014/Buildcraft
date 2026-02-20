@@ -46,8 +46,8 @@ public class PipeConnectionMatrix implements Serializable {
     }
 
     public void writeData(DataOutputStream stream) throws IOException {
-        for(int i = 0; i < connections.length; i++){
-            stream.writeByte(connections[i]);
+        for (int connection : connections) {
+            stream.writeByte(connection);
         }
     }
 

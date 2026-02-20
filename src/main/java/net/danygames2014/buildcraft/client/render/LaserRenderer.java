@@ -3,9 +3,7 @@ package net.danygames2014.buildcraft.client.render;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
 import net.minecraft.client.model.ModelPart;
-import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.texture.TextureManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
