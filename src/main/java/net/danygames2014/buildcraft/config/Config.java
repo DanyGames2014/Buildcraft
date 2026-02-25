@@ -20,6 +20,9 @@ public class Config implements ConfigFactoryProvider {
 
     @ConfigRoot(value = "machine", visibleName = "Machine Config", index = 2)
     public static final MachineConfig MACHINE_CONFIG = new MachineConfig();
+    
+    @ConfigRoot(value = "worldgen", visibleName = "Worldgen Config", index = 3)
+    public static final WorldgenConfig WORLDGEN_CONFIG = new WorldgenConfig();
 
     @Override
     public void provideLoadFactories(ImmutableMap.Builder<Type, SeptFunction<String, ConfigEntry, Field, Object, Boolean, Object, Object, ConfigEntryHandler<?>>> immutableBuilder) {

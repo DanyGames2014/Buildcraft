@@ -5,14 +5,15 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockMixin",
-    "CraftingRecipeManagerMixin"
+    "CraftingRecipeManagerMixin",
+    "FlowingLiquidBlockMixin"
   ],
   "server": [
     "ServerPlayerInteractionManagerMixin"
   ],
   "client": [
-    "ArsenicOverlayRendererMixin",
     "ArsenicItemRendererMixin",
+    "ArsenicOverlayRendererMixin",
     "BlockRenderManagerMixin",
     "ChunkBuilderMixin",
     "InteractionManagerMixin",
