@@ -21,6 +21,7 @@ public abstract class FlowingLiquidBlockMixin extends LiquidBlock {
         super(i, material);
     }
 
+    // TODO: Move to NyaLib and build a fluid interactions API around it
     @Inject(method = "canSpreadTo", at = @At(value = "HEAD"), cancellable = true)
     public void aVoid(World world, int x, int y, int z, CallbackInfoReturnable<Boolean> cir) {
         Fluid fluid = FluidRegistry.get(this.id);
