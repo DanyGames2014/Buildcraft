@@ -2,7 +2,6 @@ package net.danygames2014.buildcraft.worldgen.oil;
 
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.event.OilBiomeEvent;
 import net.danygames2014.buildcraft.init.FluidListener;
 import net.danygames2014.nyalib.fluid.Fluid;
@@ -70,10 +69,6 @@ public class OilSpringFeature {
         if (biomeBonusMultipliers.containsKey(biome)) {
             bonus *= biomeBonusMultipliers.getInt(biome);
         }
-
-//        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-//            bonus *= 30.0;
-//        }
 
         GenType type = GenType.NONE;
         if (random.nextDouble() <= 0.0004 * bonus) {// 0.04%
@@ -154,7 +149,7 @@ public class OilSpringFeature {
 
                 // Generate Spout
                 int baseY;
-                if (type == GenType.LARGE && Config.WORLDGEN_CONFIG.generateOilSprings && random.nextDouble() <= 0.25) {
+                if (type == GenType.LARGE && random.nextDouble() <= 0.25) {
                     baseY = 0;
                 } else {
                     baseY = wellY;
@@ -184,8 +179,6 @@ public class OilSpringFeature {
                 if (blockId == biome.topBlockId) {
                     generateSurfaceDeposit(world, random, biome, lakeX, lakeY, lakeZ, 5 + random.nextInt(10));
                 }
-
-                Minecraft.INSTANCE.player.sendMessage("- Generated");
             }
         }
     }

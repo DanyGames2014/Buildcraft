@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.worldgen;
 
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.worldgen.oil.OilSpringFeature;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.event.world.WorldEvent;
@@ -16,7 +17,9 @@ public class ChunkDecorationListener {
     }
 
     private void decorateOverworld(WorldGenEvent.ChunkDecoration event) {
-        oilSpringFeature.generateOil(event.world, event.random, event.x, event.z);
+        if (Config.WORLDGEN_CONFIG.generateOil) {
+            oilSpringFeature.generateOil(event.world, event.random, event.x, event.z);
+        }
     }
 
     @EventListener
