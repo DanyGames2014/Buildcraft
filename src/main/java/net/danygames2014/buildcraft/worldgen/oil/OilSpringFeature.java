@@ -1,20 +1,22 @@
 package net.danygames2014.buildcraft.worldgen.oil;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.danygames2014.buildcraft.config.Config;
+import net.danygames2014.buildcraft.event.OilBiomeEvent;
 import net.danygames2014.buildcraft.init.FluidListener;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.Fluids;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.modificationstation.stationapi.api.StationAPI;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
@@ -23,9 +25,18 @@ public class OilSpringFeature {
     public static final OilSpringFeature INSTANCE = new OilSpringFeature();
     private static final byte LARGE_WELL_HEIGHT = 16;
     private static final byte MEDIUM_WELL_HEIGHT = 6;
-    public final Set<Biome> excessiveBiomes = new HashSet<>();
-    public final Set<Biome> surfaceDepositBiomes = new HashSet<>();
-    public final Set<Biome> excludedBiomes = new HashSet<>();
+    /**
+     * Biomes which allow the generation of oil lakes
+     */
+    public final Set<Biome> surfaceDepositBiomes = new ObjectOpenHashSet<>();
+    /**
+     * Biomes which will not generate any oil
+     */
+    public final Set<Biome> excludedBiomes = new ObjectOpenHashSet<>();
+    /**
+     * The bonus of each biome
+     */
+    public final Object2IntOpenHashMap<Biome> biomeBonusMultipliers = new Object2IntOpenHashMap<>();
 
     private enum GenType {
         LARGE,
@@ -35,11 +46,7 @@ public class OilSpringFeature {
     }
 
     public OilSpringFeature() {
-        surfaceDepositBiomes.add(Biome.DESERT);
-        surfaceDepositBiomes.add(Biome.TAIGA);
-
-        excludedBiomes.add(Biome.SKY);
-        excludedBiomes.add(Biome.HELL);
+        StationAPI.EVENT_BUS.post(new OilBiomeEvent(biomeBonusMultipliers, surfaceDepositBiomes, excludedBiomes));
     }
 
     public void generateOil(World world, Random random, int chunkX, int chunkZ) {
@@ -60,13 +67,13 @@ public class OilSpringFeature {
 //                || (BiomeDictionary.isBiomeOfType(biome, FOREST) && BiomeDictionary.isBiomeOfType(biome, FROZEN));
 
         double bonus = oilBiome ? 3.0 : 1.0;
-        if (excessiveBiomes.contains(biome)) {
-            bonus *= 30.0;
+        if (biomeBonusMultipliers.containsKey(biome)) {
+            bonus *= biomeBonusMultipliers.getInt(biome);
         }
 
-        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            bonus *= 30.0;
-        }
+//        if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
+//            bonus *= 30.0;
+//        }
 
         GenType type = GenType.NONE;
         if (random.nextDouble() <= 0.0004 * bonus) {// 0.04%
@@ -153,12 +160,6 @@ public class OilSpringFeature {
                     baseY = wellY;
                 }
 
-                if (world.getBlockId(wellX, baseY, wellZ) == Block.BEDROCK.id) {
-                    if (Config.WORLDGEN_CONFIG.generateOilSprings) {
-                        world.setBlockStateWithNotify(wellX, baseY, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
-
-                    }
-                }
                 for (int y = baseY + 1; y <= maxHeight; ++y) {
                     world.setBlockStateWithNotify(wellX, y, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
                 }
@@ -172,6 +173,7 @@ public class OilSpringFeature {
                     }
                 }
             }
+            
             case LAKE -> {
                 // Generate a surface oil lake
                 int lakeX = x;
@@ -182,6 +184,8 @@ public class OilSpringFeature {
                 if (blockId == biome.topBlockId) {
                     generateSurfaceDeposit(world, random, biome, lakeX, lakeY, lakeZ, 5 + random.nextInt(10));
                 }
+
+                Minecraft.INSTANCE.player.sendMessage("- Generated");
             }
         }
     }
