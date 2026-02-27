@@ -21,6 +21,9 @@ public class MachineConfig {
     
     @ConfigCategory(name = "Refinery")
     public RefineryConfig refinery = new RefineryConfig();
+
+    @ConfigCategory(name = "Pump")
+    public PumpConfig pump = new PumpConfig();
     
     @ConfigCategory(name = "Engine")
     public EngineConfig engine = new EngineConfig();
@@ -82,5 +85,10 @@ public class MachineConfig {
     public static class EngineConfig {
         @ConfigEntry(name = "Fuel Burn Time Multiplier", minValue = 0.1F, maxValue = 10.0F, multiplayerSynced = true)
         public Float fuelBurnTimeMultiplier = 1.0F; 
+    }
+
+    public static class PumpConfig {
+        @ConfigEntry(name = "Consume water sources", description = "consumeWaterSources", multiplayerSynced = true)
+        public Boolean consumeWaterSources = true;
     }
 }
