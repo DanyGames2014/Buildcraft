@@ -115,10 +115,9 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         return array;
     }
 
-    private static void stringsToStatements(Collection<Statement> statements, String[] strings) {
+    private static void identifiersToStatements(Collection<Statement> statements, Identifier[] identifiers) {
         statements.clear();
-        for (String id : strings) {
-            // TODO: That hashmap is Identifier -> Statement, not String -> Statement. -Dany
+        for (Identifier id : identifiers) {
             statements.add(StatementManager.statements.get(id));
         }
     }
@@ -357,17 +356,17 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
             } else if (side == EnvType.CLIENT) {
                 if ("init".equals(command)) {
                     setGate(stream.readByte());
-                    String[] triggerStrings = new String[stream.readShort()];
-                    String[] actionStrings = new String[stream.readShort()];
-                    for (int i = 0; i < triggerStrings.length; i++) {
-                        triggerStrings[i] = stream.readUTF();
+                    Identifier[] triggerIdentifiers = new Identifier[stream.readShort()];
+                    Identifier[] actionIdentifiers = new Identifier[stream.readShort()];
+                    for (int i = 0; i < triggerIdentifiers.length; i++) {
+                        triggerIdentifiers[i] = Identifier.tryParse(stream.readUTF());
                     }
-                    for (int i = 0; i < actionStrings.length; i++) {
-                        actionStrings[i] = stream.readUTF();
+                    for (int i = 0; i < actionIdentifiers.length; i++) {
+                        actionIdentifiers[i] = Identifier.tryParse(stream.readUTF());
                     }
 
-                    stringsToStatements(this.potentialTriggers, triggerStrings);
-                    stringsToStatements(this.potentialActions, actionStrings);
+                    identifiersToStatements(this.potentialTriggers, triggerIdentifiers);
+                    identifiersToStatements(this.potentialActions, actionIdentifiers);
                 }
             }
 
@@ -461,9 +460,12 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     /**
      * GATE INFORMATION *
      */
-    // TODO: probably return right gui texture here
     public String  getGateGuiFile() {
         return "/assets/buildcraft/stationapi/textures/gui/" + gate.material.backgroundTexture;
+    }
+
+    public void tick(){
+        sendContentUpdates();
     }
 
     public String getGateName() {

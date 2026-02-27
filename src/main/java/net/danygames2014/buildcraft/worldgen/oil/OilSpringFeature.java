@@ -83,10 +83,6 @@ public class OilSpringFeature {
             return;
         }
 
-        if (Minecraft.INSTANCE.player != null) {
-            Minecraft.INSTANCE.player.sendMessage(x + " : " + z + " : " + type.name());
-        }
-
         // Find ground level
         int groundLevel = getTopBlock(world, x, z);
         if (groundLevel < 5) {

@@ -17,6 +17,7 @@
     "BlockRenderManagerMixin",
     "ChunkBuilderMixin",
     "InteractionManagerMixin",
+    "MinecraftMixin",
     "WorldRendererMixin"
   ],
   "injectors": {

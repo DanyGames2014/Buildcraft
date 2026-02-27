@@ -400,9 +400,4 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen {
     public boolean isShiftKeyDown(){
         return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
     }
-
-    @Override
-    protected void slotClicked(AdvancedSlot slot, int mouseButton) {
-        screenHandler.sendContentUpdates();
-    }
 }
