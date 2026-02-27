@@ -71,7 +71,6 @@ public class WireMatrix implements Serializable {
         dirty = false;
     }
 
-    // TODO: implement this
     public void writeData(DataOutputStream stream) throws IOException {
         stream.writeByte(bitSetCodec.encode(hasWire));
         for(int i = 0; i < PipeWire.values().length; i++){
