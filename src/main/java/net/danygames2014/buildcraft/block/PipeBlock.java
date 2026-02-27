@@ -16,6 +16,7 @@ import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.raycast.PipeRaycastResult;
+import net.danygames2014.nyalib.block.RedstoneLevelProvider;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.fabricmc.api.EnvType;
@@ -46,7 +47,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 
 @SuppressWarnings("deprecation")
-public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer, PaintableBlock {
+public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer, PaintableBlock, RedstoneLevelProvider {
     public final PipeType type;
     public final PipeBehavior behavior;
     public final PipeTransporter.PipeTransporterFactory transporterFactory;
@@ -190,27 +191,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             return Atlases.getTerrain().getTexture(texture).index;
         }
         return 0;
-    }
-
-
-    @Override
-    public boolean isStrongPoweringSide(World world, int x, int y, int z, int direction) {
-        return isPoweringSide(world, x, y, z, direction);
-    }
-
-    @Override
-    public boolean isPoweringSide(BlockView blockView, int x, int y, int z, int direction) {
-        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
-            int powerInDirection = pipeBlockEntity.isPoweringTo(direction);
-//            BlockPos blockPos = new BlockPos(x, y, z);
-//            BlockPos offset = blockPos.offset(Direction.byId(direction).getOpposite());
-//            int id = blockView.getBlockId(offset.getX(), offset.getY(), offset.getZ());
-//            if(id == PipeBlock.REDSTONE_WIRE.id){
-//                return powerInDirection == 15;
-//            }
-            return powerInDirection > 0;
-        }
-        return super.isPoweringSide(blockView, x, y, z, direction);
     }
 
     public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
@@ -677,5 +657,18 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     @Override
     public boolean removeColorFromBlock(World world, int x, int y, int z, Direction side) {
         return false;
+    }
+
+    @Override
+    public int getSidePowerLevel(BlockView blockView, int x, int y, int z, int side) {
+        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+            return pipeBlockEntity.isPoweringTo(side);
+        }
+        return 0;
+    }
+
+    @Override
+    public int getSideStrongPowerLevel(World world, int x, int y, int z, int side) {
+        return getSidePowerLevel(world, x, y, z, side);
     }
 }
