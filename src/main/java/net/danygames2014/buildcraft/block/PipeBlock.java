@@ -383,7 +383,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
         setBoundingBox(0, 0, 0, 1, 1, 1);
 
-        // TODO: handling which part gets hit, will be fixed later
         if (minIndex == -1) {
             return null;
         } else {
@@ -426,8 +425,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     public boolean renderWorld(BlockRenderManager blockRenderManager, BlockView blockView, int x, int y, int z) {
         if (blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
             pipeWorldRenderer.renderPipe(blockRenderManager, blockView, pipe, x, y, z);
-        } else {
-            System.out.println(currentRenderPass); // TODO: Debug prints my beloved
         }
         return false;
     }
