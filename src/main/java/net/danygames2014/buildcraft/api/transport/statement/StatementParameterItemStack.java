@@ -66,6 +66,7 @@ public class StatementParameterItemStack implements StatementParameter {
         }
     }
 
+    // TODO: null check here
     @Override
     public void writeNBT(NbtCompound nbt) {
         if (stack != null) {

@@ -10,16 +10,6 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class PathMarkerBlockEntityRenderer extends BlockEntityRenderer {
-    private ModelPart box; // TODO: What is this used for?
-
-    public PathMarkerBlockEntityRenderer() {
-        box = new ModelPart(0, 1);
-        box.addCuboid(-8F, -8F, -8F, 16, 4, 16);
-        box.pivotX = 8;
-        box.pivotY = 8;
-        box.pivotZ = 8;
-    }
-
     @Override
     public void render(BlockEntity blockEntity, double x, double y, double z, float tickDelta) {
         if(!(blockEntity instanceof PathMarkerBlockEntity marker)){
@@ -46,7 +36,6 @@ public class PathMarkerBlockEntityRenderer extends BlockEntityRenderer {
             }
         }
 
-        //GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
