@@ -22,6 +22,9 @@ public class MachineConfig {
     @ConfigCategory(name = "Refinery")
     public RefineryConfig refinery = new RefineryConfig();
     
+    @ConfigCategory(name = "Engine")
+    public EngineConfig engine = new EngineConfig();
+    
     public static class ChuteConfig {
         @ConfigEntry(name = "Tick Delay", minValue = 1, maxValue = 100, description = "Will work every x ticks")
         public Integer tickDelay = 5;
@@ -74,5 +77,10 @@ public class MachineConfig {
         
         @ConfigEntry(name = "Output Tank Fluid Capacity", minValue = 50, maxValue = 32000, multiplayerSynced = true)
         public Integer outputFluidCapacity = 4000;
+    }
+    
+    public static class EngineConfig {
+        @ConfigEntry(name = "Fuel Burn Time Multiplier", minValue = 0.1F, maxValue = 10.0F, multiplayerSynced = true)
+        public Float fuelBurnTimeMultiplier = 1.0F; 
     }
 }
