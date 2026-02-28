@@ -376,6 +376,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
     protected void notifyBlockChanged() {
         world.notifyNeighbors(x, y, z, pipeBlock.id);
+        updateConnections();
         scheduleRenderUpdate();
         sendUpdateToClient();
         world.setBlockDirty(x, y, z);
