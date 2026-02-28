@@ -146,7 +146,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
                     sideProperties.pluggables[i].onAttachedToPipe(this, Direction.byId(i));
                 }
             }
-            markDirty();
+            notifyBlockChanged();
         }
 
         transporter.tick();
@@ -333,7 +333,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
         if(sideProperties.pluggables[direction.ordinal()] != null){
             sideProperties.dropItem(this, direction, player);
-            // TODO: implement this later
             eventBus.unregisterHandler(sideProperties.pluggables[direction.ordinal()]);
         }
 
@@ -342,7 +341,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             eventBus.registerHandler(pluggable);
             pluggable.onAttachedToPipe(this, direction);
         }
-        markDirty();
+        notifyBlockChanged();
         return true;
     }
 
@@ -729,17 +728,17 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
                 PipePluggable old = sideProperties.pluggables[i];
                 PipePluggable newer = newPluggables[i];
-                if (old != null || newer != null) {
-                    if (old != null && newer != null && old.getClass() == newer.getClass()) {
-                        if (newer.requiresRenderUpdate(old)) {
-                            world.setBlockDirty(x, y, z);
-                            break;
-                        }
-                    } else {
-                        // one of them is null but not the other, so update
+                if (old == null && newer == null) {
+                    continue;
+                } else if (old != null && newer != null && old.getClass() == newer.getClass()) {
+                    if (newer.requiresRenderUpdate(old)) {
                         world.setBlockDirty(x, y, z);
                         break;
                     }
+                } else {
+                    // one of them is null but not the other, so update
+                    world.setBlockDirty(x, y, z);
+                    break;
                 }
             }
             sideProperties.pluggables = newPluggables.clone();

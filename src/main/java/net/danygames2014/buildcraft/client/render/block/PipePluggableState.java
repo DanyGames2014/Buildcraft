@@ -49,6 +49,9 @@ public class PipePluggableState implements Serializable {
                     pluggables[dir.ordinal()].readData(stream);
                 }
             }
+            else {
+                pluggables[dir.ordinal()] = null;
+            }
         }
     }
 }
