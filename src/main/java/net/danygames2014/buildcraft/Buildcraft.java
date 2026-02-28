@@ -229,10 +229,10 @@ public class Buildcraft {
         StatementManager.registerActionProvider(new PipeActionProvider());
         StatementManager.registerActionProvider(new DefaultActionProvider());
 
-        StatementManager.registerParameterClass(TriggerParameterSignal.class);
-        StatementManager.registerParameterClass(StatementParameterRedstoneGateSideOnly.class);
-        StatementManager.registerParameterClass(StatementParameterItemStack.class);
-        StatementManager.registerParameterClass(ActionParameterSignal.class);
+        StatementManager.registerParameterClass(TriggerParameterSignal::new);
+        StatementManager.registerParameterClass(StatementParameterRedstoneGateSideOnly::new);
+        StatementManager.registerParameterClass(StatementParameterItemStack::new);
+        StatementManager.registerParameterClass(ActionParameterSignal::new);
 
         GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
         GateExpansions.registerExpansion(GateExpansionTimer.INSTANCE);

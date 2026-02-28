@@ -11,7 +11,7 @@ import java.util.*;
 
 public class StatementManager {
     public static Map<Identifier, Statement> statements = new HashMap<>();
-    public static Map<Identifier, Class<? extends StatementParameter>> parameters = new HashMap<>();
+    public static Map<Identifier, StatementParameterFactory> parameters = new HashMap<>();
     private static List<TriggerProvider> triggerProviders = new LinkedList<>();
     private static List<ActionProvider> actionProviders = new LinkedList<>();
 
@@ -37,12 +37,12 @@ public class StatementManager {
         statements.put(statement.getIdentifier(), statement);
     }
 
-    public static void registerParameterClass(Class<? extends StatementParameter> param) {
+    public static void registerParameterClass(StatementParameterFactory param) {
         parameters.put(createParameter(param).getIdentifier(), param);
     }
 
     @Deprecated
-    public static void registerParameterClass(Identifier identifier, Class<? extends StatementParameter> param) {
+    public static void registerParameterClass(Identifier identifier, StatementParameterFactory param) {
         parameters.put(identifier, param);
     }
 
@@ -140,14 +140,8 @@ public class StatementManager {
         return createParameter(parameters.get(kind));
     }
 
-    private static StatementParameter createParameter(Class<? extends StatementParameter> param) {
-        try {
-            return param.newInstance(); // TODO: Switch to either a factory pattern or getDeclaredConstructor
-        } catch (InstantiationException | IllegalAccessException e) {
-            Buildcraft.LOGGER.error("Failed to create parameter " + param.getName(), e);
-        }
-
-        return null;
+    private static StatementParameter createParameter(StatementParameterFactory param) {
+        return param.create();
     }
 
     /**
@@ -161,7 +155,7 @@ public class StatementManager {
             statement.registerTextures();
         }
 
-        for (Class<? extends StatementParameter> parameter : parameters.values()) {
+        for (StatementParameterFactory parameter : parameters.values()) {
             createParameter(parameter).registerTextures();
         }
     }

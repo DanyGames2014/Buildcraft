@@ -139,7 +139,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             attachPluggables = false;
             for(int i = 0; i < Direction.values().length; i++){
                 if(sideProperties.pluggables[i] != null){
-                    // TODO: figure out what this does
                     eventBus.registerHandler(sideProperties.pluggables[i]);
                     sideProperties.pluggables[i].onAttachedToPipe(this, Direction.byId(i));
                 }

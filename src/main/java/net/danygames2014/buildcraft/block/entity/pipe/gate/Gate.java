@@ -509,8 +509,6 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
             }
         }
 
-        // TODO: This can probably be refactored with regular triggers instead
-        // of yet another system.
         for (GateExpansionController expansion : expansions.values()) {
             if (expansion.isTriggerActive(trigger, parameters)) {
                 return true;

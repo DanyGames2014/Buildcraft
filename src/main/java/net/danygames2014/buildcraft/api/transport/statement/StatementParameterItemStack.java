@@ -65,8 +65,7 @@ public class StatementParameterItemStack implements StatementParameter {
             stack = new ItemStack(nbt.getCompound("stack"));
         }
     }
-
-    // TODO: null check here
+    
     @Override
     public void writeNBT(NbtCompound nbt) {
         if (stack != null) {

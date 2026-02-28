@@ -44,7 +44,6 @@ public enum GateLogic {
         return gateTexture;
     }
 
-    // TODO: actually register textures
     @Environment(EnvType.CLIENT)
     public void registerTextures(){
         litTexture = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/gate/gate_" + getTag() + "_lit"));
