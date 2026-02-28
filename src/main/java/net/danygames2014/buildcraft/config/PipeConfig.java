@@ -9,4 +9,7 @@ public class PipeConfig {
 
     @ConfigEntry(name = "Render inner pipe")
     public Boolean renderInnerPipe = true;
+    
+    @ConfigEntry(name = "Pipe Update Distance (Server-Side)", minLength = 16L, maxLength = 64L)
+    public Integer pipeUpdateDistance = 24;
 }

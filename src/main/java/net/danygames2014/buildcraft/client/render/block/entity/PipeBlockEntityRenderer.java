@@ -14,6 +14,7 @@ import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.danygames2014.buildcraft.util.TextureUtil;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.minecraft.block.Block;
@@ -57,9 +58,9 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         public int[] centerVertical = new int[LIQUID_STAGES];
     }
 
-    public void onTextureReload(){
+    public void onTextureReload() {
         if (initialized) {
-            for (int i = 0; i < POWER_STAGES; i++){
+            for (int i = 0; i < POWER_STAGES; i++) {
                 GL11.glDeleteLists(displayPowerList[i], 1);
                 GL11.glDeleteLists(displayPowerListOverload[i], 1);
             }
@@ -71,18 +72,18 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
     @Override
     public void render(BlockEntity blockEntity, double x, double y, double z, float tickDelta) {
-        if(prevRenderInnerPipe != Config.PIPE_CONFIG.renderInnerPipe){
+        if (prevRenderInnerPipe != Config.PIPE_CONFIG.renderInnerPipe) {
             prevRenderInnerPipe = Config.PIPE_CONFIG.renderInnerPipe;
             Minecraft.INSTANCE.worldRenderer.reload();
         }
-        if(blockEntity instanceof PipeBlockEntity pipe){
+        if (blockEntity instanceof PipeBlockEntity pipe) {
             renderGatesWires(pipe, x, y, z);
             renderPluggables(pipe, x, y, z);
 
-            if(pipe.transporter instanceof FluidPipeTransporter){
+            if (pipe.transporter instanceof FluidPipeTransporter) {
                 renderFluids(pipe, x, y, z);
             }
-            if(pipe.transporter instanceof EnergyPipeTransporter){
+            if (pipe.transporter instanceof EnergyPipeTransporter) {
                 renderPower(pipe, x, y, z);
             }
         }
@@ -281,22 +282,22 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         blockRenderManager.renderBlock(renderBlock, x, y, z);
     }
 
-    private DisplayFluidList getDisplayFluidList(Fluid fluid, int skylight, int blocklight, int flags, World world){
+    private DisplayFluidList getDisplayFluidList(Fluid fluid, int skylight, int blocklight, int flags, World world) {
+        if (fluid == null) {
+            return null;
+        }
+
         int finalBlockLight = Math.max(flags & 31, blocklight);
         int listId = (fluid.getIdentifier().hashCode() & 0x3FFFF) << 13 | (flags & 0xE0 | finalBlockLight) << 5 | (skylight & 31);
         if (displayFluidLists.containsKey(listId)) {
             return displayFluidLists.get(listId);
         }
 
-        if(fluid == null){
-            return null;
-        }
-
         DisplayFluidList d = new DisplayFluidList();
         displayFluidLists.put(listId, d);
 
         EntityBlockRenderer.RenderInfo block = new EntityBlockRenderer.RenderInfo();
-        if(fluid.getStillBlock() != null){
+        if (fluid.getStillBlock() != null) {
             block.baseBlock = fluid.getStillBlock();
         } else {
             block.baseBlock = Block.WATER;
@@ -307,7 +308,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         float size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
 
-        for(int s = 0; s < LIQUID_STAGES; ++s) {
+        for (int s = 0; s < LIQUID_STAGES; ++s) {
             float ratio = (float) s / (float) LIQUID_STAGES;
 
             // SIDE HORIZONTAL
@@ -385,7 +386,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         return d;
     }
 
-    private void renderGatesWires(PipeBlockEntity pipe, double x, double y, double z){
+    private void renderGatesWires(PipeBlockEntity pipe, double x, double y, double z) {
         PipeRenderState state = pipe.renderState;
 
         if (state.wireMatrix.hasWire(PipeWire.RED)) {
@@ -522,7 +523,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         if (minZ != PipeWorldRenderer.PIPE_MIN_POS || maxZ != PipeWorldRenderer.PIPE_MAX_POS || !found) {
             renderBox.setBounds(cx == PipeWorldRenderer.PIPE_MIN_POS ? cx - 0.05F : cx, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy - 0.05F : cy, minZ, cx == PipeWorldRenderer.PIPE_MIN_POS ? cx
-                                                                                                                                                      : cx + 0.05F, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy : cy + 0.05F, maxZ);
+                    : cx + 0.05F, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy : cy + 0.05F, maxZ);
             renderLitBox(renderBox, isLit);
         }
 
@@ -530,7 +531,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         if (minX != PipeWorldRenderer.PIPE_MIN_POS || maxX != PipeWorldRenderer.PIPE_MAX_POS || !found) {
             renderBox.setBounds(minX, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy - 0.05F : cy, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz - 0.05F : cz, maxX, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy
-                                                                                                                                                            : cy + 0.05F, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz : cz + 0.05F);
+                    : cy + 0.05F, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz : cz + 0.05F);
             renderLitBox(renderBox, isLit);
         }
 
@@ -538,7 +539,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         if (minY != PipeWorldRenderer.PIPE_MIN_POS || maxY != PipeWorldRenderer.PIPE_MAX_POS || !found) {
             renderBox.setBounds(cx == PipeWorldRenderer.PIPE_MIN_POS ? cx - 0.05F : cx, minY, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz - 0.05F : cz, cx == PipeWorldRenderer.PIPE_MIN_POS ? cx
-                                                                                                                                                      : cx + 0.05F, maxY, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz : cz + 0.05F);
+                    : cx + 0.05F, maxY, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz : cz + 0.05F);
             renderLitBox(renderBox, isLit);
         }
 
@@ -584,11 +585,11 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             if (side == ForgeDirection.UNKNOWN) {
                 continue;
             }
-            
-            if (pipe.connections.get(side.getDirection()) == PipeConnectionType.NONE) {
+
+            if (pipe.renderState.pipeConnectionMatrix.getConnectionType(side.getDirection()) == PipeConnectionType.NONE) {
                 continue;
             }
-            
+
             if (transporter.getSideFillLevel(side) <= 0) {
                 continue;
             }
@@ -629,11 +630,11 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 default:
             }
             StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
-            //RenderUtils.setGLColorFromInt(fluidRenderData.color); TODO: support fluid color
+            RenderHelper.setGLColorFromInt(transporter.fluidType.getColor());
             GL11.glCallList(list);
             GL11.glPopMatrix();
         }
-        
+
         // CENTER
         if (transporter.getSideFillLevel(ForgeDirection.UNKNOWN) > 0) {
             DisplayFluidList d = getDisplayFluidList(transporter.fluidType, skylight, blockLight, 0, pipe.world);
@@ -642,7 +643,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 int stage = (int) ((float) transporter.getSideFillLevel(ForgeDirection.UNKNOWN) / (float) (transporter.getCapacity()) * (LIQUID_STAGES - 1));
 
                 StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
-                //RenderUtils.setGLColorFromInt(fluidRenderData.color); TODO: support fluid color
+                RenderHelper.setGLColorFromInt(transporter.fluidType.getColor());
 
                 if (above) {
                     GL11.glCallList(d.centerVertical[stage]);
@@ -712,9 +713,9 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
     }
 
 
-    private static void renderLitBox(EntityBlockRenderer.RenderInfo info, boolean isLit){
+    private static void renderLitBox(EntityBlockRenderer.RenderInfo info, boolean isLit) {
         EntityBlockRenderer.INSTANCE.renderBlock(info);
-        if(isLit){
+        if (isLit) {
             GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glDisable(GL11.GL_LIGHTING);

@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.core.SafeTimeTracker;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.packet.PacketFluidUpdate;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
@@ -13,9 +14,15 @@ import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.api.util.math.MathHelper;
@@ -25,7 +32,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 
-@SuppressWarnings({"DataFlowIssue", "RedundantIfStatement", "StatementWithEmptyBody", "SameParameterValue", "ConstantValue", "PointlessArithmeticExpression", "MismatchedReadAndWriteOfArray"})
+@SuppressWarnings({"DataFlowIssue", "RedundantIfStatement", "StatementWithEmptyBody", "SameParameterValue", "ConstantValue", "PointlessArithmeticExpression", "MismatchedReadAndWriteOfArray", "UnusedReturnValue"})
 public class FluidPipeTransporter extends PipeTransporter implements FluidHandler {
     static final int pipeFluidsBaseFlowRate = 10;
 
@@ -268,16 +275,22 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
 
         moveFluids();
 
-        if (networkSyncTracker.markTimeIfDelay(blockEntity.world)) {
-            boolean init = false;
-            if (++clientSyncCounter > 40) { // BuildCraftCore.longUpdateFactor * 2) {
-                clientSyncCounter = 0;
-                init = true;
-            }
-            PacketFluidUpdate packet = computeFluidUpdate(init, true);
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER) {
+            if (networkSyncTracker.markTimeIfDelay(blockEntity.world)) {
+                boolean init = false;
+                if (++clientSyncCounter > 40) { // BuildCraftCore.longUpdateFactor * 2) {
+                    clientSyncCounter = 0;
+                    init = true;
+                }
+                PacketFluidUpdate packet = computeFluidUpdate(init, true);
 
-            if (packet != null) {
-                // TODO BuildCraftTransport.instance.sendToPlayers(packet, blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, DefaultProps.PIPE_CONTENTS_RENDER_DIST);
+                if (packet != null) {
+                    for (var playerO : world.players) {
+                        if (playerO instanceof PlayerEntity player && player.getDistance(x, y, z) <= Config.PIPE_CONFIG.pipeUpdateDistance) {
+                            PacketHelper.sendTo(player, packet);
+                        }
+                    }
+                }
             }
         }
         
@@ -313,7 +326,6 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                             FluidStack resultStack = fluidTransporter.insertFluid(liquidToPush, o.getOpposite().getDirection());
                             int filled = resultStack == null ? originalAmount : originalAmount - resultStack.amount;
 
-                            //int filled = ((IFluidHandler) target).fill(o.getOpposite(), liquidToPush, true);
                             if (filled <= 0) {
                                 outputTTL[o.ordinal()]--;
                             } else {
@@ -321,12 +333,8 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                             }
                         }
                     } else {
-//                    BlockEntity target = getBlockEntityOnSide(o);
                         FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + o.offsetX, y + o.offsetY, z + o.offsetZ, FluidHandlerBlockCapability.class);
 
-//                    if (!(target instanceof IFluidHandler)) {
-//                        continue;
-//                    }
                         if (cap == null) {
                             continue;
                         }
@@ -339,7 +347,6 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                             FluidStack resultStack = cap.insertFluid(liquidToPush, o.getOpposite().getDirection());
                             int filled = resultStack == null ? originalAmount : originalAmount - resultStack.amount;
 
-                            //int filled = ((IFluidHandler) target).fill(o.getOpposite(), liquidToPush, true);
                             if (filled <= 0) {
                                 outputTTL[o.ordinal()]--;
                             } else {
@@ -533,7 +540,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         }
 
         if (changed || initPacket) {
-            PacketFluidUpdate packet = new PacketFluidUpdate(blockEntity.x, blockEntity.y, blockEntity.z, initPacket, getCapacity() > 255);
+            PacketFluidUpdate packet = new PacketFluidUpdate(blockEntity.x, blockEntity.y, blockEntity.z, initPacket);
             packet.renderCache = renderCacheCopy;
             packet.delta = delta;
             return packet;
@@ -550,15 +557,14 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         fluidType = stack.fluid;
     }
 
-    /**
-     * Initializes client
-     */
-    //@Override
-    public void sendDescriptionPacket() {
-        // TODO super.sendDescriptionPacket();
-
-        PacketFluidUpdate update = computeFluidUpdate(true, true);
-        // TODO BuildCraftTransport.instance.sendToPlayers(update, blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, DefaultProps.PIPE_CONTENTS_RENDER_DIST);
+    @Environment(EnvType.SERVER)
+    @Override
+    public void onBlockEntityUpdatePacket(ServerPlayerEntity player) {
+        PacketFluidUpdate updatePacket = computeFluidUpdate(true, true);
+        
+        if (updatePacket != null) {
+            PacketHelper.sendTo(player, updatePacket);
+        }
     }
 
     public FluidStack getStack(ForgeDirection direction) {
@@ -699,13 +705,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
             return 0;
         }
 
-        int filled;
-
-//        if (this.blockEntity.pipe instanceof IPipeTransportFluidsHook) {
-//            filled = ((IPipeTransportFluidsHook) this.blockEntity.pipe).fill(from, resource, doFill);
-//        } else {
-        filled = sections[from.ordinal()].fill(resource.amount, doFill);
-//        }
+        int filled = sections[from.ordinal()].fill(resource.amount, doFill);
 
         if (doFill && filled > 0) {
             if (fluidType == null) {
@@ -771,30 +771,6 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                 }
             }
         }
-    }
-
-    //    @Override
-    public boolean canPipeConnect(BlockEntity tile, ForgeDirection side) {
-        Direction direction = side.getDirection();
-
-        if (direction == null) {
-            return false;
-        } else {
-            return blockEntity.canConnectTo(x, y, z, direction) != PipeConnectionType.NONE;
-        }
-
-//        if (tile instanceof IPipeTile) {
-//            Pipe<?> pipe2 = (Pipe<?>) ((IPipeTile) tile).getPipe();
-//            if (BlockGenericPipe.isValid(pipe2) && !(pipe2.transport instanceof PipeTransportFluids)) {
-//                return false;
-//            }
-//        }
-//
-//        if (tile instanceof IFluidHandler) {
-//            return true;
-//        }
-//
-//        return tile instanceof IPipeTile;
     }
 
     @Override
