@@ -582,7 +582,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         boolean sides = false, above = false;
 
         for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
-            if (side == ForgeDirection.UNKNOWN) {
+            if (side == ForgeDirection.UNKNOWN || side.getDirection() == null) {
                 continue;
             }
 
@@ -678,14 +678,16 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
-        // TODO: implement this when dany is finished plumbing
         int[] displayList = pow.overload > 0 ? displayPowerListOverload : displayPowerList;
 
         for (var side : ForgeDirection.VALID_DIRECTIONS) {
-            short stage = (short) pow.displayPower[side.ordinal()];
+            short stage = pow.clientDisplayPower[side.ordinal()];
             if (stage >= 1) {
-                // TODO: this probably doesn't work on server
-                if (pipe.connections.get(side.getDirection()) == PipeConnectionType.NONE) {
+                if (side.getDirection() == null) {
+                    continue;
+                }
+                
+                if (pipe.renderState.pipeConnectionMatrix.getConnectionType(side.getDirection()) == PipeConnectionType.NONE) {
                     continue;
                 }
 

@@ -153,14 +153,6 @@ public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFlu
     public void handleClient(NetworkHandler networkHandler) {
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
         World world = player.world;
-
-        if (x == 45 && y == 64 && z == -152) {
-            System.err.println("a");
-            System.err.println(world.getBlockState(x,y,z).getBlock());
-            System.err.println(world.getBlockEntity(x,y,z));
-        }
-
-        System.err.println(this.renderCache);
         
         if (world.getBlockState(x,y,z).getBlock() instanceof PipeBlock pipeBlock && world.getBlockEntity(x,y,z) instanceof PipeBlockEntity pipe && pipe.transporter instanceof FluidPipeTransporter transporter) {
             if (renderCache.fluidId != null) {

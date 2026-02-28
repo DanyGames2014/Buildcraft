@@ -6,9 +6,13 @@ import net.danygames2014.buildcraft.api.core.SafeTimeTracker;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
+import net.danygames2014.buildcraft.config.Config;
+import net.danygames2014.buildcraft.packet.PacketPowerUpdate;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.Arrays;
@@ -32,9 +36,9 @@ public class EnergyPipeTransporter extends PipeTransporter {
     }
     
     private boolean needsInit = true;
-    private BlockEntity[] neighborBlockEntities = new BlockEntity[6];
+    private final BlockEntity[] neighborBlockEntities = new BlockEntity[6];
     public float[] displayPower = new float[6];
-    private float[] prevDisplayPower = new float[6];
+    private final float[] prevDisplayPower = new float[6];
     public short[] clientDisplayPower = new short[6];
     public int overload;
     private int[] powerQuery = new int[6];
@@ -229,17 +233,12 @@ public class EnergyPipeTransporter extends PipeTransporter {
         }
 
         // Transfer the requested energy to nearby pipes
-
         for (int i = 0; i < 6; ++i) {
             if (transferQuery[i] != 0) {
                 if (neighborBlockEntities[i] != null) {
                     BlockEntity neighborBlockEntity = neighborBlockEntities[i];
 
                     if (neighborBlockEntity instanceof PipeBlockEntity nearbyTile) {
-//                        if (nearbyTile.pipe == null) {
-//                            continue;
-//                        }
-
                         EnergyPipeTransporter nearbyTransport = (EnergyPipeTransporter) nearbyTile.transporter;
                         nearbyTransport.requestEnergy(ForgeDirection.VALID_DIRECTIONS[i].getOpposite(), transferQuery[i]);
                     }
@@ -247,17 +246,22 @@ public class EnergyPipeTransporter extends PipeTransporter {
             }
         }
 
-        if (tracker.markTimeIfDelay(world, 2 * 10)) {//BuildCraftCore.updateFactor)) {
-            //PacketPowerUpdate packet = new PacketPowerUpdate(container.xCoord, container.yCoord, container.zCoord);
+        if (tracker.markTimeIfDelay(world, 10)) {
+            PacketPowerUpdate packet = new PacketPowerUpdate(x,y,z);
 
             double displayFactor = MAX_DISPLAY / 1024.0;
             for (int i = 0; i < clientDisplayPower.length; i++) {
                 clientDisplayPower[i] = (short) (displayPower[i] * displayFactor + .9999);
             }
 
-            //packet.displayPower = clientDisplayPower;
-            //packet.overload = isOverloaded();
-            //BuildCraftTransport.instance.sendToPlayers(packet, container.getWorldObj(), container.xCoord, container.yCoord, container.zCoord, DefaultProps.PIPE_CONTENTS_RENDER_DIST);
+            packet.displayPower = clientDisplayPower;
+            packet.overload = isOverloaded();
+
+            for (var playerO : world.players) {
+                if (playerO instanceof PlayerEntity player && player.getDistance(x, y, z) <= Config.PIPE_CONFIG.pipeUpdateDistance) {
+                    PacketHelper.sendTo(player, packet);
+                }
+            }
         }
 
         blockEntity.behavior.transporterTick(blockEntity, this);        
@@ -359,10 +363,10 @@ public class EnergyPipeTransporter extends PipeTransporter {
     /**
      * Client-side handler for receiving power updates from the server;
      */
-//    public void handlePowerPacket(PacketPowerUpdate packetPower) {
-//        clientDisplayPower = packetPower.displayPower;
-//        overload = packetPower.overload ? OVERLOAD_TICKS : 0;
-//    }
+    public void handlePowerPacket(PacketPowerUpdate packetPower) {
+        clientDisplayPower = packetPower.displayPower;
+        overload = packetPower.overload ? OVERLOAD_TICKS : 0;
+    }
 
     /**
      * This can be use to provide a rough estimate of how much power is flowing
