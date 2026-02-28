@@ -10,9 +10,7 @@ import net.modificationstation.stationapi.api.network.packet.ManagedPacket;
 import net.modificationstation.stationapi.api.network.packet.PacketType;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class CommandPacket extends Packet implements ManagedPacket<CommandPacket> {
@@ -26,7 +24,7 @@ public class CommandPacket extends Packet implements ManagedPacket<CommandPacket
         }
     };
     
-    public DataInputStream stream;
+    public byte[] dataBuffer;
     public String command;
     public Object target;
     public CommandTarget handler;
@@ -51,7 +49,14 @@ public class CommandPacket extends Packet implements ManagedPacket<CommandPacket
         try {
             command = stream.readUTF();
             handler = targets.get(stream.readUnsignedByte());
-            this.stream = stream;
+
+            int dataLength = stream.readInt();
+            if (dataLength > 0) {
+                dataBuffer = new byte[dataLength];
+                stream.readFully(dataBuffer); // Only reads exactly what was written
+            } else {
+                dataBuffer = new byte[0];
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +67,19 @@ public class CommandPacket extends Packet implements ManagedPacket<CommandPacket
         try {
             stream.writeUTF(command);
             stream.writeByte(targets.indexOf(handler));
-            handler.write(stream, target);
+
+            ByteArrayOutputStream tempByteStream = new ByteArrayOutputStream();
+            DataOutputStream tempDoc = new DataOutputStream(tempByteStream);
+
+            handler.write(tempDoc, target);
+            if (writer != null) {
+                writer.write(tempDoc);
+            }
+
+            byte[] bytesToSend = tempByteStream.toByteArray();
+
+            stream.writeInt(bytesToSend.length);
+            stream.write(bytesToSend);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -71,10 +88,12 @@ public class CommandPacket extends Packet implements ManagedPacket<CommandPacket
     @Override
     public void apply(NetworkHandler networkHandler) {
         PlayerEntity player = PlayerHelper.getPlayerFromPacketHandler(networkHandler);
-        if(handler != null){
-            CommandReceiver receiver = handler.handle(player, stream, player.world);
+        if(handler != null && dataBuffer != null){
+            DataInputStream playbackStream = new DataInputStream(new ByteArrayInputStream(dataBuffer));
+
+            CommandReceiver receiver = handler.handle(player, playbackStream, player.world);
             if(receiver != null){
-                receiver.receiveCommand(command, FabricLoader.getInstance().getEnvironmentType(), player, stream);
+                receiver.receiveCommand(command, FabricLoader.getInstance().getEnvironmentType(), player, playbackStream);
             }
         }
     }

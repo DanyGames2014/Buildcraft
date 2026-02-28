@@ -292,7 +292,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     // GUI // TODO: implement gui
     public void openGui(PlayerEntity player, PipeBlockEntity blockEntity) {
         if (!player.world.isRemote) {
-            GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("gate"), blockEntity, new GateInterfaceScreenHandler(player.inventory, pipe));
+            GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("gate"), blockEntity, new GateInterfaceScreenHandler(player.inventory, blockEntity));
             ((GateInterfaceScreenHandler)player.currentScreenHandler).setGate(direction.ordinal());
         }
     }

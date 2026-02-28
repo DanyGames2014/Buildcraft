@@ -12,6 +12,8 @@ import net.danygames2014.buildcraft.packet.command.CommandReceiver;
 import net.danygames2014.buildcraft.packet.command.CommandWriter;
 import net.danygames2014.buildcraft.screen.GateInterfaceScreen;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.nbt.NbtCompound;
@@ -143,15 +145,17 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
      * (re-)requests the current selection on the gate if needed.
      */
     public void synchronize() {
-        if (!isNetInitialized && pipe.isRemoved()) {
-            isNetInitialized = true;
-            PacketHelper.send(new CommandPacket(this, "initRequest", null));
-        }
-
         // TODO: pipe.world can be null
-        if (!isSynchronized && pipe.world.isRemote && gate != null) {
-            isSynchronized = true;
-            PacketHelper.send(new CommandPacket(this, "selectionRequest", null));
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
+            if (!isNetInitialized && Minecraft.INSTANCE.world.isRemote) {
+                isNetInitialized = true;
+                PacketHelper.send(new CommandPacket(this, "initRequest", null));
+            }
+
+            if (!isSynchronized && Minecraft.INSTANCE.world.isRemote && gate != null) {
+                isSynchronized = true;
+                PacketHelper.send(new CommandPacket(this, "selectionRequest", null));
+            }
         }
     }
 
@@ -272,7 +276,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
 
     // PACKET GENERATION
     public Packet getStatementPacket(final String name, final int slot, final Statement statement) {
-        final String statementKind = statement != null ? statement.getIdentifier().toString() : null;
+        final String statementKind = statement != null ? statement.getIdentifier().toString() : "";
         return new CommandPacket(this, name, new CommandWriter() {
             public void write(DataOutputStream data) {
                 try {
@@ -324,6 +328,10 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                     PacketHelper.sendTo(player, new CommandPacket(this, "init", new CommandWriter() {
                         public void write(DataOutputStream data) {
                             try {
+                                data.writeInt(pipe.x);
+                                data.writeInt(pipe.y);
+                                data.writeInt(pipe.z);
+
                                 data.writeByte(gate.getDirection().ordinal());
                                 data.writeShort(triggerStrings.length);
                                 data.writeShort(actionStrings.length);
@@ -355,6 +363,14 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                 }
             } else if (side == EnvType.CLIENT) {
                 if ("init".equals(command)) {
+                    int x = stream.readInt();
+                    int y = stream.readInt();
+                    int z = stream.readInt();
+
+                    if(Minecraft.INSTANCE.player.world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe){
+                        this.pipe = pipe;
+                    }
+
                     setGate(stream.readByte());
                     Identifier[] triggerIdentifiers = new Identifier[stream.readShort()];
                     Identifier[] actionIdentifiers = new Identifier[stream.readShort()];
@@ -394,7 +410,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                 }
             }
         } catch (IOException e){
-
+            throw new RuntimeException(e.getCause());
         }
     }
 
