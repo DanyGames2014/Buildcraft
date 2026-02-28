@@ -20,7 +20,8 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
 
     private final List<Serializable> stateList = new LinkedList<>();
 
-    private boolean wroteData = false;
+    int stateCount;
+    public byte[] dataBuffer;
 
     public BlockEntityUpdatePacket(){
     }
@@ -37,21 +38,13 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
     public void read(DataInputStream stream) {
         super.read(stream);
         try {
-            byte stateCount = stream.readByte();
-
-            for (int i = 0; i < stateCount; i++) {
-                byte id = stream.readByte();
-                PlayerEntity player = PlayerHelper.getPlayerFromGame();
-                
-                if(player.world.getBlockEntity(x, y, z) instanceof SynchedBlockEntity synchedBlockEntity){
-                    synchedBlockEntity.getStateInstance(id).readData(stream);
-                    synchedBlockEntity.afterStateUpdated(id);
-                    wroteData = true;
-                } else {
-                    Serializable state = StateRegistry.create(id);
-                    state.readData(stream);
-                    stateList.add(state);
-                }
+            stateCount = stream.readByte();
+            int dataLength = stream.readInt();
+            if(dataLength > 0) {
+                dataBuffer = new byte[dataLength];
+                stream.readFully(dataBuffer);
+            } else {
+                dataBuffer = new byte[0];
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -64,10 +57,19 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
 
         try {
             stream.writeByte(stateList.size());
+
+            ByteArrayOutputStream tempByteStream = new ByteArrayOutputStream();
+            DataOutputStream tempDoc = new DataOutputStream(tempByteStream);
+
             for (Serializable state : stateList) {
-                stream.writeByte(StateRegistry.getId(state.getClass()));
-                state.writeData(stream);
+                tempDoc.writeByte(StateRegistry.getId(state.getClass()));
+                state.writeData(tempDoc);
             }
+
+            byte[] bytesToSend = tempByteStream.toByteArray();
+            stream.writeInt(bytesToSend.length);
+            stream.write(bytesToSend);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -75,29 +77,21 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
 
     @Override
     public void apply(NetworkHandler networkHandler) {
-        if(wroteData){
-            return;
-        }
         
         PlayerEntity player = PlayerHelper.getPlayerFromGame();
         
         if(player.world.getBlockEntity(x, y, z) instanceof SynchedBlockEntity synchedBlockEntity){
-            for(Serializable state : stateList){
-                byte id = (byte) StateRegistry.getId(state.getClass());
-                Serializable instance = synchedBlockEntity.getStateInstance(id);
-
-                try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    DataOutputStream dos = new DataOutputStream(baos);
-                    state.writeData(dos);
-                    dos.flush();
-
-                    ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-                    DataInputStream dis = new DataInputStream(bais);
-                    instance.readData(dis);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+            DataInputStream playbackStream = new DataInputStream(new ByteArrayInputStream(dataBuffer));
+            try{
+                for (int i = 0; i < stateCount; i++) {
+                    byte id = playbackStream.readByte();
+                    Serializable instance = synchedBlockEntity.getStateInstance(id);
+                    instance.readData(playbackStream);
+                    synchedBlockEntity.afterStateUpdated(id);
                 }
+            }
+            catch (IOException e){
+                throw new RuntimeException(e);
             }
         }
     }
