@@ -10,10 +10,14 @@ import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.modificationstation.stationapi.api.tag.TagKey;
 import net.modificationstation.stationapi.api.util.math.Direction;
+
+import java.util.List;
 
 public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory {
     public ItemStack[] filterInventory = new ItemStack[54];
@@ -53,7 +57,10 @@ public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory
                 
                 // Filter based on tags
                 if (filterTags) {
-                    // TODO: Filtering in diamond pipes based on tags
+                    List<TagKey<Item>> tags = filterStack.getItem().getRegistryEntry().streamTags().toList();
+                    if (stack.getItem().getRegistryEntry().streamTags().anyMatch(tags::contains)) {
+                        return true;
+                    }
                 }
             }
         }
