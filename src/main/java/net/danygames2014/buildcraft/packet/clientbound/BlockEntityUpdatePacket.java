@@ -18,7 +18,7 @@ import java.util.List;
 public class BlockEntityUpdatePacket extends CoordinatesPacket implements ManagedPacket<BlockEntityUpdatePacket> {
     public static final PacketType<BlockEntityUpdatePacket> TYPE = PacketType.builder(true, false, BlockEntityUpdatePacket::new).build();
 
-    private List<Serializable> stateList = new LinkedList<>();
+    private final List<Serializable> stateList = new LinkedList<>();
 
     private boolean wroteData = false;
 
@@ -42,6 +42,7 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
             for (int i = 0; i < stateCount; i++) {
                 byte id = stream.readByte();
                 PlayerEntity player = PlayerHelper.getPlayerFromGame();
+                
                 if(player.world.getBlockEntity(x, y, z) instanceof SynchedBlockEntity synchedBlockEntity){
                     synchedBlockEntity.getStateInstance(id).readData(stream);
                     synchedBlockEntity.afterStateUpdated(id);
@@ -72,13 +73,14 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
         }
     }
 
-    // TODO: This is probably bad so might have to rewrite at some point
     @Override
     public void apply(NetworkHandler networkHandler) {
         if(wroteData){
             return;
         }
+        
         PlayerEntity player = PlayerHelper.getPlayerFromGame();
+        
         if(player.world.getBlockEntity(x, y, z) instanceof SynchedBlockEntity synchedBlockEntity){
             for(Serializable state : stateList){
                 byte id = (byte) StateRegistry.getId(state.getClass());
@@ -99,7 +101,7 @@ public class BlockEntityUpdatePacket extends CoordinatesPacket implements Manage
             }
         }
     }
-
+    
     @Override
     public int size() {
         return 0;

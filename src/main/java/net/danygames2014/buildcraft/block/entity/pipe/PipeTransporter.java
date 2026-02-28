@@ -1,5 +1,8 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 
@@ -48,6 +51,10 @@ public abstract class PipeTransporter {
 
     public void readNbt(NbtCompound nbt) {
         
+    }
+
+    @Environment(EnvType.SERVER)
+    public void onBlockEntityUpdatePacket(ServerPlayerEntity player) {
     }
 
     public interface PipeTransporterFactory {

@@ -9,6 +9,7 @@
     "FlowingLiquidBlockMixin"
   ],
   "server": [
+    "ServerPlayerEntityMixin",
     "ServerPlayerInteractionManagerMixin"
   ],
   "client": [

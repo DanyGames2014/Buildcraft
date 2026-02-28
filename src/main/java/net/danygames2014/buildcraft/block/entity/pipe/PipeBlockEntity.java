@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.api.core.SynchedBlockEntity;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
 import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.PipeBlock;
+import net.danygames2014.buildcraft.block.entity.DelayedBlockEntityUpdate;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
 import net.danygames2014.buildcraft.block.entity.pipe.event.LensFilterHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
@@ -21,9 +22,11 @@ import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -39,7 +42,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import java.util.Collection;
 import java.util.Random;
 
-public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, Inventory, BlockEntityInit {
+public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, Inventory, BlockEntityInit, DelayedBlockEntityUpdate {
     public PipeBlock pipeBlock;
     public PipeBehavior behavior;
     public PipeTransporter transporter;
@@ -674,9 +677,10 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         updateSignalState();
     }
 
-    @Override
-    public Packet createUpdatePacket() {
-        return getBlockEntityUpdatePacket();
+    @Environment(EnvType.SERVER)
+    public void onBlockEntityUpdatePacket(ServerPlayerEntity player) {
+        PacketHelper.sendTo(player, getBlockEntityUpdatePacket());
+        transporter.onBlockEntityUpdatePacket(player);
     }
 
     public BlockEntityUpdatePacket getBlockEntityUpdatePacket(){
