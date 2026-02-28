@@ -10,6 +10,7 @@ import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.item.CustomItemRenderer;
 import net.danygames2014.buildcraft.util.ColorUtil;
 import net.danygames2014.buildcraft.util.RenderHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.item.ItemRenderer;
@@ -124,11 +125,15 @@ public class ArsenicItemRendererMixin {
     }
 
     @Inject(method = "render", at = @At(value = "HEAD"))
-    void test(ItemEntity item, double x, double y, double z, float rotation, float delta, CallbackInfo ci){
+    void renderColorBox(ItemEntity item, double x, double y, double z, float rotation, float delta, CallbackInfo ci){
         if(item instanceof TravellingItemEntity travellingItem){
             if (travellingItem.getColor() >= 0) {
                 GL11.glPushMatrix();
-                GL11.glTranslatef((float) x, (float) y + 0.25f, (float) z);
+                if(Minecraft.INSTANCE.world != null && Minecraft.INSTANCE.world.isRemote){
+                    GL11.glTranslatef((float) x, (float) y - 0.40f, (float) z);
+                } else {
+                    GL11.glTranslatef((float) x, (float) y + 0.25f, (float) z);
+                }
                 GL11.glScalef(0.8f, 0.8f, 0.8f);
 
                 StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
