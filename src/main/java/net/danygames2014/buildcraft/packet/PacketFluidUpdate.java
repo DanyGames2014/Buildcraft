@@ -24,7 +24,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.BitSet;
 
-// TODO: implement fluid in pipes in multiplayer
 public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFluidUpdate> {
     public static final PacketType<PacketFluidUpdate> TYPE = PacketType.builder(true, false, PacketFluidUpdate::new).build();
 
