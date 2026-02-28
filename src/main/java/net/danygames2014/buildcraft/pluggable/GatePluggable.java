@@ -124,8 +124,21 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public void update(PipeBlockEntity pipe, Direction direction) {
-        isLit = realGate != null && realGate.isGateActive();
-        isPulsing = realGate != null && realGate.isGatePulsing();
+
+        if(realGate != null){
+            boolean update = false;
+            if(isLit != realGate.isGateActive()){
+                isLit = realGate.isGateActive();
+                update = true;
+            }
+            if(isPulsing != realGate.isGatePulsing()){
+                isPulsing = realGate.isGatePulsing();
+                update = true;;
+            }
+            if(update){
+                pipe.scheduleRenderUpdate();
+            }
+        }
         if (isPulsing || pulseStage > 0.11F) {
             // if it is moving, or is still in a moved state, then complete
             // the current movement
