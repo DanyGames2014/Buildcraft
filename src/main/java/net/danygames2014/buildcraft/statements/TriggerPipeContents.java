@@ -48,7 +48,7 @@ public class TriggerPipeContents extends BCStatement implements TriggerInternal 
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.trigger.pipe." + kind.name());
+        return TranslationStorage.getInstance().get("gate.buildcraft.trigger.pipe." + kind.name());
     }
 
 

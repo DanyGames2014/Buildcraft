@@ -43,7 +43,7 @@ public class TriggerFluidContainerLevel extends BCStatement implements TriggerEx
 
     @Override
     public String getDescription() {
-        return String.format(TranslationStorage.getInstance().get("gate.trigger.fluidlevel.below"), (int) (type.level * 100));
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.fluidlevel.below"), (int) (type.level * 100));
     }
 
 

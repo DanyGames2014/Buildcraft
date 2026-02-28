@@ -22,7 +22,7 @@ public class TriggerMachine extends BCStatement implements TriggerExternal {
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.trigger.machine." + (active ? "scheduled" : "done"));
+        return TranslationStorage.getInstance().get("gate.buildcraft.trigger.machine." + (active ? "scheduled" : "done"));
     }
 
     @Override

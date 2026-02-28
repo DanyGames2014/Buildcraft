@@ -46,7 +46,7 @@ public class TriggerInventoryLevel extends BCStatement implements TriggerExterna
 
     @Override
     public String getDescription() {
-        return String.format(TranslationStorage.getInstance().get("gate.trigger.inventorylevel.below"), (int) (type.level * 100));
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.inventorylevel.below"), (int) (type.level * 100));
     }
 
     @Override

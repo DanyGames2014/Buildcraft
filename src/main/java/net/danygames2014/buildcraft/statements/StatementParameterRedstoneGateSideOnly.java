@@ -43,7 +43,7 @@ public class StatementParameterRedstoneGateSideOnly implements StatementParamete
 
     @Override
     public String getDescription() {
-        return isOn ? TranslationStorage.getInstance().get("gate.parameter.redstone.gateSideOnly") : "";
+        return isOn ? TranslationStorage.getInstance().get("gate.buildcraft.parameter.redstone.gateSideOnly") : "";
     }
 
     @Override

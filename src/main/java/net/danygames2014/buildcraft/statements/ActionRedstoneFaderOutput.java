@@ -15,7 +15,7 @@ public class ActionRedstoneFaderOutput extends ActionRedstoneOutput implements A
 
     @Override
     public String getDescription() {
-        return String.format(TranslationStorage.getInstance().get("gate.trigger.redstone.input.level"), level);
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.redstone.input.level"), level);
     }
 
     @Override

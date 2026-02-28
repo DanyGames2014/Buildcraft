@@ -72,14 +72,20 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
     public void drawTooltipForSlotAt(int mouseX, int mouseY) {
         AdvancedSlot slot = getSlotAtLocation(mouseX, mouseY);
 
-        if (slot != null) {
+        if (slot != null && slot.getDescription() != null) {
             slot.drawTooltip(this, mouseX, mouseY);
         }
     }
 
     public void drawTooltip(String caption, int mouseX, int mouseY) {
         if (!caption.isEmpty()) {
-            minecraft.textRenderer.drawWithShadow(caption, mouseX, mouseY, 0xFFFFFF);
+            int var14 = mouseX + 12;
+            int var15 = mouseY - 12;
+            int var11 = this.textRenderer.getWidth(caption);
+            this.fillGradient(var14 - 3, var15 - 3, var14 + var11 + 3, var15 + 8 + 3, -1073741824, -1073741824);
+            this.textRenderer.drawWithShadow(caption, var14, var15, -1);
+
+
             //drawCreativeTabHoveringText(caption, mouseX, mouseY);
             //RenderHelper.enableGUIStandardItemLighting();
         }

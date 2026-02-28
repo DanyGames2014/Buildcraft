@@ -381,7 +381,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                 NbtCompound parameterData = NbtIo.read(stream);
                 StatementParameter parameter = null;
                 if (!parameterName.isEmpty()) {
-                    parameter = StatementManager.createParameter(parameterName);
+                    parameter = StatementManager.createParameter(Identifier.tryParse(parameterName));
                 }
 
                 if (parameter != null) {

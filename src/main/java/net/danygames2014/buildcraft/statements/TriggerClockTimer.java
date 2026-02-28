@@ -30,7 +30,7 @@ public class TriggerClockTimer extends BCStatement implements TriggerInternal {
 
     @Override
     public String getDescription() {
-        return String.format(TranslationStorage.getInstance().get("gate.trigger.timer"), time.delay);
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.timer"), time.delay);
     }
 
     @Override

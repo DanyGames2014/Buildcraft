@@ -8,6 +8,7 @@ import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.BCStatement;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 
 import java.util.Locale;
@@ -62,6 +63,11 @@ public class TriggerPipeSignal extends BCStatement implements TriggerInternal {
         }
 
         return true;
+    }
+
+    @Override
+    public String getDescription() {
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.pipe.wire." + (active ? "active" : "inactive")), TranslationStorage.getInstance().get("color.buildcraft." + color.name().toLowerCase(Locale.ENGLISH)));
     }
 
     @Override

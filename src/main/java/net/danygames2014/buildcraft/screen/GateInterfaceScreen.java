@@ -213,8 +213,12 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen {
 
         textRenderer.draw(name, (backgroundWidth / 2) - (textRenderer.getWidth(name) / 2), 10, 0x404040);
         textRenderer.draw(TranslationStorage.getInstance().get("gui.inventory"), 8, backgroundHeight - 97, 0x404040);
+    }
 
-        //drawTooltipForSlotAt(par1, par2);
+    @Override
+    public void render(int mouseX, int mouseY, float delta) {
+        super.render(mouseX, mouseY, delta);
+        drawTooltipForSlotAt(mouseX, mouseY);
     }
 
     @Override

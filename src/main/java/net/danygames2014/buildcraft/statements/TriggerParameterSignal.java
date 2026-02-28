@@ -6,11 +6,14 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.StatementMouseClick;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
+
+import java.util.Locale;
 
 public class TriggerParameterSignal implements StatementParameter {
     public static Atlas.Sprite[] sprites = new Atlas.Sprite[8];
@@ -57,7 +60,10 @@ public class TriggerParameterSignal implements StatementParameter {
 
     @Override
     public String getDescription() {
-        return "";
+        if (color == null) {
+            return null;
+        }
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.pipe.wire." + (active ? "active" : "inactive")), TranslationStorage.getInstance().get("color.buildcraft." + color.name().toLowerCase(Locale.ENGLISH)));
     }
 
     @Override

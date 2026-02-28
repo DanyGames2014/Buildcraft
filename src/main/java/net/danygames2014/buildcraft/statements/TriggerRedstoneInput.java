@@ -20,7 +20,7 @@ public class TriggerRedstoneInput extends BCStatement implements TriggerInternal
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.trigger.redstone.input." + (active ? "active" : "inactive"));
+        return TranslationStorage.getInstance().get("gate.buildcraft.trigger.redstone.input." + (active ? "active" : "inactive"));
     }
 
     @Override

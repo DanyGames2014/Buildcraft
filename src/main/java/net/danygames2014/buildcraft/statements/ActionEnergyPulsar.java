@@ -15,7 +15,7 @@ public class ActionEnergyPulsar extends BCStatement implements ActionInternal {
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.action.pulsar.constant");
+        return TranslationStorage.getInstance().get("gate.buildcraft.action.pulsar.constant");
     }
 
     @Override

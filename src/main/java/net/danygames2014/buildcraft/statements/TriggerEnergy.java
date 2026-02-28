@@ -31,7 +31,7 @@ public class TriggerEnergy extends BCStatement implements TriggerInternal {
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.trigger.machine.energyStored." + (high ? "high" : "low"));
+        return TranslationStorage.getInstance().get("gate.buildcraft.trigger.machine.energyStored." + (high ? "high" : "low"));
     }
 
     @Override

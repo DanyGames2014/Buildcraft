@@ -36,7 +36,7 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.trigger.fluid." + state.name().toLowerCase(Locale.ENGLISH));
+        return TranslationStorage.getInstance().get("gate.buildcraft.trigger.fluid." + state.name().toLowerCase(Locale.ENGLISH));
     }
 
     // TODO: confirm if this is actually working or not

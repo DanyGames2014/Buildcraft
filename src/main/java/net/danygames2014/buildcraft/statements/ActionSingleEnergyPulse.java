@@ -15,7 +15,7 @@ public class ActionSingleEnergyPulse extends BCStatement implements ActionIntern
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.action.pulsar.single");
+        return TranslationStorage.getInstance().get("gate.buildcraft.action.pulsar.single");
     }
 
     @Override

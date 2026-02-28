@@ -67,7 +67,7 @@ public class ActionParameterSignal implements StatementParameter {
         if (color == null) {
             return null;
         }
-        return String.format(TranslationStorage.getInstance().get("gate.action.pipe.wire"), TranslationStorage.getInstance().get("color." + color.name().toLowerCase(Locale.ENGLISH)));
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.action.pipe.wire"), TranslationStorage.getInstance().get("color." + color.name().toLowerCase(Locale.ENGLISH)));
     }
 
     @Override

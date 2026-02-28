@@ -6,10 +6,10 @@ public class GateDefinition {
     public static String getLocalizedName(GateMaterial material, GateLogic logic) {
         TranslationStorage translationStorage = TranslationStorage.getInstance();
         if (material == GateMaterial.REDSTONE) {
-            return translationStorage.get("gate.name.basic");
+            return translationStorage.get("gate.buildcraft.basic.name");
         } else {
-            return String.format(translationStorage.get("gate.name"), translationStorage.get("gate.material." + material.getTag()),
-                    translationStorage.get("gate.logic." + logic.getTag()));
+            return String.format(translationStorage.get("gate.buildcraft.name"), translationStorage.get("gate.buildcraft.material." + material.getTag()),
+                    translationStorage.get("gate.buildcraft.logic." + logic.getTag()));
         }
     }
 }

@@ -20,7 +20,7 @@ public class TriggerRedstoneFaderInput extends BCStatement implements TriggerInt
 
     @Override
     public String getDescription() {
-        return String.format(TranslationStorage.getInstance().get("gate.trigger.redstone.input.level"), level);
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.redstone.input.level"), level);
     }
 
     @Override

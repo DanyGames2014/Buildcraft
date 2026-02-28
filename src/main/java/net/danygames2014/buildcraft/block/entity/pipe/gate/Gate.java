@@ -225,7 +225,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
             for (int j = 0; j < material.numTriggerParameters; ++j) {
                 if (data.contains("triggerParameters[" + i + "][" + j + "]")) {
                     NbtCompound cpt = data.getCompound("triggerParameters[" + i + "][" + j + "]");
-                    triggerParameters[i][j] = StatementManager.createParameter(cpt.getString("kind"));
+                    triggerParameters[i][j] = StatementManager.createParameter(Identifier.tryParse(cpt.getString("kind")));
                     triggerParameters[i][j].readNBT(cpt);
                 }
             }
@@ -233,7 +233,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
             for (int j = 0; j < material.numActionParameters; ++j) {
                 if (data.contains("actionParameters[" + i + "][" + j + "]")) {
                     NbtCompound cpt = data.getCompound("actionParameters[" + i + "][" + j + "]");
-                    actionParameters[i][j] = StatementManager.createParameter(cpt.getString("kind"));
+                    actionParameters[i][j] = StatementManager.createParameter(Identifier.tryParse(cpt.getString("kind")));
                     actionParameters[i][j].readNBT(cpt);
                 }
             }

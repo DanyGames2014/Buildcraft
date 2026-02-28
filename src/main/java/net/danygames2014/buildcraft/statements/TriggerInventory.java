@@ -36,7 +36,7 @@ public class TriggerInventory extends BCStatement implements TriggerExternal {
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.trigger.inventory." + state.name().toLowerCase(Locale.ENGLISH));
+        return TranslationStorage.getInstance().get("gate.buildcraft.trigger.inventory." + state.name().toLowerCase(Locale.ENGLISH));
     }
 
     @Override

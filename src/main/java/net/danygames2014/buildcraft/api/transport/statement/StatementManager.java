@@ -136,8 +136,7 @@ public class StatementManager {
         return result;
     }
 
-    public static StatementParameter createParameter(String kind) {
-        // TODO: That hashmap is Identifier -> Statement, not String -> Statement. -Dany
+    public static StatementParameter createParameter(Identifier kind) {
         return createParameter(parameters.get(kind));
     }
 

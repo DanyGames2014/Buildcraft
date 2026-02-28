@@ -39,7 +39,7 @@ public class ActionSignalOutput extends BCStatement implements ActionInternal {
 
     @Override
     public String getDescription() {
-        return String.format(TranslationStorage.getInstance().get("gate.action.pipe.wire"), TranslationStorage.getInstance().get("color." + color.name().toLowerCase(Locale.ENGLISH)));
+        return String.format(TranslationStorage.getInstance().get("gate.buildcraft.action.pipe.wire"), TranslationStorage.getInstance().get("color.buildcraft." + color.name().toLowerCase(Locale.ENGLISH)));
     }
 
     @Override

@@ -25,7 +25,7 @@ public class ActionRedstoneOutput extends BCStatement implements ActionInternal 
 
     @Override
     public String getDescription() {
-        return TranslationStorage.getInstance().get("gate.action.redstone.signal");
+        return TranslationStorage.getInstance().get("gate.buildcraft.action.redstone.signal");
     }
 
     @Override
