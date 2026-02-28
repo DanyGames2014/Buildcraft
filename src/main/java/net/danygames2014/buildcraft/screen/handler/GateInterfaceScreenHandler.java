@@ -12,6 +12,7 @@ import net.danygames2014.buildcraft.packet.command.CommandReceiver;
 import net.danygames2014.buildcraft.packet.command.CommandWriter;
 import net.danygames2014.buildcraft.screen.GateInterfaceScreen;
 import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +21,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.screen.slot.Slot;
 import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 import net.modificationstation.stationapi.api.util.Identifier;
@@ -159,7 +161,8 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         }
     }
 
-    public void updateProgressBar(int id, int state) {
+    @Override
+    public void setProperty(int id, int state) {
         if (id == 0 /* Action state update */) {
             for (int i = 0; i < 8; i++) {
                 /* Bit mask of triggers */
@@ -185,7 +188,15 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
 
         return state;
     }
-// TODO: decide if this will need to be used
+
+    @Environment(EnvType.SERVER)
+    @Override
+    public void addListener(ScreenHandlerListener listener) {
+        super.addListener(listener);
+        listener.onPropertyUpdate(this, 0, this.lastTriggerState);
+    }
+
+    // TODO: decide if this will need to be used
 
     @Override
     public void sendContentUpdates() {
@@ -194,11 +205,11 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         int state = calculateTriggerState();
 
         if (state != lastTriggerState) {
-//            for (Object crafter : this.crafters) {
-//                ICrafting viewingPlayer = (ICrafting) crafter;
-//
-//                viewingPlayer.sendProgressBarUpdate(this, 0 /* State update */, state);
-//            }
+
+            for(int var1 = 0; var1 < this.listeners.size(); ++var1) {
+                ScreenHandlerListener var2 = (ScreenHandlerListener)this.listeners.get(var1);
+                var2.onPropertyUpdate(this, 0 /* State update */, state);
+            }
 
             lastTriggerState = state;
         }
@@ -480,8 +491,11 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         return "/assets/buildcraft/stationapi/textures/gui/" + gate.material.backgroundTexture;
     }
 
+    @Environment(EnvType.CLIENT)
     public void tick(){
-        sendContentUpdates();
+        if(!Minecraft.INSTANCE.world.isRemote){
+            sendContentUpdates();
+        }
     }
 
     public String getGateName() {
