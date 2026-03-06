@@ -200,8 +200,6 @@ public class GateInterfaceScreen extends AdvancedInterfaceScreen {
                 }
             }
         }
-        // TODO: what is this?
-        //initGui();
     }
 
     @Override

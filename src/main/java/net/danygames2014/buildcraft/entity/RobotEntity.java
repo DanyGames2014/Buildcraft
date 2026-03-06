@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.MutableBlockPos;
 import net.modificationstation.stationapi.api.util.math.StationBlockPos;
 
+// TODO: this entity seems to not spawn on server
 public class RobotEntity extends Entity {
     private static final int TARGET_X_KEY = 1;
     private static final int TARGET_Y_KEY = 2;

@@ -165,7 +165,6 @@ public class AdvancedInterfaceScreen extends BuildcraftScreen{
         GL11.glPopMatrix();
     }
 
-    // TODO: Use this for all children of this class
     protected void slotClicked(AdvancedSlot slot, int mouseButton) {
     }
 }

@@ -196,8 +196,6 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         listener.onPropertyUpdate(this, 0, this.lastTriggerState);
     }
 
-    // TODO: decide if this will need to be used
-
     @Override
     public void sendContentUpdates() {
         super.sendContentUpdates();

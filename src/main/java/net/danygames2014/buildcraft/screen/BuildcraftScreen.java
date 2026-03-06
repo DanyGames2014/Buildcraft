@@ -233,7 +233,5 @@ public abstract class BuildcraftScreen extends HandledScreen {
 
             GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0F);
         }
-
-        // TODO: possibly move this to a helper method
     }
 }

@@ -9,7 +9,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-// TODO: update as we add wires, etc
 public class PipeRenderState implements Serializable {
     public final PipeConnectionMatrix pipeConnectionMatrix = new PipeConnectionMatrix();
     public final TextureMatrix textureMatrix = new TextureMatrix();
@@ -43,7 +42,6 @@ public class PipeRenderState implements Serializable {
         return pipeConnectionMatrix.isDirty() || textureMatrix.isDirty() || wireMatrix.isDirty() || glassColorDirty;
     }
 
-    // TODO, make this write to buffer instead, for update packet
     public void writeData(DataOutputStream stream) throws IOException {
         stream.writeByte(glassColor < -1 ? -1 : glassColor);
         pipeConnectionMatrix.writeData(stream);

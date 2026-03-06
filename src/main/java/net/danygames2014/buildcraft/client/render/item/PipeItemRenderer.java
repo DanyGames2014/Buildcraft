@@ -30,7 +30,6 @@ public class PipeItemRenderer {
         GL11.glPopMatrix();
     }
 
-    // TODO: move to util class if we need this multiple times
     public static void drawBlockItem(BlockRenderManager blockRenderManager, Tessellator tessellator, Block block, int textureIndex) {
         tessellator.startQuads();
         tessellator.normal(0.0F, -1F, 0.0F);

@@ -5,7 +5,6 @@ import net.minecraft.client.model.Quad;
 import net.minecraft.client.model.Vertex;
 import net.minecraft.client.render.Tessellator;
 
-// TODO: There's ALOT of warnings in this class
 public class ModelFrustum {
     /** X vertex coordinate of lower box corner */
     public final float posX1;
@@ -95,7 +94,6 @@ public class ModelFrustum {
 
         this.quadList[0] = new Quad(new Vertex[] { var19, var15, var16, var20 }, textureOffsetX + depth + width, textureOffsetY
                                                                                                                                                 + depth, textureOffsetX + depth + width + depth, textureOffsetY + depth + height);
-        // TODO: these seem to get overwritten immediately
         this.quadList[1] = new Quad(new Vertex[] { var23, var18, var21, var17 }, textureOffsetX, textureOffsetY + depth,
                 textureOffsetX + depth, textureOffsetY + depth + height);
         this.quadList[2] = new Quad(new Vertex[] { var19, var18, var23, var15 }, textureOffsetX + depth, textureOffsetY,
