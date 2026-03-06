@@ -99,15 +99,25 @@ public class RefineryBlock extends TemplateMachineBlock {
                     Fluid bucketFluid = fluidBucket.getFluid();
                     if(bucketFluid != null && raycastResult.index != 2){
                         if((tankStack == null || tankStack.fluid == bucketFluid) && remainingCapacity >= bucketFluid.getBucketSize()){
-                            blockEntity.insertFluid(new FluidStack(bucketFluid, bucketFluid.getBucketSize()), raycastResult.index, null);
-                            player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;
+                            if(!world.isRemote){
+                                blockEntity.insertFluid(new FluidStack(bucketFluid, bucketFluid.getBucketSize()), raycastResult.index, null);
+                                player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;
+                                if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
+                                    blockEntity.sendNetworkUpdate();
+                                }
+                            }
                             return true;
                         }
                     }
                     if(bucketFluid == null){
                         if(tankStack != null && tankStack.amount >= tankStack.fluid.getBucketSize()){
-                            blockEntity.extractFluid(raycastResult.index, tankStack.fluid.getBucketSize(), null);
-                            player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
+                            if(!world.isRemote){
+                                blockEntity.extractFluid(raycastResult.index, tankStack.fluid.getBucketSize(), null);
+                                player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
+                                if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
+                                    blockEntity.sendNetworkUpdate();
+                                }
+                            }
                             return true;
                         }
                     }

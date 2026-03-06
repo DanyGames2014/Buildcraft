@@ -6,19 +6,22 @@ import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.recipe.refinery.RefineryRecipe;
 import net.danygames2014.buildcraft.recipe.refinery.RefineryRecipeRegistry;
+import net.danygames2014.buildcraft.util.NetworkUtil;
 import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.block.ManagedFluidHandler;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.state.property.Properties;
-import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHandler, HasWork, IPowerReceptor, BlockEntityInit {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+public class RefineryBlockEntity extends SyncedBlockEntity implements ManagedFluidHandler, HasWork, IPowerReceptor, BlockEntityInit {
     public static int CAPACITY_PER_SLOT = 1000 * 4;
 
     public RefineryRecipe currentRecipe;
@@ -33,8 +36,6 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
 
     private PowerHandler powerHandler;
     private boolean isActive;
-
-    private Identifier currentRecipeIdentifier;
 
     public RefineryBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
@@ -59,8 +60,7 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
         }
 
         if (updateNetworkTime.markTimeIfDelay(world)) {
-            // TODO: is this needed?
-//            sendNetworkUpdate();
+            sendNetworkUpdate();
         }
 
         isActive = false;
@@ -206,7 +206,6 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
         for(RefineryRecipe recipe : RefineryRecipeRegistry.getInstance().registry.values()){
             if(containsInput(recipe.inputFluids[0]) && containsInput(recipe.inputFluids[1])){
                 currentRecipe = recipe;
-//                currentRecipeIdentifier = recipe
                 if(currentRecipe.inputFluids[0] != null && currentRecipe.inputFluids[1] != null){
                     break;
                 }
@@ -240,5 +239,21 @@ public class RefineryBlockEntity extends BlockEntity implements ManagedFluidHand
             getFluidSlot(1, null).setAllowedSides(facing.rotateYCounterclockwise(), facing.getOpposite());
             getFluidSlot(2, null).setAllowedSides(facing);
         }
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        stream.writeFloat(animationSpeed);
+        NetworkUtil.writeFluid(getFluid(0, null), stream);
+        NetworkUtil.writeFluid(getFluid(1, null), stream);
+        NetworkUtil.writeFluid(getFluid(2, null), stream);
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        animationSpeed = stream.readFloat();
+        setFluid(0, NetworkUtil.readFluid(stream), null);
+        setFluid(1, NetworkUtil.readFluid(stream), null);
+        setFluid(2, NetworkUtil.readFluid(stream), null);
     }
 }

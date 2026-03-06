@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.block.entity;
 
+import net.danygames2014.buildcraft.util.NetworkUtil;
 import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
@@ -307,22 +308,11 @@ public class TankBlockEntity extends SyncedBlockEntity implements FluidHandler {
 
     @Override
     public void writeData(DataOutputStream stream) throws IOException {
-        if(fluid != null){
-            stream.writeUTF(fluid.fluid.getIdentifier().toString());
-            stream.writeInt(fluid.amount);
-        } else {
-            stream.writeUTF("none");
-        }
+        NetworkUtil.writeFluid(fluid, stream);
     }
 
     @Override
     public void readData(DataInputStream stream) throws IOException {
-        String id = stream.readUTF();
-        if(!id.equals("none")){
-            int amount = stream.readInt();
-            fluid = new FluidStack(FluidRegistry.get(Identifier.of(id)), amount);
-        } else {
-            fluid = null;
-        }
+        fluid = NetworkUtil.readFluid(stream);
     }
 }
