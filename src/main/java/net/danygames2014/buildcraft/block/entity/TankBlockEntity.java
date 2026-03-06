@@ -246,7 +246,19 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
 
     @Override
     public FluidStack getFluid(int slot, @Nullable Direction direction) {
-        return getBottomTank(fluid).fluid;
+        TankBlockEntity tank = getBottomTank(fluid);
+        if(tank.fluid == null){
+            return null;
+        }
+
+        FluidStack total = new FluidStack(tank.fluid.fluid, tank.fluid.amount);
+        while (tank != null){
+            tank = getTankAbove(tank);
+            if(tank != null && tank.fluid != null){
+                total.amount += tank.fluid.amount;
+            }
+        }
+        return total;
     }
 
     @Override
