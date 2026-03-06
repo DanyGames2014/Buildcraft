@@ -15,7 +15,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.GateFactory;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
-import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
+import net.danygames2014.buildcraft.packet.clientbound.BlockEntityStateUpdatePacket;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.registry.StateRegistry;
@@ -683,8 +683,8 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         transporter.onBlockEntityUpdatePacket(player);
     }
 
-    public BlockEntityUpdatePacket getBlockEntityUpdatePacket(){
-        BlockEntityUpdatePacket packet = new BlockEntityUpdatePacket(x, y, z);
+    public BlockEntityStateUpdatePacket getBlockEntityUpdatePacket(){
+        BlockEntityStateUpdatePacket packet = new BlockEntityStateUpdatePacket(x, y, z);
         packet.addStateForSerialization(renderState);
         packet.addStateForSerialization(pluggableState);
         return packet;

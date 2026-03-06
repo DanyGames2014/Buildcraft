@@ -1,31 +1,21 @@
 package net.danygames2014.buildcraft.block.entity;
 
-import net.danygames2014.buildcraft.api.core.Serializable;
-import net.danygames2014.buildcraft.api.core.SynchedBlockEntity;
-import net.danygames2014.buildcraft.client.render.TankRenderState;
-import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
-import net.danygames2014.buildcraft.registry.StateRegistry;
+import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.Packet;
-import net.modificationstation.stationapi.api.network.packet.PacketHelper;
+import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class TankBlockEntity extends BlockEntity implements FluidHandler, SynchedBlockEntity, DelayedBlockEntityUpdate {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+public class TankBlockEntity extends SyncedBlockEntity implements FluidHandler {
     public static final int CAPACITY = 10000;
     public FluidStack fluid;
-    public boolean hasUpdate = true;
-    public boolean sendClientUpdate = false;
-
-    public final TankRenderState tankRenderState = new TankRenderState();
 
     @Override
     public void tick() {
@@ -33,23 +23,6 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler, Synche
 
         if(fluid != null){
             moveLiquidBelow();
-        }
-        if(hasUpdate){
-            hasUpdate = false;
-            tankRenderState.fluid = fluid;
-            sendClientUpdate = true;
-        }
-        if(sendClientUpdate){
-            sendClientUpdate = false;
-            if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
-                Packet updatePacket = getBlockEntityUpdatePacket();
-                for(Object o : world.players){
-                    PlayerEntity player = (PlayerEntity) o;
-                    if(player.getDistance(x, y, z) < 40){
-                        PacketHelper.sendTo(player, updatePacket);
-                    }
-                }
-            }
         }
     }
 
@@ -138,8 +111,8 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler, Synche
                 fluid = null;
             }
 
-            hasUpdate = true;
-            below.hasUpdate = true;
+            sendNetworkUpdate();
+            below.sendNetworkUpdate();
         }
 //        fluid = below.insertFluid(fluid, Direction.UP);
     }
@@ -205,7 +178,7 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler, Synche
                     } else {
                         tankToFill.fluid.amount += used;
                     }
-                    tankToFill.hasUpdate = true;
+                    tankToFill.sendNetworkUpdate();
                 }
                 remainingToInsert.amount -= used;
             }
@@ -254,7 +227,7 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler, Synche
                     if (currentTank.fluid.amount <= 0) {
                         currentTank.fluid = null;
                     }
-                    currentTank.hasUpdate = true;
+                    currentTank.sendNetworkUpdate();
                 }
                 currentTank = getTankBelow(currentTank);
             }
@@ -333,43 +306,23 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler, Synche
     }
 
     @Override
-    public Serializable getStateInstance(byte stateId) {
-        Class<? extends Serializable> stateClass = StateRegistry.getClass(stateId);
-        if(stateClass == TankRenderState.class){
-            return tankRenderState;
-        };
-        throw new RuntimeException("Unknown state requested: " + stateId + " this is a bug!");
+    public void writeData(DataOutputStream stream) throws IOException {
+        if(fluid != null){
+            stream.writeUTF(fluid.fluid.getIdentifier().toString());
+            stream.writeInt(fluid.amount);
+        } else {
+            stream.writeUTF("none");
+        }
     }
 
     @Override
-    public Packet createUpdatePacket() {
-        return getBlockEntityUpdatePacket();
-    }
-
-
-
-    public BlockEntityUpdatePacket getBlockEntityUpdatePacket(){
-        BlockEntityUpdatePacket packet = new BlockEntityUpdatePacket(x, y, z);
-        packet.addStateForSerialization(tankRenderState);
-        return packet;
-    }
-
-    @Override
-    public void afterStateUpdated(byte stateId) {
-        Class<? extends Serializable> stateClass = StateRegistry.getClass(stateId);
-        if(stateClass == TankRenderState.class){
-            if(!world.isRemote) return;
-            if(tankRenderState.fluid != null){
-                fluid = tankRenderState.fluid.copy();
-            } else {
-                fluid = null;
-            }
-        };
-    }
-
-    @Environment(EnvType.SERVER)
-    @Override
-    public void onBlockEntityUpdatePacket(ServerPlayerEntity player) {
-        PacketHelper.sendTo(player, getBlockEntityUpdatePacket());
+    public void readData(DataInputStream stream) throws IOException {
+        String id = stream.readUTF();
+        if(!id.equals("none")){
+            int amount = stream.readInt();
+            fluid = new FluidStack(FluidRegistry.get(Identifier.of(id)), amount);
+        } else {
+            fluid = null;
+        }
     }
 }
