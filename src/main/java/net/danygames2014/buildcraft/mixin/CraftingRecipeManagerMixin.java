@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.mixin;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.item.FacadeItem;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.BlockItem;
@@ -19,7 +20,7 @@ public class CraftingRecipeManagerMixin {
         ItemStack returnStack = null;
         for(ItemStack stack : craftingInventory.stacks) {
             if (stack != null) {
-                if (stack.isOf(Item.DIAMOND_HOE)) {
+                if (stack.isOf(Buildcraft.cobblestoneStructurePipe.asItem())) {
                     hasStructurePipe = true;
                 } else {
                     Item var8 = stack.getItem();
@@ -31,6 +32,26 @@ public class CraftingRecipeManagerMixin {
         }
 
         if (hasStructurePipe && returnStack != null) {
+            cir.setReturnValue(returnStack);
+        }
+    }
+
+    @Inject(method = "craft", at = @At("HEAD"), cancellable = true)
+    public void convertHollowFacade(CraftingInventory craftingInventory, CallbackInfoReturnable<ItemStack> cir){
+        ItemStack returnStack = null;
+        for(ItemStack stack : craftingInventory.stacks) {
+            if (stack != null) {
+                if (stack.getItem() instanceof FacadeItem) {
+                    if(FacadeItem.isHollow(stack)){
+                        returnStack = FacadeItem.createStack(FacadeItem.getBlock(stack), FacadeItem.getMeta(stack), false);
+                    } else {
+                        returnStack = FacadeItem.createStack(FacadeItem.getBlock(stack), FacadeItem.getMeta(stack), true);
+                    }
+                }
+            }
+        }
+
+        if (returnStack != null) {
             cir.setReturnValue(returnStack);
         }
     }

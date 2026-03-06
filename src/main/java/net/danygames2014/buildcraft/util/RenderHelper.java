@@ -1,7 +1,9 @@
 package net.danygames2014.buildcraft.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.platform.Lighting;
 import net.minecraft.item.ItemStack;
@@ -30,6 +32,23 @@ public class RenderHelper {
         if (drawOverlay) {
             itemRenderer.renderGuiItemDecoration(Minecraft.INSTANCE.textRenderer, Minecraft.INSTANCE.textureManager, item, x, y);
         }
+    }
+
+    public static void drawBlockItem(BlockRenderManager blockRenderManager, Tessellator tessellator, Block block, int textureIndex) {
+        tessellator.startQuads();
+        tessellator.normal(0.0F, -1F, 0.0F);
+        blockRenderManager.renderBottomFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
+        tessellator.normal(0.0F, 1.0F, 0.0F);
+        blockRenderManager.renderTopFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
+        tessellator.normal(0.0F, 0.0F, -1F);
+        blockRenderManager.renderNorthFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
+        tessellator.normal(0.0F, 0.0F, 1.0F);
+        blockRenderManager.renderSouthFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
+        tessellator.normal(-1F, 0.0F, 0.0F);
+        blockRenderManager.renderWestFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
+        tessellator.normal(1.0F, 0.0F, 0.0F);
+        blockRenderManager.renderEastFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
+        tessellator.draw();
     }
 
     public static void enableItemLighting() {

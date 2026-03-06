@@ -61,7 +61,7 @@ public class TextureListener {
     public static final Identifier filter = Buildcraft.NAMESPACE.id("block/pluggable/filter_frame");
     public static final Identifier lensOverlay = Buildcraft.NAMESPACE.id("block/pluggable/lens_overlay");
 
-    public static final Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/structure_pipe");
+    public static final Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/cobblestone_structure_pipe");
 
     public static final Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
 

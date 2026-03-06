@@ -244,6 +244,11 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         renderIn3D(tessellator, stack);
     }
 
+    @Override
+    public boolean renderInHandBlock(SpriteAtlasTexture atlas, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
+        return false;
+    }
+
     @Environment(EnvType.CLIENT)
     private void renderIn3D(Tessellator tessellator, ItemStack stack) {
         GL11.glPushMatrix();
@@ -377,6 +382,11 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
             }
         }
         return true;
+    }
+
+    @Override
+    public boolean renderOnGroundBlock(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
+        return false;
     }
 
     @Environment(EnvType.CLIENT)

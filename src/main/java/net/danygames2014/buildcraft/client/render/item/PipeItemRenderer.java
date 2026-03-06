@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.client.render.item;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -22,28 +23,11 @@ public class PipeItemRenderer {
 
         GL11.glTranslatef(translateX, translateY, translateZ);
 
-        drawBlockItem(blockRenderManager, tessellator, renderBlock, block.getTexture(0));
+        RenderHelper.drawBlockItem(blockRenderManager, tessellator, renderBlock, block.getTexture(0));
 
         renderBlock.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
-    }
-
-    public static void drawBlockItem(BlockRenderManager blockRenderManager, Tessellator tessellator, Block block, int textureIndex) {
-        tessellator.startQuads();
-        tessellator.normal(0.0F, -1F, 0.0F);
-        blockRenderManager.renderBottomFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
-        tessellator.normal(0.0F, 1.0F, 0.0F);
-        blockRenderManager.renderTopFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
-        tessellator.normal(0.0F, 0.0F, -1F);
-        blockRenderManager.renderNorthFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
-        tessellator.normal(0.0F, 0.0F, 1.0F);
-        blockRenderManager.renderSouthFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
-        tessellator.normal(-1F, 0.0F, 0.0F);
-        blockRenderManager.renderWestFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
-        tessellator.normal(1.0F, 0.0F, 0.0F);
-        blockRenderManager.renderEastFace(block, 0.0D, 0.0D, 0.0D, textureIndex);
-        tessellator.draw();
     }
 }

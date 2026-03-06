@@ -65,6 +65,16 @@ public class ArsenicItemRendererMixin {
             cancelVanillaVertex = customItemRenderer.renderOnGround(ArsenicItemRenderer.class.cast(this), this.itemRenderer, tessellator, itemEntity, x, y, z, delta, stack, yOffset, angle, renderedAmount, atlas);
         }
     }
+
+    @Inject(method = "renderVanilla", at = @At(value = "INVOKE", target = "Lorg/lwjgl/opengl/GL11;glTranslatef(FFF)V", ordinal = 0, shift = At.Shift.AFTER), cancellable = true)
+    public void renderOnGroundBlock(ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas, CallbackInfo ci){
+        if (stack.getItem() instanceof CustomItemRenderer customItemRenderer) {
+            if(customItemRenderer.renderOnGroundBlock(ArsenicItemRenderer.class.cast(this), this.itemRenderer, Tessellator.INSTANCE, itemEntity, x, y, z, delta, stack, yOffset, angle, renderedAmount, atlas)){
+                GL11.glPopMatrix();
+                ci.cancel();
+            }
+        }
+    }
     
     @WrapWithCondition(method = "renderVanilla", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/Tessellator;vertex(DDDDD)V"))
     public boolean cancelVanillaVertex(Tessellator instance, double x, double y, double z, double u, double v) {

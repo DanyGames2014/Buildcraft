@@ -35,4 +35,13 @@ public class ArsenicOverlayRendererMixin {
             ci.cancel();
         }
     }
+
+    @Inject(method = "renderVanilla(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/modificationstation/stationapi/api/client/texture/SpriteAtlasTexture;)V", at = @At("HEAD"), cancellable = true)
+    public void renderInHandBlock(LivingEntity entity, ItemStack item, SpriteAtlasTexture atlas, CallbackInfo ci){
+        if (item.getItem() instanceof CustomItemRenderer customItemRenderer) {
+            if(customItemRenderer.renderInHandBlock(atlas, Tessellator.INSTANCE, entity, item)){
+                ci.cancel();
+            }
+        }
+    }
 }

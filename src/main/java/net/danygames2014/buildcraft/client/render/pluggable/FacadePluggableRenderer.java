@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.client.render.pluggable;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
@@ -88,8 +89,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
 
     @Override
     public void renderPluggable(BlockRenderManager blockRenderManager, PipeBlockEntity pipe, Direction side, PipePluggable pluggable, int x, int y, int z) {
-        // TODO: when mutli renderpass is implemented, change this to be the actual renderpass
-        int renderPass = 0;
+        int renderPass = PipeBlock.currentRenderPass;
         FacadePluggable facadePluggable = (FacadePluggable)pluggable;
 
         Block block = facadePluggable.getBlock();
