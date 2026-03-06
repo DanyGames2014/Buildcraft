@@ -10,15 +10,6 @@ import org.lwjgl.opengl.GL11;
 public class LaserRenderer {
     public static final float STEP = 0.04F;
 
-    public static final String[] LASER_TEXTURES = new String[]{
-            "/assets/buildcraft/stationapi/textures/block/laser/laser_1.png",
-            "/assets/buildcraft/stationapi/textures/block/laser/laser_2.png",
-            "/assets/buildcraft/stationapi/textures/block/laser/laser_3.png",
-            "/assets/buildcraft/stationapi/textures/block/laser/laser_4.png",
-            "/assets/buildcraft/stationapi/textures/block/laser/stripes.png",
-            "/assets/buildcraft/stationapi/textures/block/laser/blue_stripes.png"
-    };
-
     protected static ModelPart model = new ModelPart(0 ,0) {
     };
     private static ModelPart [] box;

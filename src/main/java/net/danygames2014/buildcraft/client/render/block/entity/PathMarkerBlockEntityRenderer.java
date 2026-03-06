@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.client.render.block.entity;
 import net.danygames2014.buildcraft.block.entity.PathMarkerBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.client.render.LaserRenderer;
+import net.danygames2014.buildcraft.util.Constants;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelPart;
@@ -31,7 +32,7 @@ public class PathMarkerBlockEntityRenderer extends BlockEntityRenderer {
                 LaserRenderer
                         .doRenderLaser(
                                 Minecraft.INSTANCE.textureManager,
-                                laser, LaserRenderer.LASER_TEXTURES[3]);
+                                laser, Constants.LASER_TEXTURES[3]);
                 GL11.glPopMatrix();
             }
         }

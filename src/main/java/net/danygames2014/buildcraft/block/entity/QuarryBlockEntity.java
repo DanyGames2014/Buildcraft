@@ -9,6 +9,7 @@ import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.entity.MechanicalArmEntity;
+import net.danygames2014.buildcraft.util.Constants;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -195,13 +196,13 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
         double avg = powerReceiver.getAveragePowerUsed();
 
         if (avg <= 10.0) {
-            return LaserRenderer.LASER_TEXTURES[0];
+            return Constants.LASER_TEXTURES[0];
         } else if (avg <= 20.0) {
-            return LaserRenderer.LASER_TEXTURES[1];
+            return Constants.LASER_TEXTURES[1];
         } else if (avg <= 30.0) {
-            return LaserRenderer.LASER_TEXTURES[2];
+            return Constants.LASER_TEXTURES[2];
         } else {
-            return LaserRenderer.LASER_TEXTURES[3];
+            return Constants.LASER_TEXTURES[3];
         }
     }
 

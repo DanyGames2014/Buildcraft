@@ -84,15 +84,6 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     }
 
     public void setAction(int position, Statement action) {
-        // HUGE HACK! TODO - Remove in an API rewrite by adding
-        // ways for actions to fix their state on removal.
-//        if (actions[position] instanceof ActionValve && pipe != null && pipe.transporter != null) {
-//            for (Direction side : Direction.values()) {
-//                pipe.transporter.allowInput(side, true);
-//                pipe.transporter.allowOutput(side, true);
-//            }
-//        }
-
         if (action != actions[position]) {
             Arrays.fill(actionParameters[position], null);
         }
@@ -289,7 +280,6 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
         redstoneOutput = data.getByte("redstoneOutput");
     }
 
-    // GUI // TODO: implement gui
     public void openGui(PlayerEntity player, PipeBlockEntity blockEntity) {
         if (!player.world.isRemote) {
             GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("gate"), blockEntity, new GateInterfaceScreenHandler(player.inventory, blockEntity));

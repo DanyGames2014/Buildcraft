@@ -11,6 +11,7 @@ import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.registry.ControlModeRegistry;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -282,13 +283,13 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
         double avg = powerAverage / POWER_AVERAGING;
 
         if (avg <= 1.0) {
-            return LaserRenderer.LASER_TEXTURES[0];
+            return Constants.LASER_TEXTURES[0];
         } else if (avg <= 2.0) {
-            return LaserRenderer.LASER_TEXTURES[1];
+            return Constants.LASER_TEXTURES[1];
         } else if (avg <= 3.0) {
-            return LaserRenderer.LASER_TEXTURES[2];
+            return Constants.LASER_TEXTURES[2];
         } else {
-            return LaserRenderer.LASER_TEXTURES[3];
+            return Constants.LASER_TEXTURES[3];
         }
     }
 

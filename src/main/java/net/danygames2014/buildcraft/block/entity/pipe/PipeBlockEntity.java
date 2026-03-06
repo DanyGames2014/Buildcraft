@@ -93,8 +93,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         behavior = pipeBlock.behavior;
         transporter = pipeBlock.transporterFactory.create(this);
         transporter.init();
-        // TODO: dany pls fix
-//        updateConnections();
         scheduleRenderUpdate();
     }
 
@@ -107,7 +105,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             updateConnections();
         }
 
-        // TODO: This does more, but I only added the render related code for now
         if (neighbourUpdate) {
             refreshRenderState = true;
             neighbourUpdate = false;
@@ -368,7 +365,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         if (!world.isRemote && color >= -1 && color < 16 && glassColor != color) {
             renderState.glassColorDirty = true;
             glassColor = color;
-            notifyBlockChanged(); // TODO: check what this does
+            notifyBlockChanged();
             return true;
         }
         return false;
@@ -626,7 +623,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         
         // Pipe connections:
         for (Direction direction : Direction.values()) {
-            // TODO: Actually use the returned connection type here to swap the texture when neeeded, no fucking idea how to do it, sorry ralf
             renderState.pipeConnectionMatrix.setConnected(direction, connections.get(direction));
             //renderState.pipeConnectionMatrix.setConnected(direction, this.canConnectTo(x, y, z, direction));
         }

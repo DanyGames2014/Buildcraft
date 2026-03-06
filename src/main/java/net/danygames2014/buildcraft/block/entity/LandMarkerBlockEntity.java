@@ -15,8 +15,37 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAreaProvider {
+public class LandMarkerBlockEntity extends SyncedBlockEntity implements BlockEntityAreaProvider {
     public static int MARKER_RANGE = 64;
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        origin.writeData(stream);
+        stream.writeBoolean(showSignals);
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        origin.readData(stream);
+        showSignals = stream.readBoolean();
+
+        switchSignals();
+
+        if (origin.vectO.isSet() && origin.vectO.getMarker(world) != null) {
+            origin.vectO.getMarker(world).updateSignals();
+
+            for (TileWrapper w : origin.vect) {
+                LandMarkerBlockEntity m = w.getMarker(world);
+
+                if (m != null) {
+                    m.updateSignals();
+                }
+            }
+        }
+
+        createLasers();
+    }
+
     public static class TileWrapper implements Serializable {
 
         public int x, y, z;
@@ -128,7 +157,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
     public void updateSignals() {
         if (!world.isRemote) {
             showSignals = world.isPowered(x, y, z);
-            //sendNetworkUpdate();
+            sendNetworkUpdate();
         }
     }
 
@@ -187,7 +216,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
             }
         }
 
-        //sendNetworkUpdate();
+        sendNetworkUpdate();
     }
 
     void setVect(int n) {
@@ -470,8 +499,7 @@ public class LandMarkerBlockEntity extends BlockEntity implements BlockEntityAre
         signals = null;
 
         if (!world.isRemote && markerOrigin != null && markerOrigin != this) {
-            // TODO: is this needed ?
-            //markerOrigin.sendNetworkUpdate();
+            markerOrigin.sendNetworkUpdate();
         }
     }
 

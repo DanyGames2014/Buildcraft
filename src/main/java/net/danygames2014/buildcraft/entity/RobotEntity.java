@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.block.entity.AreaWorkerBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.client.render.LaserRenderer;
+import net.danygames2014.buildcraft.util.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -49,7 +50,7 @@ public class RobotEntity extends Entity {
         dataTracker.startTracking(TARGET_X_KEY, 0);
         dataTracker.startTracking(TARGET_Y_KEY, 0);
         dataTracker.startTracking(TARGET_Z_KEY, 0);
-        dataTracker.startTracking(LASER_TEXTURE_KEY, LaserRenderer.LASER_TEXTURES[0]);
+        dataTracker.startTracking(LASER_TEXTURE_KEY, Constants.LASER_TEXTURES[0]);
     }
 
     @Override
