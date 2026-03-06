@@ -27,7 +27,7 @@ public abstract class StatementParameterSlot extends AdvancedSlot{
         StatementParameter parameter = getParameter();
 
         // HACK: We're explicitly returning null so that the item stack description is used.
-        if (parameter != null && !(parameter instanceof StatementParameterItemStack)) {
+        if (parameter != null) {
             return parameter.getDescription() != null ? parameter.getDescription() : "";
         } else {
             return null;

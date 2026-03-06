@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.api.transport.statement;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
@@ -43,7 +44,7 @@ public class StatementParameterItemStack implements StatementParameter {
     @Override
     public String getDescription() {
         if (stack != null) {
-            return stack.getTranslationKey();
+            return TranslationStorage.getInstance().get(stack.getTranslationKey() + ".name");
         } else {
             return "";
         }
