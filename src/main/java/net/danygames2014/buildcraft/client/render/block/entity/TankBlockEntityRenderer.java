@@ -18,7 +18,7 @@ public class TankBlockEntityRenderer extends BlockEntityRenderer {
         if(!(blockEntity instanceof TankBlockEntity tankBlockEntity)){
             return;
         }
-        if(tankBlockEntity.fluid == null || tankBlockEntity.fluid.amount <= 0){
+        if(tankBlockEntity.tankRenderState.fluid == null || tankBlockEntity.tankRenderState.fluid.amount <= 0){
             return;
         }
         GL11.glEnable(GL11.GL_BLEND);
@@ -28,7 +28,7 @@ public class TankBlockEntityRenderer extends BlockEntityRenderer {
         BlockRenderManager blockRenderManager = Minecraft.INSTANCE.worldRenderer.blockRenderManager;
         GL11.glTranslated(x, y, z);
 
-        float waterMaxY = (float) tankBlockEntity.fluid.amount / TankBlockEntity.CAPACITY;
+        float waterMaxY = (float) tankBlockEntity.tankRenderState.fluid.amount / TankBlockEntity.CAPACITY;
 
         Buildcraft.tank.setBoundingBox(0.126F, 0.01F, 0.126F, 0.874F, waterMaxY - 0.01F, 0.874F);
 
@@ -37,7 +37,7 @@ public class TankBlockEntityRenderer extends BlockEntityRenderer {
         Tessellator tessellator = Tessellator.INSTANCE;
         tessellator.startQuads();
 
-        int fluidTextureIndex = tankBlockEntity.fluid.fluid.getStillBlock().getTexture(0);
+        int fluidTextureIndex = tankBlockEntity.tankRenderState.fluid.fluid.getStillBlock().getTexture(0);
 
         blockRenderManager.renderTopFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);
         blockRenderManager.renderNorthFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);

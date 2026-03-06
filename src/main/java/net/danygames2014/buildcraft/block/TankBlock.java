@@ -112,8 +112,10 @@ public class TankBlock extends TemplateBlockWithEntity {
                     if(bucketFluid != null){
                         FluidStack bucketStack = new FluidStack(bucketFluid, bucketFluid.getBucketSize());
                         if(blockEntity.insertFluid(0, bucketStack, false).amount == 0){
-                            blockEntity.insertFluid(0, bucketStack, true);
-                            player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;
+                            if(!world.isRemote){
+                                blockEntity.insertFluid(0, bucketStack, true);
+                                player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;
+                            }
                             return true;
                         }
                     }
@@ -122,8 +124,10 @@ public class TankBlock extends TemplateBlockWithEntity {
                         if(tankStack != null){
                             FluidStack result = blockEntity.extractFluid(0, tankStack.fluid.getBucketSize(), false);
                             if(result != null && result.amount == tankStack.fluid.getBucketSize()){
-                                blockEntity.extractFluid(0, tankStack.fluid.getBucketSize(), true);
-                                player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
+                                if(!world.isRemote){
+                                    blockEntity.extractFluid(0, tankStack.fluid.getBucketSize(), true);
+                                    player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
+                                }
                                 return true;
                             }
                         }

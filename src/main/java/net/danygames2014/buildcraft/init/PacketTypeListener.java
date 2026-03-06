@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
+import net.danygames2014.buildcraft.client.render.TankRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.packet.*;
 import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
@@ -31,5 +32,6 @@ public class PacketTypeListener {
 
         StateRegistry.register(PipeRenderState.class);
         StateRegistry.register(PipePluggableState.class);
+        StateRegistry.register(TankRenderState.class);
     }
 }
