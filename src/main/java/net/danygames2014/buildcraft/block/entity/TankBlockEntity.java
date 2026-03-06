@@ -21,11 +21,19 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
         }
     }
 
-    public TankBlockEntity getBottomTank(){
+    public TankBlockEntity getBottomTank(@Nullable FluidStack filter){
         TankBlockEntity lastTank = this;
-        while(true){
+        while (true) {
             TankBlockEntity below = getTankBelow(lastTank);
-            if(below != null){
+            if (below != null) {
+                if (filter != null) {
+                    if (below.fluid == null || !below.fluid.isFluidEqual(filter)) {
+                        break;
+                    }
+                }
+                if (lastTank.fluid != null && below.fluid != null && !below.fluid.isFluidEqual(lastTank.fluid)) {
+                    break;
+                }
                 lastTank = below;
             } else {
                 break;
@@ -34,11 +42,19 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
         return lastTank;
     }
 
-    public TankBlockEntity getTopTank(){
+    public TankBlockEntity getTopTank(@Nullable FluidStack filter){
         TankBlockEntity lastTank = this;
-        while(true){
+        while (true) {
             TankBlockEntity above = getTankAbove(lastTank);
-            if(above != null){
+            if (above != null) {
+                if (filter != null) {
+                    if (above.fluid == null || !above.fluid.isFluidEqual(filter)) {
+                        break;
+                    }
+                }
+                if (lastTank.fluid != null && above.fluid != null && !above.fluid.isFluidEqual(lastTank.fluid)) {
+                    break;
+                }
                 lastTank = above;
             } else {
                 break;
@@ -50,6 +66,9 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
     public static TankBlockEntity getTankBelow(TankBlockEntity tank){
         BlockEntity below = tank.world.getBlockEntity(tank.x, tank.y - 1, tank.z);
         if(below instanceof TankBlockEntity belowTank){
+            if(belowTank.fluid != null && tank.fluid != null && !belowTank.fluid.isFluidEqual(tank.fluid)){
+                return null;
+            }
             return belowTank;
         }
         else {
@@ -60,6 +79,9 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
     public static TankBlockEntity getTankAbove(TankBlockEntity tank){
         BlockEntity above = tank.world.getBlockEntity(tank.x, tank.y + 1, tank.z);
         if(above instanceof TankBlockEntity aboveTank){
+            if(aboveTank.fluid != null && tank.fluid != null && !aboveTank.fluid.isFluidEqual(tank.fluid)){
+                return null;
+            }
             return aboveTank;
         }
         else {
@@ -80,6 +102,9 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
                 below.fluid.amount += used;
             }
             fluid.amount -= used;
+            if(fluid.amount <= 0){
+                fluid = null;
+            }
 
             hasUpdate = true;
             below.hasUpdate = true;
@@ -132,7 +157,7 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
             return stack;
         }
         FluidStack remainingToInsert = stack.copy();
-        TankBlockEntity tankToFill = getBottomTank();
+        TankBlockEntity tankToFill = getBottomTank(stack);
 
         FluidStack fluid = tankToFill.fluid;
         if(fluid != null && fluid.amount > 0 && !fluid.isFluidEqual(stack)){
@@ -162,9 +187,13 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
             return null;
         }
 
-        TankBlockEntity currentTank = getTopTank();
+        TankBlockEntity currentTank = getTopTank(fluid);
         while (currentTank != null && (currentTank.fluid == null || currentTank.fluid.amount <= 0)) {
             currentTank = getTankBelow(currentTank);
+        }
+
+        if(currentTank == null){
+            return null;
         }
 
         FluidStack fluid = currentTank.fluid.copy();
@@ -217,7 +246,7 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
 
     @Override
     public FluidStack getFluid(int slot, @Nullable Direction direction) {
-        return getBottomTank().fluid;
+        return getBottomTank(fluid).fluid;
     }
 
     @Override
@@ -233,16 +262,20 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
 
     @Override
     public int getFluidCapacity(int slot, @Nullable Direction direction) {
-        int capacity = 0;
-        TankBlockEntity currentTank = getBottomTank();
-        while(currentTank != null){
-            if(fluid != null && currentTank.fluid != null && !currentTank.fluid.isFluidEqual(fluid)){
+        int totalCapacity = 0;
+        TankBlockEntity current = getBottomTank(fluid);
+
+        FluidStack existingFluid = current != null ? current.fluid : null;
+
+        while (current != null) {
+            if (existingFluid != null && current.fluid != null && !current.fluid.isFluidEqual(existingFluid)) {
                 break;
             }
-            capacity += CAPACITY;
-            currentTank = getTankAbove(currentTank);
+
+            totalCapacity += CAPACITY;
+            current = getTankAbove(current);
         }
-        return capacity;
+        return totalCapacity;
     }
 
     @Override
