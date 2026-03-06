@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 public class TankBlockEntity extends BlockEntity implements FluidHandler {
     public static final int CAPACITY = 10000;
     public FluidStack fluid;
+    public boolean hasUpdate = false;
 
     @Override
     public void tick() {
@@ -71,7 +72,19 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
         if(below == null){
             return;
         }
-        fluid = below.insertFluid(fluid, Direction.UP);
+        int used = getUsed(fluid, below.fluid);
+        if(used > 0){
+            if(below.fluid == null){
+                below.fluid = new FluidStack(fluid.fluid, used);
+            } else {
+                below.fluid.amount += used;
+            }
+            fluid.amount -= used;
+
+            hasUpdate = true;
+            below.hasUpdate = true;
+        }
+//        fluid = below.insertFluid(fluid, Direction.UP);
     }
 
     @Override
@@ -101,9 +114,7 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
 
     @Override
     public FluidStack extractFluid(int slot, int amount, @Nullable Direction direction) {
-        FluidStack returnStack = fluid.copy();
-        returnStack.amount = amount;
-        return returnStack;
+        return extractFluid(0, amount, true);
     }
 
     @Override
@@ -116,29 +127,92 @@ public class TankBlockEntity extends BlockEntity implements FluidHandler {
         return this.insertFluid(stack, direction);
     }
 
+    public FluidStack insertFluid(int tankIndex, FluidStack stack, boolean doInsert){
+        if(tankIndex != 0 || stack == null){
+            return stack;
+        }
+        FluidStack remainingToInsert = stack.copy();
+        TankBlockEntity tankToFill = getBottomTank();
+
+        FluidStack fluid = tankToFill.fluid;
+        if(fluid != null && fluid.amount > 0 && !fluid.isFluidEqual(stack)){
+            return stack;
+        }
+
+        while (tankToFill != null && remainingToInsert.amount > 0) {
+            int used = getUsed(remainingToInsert, tankToFill.fluid);
+            if(used > 0) {
+                if(doInsert) {
+                    if(tankToFill.fluid == null){
+                        tankToFill.fluid = new FluidStack(stack.fluid, used);
+                    } else {
+                        tankToFill.fluid.amount += used;
+                    }
+                    tankToFill.hasUpdate = true;
+                }
+                remainingToInsert.amount -= used;
+            }
+            tankToFill = getTankAbove(tankToFill);
+        }
+        return remainingToInsert;
+    }
+
+    public FluidStack extractFluid(int tankIndex, int maxDrain, boolean doDrain) {
+        if (tankIndex != 0 || maxDrain <= 0) {
+            return null;
+        }
+
+        TankBlockEntity currentTank = getTopTank();
+        while (currentTank != null && (currentTank.fluid == null || currentTank.fluid.amount <= 0)) {
+            currentTank = getTankBelow(currentTank);
+        }
+
+        FluidStack fluid = currentTank.fluid.copy();
+        int totalAvailable = 0;
+
+        TankBlockEntity tempTank = currentTank;
+        while (tempTank != null) {
+            if (tempTank.fluid != null && tempTank.fluid.isFluidEqual(fluid)) {
+                totalAvailable += tempTank.fluid.amount;
+            }
+            tempTank = getTankBelow(tempTank);
+        }
+
+        int toDrain = Math.min(totalAvailable, maxDrain);
+        fluid.amount = toDrain;
+
+        if (doDrain && toDrain > 0) {
+            int remainingToDrain = toDrain;
+            while (currentTank != null && remainingToDrain > 0) {
+                if (currentTank.fluid != null && currentTank.fluid.isFluidEqual(fluid)) {
+                    int drained = Math.min(currentTank.fluid.amount, remainingToDrain);
+
+                    currentTank.fluid.amount -= drained;
+                    remainingToDrain -= drained;
+
+                    if (currentTank.fluid.amount <= 0) {
+                        currentTank.fluid = null;
+                    }
+                    currentTank.hasUpdate = true;
+                }
+                currentTank = getTankBelow(currentTank);
+            }
+        }
+
+        return fluid;
+    }
+
+    private int getUsed(FluidStack input, FluidStack existing){
+        if(existing == null) return Math.min(TankBlockEntity.CAPACITY, input.amount);
+        if(!existing.isFluidEqual(input)) return 0;
+
+        int spaceAvailable = TankBlockEntity.CAPACITY - existing.amount;
+        return Math.min(spaceAvailable, input.amount);
+    }
+
     @Override
     public FluidStack insertFluid(FluidStack stack, @Nullable Direction direction) {
-        TankBlockEntity currentTank = getBottomTank();
-        while(stack.amount > 0 && currentTank != null){
-            if(fluid != null && currentTank.fluid != null && !currentTank.fluid.isFluidEqual(fluid)){
-                break;
-            }
-            FluidStack currentStack = currentTank.fluid;
-
-            if (currentStack == null) {
-                currentStack = new FluidStack(stack.fluid, 0);
-            }
-            int capacity = currentTank.getFluidCapacity(0, direction);
-            int space = capacity - currentStack.amount;
-            int addedAmount = Math.min(stack.amount, space);
-            currentStack.amount += addedAmount;
-            stack.amount -= addedAmount;
-
-            currentTank.fluid = currentStack;
-
-            currentTank = getTankAbove(currentTank);
-        }
-        return stack.amount > 0 ? stack : null;
+        return insertFluid(0, stack, true);
     }
 
     @Override

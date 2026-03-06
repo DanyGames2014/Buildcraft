@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.block.entity.TankBlockEntity;
+import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBucket;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.minecraft.block.Block;
@@ -103,18 +104,32 @@ public class TankBlock extends TemplateBlockWithEntity {
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        ItemStack hand = player.getHand();
-        if (hand != null && hand.getItem() instanceof FluidBucket fluidBucket) {
-            if (fluidBucket.getFluid() != null) {
-                FluidStack fluidStack = new FluidStack(fluidBucket.getFluid(), fluidBucket.getFluid().getBucketSize());
-
-                TankBlockEntity tankBlockEntity = (TankBlockEntity) world.getBlockEntity(x, y, z);
-                tankBlockEntity.insertFluid(fluidStack, null);
-                return true;
+        if(world.getBlockEntity(x, y, z) instanceof TankBlockEntity blockEntity){
+            if(player.getHand() != null){
+                ItemStack hand = player.getHand();
+                if(hand.getItem() instanceof FluidBucket fluidBucket){
+                    Fluid bucketFluid = fluidBucket.getFluid();
+                    if(bucketFluid != null){
+                        FluidStack bucketStack = new FluidStack(bucketFluid, bucketFluid.getBucketSize());
+                        if(blockEntity.insertFluid(0, bucketStack, false).amount == 0){
+                            blockEntity.insertFluid(0, bucketStack, true);
+                            player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;
+                            return true;
+                        }
+                    }
+                    if(bucketFluid == null){
+                        FluidStack tankStack = blockEntity.getFluid(0, null);
+                        if(tankStack != null){
+                            FluidStack result = blockEntity.extractFluid(0, tankStack.fluid.getBucketSize(), false);
+                            if(result != null && result.amount == tankStack.fluid.getBucketSize()){
+                                blockEntity.extractFluid(0, tankStack.fluid.getBucketSize(), true);
+                                player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
-        }
-        if (world.getBlockEntity(x, y, z) instanceof TankBlockEntity tankBlockEntity && tankBlockEntity.fluid != null) {
-            System.out.println(tankBlockEntity.fluid.amount);
         }
         return false;
     }
