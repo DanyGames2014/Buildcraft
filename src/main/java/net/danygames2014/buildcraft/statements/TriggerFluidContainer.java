@@ -15,6 +15,7 @@ import net.minecraft.client.resource.language.TranslationStorage;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class TriggerFluidContainer extends BCStatement implements TriggerExternal {
@@ -39,7 +40,6 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
         return TranslationStorage.getInstance().get("gate.buildcraft.trigger.fluid." + state.name().toLowerCase(Locale.ENGLISH));
     }
 
-    // TODO: confirm if this is actually working or not
     @Override
     public boolean isTriggerActive(BlockEntity target, Direction side, StatementContainer source, StatementParameter[] parameters) {
         FluidHandlerBlockCapability capability = CapabilityHelper.getCapability(target.world, target.x, target.y, target.z, FluidHandlerBlockCapability.class);
@@ -58,23 +58,28 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
                 searchedFluid.amount = 1;
             }
 
-            FluidStack[] liquids = capability.getFluids(side);
-            if (liquids == null) {
+
+            int slots = capability.getFluidSlots(side.getOpposite());
+            if(slots <= 0){
                 return false;
+            }
+            FluidStack[] liquids = new FluidStack[slots];
+            for(int i = 0; i < liquids.length; i++){
+                liquids[i] = capability.getFluid(i, side.getOpposite());
             }
 
             //noinspection EnhancedSwitchMigration
             switch (state) {
                 case Empty:
                     for (FluidStack c : liquids) {
-                        if (c != null && c.fluid != null && c.amount > 0 && (searchedFluid == null || searchedFluid.isFluidEqual(c))) {
-                            return false;
+                        if (c == null ||  c.amount <= 0 && (searchedFluid == null || !searchedFluid.isFluidEqual(c))) {
+                            return true;
                         }
                     }
-                    return true;
+                    return false;
                 case Contains:
                     for (FluidStack c : liquids) {
-                        if (c != null && c.fluid != null && c.amount > 0 && (searchedFluid == null || searchedFluid.isFluidEqual(c))) {
+                        if (c != null && c.fluid != null && c.amount > 0 && searchedFluid != null && searchedFluid.isFluidEqual(c)) {
                             return true;
                         }
                     }
@@ -83,7 +88,7 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
                     if (searchedFluid == null) {
                         for (int i = 0; i < liquids.length; i++) {
                             FluidStack c = liquids[i];
-                            if (c != null && (c.fluid == null || capability.getFluidCapacity(i, side) > 0)) {
+                            if (c == null || (capability.getFluidCapacity(i, side) - c.amount > 0)) {
                                 return true;
                             }
                         }
@@ -91,7 +96,7 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
                     } else {
                         for (int i = 0; i < liquids.length; i++) {
                             FluidStack c = liquids[i];
-                            if (c != null && (c.fluid == null || capability.getFluidCapacity(i, side) > 0 && c.fluid == searchedFluid.fluid)) {
+                            if (c == null || (c.fluid == null || capability.getFluidCapacity(i, side) - c.amount > 0 && c.fluid == searchedFluid.fluid)) {
                                 return true;
                             }
                         }
@@ -101,15 +106,15 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
                     if (searchedFluid == null) {
                         for (int i = 0; i < liquids.length; i++) {
                             FluidStack c = liquids[i];
-                            if (c != null && (c.fluid == null || capability.getFluidCapacity(i, side) <= 0)) {
-                                return false;
+                            if (c != null && c.fluid != null && capability.getFluidCapacity(i, side) - c.amount <= 0) {
+                                return true;
                             }
                         }
-                        return true;
+                        return false;
                     } else {
                         for (int i = 0; i < liquids.length; i++) {
                             FluidStack c = liquids[i];
-                            if (c != null && (c.fluid == null || capability.getFluidCapacity(i, side) <= 0 && c.fluid == searchedFluid.fluid)) {
+                            if (c != null && c.fluid != null && capability.getFluidCapacity(i, side) - c.amount <= 0 && c.fluid == searchedFluid.fluid) {
                                 return true;
                             }
                         }
