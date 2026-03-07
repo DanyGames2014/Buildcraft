@@ -76,16 +76,16 @@ public class Buildcraft {
     public static Block goldenChuteBlock;
     public static Block autoWorkbench;
     public static Block miningWell;
-    public static Block quarry; // NYI
-    public static Block pump; // NYI
+    public static Block quarry;
+    public static Block pump;
     public static Block tank;
-    public static Block refinery; // NYI
+    public static Block refinery;
     public static Block laser;
     public static Block assemblyTable;
-    public static Block filler; // NYI
-    public static Block builder; // NYI
-    public static Block architectTable; // NYI
-    public static Block blueprintLibrary; // NYI
+    public static Block filler;
+    public static Block builder;
+    public static Block architectTable;
+    public static Block blueprintLibrary;
     public static Block landMarker;
     public static Block pathMarker;
     public static Block redstoneEngine;

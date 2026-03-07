@@ -46,7 +46,8 @@ public class CombustionEngineScreen extends EngineScreen {
         Atlas.Sprite sprite = Atlases.getTerrain().getTexture(textureId);
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
-        int color = 0xFFFFFF; // TODO: change this to the colormultiplier
+        // TODO: Implement a default color multiplier in NyaLib
+        int color = 0xFFFFFF;
 
         float red = (float) (color >> 16 & 255) / 255.0F;
         float green = (float) (color >> 8 & 255) / 255.0F;
