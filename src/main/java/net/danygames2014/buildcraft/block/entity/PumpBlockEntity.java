@@ -6,6 +6,8 @@ import net.danygames2014.buildcraft.api.core.BlockIndex;
 import net.danygames2014.buildcraft.api.core.SafeTimeTracker;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
+import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.entity.EntityBlock;
@@ -30,7 +32,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 
-// TODO: continue after canDrainBlock
 public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler, IPowerReceptor, HasWork {
 
     public static final int REBUILD_DELAY = 512;
@@ -112,7 +113,6 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
             }
         } else {
             if (tick % 128 == 0) {
-                // TODO: improve that decision
                 rebuildQueue();
 
                 if (getNextIndexToPump(false) == null) {
@@ -154,46 +154,93 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
 
         pushFluidToConsumers(getFluid(0, null), 400, blockEntityBuffer);
     }
-    // TODO: this doesnt seem to push to adjacent tanks yet
+
+
     public void pushFluidToConsumers(FluidStack tank, int flowCap, BlockEntityBuffer[] beBuffer) {
+        if (tank == null || tank.amount <= 0) return;
+
         int amountToPush = Math.min(tank.amount, flowCap);
-        for (Direction side : Direction.values()) {
-            if(tank != null && tank.amount > 0){
-                BlockEntity blockEntity = beBuffer[side.ordinal()].getBlockEntity();
-                FluidHandlerBlockCapability capability = blockEntity != null ? CapabilityHelper.getCapability(blockEntity, FluidHandlerBlockCapability.class) : null;
-                if(capability != null){
-                    int slots = getFluidSlots(side.getOpposite());
-                    for( int i = 0; i < slots; i++){
-                        int capacity = getFluidCapacity(i, side.getOpposite());
-                        int toAdd  = Math.min(amountToPush, capacity);
-                        if(toAdd > 0){
-                            insertFluid(new FluidStack(tank.fluid, toAdd), i, side.getOpposite());
-                            amountToPush -= toAdd;
-                            tank.amount -= toAdd;
-                            if(amountToPush <= 0){
-                                return;
-                            }
-                        }
+
+        for(Direction side : Direction.values()){
+            if (amountToPush <= 0 || tank.amount <= 0) break;
+
+            BlockEntity blockEntity = beBuffer[side.ordinal()].getBlockEntity();
+
+            FluidHandlerBlockCapability capability = blockEntity != null ? CapabilityHelper.getCapability(blockEntity, FluidHandlerBlockCapability.class) : null;
+
+            if(capability != null){
+                int slots = capability.getFluidSlots(side.getOpposite());
+                for (int i = 0; i < slots; i++) {
+                    int toAdd = Math.min(amountToPush, tank.amount);
+
+                    FluidStack remainder = capability.insertFluid(new FluidStack(tank.fluid, toAdd), i, side.getOpposite());
+
+                    int actuallyMoved = toAdd - (remainder == null ? 0 : remainder.amount);
+
+                    tank.amount -= actuallyMoved;
+                    amountToPush -= actuallyMoved;
+
+                    if (amountToPush <= 0) return;
+                }
+            } else if (blockEntity instanceof PipeBlockEntity pipe){
+                if (pipe.transporter instanceof FluidPipeTransporter fluidTransporter) {
+                    if (fluidTransporter.isPipeConnected(side.getOpposite())) {
+                        int toAdd = Math.min(amountToPush, tank.amount);
+
+                        FluidStack remainder = fluidTransporter.insertFluid(new FluidStack(tank.fluid, toAdd), side.getOpposite());
+
+                        int actuallyMoved = toAdd - (remainder == null ? 0 : remainder.amount);
+
+                        tank.amount -= actuallyMoved;
+                        amountToPush -= actuallyMoved;
+
+                        if (amountToPush <= 0) return;
                     }
                 }
             }
         }
-//        FluidStack fluidStack = tank.drain(amountToPush, false);
-//        if (fluidStack != null && fluidStack.amount > 0) {
-//            BlockEntity blockEntity = beBuffer[side.ordinal()].getBlockEntity();
-//            FluidHandlerBlockCapability capability = CapabilityHelper.getCapability(blockEntity, FluidHandlerBlockCapability.class);
-//            if (capability != null) {
-//                int used = capability.insertFluid(fluidStack, side.getOpposite()).amount;
-//                if (used > 0) {
-//                    amountToPush -= used;
-//                    tank.drain(used, true);
-//                    if (amountToPush <= 0) {
-//                        return;
+    }
+
+//    public void pushFluidToConsumers(FluidStack tank, int flowCap, BlockEntityBuffer[] beBuffer) {
+//        if(tank == null) return;
+//        int amountToPush = Math.min(tank.amount, flowCap);
+//        for (Direction side : Direction.values()) {
+//            if(tank != null && tank.amount > 0){
+//                BlockEntity blockEntity = beBuffer[side.ordinal()].getBlockEntity();
+//                FluidHandlerBlockCapability capability = blockEntity != null ? CapabilityHelper.getCapability(blockEntity, FluidHandlerBlockCapability.class) : null;
+//                if(capability != null){
+//                    int slots = getFluidSlots(side.getOpposite());
+//                    for( int i = 0; i < slots; i++){
+//                        int capacity = getFluidCapacity(i, side.getOpposite());
+//                        int toAdd  = Math.min(amountToPush, capacity);
+//                        if(toAdd > 0){
+//                            capability.insertFluid(new FluidStack(tank.fluid, toAdd), i, side.getOpposite());
+//                            amountToPush -= toAdd;
+//                            tank.amount -= toAdd;
+//                            if(amountToPush <= 0){
+//                                return;
+//                            }
+//                        }
+//                    }
+//                } else if (blockEntity instanceof PipeBlockEntity pipe){
+//                    if(pipe.transporter instanceof FluidPipeTransporter fluidTransporter){
+//                        if(fluidTransporter.isPipeConnected(side.getOpposite())){
+//                            int capacity = fluidTransporter.getCapacity();
+//                            int toAdd  = Math.min(amountToPush, capacity);
+//                            if(toAdd > 0){
+//                                fluidTransporter.insertFluid(new FluidStack(tank.fluid, toAdd), side.getOpposite());
+//                                amountToPush -= toAdd;
+//                                tank.amount -= toAdd;
+//                                if(amountToPush <= 0){
+//                                    return;
+//                                }
+//                            }
+//                        }
 //                    }
 //                }
 //            }
 //        }
-    }
+//    }
 
     private BlockEntity getBlockEntity(Direction side) {
         if (blockEntityBuffer == null) {
