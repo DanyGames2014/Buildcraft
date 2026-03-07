@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,12 +17,14 @@ public abstract class SyncedBlockEntity extends BlockEntity implements Serializa
     }
 
     public void sendNetworkUpdate(){
-        if(world != null && !world.isRemote){
-            Packet updatePacket = getUpdatePacket();
-            for(Object o : world.players){
-                PlayerEntity player = (PlayerEntity) o;
-                if(player.getDistance(x, y, z) < getNetworkUpdateRange()){
-                    PacketHelper.sendTo(player, updatePacket);
+        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
+            if(world != null && !world.isRemote){
+                Packet updatePacket = getUpdatePacket();
+                for(Object o : world.players){
+                    PlayerEntity player = (PlayerEntity) o;
+                    if(player.getDistance(x, y, z) < getNetworkUpdateRange()){
+                        PacketHelper.sendTo(player, updatePacket);
+                    }
                 }
             }
         }
