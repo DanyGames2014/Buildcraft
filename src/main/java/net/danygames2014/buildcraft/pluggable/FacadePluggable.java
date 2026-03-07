@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.pluggable.FacadePluggableRenderer;
+import net.danygames2014.buildcraft.item.FacadeItem;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -26,11 +27,10 @@ public class FacadePluggable extends PipePluggable {
     public static final float FACADE_THICKNESS = 2F / 16F;
 
     public FacadePluggable(ItemStack stack){
-        NbtCompound nbt = stack.getStationNbt();
-        block = BlockRegistry.INSTANCE.get(Identifier.tryParse(nbt.getString("id")));
-        meta = nbt.getInt("meta");
+        block = FacadeItem.getBlock(stack);
+        meta = FacadeItem.getMeta(stack);
         transparent = !block.isOpaque();
-        hollow = nbt.getBoolean("hollow");
+        hollow = FacadeItem.isHollow(stack);
     }
 
     public FacadePluggable(){
@@ -61,7 +61,7 @@ public class FacadePluggable extends PipePluggable {
 
     @Override
     public ItemStack[] getDropItems(PipeBlockEntity pipe) {
-        return new ItemStack[0];
+        return new ItemStack[]{FacadeItem.createStack(block, meta, hollow)};
     }
 
     @Override
@@ -88,7 +88,7 @@ public class FacadePluggable extends PipePluggable {
 
     @Override
     public void readNbt(NbtCompound nbt) {
-        block = BlockRegistry.INSTANCE.get(Identifier.tryParse(nbt.getString("id")));
+        block = BlockRegistry.INSTANCE.get(Identifier.tryParse(nbt.getString("blockid")));
         meta = nbt.getInt("meta");
         transparent = !block.isOpaque();
         hollow = nbt.getBoolean("hollow");
@@ -96,7 +96,7 @@ public class FacadePluggable extends PipePluggable {
 
     @Override
     public void writeNbt(NbtCompound nbt) {
-        nbt.putString("id", BlockRegistry.INSTANCE.getId(block).toString());
+        nbt.putString("blockid", BlockRegistry.INSTANCE.getId(block).toString());
         nbt.putInt("meta", meta);
         nbt.putBoolean("hollow", hollow);
     }

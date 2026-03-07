@@ -15,7 +15,7 @@ item.buildcraft.yellow_pipe_wire.name=Yellow Pipe Wire
 
 item.buildcraft.redstone_chipset.name=Redstone Chipset
 item.buildcraft.redstone_iron_chipset.name=Redstone Iron Chipset
-item.buildcraft.redstone_golden_chipset.name=Redston Golden Chipset
+item.buildcraft.redstone_golden_chipset.name=Redstone Golden Chipset
 item.buildcraft.redstone_diamond_chipset.name=Redstone Diamond Chipset
 item.buildcraft.pulsating_chipset.name=Pulsating Chipset
 
@@ -129,6 +129,9 @@ tile.buildcraft.diamond_energy_pipe.name=Diamond Kinesis Pipe
 
 fluid.buildcraft.oil.name=Oil
 fluid.buildcraft.fuel.name=Fuel
+
+facade.buildcraft.normal.name=Facade
+facade.buildcraft.hollow.name=Hollow Facade
 
 tooltip.buildcraft.gate.expansions=Installed Expansions:
 gate.buildcraft.expansion.pulsar=Autarchic Pulsar

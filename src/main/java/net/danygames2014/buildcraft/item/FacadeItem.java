@@ -14,11 +14,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Box;
+import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import net.modificationstation.stationapi.api.client.render.model.json.ModelTransformation;
 import net.modificationstation.stationapi.api.client.texture.Sprite;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
@@ -27,12 +29,13 @@ import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 @EnvironmentInterface(value = EnvType.CLIENT, itf = CustomItemRenderer.class)
-public class FacadeItem extends TemplateItem implements PipePluggableItem, CustomItemRenderer {
+public class FacadeItem extends TemplateItem implements PipePluggableItem, CustomItemRenderer, CustomTooltipProvider {
     public FacadeItem(Identifier identifier) {
         super(identifier);
     }
@@ -41,6 +44,8 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem, Custo
     public PipePluggable createPipePluggable(PipeBlockEntity pipe, Direction side, ItemStack stack) {
         return new FacadePluggable(stack);
     }
+
+
 
     public static ItemStack createStack(Block block, int meta, boolean hollow){
         ItemStack stack = new ItemStack(Buildcraft.facade);
@@ -134,5 +139,10 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem, Custo
             GL11.glPopMatrix();
         }
         return true;
+    }
+
+    @Override
+    public @NotNull String[] getTooltip(ItemStack itemStack, String s) {
+        return new String[]{getBlock(itemStack).getTranslatedName() + " " + TranslationStorage.getInstance().get("facade.buildcraft." + (isHollow(itemStack) ? "hollow" : "normal")+ ".name")};
     }
 }
