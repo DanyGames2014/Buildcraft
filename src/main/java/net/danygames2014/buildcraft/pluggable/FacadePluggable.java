@@ -113,11 +113,16 @@ public class FacadePluggable extends PipePluggable {
 
     @Override
     public void writeData(DataOutputStream stream) throws IOException {
-
+        stream.writeUTF(BlockRegistry.INSTANCE.getId(block).toString());
+        stream.writeInt(meta);
+        stream.writeBoolean(hollow);
     }
 
     @Override
     public void readData(DataInputStream stream) throws IOException {
-
+        block = BlockRegistry.INSTANCE.get(Identifier.tryParse(stream.readUTF()));
+        meta = stream.readInt();
+        transparent = !block.isOpaque();
+        hollow = stream.readBoolean();
     }
 }
