@@ -20,6 +20,7 @@ import net.danygames2014.buildcraft.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.danygames2014.buildcraft.util.DirectionUtil;
+import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -39,7 +40,9 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.apache.commons.lang3.NotImplementedException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 
 public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, Inventory, BlockEntityInit, DelayedBlockEntityUpdate {
@@ -297,6 +300,26 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         if (transporter != null) {
             transporter.onBreak();
         }
+        for(ItemStack stack : computeItemDrops()) {
+            ItemUtil.dropItems(world, stack, x, y, z);
+        }
+    }
+
+    public ArrayList<ItemStack> computeItemDrops() {
+        ArrayList<ItemStack> result = new ArrayList<ItemStack>();
+
+        for (PipeWire pipeWire : PipeWire.values()) {
+            if (wireSet[pipeWire.ordinal()]) {
+                result.add(pipeWire.getStack());
+            }
+        }
+
+        for (Direction direction : Direction.values()) {
+            if (hasPipePluggable(direction)) {
+                Collections.addAll(result, getPipePluggable(direction).getDropItems(this));
+            }
+        }
+        return result;
     }
 
     public boolean hasFacade(Direction direction){

@@ -45,6 +45,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer, PaintableBlock, RedstoneLevelProvider {
