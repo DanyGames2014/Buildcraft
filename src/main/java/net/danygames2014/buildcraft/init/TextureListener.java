@@ -75,6 +75,8 @@ public class TextureListener {
     public static Atlas.Sprite drill;
     public static Atlas.Sprite drillHead;
 
+    public static Atlas.Sprite pumpTube;
+
     public static Atlas.Sprite itemColorBox;
 
 
@@ -132,6 +134,9 @@ public class TextureListener {
 
         drill = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill"));
         drillHead = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill_head"));
+
+
+        pumpTube = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/pump_tube"));
 
         itemColorBox = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/item_color_box"));
 

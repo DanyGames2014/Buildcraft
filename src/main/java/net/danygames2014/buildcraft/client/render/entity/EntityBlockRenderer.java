@@ -54,7 +54,7 @@ public class EntityBlockRenderer extends EntityRenderer {
 
         // TODO: confirm this is correct
         public float getBlockBrightness(World world, int x, int y, int z) {
-            return world.getBrightness(x, y, z);
+            return world.dimension.lightLevelToLuminance[world.getLightLevel(x, y, z)];
         }
 
         public final void setBounds(float minX, float minY, float minZ, float maxX, float maxY, float maxZ) {

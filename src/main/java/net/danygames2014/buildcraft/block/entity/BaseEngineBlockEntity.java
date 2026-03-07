@@ -158,6 +158,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         return (int) (((float) getBurnTime() / (float) getMaxBurnTime()) * scale);
     }
 
+    // TODO: these are crashing the game when removing an engine with the debug pickaxe on server
     // Blockstate Wrappers
     public boolean isPumping() {
         return world.getBlockState(x, y, z).get(BaseEngineBlock.PUMPING_PROPERTY);

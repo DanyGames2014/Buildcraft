@@ -25,5 +25,6 @@ public class BlockEntityRendererListener {
         event.renderers.put(BuilderBlockEntity.class, new AreaWorkerBlockEntityRenderer());
         event.renderers.put(QuarryBlockEntity.class, new AreaWorkerBlockEntityRenderer());
         event.renderers.put(RefineryBlockEntity.class, RefineryBlockEntityRenderer.INSTANCE);
+        event.renderers.put(PumpBlockEntity.class, new PumpBlockEntityRenderer());
     }
 }

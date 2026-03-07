@@ -11,6 +11,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTrans
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.entity.EntityBlock;
+import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.fluid.Fluid;
@@ -29,21 +30,24 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 
-public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler, IPowerReceptor, HasWork {
+public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHandler, IPowerReceptor, HasWork {
 
     public static final int REBUILD_DELAY = 512;
     public static int MAX_LIQUID = 1000 * 16;
-    EntityBlock tube;
-    private TreeMap<Integer, Deque<BlockIndex>> pumpLayerQueues = new TreeMap<Integer, Deque<BlockIndex>>();
+    public EntityBlock tube;
+    private final TreeMap<Integer, Deque<BlockIndex>> pumpLayerQueues = new TreeMap<>();
     double tubeY = Double.NaN;
     int aimY = 0;
-    private PowerHandler powerHandler;
+    private final PowerHandler powerHandler;
     private BlockEntityBuffer[] blockEntityBuffer = null;
-    private SafeTimeTracker timer = new SafeTimeTracker(REBUILD_DELAY);
-    private Random random = new Random();
+    private final SafeTimeTracker timer = new SafeTimeTracker(REBUILD_DELAY);
+    private final Random random = new Random();
     private int tick = random.nextInt();
     private int numFluidBlocksFound = 0;
     private boolean powered = false;
@@ -70,6 +74,10 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
             createTube();
         }
 
+        if(tube != null && world.isRemote){
+            setTubePosition();
+        }
+
         if (world.isRemote) {
             return;
         }
@@ -87,7 +95,7 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
         if (tube.y - aimY > 0.01) {
             tubeY = tube.y - 0.01;
             setTubePosition();
-//            sendNetworkUpdate();
+            sendNetworkUpdate();
             return;
         }
 
@@ -129,14 +137,14 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
         }
     }
 
-    public void neighborUpdate(Block block){
+    public void neighborUpdate(){
         boolean p = world.isPowered(x, y, z);
 
         if (powered != p) {
             powered = p;
 
             if(!world.isRemote) {
-//                sendNetworkUpdate();
+                sendNetworkUpdate();
             }
         }
     }
@@ -201,47 +209,6 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
         }
     }
 
-//    public void pushFluidToConsumers(FluidStack tank, int flowCap, BlockEntityBuffer[] beBuffer) {
-//        if(tank == null) return;
-//        int amountToPush = Math.min(tank.amount, flowCap);
-//        for (Direction side : Direction.values()) {
-//            if(tank != null && tank.amount > 0){
-//                BlockEntity blockEntity = beBuffer[side.ordinal()].getBlockEntity();
-//                FluidHandlerBlockCapability capability = blockEntity != null ? CapabilityHelper.getCapability(blockEntity, FluidHandlerBlockCapability.class) : null;
-//                if(capability != null){
-//                    int slots = getFluidSlots(side.getOpposite());
-//                    for( int i = 0; i < slots; i++){
-//                        int capacity = getFluidCapacity(i, side.getOpposite());
-//                        int toAdd  = Math.min(amountToPush, capacity);
-//                        if(toAdd > 0){
-//                            capability.insertFluid(new FluidStack(tank.fluid, toAdd), i, side.getOpposite());
-//                            amountToPush -= toAdd;
-//                            tank.amount -= toAdd;
-//                            if(amountToPush <= 0){
-//                                return;
-//                            }
-//                        }
-//                    }
-//                } else if (blockEntity instanceof PipeBlockEntity pipe){
-//                    if(pipe.transporter instanceof FluidPipeTransporter fluidTransporter){
-//                        if(fluidTransporter.isPipeConnected(side.getOpposite())){
-//                            int capacity = fluidTransporter.getCapacity();
-//                            int toAdd  = Math.min(amountToPush, capacity);
-//                            if(toAdd > 0){
-//                                fluidTransporter.insertFluid(new FluidStack(tank.fluid, toAdd), side.getOpposite());
-//                                amountToPush -= toAdd;
-//                                tank.amount -= toAdd;
-//                                if(amountToPush <= 0){
-//                                    return;
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     private BlockEntity getBlockEntity(Direction side) {
         if (blockEntityBuffer == null) {
             blockEntityBuffer = BlockEntityBuffer.makeBuffer(world, x, y, z, false);
@@ -268,10 +235,10 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
 
             setTubePosition();
 
-            world.spawnEntity(tube);
+//            world.spawnEntity(tube);
 
             if (!world.isRemote) {
-//                sendNetworkUpdate();
+                sendNetworkUpdate();
             }
         }
     }
@@ -302,8 +269,7 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
             }
 
             if (remove) {
-                BlockIndex index = topLayer.pollLast();
-                return index;
+                return topLayer.pollLast();
             } else {
                 return topLayer.peekLast();
             }
@@ -313,14 +279,7 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
     }
 
     private Deque<BlockIndex> getLayerQueue(int layer) {
-        Deque<BlockIndex> pumpQueue = pumpLayerQueues.get(layer);
-
-        if (pumpQueue == null) {
-            pumpQueue = new LinkedList<>();
-            pumpLayerQueues.put(layer, pumpQueue);
-        }
-
-        return pumpQueue;
+        return pumpLayerQueues.computeIfAbsent(layer, k -> new LinkedList<>());
     }
 
     public void rebuildQueue() {
@@ -344,11 +303,9 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
 
         queueForPumping(x, y, z, visitedBlocks, fluidsFound, pumpingFluid);
 
-//		long timeoutTime = System.nanoTime() + 10000;
-
         while (!fluidsFound.isEmpty()) {
             Deque<BlockIndex> fluidsToExpand = fluidsFound;
-            fluidsFound = new LinkedList<BlockIndex>();
+            fluidsFound = new LinkedList<>();
 
             for (BlockIndex index : fluidsToExpand) {
                 queueForPumping(index.x, index.y + 1, index.z, visitedBlocks, fluidsFound, pumpingFluid);
@@ -357,9 +314,7 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
                 queueForPumping(index.x, index.y, index.z + 1, visitedBlocks, fluidsFound, pumpingFluid);
                 queueForPumping(index.x, index.y, index.z - 1, visitedBlocks, fluidsFound, pumpingFluid);
 
-                if (pumpingFluid == Fluids.WATER
-                            && !Config.MACHINE_CONFIG.pump.consumeWaterSources
-                            && numFluidBlocksFound >= 9) {
+                if (pumpingFluid == Fluids.WATER && !Config.MACHINE_CONFIG.pump.consumeWaterSources && numFluidBlocksFound >= 9) {
                     return;
                 }
             }
@@ -445,7 +400,7 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
     public EntityBlock newPumpTube(World w) {
         EntityBlock eb = new EntityBlock(w);
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
-            eb.texture = 1;
+            eb.texture = TextureListener.pumpTube.index;
         }
         return eb;
     }
@@ -529,5 +484,21 @@ public class PumpBlockEntity extends BlockEntity implements ManagedFluidHandler,
     @Override
     public World getWorld() {
         return world;
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        stream.writeShort(aimY);
+        stream.writeFloat((float) tubeY);
+        stream.writeBoolean(powered);
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        aimY = stream.readShort();
+        tubeY = stream.readFloat();
+        powered = stream.readBoolean();
+
+        setTubePosition();
     }
 }
