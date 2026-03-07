@@ -85,18 +85,13 @@ public class FacadeItemRenderer {
         // Render Facade
         GL11.glPushMatrix();
 
-        // Enable glBlending for transparency
-        if (block != null) {
-            RenderHelper.setGLColorFromInt(block.getColor(decodedMeta));
-        }
-
         if (hollow) {
             GL11.glTranslatef(translateX, translateY, translateZ);
             drawHollowCube(tessellator, blockRenderManager, block, decodedMeta);
         } else {
             Buildcraft.renderBlock.setBoundingBox(0F, 0F, 1 - FacadePluggable.FACADE_THICKNESS, 1F, 1F, 1F);
             GL11.glTranslatef(translateX, translateY, translateZ);
-            RenderHelper.drawBlockItem(blockRenderManager, tessellator, Buildcraft.renderBlock, decodedMeta);
+            RenderHelper.drawBlockItem(blockRenderManager, tessellator, Buildcraft.renderBlock, block.getTexture(0, decodedMeta));
         }
 
         GL11.glPopMatrix();
@@ -136,6 +131,5 @@ public class FacadeItemRenderer {
             blockRenderManager.renderSouthFace(Buildcraft.renderBlock, 0.0D, 0.0D, 0.0D, textureID);
             tessellator.draw();
         }
-        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
     }
 }

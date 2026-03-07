@@ -6,6 +6,9 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.danygames2014.buildcraft.client.render.item.FacadeItemRenderer;
 import net.danygames2014.buildcraft.pluggable.FacadePluggable;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.font.TextRenderer;
@@ -15,6 +18,8 @@ import net.minecraft.client.texture.TextureManager;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Box;
+import net.modificationstation.stationapi.api.client.render.model.json.ModelTransformation;
 import net.modificationstation.stationapi.api.client.texture.Sprite;
 import net.modificationstation.stationapi.api.client.texture.SpriteAtlasTexture;
 import net.modificationstation.stationapi.api.registry.BlockRegistry;
@@ -24,6 +29,9 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import net.modificationstation.stationapi.impl.client.arsenic.renderer.render.ArsenicItemRenderer;
 import org.lwjgl.opengl.GL11;
 
+import static org.lwjgl.opengl.GL11.glTranslatef;
+
+@EnvironmentInterface(value = EnvType.CLIENT, itf = CustomItemRenderer.class)
 public class FacadeItem extends TemplateItem implements PipePluggableItem, CustomItemRenderer {
     public FacadeItem(Identifier identifier) {
         super(identifier);
@@ -63,11 +71,12 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem, Custo
         return 0;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInGui(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         GL11.glPushMatrix();
 
-        GL11.glTranslatef((float)(x - 2), (float)(y + 3), -3.0F);
+        GL11.glTranslatef((float)(x - 2), (y + 2f), 1);
         GL11.glScalef(10.0F, 10.0F, 10.0F);
         GL11.glTranslatef(1.0F, 0.5F, 1.0F);
         GL11.glScalef(1.0F, 1.0F, -1.0F);
@@ -83,25 +92,46 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem, Custo
         GL11.glPopMatrix();
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void renderInHand(SpriteAtlasTexture atlas, Sprite texture, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderInHandBlock(SpriteAtlasTexture atlas, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
+        GL11.glRotatef(60f, 0f, 0f, 1f);
+        GL11.glRotatef(-30f, 1f, 0f, 0f);
         FacadeItemRenderer.INSTANCE.renderFacadeItem(Minecraft.INSTANCE.worldRenderer.blockRenderManager, stack, 0, 0, 0);
         return true;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderOnGround(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
         return false;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public boolean renderOnGroundBlock(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, Tessellator tessellator, ItemEntity itemEntity, float x, float y, float z, float delta, ItemStack stack, float yOffset, float angle, byte renderedAmount, SpriteAtlasTexture atlas) {
-        GL11.glScalef(0.50F, 0.50F, 0.50F);
-        FacadeItemRenderer.INSTANCE.renderFacadeItem(Minecraft.INSTANCE.worldRenderer.blockRenderManager, stack, -0.6F, 0f, -0.6F);
+        GL11.glRotatef(angle, 0.0F, 1.0F, 0.0F);
+        GL11.glScalef(0.25F, 0.25F, 0.25F);
+
+        for(int i = 0; i < renderedAmount; i++) {
+            GL11.glPushMatrix();
+
+            if (i > 0) {
+                float offsetX = (itemRenderer.random.nextFloat() * 2.0F - 1.0F) * 0.2F / 0.25F;
+                float offsetY = (itemRenderer.random.nextFloat() * 2.0F - 1.0F) * 0.2F / 0.25F;
+                float offsetZ = (itemRenderer.random.nextFloat() * 2.0F - 1.0F) * 0.2F / 0.25F;
+                glTranslatef(offsetX, offsetY, offsetZ);
+            }
+
+            FacadeItemRenderer.INSTANCE.renderFacadeItem(Minecraft.INSTANCE.worldRenderer.blockRenderManager, stack, -0.6F, 0f, -0.6F);
+
+            GL11.glPopMatrix();
+        }
         return true;
     }
 }
