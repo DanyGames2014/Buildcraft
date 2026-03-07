@@ -102,6 +102,7 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem, Custo
     public boolean renderInHandBlock(SpriteAtlasTexture atlas, Tessellator tessellator, LivingEntity entity, ItemStack stack) {
         GL11.glRotatef(60f, 0f, 0f, 1f);
         GL11.glRotatef(-30f, 1f, 0f, 0f);
+        GL11.glTranslatef(0F, -0.5f, 0F);
         FacadeItemRenderer.INSTANCE.renderFacadeItem(Minecraft.INSTANCE.worldRenderer.blockRenderManager, stack, 0, 0, 0);
         return true;
     }
