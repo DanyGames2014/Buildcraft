@@ -93,7 +93,6 @@ public class LaserRenderer {
         initScaledBoxes();
 
         if (laser.isGlowing) {
-            // TODO: probably use glcolor
             GL11.glColor4f(1f, 1f, 1f, 1f);
 //            float lastBrightnessX = OpenGlHelper.lastBrightnessX;
 //            float lastBrightnessY = OpenGlHelper.lastBrightnessY;

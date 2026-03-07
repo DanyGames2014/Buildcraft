@@ -40,7 +40,6 @@ public class StatementParameterItemStack implements StatementParameter {
         }
     }
 
-    // TODO: this is probably incorrect
     @Override
     public String getDescription() {
         if (stack != null) {

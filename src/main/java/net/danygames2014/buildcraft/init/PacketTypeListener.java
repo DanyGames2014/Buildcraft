@@ -30,6 +30,7 @@ public class PacketTypeListener {
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("builder_command"), BuilderCommandPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("fluid_update"), PacketFluidUpdate.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("power_update"), PacketPowerUpdate.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("blueprint_library_blueprint"), BlueprintLibraryBlueprintPacket.TYPE);
 
         StateRegistry.register(PipeRenderState.class);
         StateRegistry.register(PipePluggableState.class);
