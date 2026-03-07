@@ -80,7 +80,7 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem, Custo
     @Override
     public void renderInGui(ArsenicItemRenderer arsenicItemRenderer, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         GL11.glPushMatrix();
-
+        GL11.glColor3f(1f, 1f, 1f);
         GL11.glTranslatef((float)(x - 2), (y + 2f), 1);
         GL11.glScalef(10.0F, 10.0F, 10.0F);
         GL11.glTranslatef(1.0F, 0.5F, 1.0F);

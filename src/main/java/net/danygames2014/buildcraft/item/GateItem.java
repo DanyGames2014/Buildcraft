@@ -221,6 +221,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
     @Override
     public void renderInGui(ArsenicItemRenderer arsenic, ItemRenderer itemRenderer, TextRenderer textRenderer, TextureManager textureManager, ItemStack stack, int x, int y) {
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
+        GL11.glColor3f(1f, 1f, 1f);
         Atlas.Sprite logic = GateItem.getLogic(stack).getItemTexture();
         renderSprite(arsenic, x, y, logic);
 
