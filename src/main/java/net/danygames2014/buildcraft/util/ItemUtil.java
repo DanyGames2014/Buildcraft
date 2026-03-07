@@ -10,6 +10,7 @@ public class ItemUtil {
     public static void dropTryIntoPlayerInventory(World world, int x, int y, int z, ItemStack stack, PlayerEntity player) {
         if (player != null) {
             player.inventory.addStack(stack);
+            player.inventory.markDirty();
         }
         dropItems(world, stack, x, y, z);
     }
