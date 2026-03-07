@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class BlueprintData {
-    public boolean written;
-    public String name = "unnamed";
+    public boolean written = false;
+    public String name = "invalid";
     public String author = "Unknown";
-    public Direction facing;
-    public int sizeX;
-    public int sizeY;
-    public int sizeZ;
+    public Direction facing = Direction.UP;
+    public int sizeX = 0;
+    public int sizeY = 0;
+    public int sizeZ = 0;
     public ArrayList<BlueprintEntry> entries;
 
     public BlueprintData() {
