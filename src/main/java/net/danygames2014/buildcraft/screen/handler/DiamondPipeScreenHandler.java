@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
-import net.danygames2014.buildcraft.screen.slot.DiamondPipeFilterSlot;
+import net.danygames2014.buildcraft.inventory.slot.DiamondPipeFilterSlot;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,8 +1,8 @@
 package net.danygames2014.buildcraft.block.entity.pipe.event;
 
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
-import net.danygames2014.buildcraft.pluggable.LensPluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.LensPluggable;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
 import java.util.LinkedList;

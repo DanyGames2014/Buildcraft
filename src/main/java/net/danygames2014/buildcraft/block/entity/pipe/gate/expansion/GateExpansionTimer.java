@@ -8,7 +8,7 @@ import net.danygames2014.buildcraft.api.transport.statement.Statement;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.statements.TriggerClockTimer;
+import net.danygames2014.buildcraft.block.entity.pipe.statement.TriggerClockTimer;
 import net.minecraft.block.entity.BlockEntity;
 
 import java.util.List;

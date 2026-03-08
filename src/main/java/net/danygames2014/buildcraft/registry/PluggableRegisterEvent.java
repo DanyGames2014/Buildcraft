@@ -1,6 +1,6 @@
 package net.danygames2014.buildcraft.registry;
 
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.mine_diver.unsafeevents.Event;
 import net.modificationstation.stationapi.api.util.Identifier;
 

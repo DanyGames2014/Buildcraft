@@ -3,7 +3,7 @@ package net.danygames2014.buildcraft.client.render.pluggable;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.MatrixTransformation;

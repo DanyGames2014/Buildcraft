@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.registry.PluggableRegistry;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.minecraft.entity.player.PlayerEntity;

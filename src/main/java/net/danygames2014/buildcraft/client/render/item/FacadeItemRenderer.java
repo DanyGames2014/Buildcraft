@@ -3,7 +3,7 @@ package net.danygames2014.buildcraft.client.render.item;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.item.FacadeItem;
-import net.danygames2014.buildcraft.pluggable.FacadePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;

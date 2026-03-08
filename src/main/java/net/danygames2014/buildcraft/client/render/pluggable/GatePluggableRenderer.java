@@ -1,11 +1,11 @@
 package net.danygames2014.buildcraft.client.render.pluggable;
 
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableDynamicRenderer;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.block.entity.PipeBlockEntityRenderer;
-import net.danygames2014.buildcraft.pluggable.GatePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.modificationstation.stationapi.api.util.math.Direction;
 

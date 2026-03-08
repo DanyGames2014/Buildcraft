@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.client.render.block;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.registry.PluggableRegistry;
 import net.danygames2014.buildcraft.util.ConnectionMatrix;
 import net.modificationstation.stationapi.api.util.Identifier;

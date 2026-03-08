@@ -1,6 +1,6 @@
 package net.danygames2014.buildcraft.screen;
 
-import net.danygames2014.buildcraft.screen.slot.AdvancedSlot;
+import net.danygames2014.buildcraft.inventory.slot.AdvancedSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.platform.Lighting;

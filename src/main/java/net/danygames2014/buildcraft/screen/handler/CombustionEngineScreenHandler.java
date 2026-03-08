@@ -1,8 +1,8 @@
 package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.CombustionEngineBlockEntity;
-import net.danygames2014.buildcraft.screen.slot.CombustionEngineFuelSlot;
-import net.danygames2014.buildcraft.screen.slot.InvisibleFluidSlot;
+import net.danygames2014.buildcraft.inventory.slot.CombustionEngineFuelSlot;
+import net.danygames2014.buildcraft.inventory.slot.InvisibleFluidSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;

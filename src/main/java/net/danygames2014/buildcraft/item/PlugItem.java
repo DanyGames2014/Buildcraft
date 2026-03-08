@@ -2,8 +2,8 @@ package net.danygames2014.buildcraft.item;
 
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
-import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
-import net.danygames2014.buildcraft.pluggable.PlugPluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PlugPluggable;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.template.item.TemplateItem;
 import net.modificationstation.stationapi.api.util.Identifier;

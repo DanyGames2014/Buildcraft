@@ -11,13 +11,13 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansi
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionRedstoneFader;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionTimer;
 import net.danygames2014.buildcraft.block.entity.pipe.parameter.ActionParameterSignal;
+import net.danygames2014.buildcraft.block.entity.pipe.statement.*;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.StructurePipeTransporter;
 import net.danygames2014.buildcraft.block.material.PipeMaterial;
 import net.danygames2014.buildcraft.item.*;
-import net.danygames2014.buildcraft.statements.*;
 import net.danygames2014.buildcraft.util.ColorUtil;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.minecraft.block.Block;

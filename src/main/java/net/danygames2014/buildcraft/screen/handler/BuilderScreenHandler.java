@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.BuilderBlockEntity;
-import net.danygames2014.buildcraft.screen.slot.ArchitectTableInputSlot;
+import net.danygames2014.buildcraft.inventory.slot.ArchitectTableInputSlot;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;

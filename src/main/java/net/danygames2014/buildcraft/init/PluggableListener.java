@@ -1,9 +1,9 @@
 package net.danygames2014.buildcraft.init;
 
-import net.danygames2014.buildcraft.pluggable.FacadePluggable;
-import net.danygames2014.buildcraft.pluggable.GatePluggable;
-import net.danygames2014.buildcraft.pluggable.LensPluggable;
-import net.danygames2014.buildcraft.pluggable.PlugPluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.LensPluggable;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PlugPluggable;
 import net.danygames2014.buildcraft.registry.PluggableRegisterEvent;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
