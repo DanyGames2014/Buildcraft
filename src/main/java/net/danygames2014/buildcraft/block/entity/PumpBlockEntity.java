@@ -369,6 +369,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
         }
     }
 
+    //
     // TODO: check for dimension
     private boolean isFluidAllowed(Fluid fluid) {
 //        return BuildCraftFactory.pumpDimensionList.isFluidAllowed(fluid, world.dimension.id);

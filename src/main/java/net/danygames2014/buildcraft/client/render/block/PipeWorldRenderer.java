@@ -32,7 +32,6 @@ public class PipeWorldRenderer {
             int connectivity = state.pipeConnectionMatrix.getMask();
             float[] dim = new float[6];
 
-            // TODO: Pipe behavior is probably null in multiplayer
             if(renderPass == 1 || (pipeBlockEntity.behavior instanceof StructurePipeBehavior && glassColor >= 0)){
                 renderBlock.setColor(ColorUtil.getColor(glassColor));
             }

@@ -52,7 +52,6 @@ public class EntityBlockRenderer extends EntityRenderer {
             this.brightness = world.getBrightness(LightType.SKY, x, y, z) << 16 | light;
         }
 
-        // TODO: confirm this is correct
         public float getBlockBrightness(World world, int x, int y, int z) {
             return world.dimension.lightLevelToLuminance[world.getLightLevel(x, y, z)];
         }
