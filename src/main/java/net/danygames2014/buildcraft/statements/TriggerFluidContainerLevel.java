@@ -64,9 +64,13 @@ public class TriggerFluidContainerLevel extends BCStatement implements TriggerEx
                 searchedFluid.amount = 1;
             }
 
-            FluidStack[] liquids = capability.getFluids(side);
-            if (liquids == null || liquids.length == 0) {
+            int slots = capability.getFluidSlots(side.getOpposite());
+            if(slots <= 0){
                 return false;
+            }
+            FluidStack[] liquids = new FluidStack[slots];
+            for(int i = 0; i < liquids.length; i++){
+                liquids[i] = capability.getFluid(i, side.getOpposite());
             }
 
             for (int i = 0; i < liquids.length; i++) {
