@@ -16,3 +16,4 @@ accessible field net/minecraft/client/gui/screen/ingame/HandledScreen itemRender
 accessible field net/minecraft/client/resource/language/TranslationStorage INSTANCE Lnet/minecraft/client/resource/language/TranslationStorage;
 accessible field net/minecraft/client/resource/language/TranslationStorage translations Ljava/util/Properties;
 accessible field net/minecraft/client/render/item/ItemRenderer random Ljava/util/Random;
+accessible method net/minecraft/block/Block getDroppedItemMeta (I)I

@@ -4,8 +4,8 @@ import net.danygames2014.buildcraft.util.DirectionUtil;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class Position implements Serializable {
         orientation = null;
     }
 
-    public Position(double ci, double cj, double ck, Direction corientation) {
+    public Position(double ci, double cj, double ck, @Nullable Direction corientation) {
         x = ci;
         y = cj;
         z = ck;

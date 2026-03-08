@@ -149,6 +149,10 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
             lasers.add(new LaserData(new Position(startX, startY, startZ), new Position(endX, endY, endZ)));
         }
         
+        public void clearLasers() {
+            lasers.clear();
+        }
+        
         public void writeNbt(NbtCompound nbt) {
             nbt.putInt("minX", minX);
             nbt.putInt("minY", minY);

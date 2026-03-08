@@ -136,7 +136,7 @@ public class MechanicalArmEntity extends Entity {
         return new double[] { this.headX / 32D, this.headY / 32D, this.headZ / 32D };
     }
 
-    void setHead(double x, double y, double z) {
+    public void setHead(double x, double y, double z) {
         this.headX = (int) (x * 32D);
         this.headY = (int) (y * 32D);
         this.headZ = (int) (z * 32D);

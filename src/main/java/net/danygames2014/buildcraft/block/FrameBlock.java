@@ -62,7 +62,7 @@ public class FrameBlock extends TemplateBlock {
     }
 
     @Override
-    protected int getDroppedItemMeta(int blockMeta) {
+    public int getDroppedItemMeta(int blockMeta) {
         return 0;
     }
 
