@@ -4,8 +4,7 @@ import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class CreativeEngineBlockEntity  extends BaseEngineBlockEntity{
     private PowerMode powerMode = PowerMode.M2;

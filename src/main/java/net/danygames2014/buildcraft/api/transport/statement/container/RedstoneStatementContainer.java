@@ -1,8 +1,7 @@
 package net.danygames2014.buildcraft.api.transport.statement.container;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public interface RedstoneStatementContainer {
     /**

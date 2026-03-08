@@ -1,8 +1,8 @@
 package net.danygames2014.buildcraft.util;
 
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
 public class DirectionUtil {

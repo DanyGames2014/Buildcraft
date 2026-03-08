@@ -5,8 +5,7 @@ import net.danygames2014.buildcraft.client.render.block.EngineRenderer;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
-
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public class EngineBlockEntityRenderer extends BlockEntityRenderer {
     private final EngineRenderer engineRenderer;

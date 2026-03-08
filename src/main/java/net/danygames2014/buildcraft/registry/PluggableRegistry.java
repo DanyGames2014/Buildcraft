@@ -2,8 +2,8 @@ package net.danygames2014.buildcraft.registry;
 
 import net.danygames2014.buildcraft.block.entity.pipe.PipePluggable;
 import net.modificationstation.stationapi.api.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 
 public class PluggableRegistry{
