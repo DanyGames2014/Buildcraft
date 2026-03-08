@@ -147,7 +147,6 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
      * (re-)requests the current selection on the gate if needed.
      */
     public void synchronize() {
-        // TODO: pipe.world can be null
         if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
             if (!isNetInitialized && Minecraft.INSTANCE.world.isRemote) {
                 isNetInitialized = true;

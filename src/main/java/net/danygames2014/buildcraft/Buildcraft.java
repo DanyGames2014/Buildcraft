@@ -168,6 +168,9 @@ public class Buildcraft {
     public static TriggerExternal triggerMachineActive;
     public static TriggerExternal triggerMachineInactive;
 
+    public static TriggerExternal triggerEnergyHigh;
+    public static TriggerExternal triggerEnergyLow;
+
     public static ActionInternal[] actionPipeWire = new ActionSignalOutput[PipeWire.values().length];
     public static ActionInternal actionEnergyPulser;
     public static ActionInternal actionSingleEnergyPulse;
@@ -222,6 +225,9 @@ public class Buildcraft {
 
         triggerMachineActive = new TriggerMachine(true);
         triggerMachineInactive = new TriggerMachine(false);
+
+        triggerEnergyHigh = new TriggerEnergy(true);
+        triggerEnergyLow = new TriggerEnergy(false);
 
         StatementManager.registerTriggerProvider(new PipeTriggerProvider());
         StatementManager.registerTriggerProvider(new DefaultTriggerProvider());

@@ -40,7 +40,6 @@ public class TriggerRedstoneInput extends BCStatement implements TriggerInternal
     @Override
     public boolean isTriggerActive(StatementContainer container, StatementParameter[] parameters) {
         if (container instanceof RedstoneStatementContainer) {
-            // TODO: check if side should be null
             int level = ((RedstoneStatementContainer) container).getRedstoneInput(null);
             if (parameters.length > 0 && parameters[0] instanceof StatementParameterRedstoneGateSideOnly &&
                         ((StatementParameterRedstoneGateSideOnly) parameters[0]).isOn &&

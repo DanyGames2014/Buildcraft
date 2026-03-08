@@ -54,9 +54,6 @@ public class PipeTriggerProvider implements TriggerProvider {
 
     @Override
     public Collection<TriggerExternal> getExternalTriggers(Direction side, BlockEntity blockEntity) {
-        @SuppressWarnings("UnnecessaryLocalVariable") 
-        LinkedList<TriggerExternal> result = new LinkedList<>();
-        // TODO: Huh? why does it just return an empty linkedlist
-        return result;
+        return new LinkedList<>();
     }
 }

@@ -9,6 +9,7 @@ import net.danygames2014.buildcraft.api.transport.statement.TriggerProvider;
 import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneStatementContainer;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
+import net.danygames2014.nyalib.capability.block.energyhandler.EnergyStorageBlockCapability;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.minecraft.block.entity.BlockEntity;
@@ -58,6 +59,11 @@ public class DefaultTriggerProvider implements TriggerProvider {
         if (blockEntity instanceof HasWork) {
             res.add(Buildcraft.triggerMachineActive);
             res.add(Buildcraft.triggerMachineInactive);
+        }
+
+        if(blockEntity != null && CapabilityHelper.getCapability(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, EnergyStorageBlockCapability.class) != null){
+            res.add(Buildcraft.triggerEnergyHigh);
+            res.add(Buildcraft.triggerEnergyLow);
         }
 
         return res;
