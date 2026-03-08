@@ -7,6 +7,7 @@ import net.modificationstation.stationapi.api.event.registry.EntityHandlerRegist
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
 
+@SuppressWarnings("unused")
 public class EntityListener {
     @Entrypoint.Namespace
     public static Namespace NAMESPACE;
@@ -23,5 +24,9 @@ public class EntityListener {
     @EventListener
     public void registerEntityHandlers(EntityHandlerRegistryEvent event) {
         event.register(NAMESPACE.id("travelling_item"), TravellingItemEntity::new);
+        event.register(NAMESPACE.id("robot"), RobotEntity::new);
+        event.register(NAMESPACE.id("mechanical_arm"), MechanicalArmEntity::new);
+        event.register(NAMESPACE.id("entity_block"), EntityBlock::new);
+        event.register(NAMESPACE.id("entity_block_with_parent"), EntityBlockWithParent::new);
     }
 }

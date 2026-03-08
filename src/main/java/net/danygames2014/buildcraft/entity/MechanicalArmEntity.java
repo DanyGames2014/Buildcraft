@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.entity;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.QuarryBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.fabricmc.api.EnvType;
@@ -7,8 +8,14 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.TriState;
 
-public class MechanicalArmEntity extends Entity {
+// TODO: Make this work properly on server
+@HasTrackingParameters(trackingDistance = 32, updatePeriod = 1, sendVelocity = TriState.TRUE)
+public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvider {
     protected QuarryBlockEntity parent;
 
     private double armSizeX;
@@ -42,6 +49,11 @@ public class MechanicalArmEntity extends Entity {
         this.parent = parent;
         parent.setArm(this);
         updatePosition();
+    }
+
+    public MechanicalArmEntity(World world, double x, double y, double z) {
+        this(world);
+        this.setPosition(x, y, z);
     }
 
     @Override
@@ -171,5 +183,10 @@ public class MechanicalArmEntity extends Entity {
     @Override
     protected boolean pushOutOfBlock(double x, double y, double z) {
         return false;
+    }
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Buildcraft.NAMESPACE.id("mechanical_arm");
     }
 }

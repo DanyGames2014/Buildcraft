@@ -1,9 +1,9 @@
 package net.danygames2014.buildcraft.entity;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.block.entity.AreaWorkerBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
-import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.util.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -11,11 +11,15 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.TriState;
 import net.modificationstation.stationapi.api.util.math.MutableBlockPos;
 import net.modificationstation.stationapi.api.util.math.StationBlockPos;
 
-// TODO: this entity seems to not spawn on server
-public class RobotEntity extends Entity {
+@HasTrackingParameters(trackingDistance = 32, updatePeriod = 1, sendVelocity = TriState.TRUE)
+public class RobotEntity extends Entity implements EntitySpawnDataProvider {
     private static final int TARGET_X_KEY = 1;
     private static final int TARGET_Y_KEY = 2;
     private static final int TARGET_Z_KEY = 3;
@@ -39,6 +43,11 @@ public class RobotEntity extends Entity {
         this(world);
         this.areaWorker = areaWorker;
         this.areaWorkerPosition = new BlockPos(areaWorker.x, areaWorker.y, areaWorker.z);
+    }
+
+    public RobotEntity(World world, double x, double y, double z) {
+        this(world);
+        this.setPosition(x, y, z);
     }
 
     @Override
@@ -133,10 +142,10 @@ public class RobotEntity extends Entity {
                 }
             }
             move();
-        }
 
-        if(areaWorkerPosition == null || areaWorker.isRemoved() || areaWorker.robot != this){
-            markDead();
+            if(areaWorkerPosition == null || areaWorker.isRemoved() || areaWorker.robot != this){
+                markDead();
+            }
         }
     }
 
@@ -154,5 +163,10 @@ public class RobotEntity extends Entity {
     @Override
     public boolean shouldRender(Vec3d pos) {
         return true;
+    }
+
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Buildcraft.NAMESPACE.id("robot");
     }
 }

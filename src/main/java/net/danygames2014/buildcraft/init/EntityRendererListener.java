@@ -10,6 +10,7 @@ import net.danygames2014.buildcraft.entity.RobotEntity;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.client.event.render.entity.EntityRendererRegisterEvent;
 
+@SuppressWarnings("unused")
 public class EntityRendererListener {
     @EventListener
     public void registerEntityRenderers(EntityRendererRegisterEvent event){

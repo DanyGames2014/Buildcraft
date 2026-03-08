@@ -1,11 +1,17 @@
 package net.danygames2014.buildcraft.entity;
 
+import net.danygames2014.buildcraft.Buildcraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.server.entity.EntitySpawnDataProvider;
+import net.modificationstation.stationapi.api.server.entity.HasTrackingParameters;
+import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.TriState;
 
-public class EntityBlock extends Entity {
-
+// TODO: Make this work properly on server
+@HasTrackingParameters(trackingDistance = 32, updatePeriod = 1, sendVelocity = TriState.TRUE)
+public class EntityBlock extends Entity implements EntitySpawnDataProvider {
     public int texture;
     public float shadowSize = 0;
     public float pitch = 0;
@@ -93,4 +99,8 @@ public class EntityBlock extends Entity {
     public void read(NbtCompound nbt) {
     }
 
+    @Override
+    public Identifier getHandlerIdentifier() {
+        return Buildcraft.NAMESPACE.id("entity_block");
+    }
 }
