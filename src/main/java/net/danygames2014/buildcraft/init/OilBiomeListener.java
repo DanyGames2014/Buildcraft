@@ -11,11 +11,11 @@ public class OilBiomeListener {
         event.addExcludedBiome(Biome.HELL);
         
         event.addSurfaceDepositBiome(Biome.DESERT);
-        event.addSurfaceDepositBiome(Biome.TAIGA);
-        event.addSurfaceDepositBiome(Biome.ICE_DESERT);
+        event.addSurfaceDepositBiome(Biome.TUNDRA);
+        event.addSurfaceDepositBiome(Biome.PLAINS);
+        event.addSurfaceDepositBiome(Biome.SAVANNA);
         
-        event.addBiomeBonusMultiplier(Biome.DESERT, 7);
-        event.addBiomeBonusMultiplier(Biome.TAIGA, 3);
-        event.addBiomeBonusMultiplier(Biome.ICE_DESERT, 10);
+        event.addBiomeBonusMultiplier(Biome.DESERT, 2);
+        event.addBiomeBonusMultiplier(Biome.TUNDRA, 2);
     }
 }

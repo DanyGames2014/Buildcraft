@@ -10,7 +10,6 @@ import net.danygames2014.nyalib.fluid.Fluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.PlantBlock;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.modificationstation.stationapi.api.StationAPI;
@@ -55,7 +54,6 @@ public class OilSpringFeature {
 
         Biome biome = world.method_1781().getBiome(x, z);
 
-        // Do not generate oil in the End or Nether
         if (excludedBiomes.contains(biome)) {
             return;
         }
@@ -71,11 +69,11 @@ public class OilSpringFeature {
         }
 
         GenType type = GenType.NONE;
-        if (random.nextDouble() <= 0.0004 * bonus) {// 0.04%
+        if (random.nextDouble() <= 0.0007 * bonus) {// 0.06%
             type = GenType.LARGE;
-        } else if (random.nextDouble() <= 0.001 * bonus) {// 0.1%
+        } else if (random.nextDouble() <= 0.002 * bonus) {// 0.2%
             type = GenType.MEDIUM;
-        } else if (oilBiome && random.nextDouble() <= 0.02 * bonus) {// 2%
+        } else if (oilBiome && random.nextDouble() <= 0.03 * bonus) {// 3%
             type = GenType.LAKE;
         }
 
@@ -260,6 +258,10 @@ public class OilSpringFeature {
         if (block instanceof PlantBlock) {
             return true;
         }
+        
+        if (block.material.isReplaceable()) {
+            return true;
+        }
 
         //if (!world.isBlockOpaqueCube(x, y, z)) {
         if (!block.isFullCube()) {
@@ -275,6 +277,13 @@ public class OilSpringFeature {
                 || isOil(world, x, y, z + 1)
                 || isOil(world, x, y, z - 1);
     }
+    
+    private boolean isAirAdjacent(World world, int x, int y, int z) {
+        return world.isAir(x + 1, y, z)
+                || world.isAir(x - 1, y, z)
+                || world.isAir(x, y, z + 1)
+                || world.isAir(x, y, z - 1);
+    }
 
     private boolean isOilSurrounded(World world, int x, int y, int z) {
         return isOil(world, x + 1, y, z)
@@ -285,7 +294,7 @@ public class OilSpringFeature {
 
     private void setOilWithProba(World world, Biome biome, Random rand, float proba, int x, int y, int z, int depth) {
         if (rand.nextFloat() <= proba && world.getBlockId(x, y - depth - 1, z) != 0) {
-            if (isOilAdjacent(world, x, y, z)) {
+            if (isOilAdjacent(world, x, y, z) && !isAirAdjacent(world, x, y, z)) {
                 setOilColumnForLake(world, biome, x, y, z, depth);
             }
         }
@@ -293,7 +302,7 @@ public class OilSpringFeature {
 
     private void setOilColumnForLake(World world, Biome biome, int x, int y, int z, int depth) {
         if (isReplaceableForLake(world, biome, x, y + 1, z)) {
-            if (!world.isAir(x, y + 2, z)) {
+            if (!isReplaceableForLake(world, biome,x, y + 2, z)) {
                 return;
             }
 
