@@ -28,7 +28,7 @@ public class AreaWorkerBlockEntityRenderer extends BlockEntityRenderer {
             GL11.glColor3f(luminance, luminance, luminance);
             
             for (LaserData laser : areaWorker.workingArea.lasers) {
-                LaserRenderer.doRenderLaser(Minecraft.INSTANCE.textureManager, laser, Constants.LASER_TEXTURES[4]);
+                LaserRenderer.doRenderLaser(Minecraft.INSTANCE.textureManager, laser, areaWorker.getLaserTexture());
             }
             
             GL11.glEnable(GL11.GL_LIGHTING);

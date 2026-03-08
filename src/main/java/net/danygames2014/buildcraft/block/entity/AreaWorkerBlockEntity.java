@@ -3,6 +3,9 @@ package net.danygames2014.buildcraft.block.entity;
 import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.entity.RobotEntity;
+import net.danygames2014.buildcraft.util.Constants;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
@@ -86,6 +89,11 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
         if(this.robot != null){
             robot.setLaserTarget(x, y, z);
         }
+    }
+
+    @Environment(EnvType.CLIENT)
+    public String getLaserTexture(){
+        return Constants.LASER_TEXTURES[4];
     }
 
     public static class WorkingArea {

@@ -6,6 +6,9 @@ import net.danygames2014.buildcraft.item.BlueprintData;
 import net.danygames2014.buildcraft.item.BlueprintPersistentState;
 import net.danygames2014.buildcraft.item.BuilderBlueprintItem;
 import net.danygames2014.buildcraft.item.BuilderTemplateItem;
+import net.danygames2014.buildcraft.util.Constants;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -108,7 +111,13 @@ public class ArchitectTableBlockEntity extends AreaWorkerBlockEntity implements 
         inventory.setStack(1, inputStack);
         inventory.setStack(0, null);
     }
-    
+
+    @Environment(EnvType.CLIENT)
+    @Override
+    public String getLaserTexture() {
+        return Constants.LASER_TEXTURES[5];
+    }
+
     // Inventory
     @Override
     public int size() {
