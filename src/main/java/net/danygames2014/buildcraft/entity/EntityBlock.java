@@ -74,15 +74,23 @@ public class EntityBlock extends Entity {
 
     @Override
     protected void writeNbt(NbtCompound nbt) {
-        nbt.putDouble("x_size", xSize);
-        nbt.putDouble("y_size", ySize);
-        nbt.putDouble("z_size", zSize);
     }
 
     @Override
     protected void readNbt(NbtCompound nbt) {
-        xSize = nbt.getDouble("x_size");
-        ySize = nbt.getDouble("y_size");
-        zSize = nbt.getDouble("z_size");
     }
+
+    @Override
+    public boolean saveSelfNbt(NbtCompound nbt) {
+        return false;
+    }
+
+    @Override
+    public void write(NbtCompound nbt) {
+    }
+
+    @Override
+    public void read(NbtCompound nbt) {
+    }
+
 }
