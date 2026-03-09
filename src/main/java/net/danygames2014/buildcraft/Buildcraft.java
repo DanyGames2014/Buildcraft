@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft;
 
+import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.api.transport.statement.*;
 import net.danygames2014.buildcraft.block.*;
@@ -166,6 +167,12 @@ public class Buildcraft {
     public static TriggerExternal triggerFluidContainerBelow50;
     public static TriggerExternal triggerFluidContainerBelow75;
 
+    public static TriggerExternal triggerBlueEngineHeat;
+    public static TriggerExternal triggerGreenEngineHeat;
+    public static TriggerExternal triggerYellowEngineHeat;
+    public static TriggerExternal triggerRedEngineHeat;
+    public static TriggerExternal triggerEngineOverheat;
+
     public static TriggerExternal triggerMachineActive;
     public static TriggerExternal triggerMachineInactive;
 
@@ -223,6 +230,12 @@ public class Buildcraft {
         triggerFluidContainerBelow25 = new TriggerFluidContainerLevel(TriggerFluidContainerLevel.TriggerType.BELOW25);
         triggerFluidContainerBelow50 = new TriggerFluidContainerLevel(TriggerFluidContainerLevel.TriggerType.BELOW50);
         triggerFluidContainerBelow75 = new TriggerFluidContainerLevel(TriggerFluidContainerLevel.TriggerType.BELOW75);
+
+        triggerBlueEngineHeat = new TriggerEngineHeat(EnergyStage.BLUE);
+        triggerGreenEngineHeat = new TriggerEngineHeat(EnergyStage.GREEN);
+        triggerYellowEngineHeat = new TriggerEngineHeat(EnergyStage.YELLOW);
+        triggerRedEngineHeat = new TriggerEngineHeat(EnergyStage.RED);
+        triggerEngineOverheat = new TriggerEngineHeat(EnergyStage.OVERHEAT);
 
         triggerMachineActive = new TriggerMachine(true);
         triggerMachineInactive = new TriggerMachine(false);

@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.api.transport.statement.TriggerExternal;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerProvider;
 import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneStatementContainer;
+import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.energyhandler.EnergyStorageBlockCapability;
@@ -64,6 +65,14 @@ public class DefaultTriggerProvider implements TriggerProvider {
         if(blockEntity != null && CapabilityHelper.getCapability(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, EnergyStorageBlockCapability.class) != null){
             res.add(Buildcraft.triggerEnergyHigh);
             res.add(Buildcraft.triggerEnergyLow);
+        }
+
+        if(blockEntity instanceof BaseEngineBlockEntity){
+            res.add(Buildcraft.triggerBlueEngineHeat);
+            res.add(Buildcraft.triggerGreenEngineHeat);
+            res.add(Buildcraft.triggerYellowEngineHeat);
+            res.add(Buildcraft.triggerRedEngineHeat);
+            res.add(Buildcraft.triggerEngineOverheat);
         }
 
         return res;
