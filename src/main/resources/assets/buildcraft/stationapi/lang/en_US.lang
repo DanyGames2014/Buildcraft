@@ -79,6 +79,7 @@ tile.buildcraft.auto_workbench.name=Auto Workbench
 tile.buildcraft.mining_well.name=Mining Well
 tile.buildcraft.quarry.name=Quarry
 tile.buildcraft.pump.name=Pump
+tile.buildcraft.flood_gate.name=Flood Gate
 tile.buildcraft.tank.name=Tank
 tile.buildcraft.refinery.name=Refinery
 tile.buildcraft.laser.name=Laser
