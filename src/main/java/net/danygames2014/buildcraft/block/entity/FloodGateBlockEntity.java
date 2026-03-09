@@ -8,6 +8,7 @@ import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.fluid.block.ManagedFluidHandler;
 import net.minecraft.block.Block;
+import net.minecraft.block.LiquidBlock;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -95,8 +96,16 @@ public class FloodGateBlockEntity extends SyncedBlockEntity implements ManagedFl
         if (canPlaceFluidAt(blockState.getBlock(), x, y, z)) {
             boolean placed;
             Block b = fluid.getStillBlock();
-
-            placed = world.setBlock(x, y, z, b.id);
+            if(b instanceof LiquidBlock){
+                if(blockState.getBlock().id == b.id){
+                    world.setBlockMeta(x, y, z, 0);
+                    placed = true;
+                } else {
+                    placed = world.setBlock(x, y, z, b.id, 0);
+                }
+            } else {
+                placed = world.setBlock(x, y, z, b.id);
+            }
 
             if (placed) {
                 queueAdjacent(x, y, z);
@@ -193,7 +202,7 @@ public class FloodGateBlockEntity extends SyncedBlockEntity implements ManagedFl
     }
 
     private boolean canPlaceFluidAt(Block block, int x, int y, int z) {
-        return BlockUtil.isSoftBlock(world, x, y, z);
+        return BlockUtil.isSoftBlock(world, x, y, z) && !BlockUtil.isFullFluidBlock(block, world, x, y, z);
     }
 
     public void neighborUpdate(){

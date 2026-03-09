@@ -1,8 +1,10 @@
 package net.danygames2014.buildcraft.util;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.nyalib.block.StillFluidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
+import net.minecraft.block.StillLiquidBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,7 +41,14 @@ public class BlockUtil {
         Block block = state.getBlock();
         int blockId = world.getBlockId(x, y, z);
 
-        return blockId == 0 || block == null || /* BuildCraftAPI.softBlocks[blockID] ||*/ state.isAir() || block.getHardness(state,world, new BlockPos(x, y, z)) == 0;
+        return blockId == 0 || block == null || /* BuildCraftAPI.softBlocks[blockID] ||*/ block instanceof LiquidBlock || state.isAir() || block.getHardness(state,world, new BlockPos(x, y, z)) == 0;
+    }
+
+    public static boolean isFullFluidBlock(Block block, World world, int x, int y, int z) {
+        if (block instanceof StillLiquidBlock) {
+            return world.getBlockMeta(x, y, z) == 0;
+        }
+        return false;
     }
 
     public static List<ItemStack> getStacksFromBlock(World world, int x, int y, int z) {
