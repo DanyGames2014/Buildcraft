@@ -23,6 +23,7 @@ public class BlockEntityListener {
         event.register(MiningWellBlockEntity.class, NAMESPACE.id("mining_well").toString());
         event.register(QuarryBlockEntity.class, NAMESPACE.id("quarry").toString());
         event.register(PumpBlockEntity.class, NAMESPACE.id("pump").toString());
+        event.register(FloodGateBlockEntity.class, NAMESPACE.id("flood_gate").toString());
         event.register(TankBlockEntity.class, NAMESPACE.id("tank").toString());
         event.register(RefineryBlockEntity.class, NAMESPACE.id("refinery").toString());
         event.register(LaserBlockEntity.class, NAMESPACE.id("laser").toString());

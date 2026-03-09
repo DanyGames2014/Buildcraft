@@ -78,6 +78,7 @@ public class Buildcraft {
     public static Block miningWell;
     public static Block quarry;
     public static Block pump;
+    public static Block floodGate;
     public static Block tank;
     public static Block refinery;
     public static Block laser;
@@ -310,6 +311,7 @@ public class Buildcraft {
         miningWell = new MiningWellBlock(NAMESPACE.id("mining_well"), Material.METAL).setTranslationKey(NAMESPACE, "mining_well").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         quarry = new QuarryBlock(NAMESPACE.id("quarry"), Material.METAL).setTranslationKey(NAMESPACE, "quarry").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         pump = new PumpBlock(NAMESPACE.id("pump"), Material.METAL).setTranslationKey(NAMESPACE, "pump").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        pump = new FloodGateBlock(NAMESPACE.id("flood_gate"), Material.METAL).setTranslationKey(NAMESPACE, "flood_gate").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         tank = new TankBlock(NAMESPACE.id("tank")).setTranslationKey(NAMESPACE, "tank").setHardness(0.5F);
         refinery = new RefineryBlock(NAMESPACE.id("refinery"), Material.METAL).setTranslationKey(NAMESPACE, "refinery").setHardness(3.0F);
         laser = new LaserBlock(NAMESPACE.id("laser"), Material.METAL).setTranslationKey(NAMESPACE, "laser").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);

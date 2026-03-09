@@ -12,6 +12,9 @@ import java.util.List;
 
 @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "RedundantIfStatement"})
 public class BlockUtil {
+
+    public static final XorShift128Random RANDOM = new XorShift128Random();
+
     public static boolean canChangeBlock(World world, int x, int y, int z) {
         BlockState state = world.getBlockState(x, y, z);
         Block block = state.getBlock();
