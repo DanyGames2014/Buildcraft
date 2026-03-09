@@ -21,7 +21,6 @@ import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.fluid.block.ManagedFluidHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -37,7 +36,6 @@ import java.util.*;
 
 
 public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHandler, IPowerReceptor, HasWork {
-
     public static final int REBUILD_DELAY = 512;
     public static int MAX_LIQUID = 1000 * 16;
     public EntityBlock tube;
@@ -52,7 +50,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
     private int numFluidBlocksFound = 0;
     private boolean powered = false;
 
-    public PumpBlockEntity(){
+    public PumpBlockEntity() {
         powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
         initPowerProvider();
         addFluidSlot(MAX_LIQUID);
@@ -74,7 +72,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
             createTube();
         }
 
-        if(tube != null && world.isRemote){
+        if (tube != null && world.isRemote) {
             setTubePosition();
         }
 
@@ -137,13 +135,13 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
         }
     }
 
-    public void neighborUpdate(){
+    public void neighborUpdate() {
         boolean p = world.isPowered(x, y, z);
 
         if (powered != p) {
             powered = p;
 
-            if(!world.isRemote) {
+            if (!world.isRemote) {
                 sendNetworkUpdate();
             }
         }
@@ -165,18 +163,32 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
 
 
     public void pushFluidToConsumers(FluidStack tank, int flowCap, BlockEntityBuffer[] beBuffer) {
-        if (tank == null || tank.amount <= 0) return;
+        if (tank == null) {
+            return;
+        }
 
+        if (tank.amount <= 0) {
+            setFluid(0, null, null);
+            return;
+        }
+        
         int amountToPush = Math.min(tank.amount, flowCap);
 
-        for(Direction side : Direction.values()){
-            if (amountToPush <= 0 || tank.amount <= 0) break;
+        for (Direction side : Direction.values()) {
+            if (amountToPush <= 0) {
+                break;
+            }
+
+            if (tank.amount <= 0) {
+                setFluid(0, null, null);
+                return;
+            }
 
             BlockEntity blockEntity = beBuffer[side.ordinal()].getBlockEntity();
 
             FluidHandlerBlockCapability capability = blockEntity != null ? CapabilityHelper.getCapability(blockEntity, FluidHandlerBlockCapability.class) : null;
 
-            if(capability != null){
+            if (capability != null) {
                 int slots = capability.getFluidSlots(side.getOpposite());
                 for (int i = 0; i < slots; i++) {
                     int toAdd = Math.min(amountToPush, tank.amount);
@@ -190,7 +202,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
 
                     if (amountToPush <= 0) return;
                 }
-            } else if (blockEntity instanceof PipeBlockEntity pipe){
+            } else if (blockEntity instanceof PipeBlockEntity pipe) {
                 if (pipe.transporter instanceof FluidPipeTransporter fluidTransporter) {
                     if (fluidTransporter.isPipeConnected(side.getOpposite())) {
                         int toAdd = Math.min(amountToPush, tank.amount);
@@ -369,10 +381,15 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
         }
     }
 
-    //
-    // TODO: check for dimension
     private boolean isFluidAllowed(Fluid fluid) {
-//        return BuildCraftFactory.pumpDimensionList.isFluidAllowed(fluid, world.dimension.id);
+        if (Config.fluidBlacklistMap.containsKey(world.dimension.id) && Config.fluidBlacklistMap.get(world.dimension.id).contains(fluid)) {
+            return false;
+        }
+
+        if (Config.fluidBlacklistMap.containsKey(-999) && Config.fluidBlacklistMap.get(-999).contains(fluid)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -400,7 +417,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
 
     public EntityBlock newPumpTube(World w) {
         EntityBlock eb = new EntityBlock(w);
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             eb.texture = TextureListener.pumpTube.index;
         }
         return eb;
@@ -475,7 +492,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
 
         nbt.putInt("aimY", aimY);
 
-        if(tube != null){
+        if (tube != null) {
             nbt.putFloat("tubeY", (float) tube.y);
         } else {
             nbt.putFloat("tubeY", this.y);

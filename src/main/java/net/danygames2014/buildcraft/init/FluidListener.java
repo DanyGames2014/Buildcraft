@@ -45,5 +45,8 @@ public class FluidListener {
         
         // Refinery Recipes
         StationAPI.EVENT_BUS.post(new RefineryRecipeRegisterEvent());
+        
+        // Pump Blacklist
+        Config.initPumpBlacklist();
     }
 }

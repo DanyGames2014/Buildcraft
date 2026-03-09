@@ -88,7 +88,10 @@ public class MachineConfig {
     }
 
     public static class PumpConfig {
-        @ConfigEntry(name = "Consume water sources", description = "consumeWaterSources", multiplayerSynced = true)
+        @ConfigEntry(name = "Consume water sources", multiplayerSynced = true)
         public Boolean consumeWaterSources = true;
+        
+        @ConfigEntry(name = "Fluid Blacklist", multiplayerSynced = true, requiresRestart = true)
+        public String[] fluidBlacklist = new String[0];
     }
 }
