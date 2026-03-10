@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.init.TextureListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.World;
+import net.modificationstation.stationapi.api.util.Identifier;
 
 public class LaserUtil {
     public static EntityBlock createLaser(World world, Position p1, Position p2, LaserKind kind) {
@@ -45,11 +46,9 @@ public class LaserUtil {
             jSize = 0.10;
         }
 
-        EntityBlock block = new EntityBlock(world, i, j, k, iSize, jSize, kSize);
+        EntityBlock block = new EntityBlock(world, i, j, k, (float) iSize, (float) jSize, (float) kSize);
         block.setBrightness(210);
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            block.texture = getLaserTexture(kind);
-        }
+        block.setTextureIdentifier(getLaserTexture(kind));
 
         world.spawnEntity(block);
 
@@ -85,11 +84,11 @@ public class LaserUtil {
         return lasers;
     }
 
-    public static int getLaserTexture(LaserKind kind){
+    public static Identifier getLaserTexture(LaserKind kind){
         return switch (kind) {
-            case BLUE -> TextureListener.blueLaser.index;
-            case RED -> TextureListener.redLaser.index;
-            case STRIPES -> TextureListener.stripesLaser.index;
+            case BLUE -> TextureListener.blueLaser;
+            case RED -> TextureListener.redLaser;
+            case STRIPES -> TextureListener.stripesLaser;
         };
     }
 }

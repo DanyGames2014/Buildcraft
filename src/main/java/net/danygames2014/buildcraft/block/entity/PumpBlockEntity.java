@@ -406,9 +406,9 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
 
     private void setTubePosition() {
         if (tube != null) {
-            tube.xSize = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
-            tube.zSize = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
-            tube.ySize = this.y - tube.y;
+            tube.setXSize(PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS);
+            tube.setZSize(PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS);
+            tube.setYSize((float) (this.y - tube.y));
 
             tube.setPosition(this.x + PipeWorldRenderer.PIPE_MIN_POS, tubeY, this.z + PipeWorldRenderer.PIPE_MIN_POS);
         }
@@ -417,9 +417,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
 
     public EntityBlock newPumpTube(World w) {
         EntityBlock eb = new EntityBlock(w);
-        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
-            eb.texture = TextureListener.pumpTube.index;
-        }
+        eb.setTextureIdentifier(TextureListener.pumpTube);
         return eb;
     }
 

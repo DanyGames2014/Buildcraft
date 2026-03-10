@@ -63,19 +63,19 @@ public class TextureListener {
 
     public static final Identifier structurePipe = Buildcraft.NAMESPACE.id("block/pipe/cobblestone_structure_pipe");
 
+    public static Identifier redLaser = Buildcraft.NAMESPACE.id("block/laser/block_red");
+    public static Identifier blueLaser = Buildcraft.NAMESPACE.id("block/laser/block_blue");
+    public static Identifier stripesLaser = Buildcraft.NAMESPACE.id("block/laser/stripes");
+
+    public static Identifier drill = Buildcraft.NAMESPACE.id("block/drill");
+    public static Identifier drillHead = Buildcraft.NAMESPACE.id("block/drill_head");
+
+    public static Identifier pumpTube = Buildcraft.NAMESPACE.id("block/pump_tube");
+
     public static final Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
 
     public static Atlas.Sprite energyRedSprite;
     public static Atlas.Sprite energyCyanSprite;
-
-    public static Atlas.Sprite redLaser;
-    public static Atlas.Sprite blueLaser;
-    public static Atlas.Sprite stripesLaser;
-
-    public static Atlas.Sprite drill;
-    public static Atlas.Sprite drillHead;
-
-    public static Atlas.Sprite pumpTube;
 
     public static Atlas.Sprite itemColorBox;
 
@@ -123,20 +123,19 @@ public class TextureListener {
         Atlases.getTerrain().addTexture(lensOverlay);
         Atlases.getTerrain().addTexture(structurePipe);
 
+        Atlases.getTerrain().addTexture(redLaser);
+        Atlases.getTerrain().addTexture(blueLaser);
+        Atlases.getTerrain().addTexture(stripesLaser);
+
+        Atlases.getTerrain().addTexture(drill);
+        Atlases.getTerrain().addTexture(drillHead);
+
+        Atlases.getTerrain().addTexture(pumpTube);
+
         Atlases.getTerrain().addTexture(missingTexture);
 
         energyRedSprite = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/misc/power_red"));
         energyCyanSprite = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/misc/power_cyan"));
-
-        redLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/block_red"));
-        blueLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/block_blue"));
-        stripesLaser = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/laser/stripes"));
-
-        drill = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill"));
-        drillHead = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/drill_head"));
-
-
-        pumpTube = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/pump_tube"));
 
         itemColorBox = Atlases.getTerrain().addTexture(Buildcraft.NAMESPACE.id("block/item_color_box"));
 

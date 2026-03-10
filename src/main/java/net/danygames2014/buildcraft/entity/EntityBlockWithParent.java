@@ -19,7 +19,7 @@ public class EntityBlockWithParent extends EntityBlock implements EntitySpawnDat
         super(world);
     }
 
-    public EntityBlockWithParent(World world, double x, double y, double z, double xSize, double ySize, double zSize, Entity parent){
+    public EntityBlockWithParent(World world, double x, double y, double z, float xSize, float ySize, float zSize, Entity parent){
         super(world, x, y, z, xSize, ySize, zSize);
         this.parent = parent;
     }
@@ -31,6 +31,9 @@ public class EntityBlockWithParent extends EntityBlock implements EntitySpawnDat
     @Override
     public void tick() {
         super.tick();
+        if(world.isRemote){
+            return;
+        }
         if(parent == null || parent.dead){
             invalidTimer++;
             if(invalidTimer > 20){

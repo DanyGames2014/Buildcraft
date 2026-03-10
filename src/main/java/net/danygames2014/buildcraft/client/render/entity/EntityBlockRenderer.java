@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.client.render.entity;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.entity.EntityBlock;
+import net.danygames2014.buildcraft.util.TextureUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
@@ -11,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
+import net.modificationstation.stationapi.api.client.texture.TextureHelper;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
 
@@ -130,19 +132,19 @@ public class EntityBlockRenderer extends EntityRenderer {
 
         shadowRadius = entity.shadowSize;
         RenderInfo util = new RenderInfo();
-        util.texture = entity.texture;
+        util.texture = TextureUtil.getTerrainTextureOffset(entity.getTextureIdentifier());
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
-        for(int xBase = 0; xBase < entity.xSize; ++xBase){
-            for(int yBase = 0; yBase < entity.ySize; ++yBase){
-                for(int zBase = 0; zBase < entity.zSize; ++zBase){
+        for(int xBase = 0; xBase < entity.getXSize(); ++xBase){
+            for(int yBase = 0; yBase < entity.getYSize(); ++yBase){
+                for(int zBase = 0; zBase < entity.getZSize(); ++zBase){
                     util.minX = 0;
                     util.minY = 0;
                     util.minZ = 0;
 
-                    double remainX = entity.xSize - xBase;
-                    double remainY = entity.ySize - yBase;
-                    double remainZ = entity.zSize - zBase;
+                    double remainX = entity.getXSize() - xBase;
+                    double remainY = entity.getYSize() - yBase;
+                    double remainZ = entity.getZSize() - zBase;
 
                     util.maxX = (float) (Math.min(remainX, 1.0));
                     util.maxY = (float) (Math.min(remainY, 1.0));
@@ -172,7 +174,7 @@ public class EntityBlockRenderer extends EntityRenderer {
 
         info.baseBlock.setBoundingBox(info.minX, info.minY, info.minZ, info.maxX, info.maxY, info.maxZ);
 
-        // TODO: no brightness in tesselator, look for alternative method
+        // Could implement this at some point, but nothing seems to use it atm.
 //        if(info.light != -1){
 //            tessellator.
 //        }

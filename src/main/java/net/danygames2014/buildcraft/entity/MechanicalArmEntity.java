@@ -107,11 +107,11 @@ public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvid
     }
 
     private void makeParts(World world) {
-        xArm = newDrill(world, 0, 0, 0, 1, 0.5, 0.5);
-        yArm = newDrill(world, 0, 0, 0, 0.5, 1, 0.5);
-        zArm = newDrill(world, 0, 0, 0, 0.5, 0.5, 1);
+        xArm = newDrill(world, 0, 0, 0, 1f, 0.5f, 0.5f);
+        yArm = newDrill(world, 0, 0, 0, 0.5f, 1, 0.5f);
+        zArm = newDrill(world, 0, 0, 0, 0.5f, 0.5f, 1);
 
-        head = newDrillHead(world, 0, 0, 0, 0.2, 1, 0.2);
+        head = newDrillHead(world, 0, 0, 0, 0.2f, 1, 0.2f);
         head.shadowSize = 1.0F;
     }
 
@@ -127,7 +127,7 @@ public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvid
     public void updatePosition() {
         double[] headT = getHead();
         this.xArm.setPosition(xRoot, yRoot, headT[2] + 0.25);
-        this.yArm.ySize = yRoot - headT[1] - 1;
+        this.yArm.setYSize((float) (yRoot - headT[1] - 1));
         this.yArm.setPosition(headT[0] + 0.25, headT[1] + 1, headT[2] + 0.25);
         this.zArm.setPosition(headT[0] + 0.25, yRoot, zRoot);
         this.head.setPosition(headT[0] + 0.4, headT[1], headT[2] + 0.4);
@@ -156,27 +156,23 @@ public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvid
 
     private void setArmSize(double x, double z) {
         armSizeX = x;
-        xArm.xSize = x;
+        xArm.setXSize((float) x);
         armSizeZ = z;
-        zArm.zSize = z;
+        zArm.setZSize((float) z);;
         updatePosition();
     }
 
     @SuppressWarnings("SameParameterValue")
-    private EntityBlockWithParent newDrill(World w, double x, double y, double z, double sizeX, double sizeY, double sizeZ){
+    private EntityBlockWithParent newDrill(World w, double x, double y, double z, float sizeX, float sizeY, float sizeZ){
         EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, x, y, z, sizeX, sizeY, sizeZ, this);
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
-            entityBlock.texture = TextureListener.drill.index;
-        }
+        entityBlock.setTextureIdentifier(TextureListener.drill);
         return entityBlock;
     }
 
     @SuppressWarnings("SameParameterValue")
-    private EntityBlockWithParent newDrillHead(World w, double x, double y, double z, double sizeX, double sizeY, double sizeZ){
+    private EntityBlockWithParent newDrillHead(World w, double x, double y, double z, float sizeX, float sizeY, float sizeZ){
         EntityBlockWithParent entityBlock = new EntityBlockWithParent(w, x, y, z, sizeX, sizeY, sizeZ, this);
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
-            entityBlock.texture = TextureListener.drillHead.index;
-        }
+        entityBlock.setTextureIdentifier(TextureListener.drillHead);
         return entityBlock;
     }
 
