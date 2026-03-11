@@ -75,6 +75,7 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         }
     }
     
+    @SuppressWarnings("DataFlowIssue")
     @Override
     public void tick() {
         super.tick();

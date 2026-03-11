@@ -123,6 +123,6 @@ public enum ForgeDirection {
                 return EAST;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 }

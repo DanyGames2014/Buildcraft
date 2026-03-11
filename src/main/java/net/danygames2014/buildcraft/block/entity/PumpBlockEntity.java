@@ -19,8 +19,6 @@ import net.danygames2014.nyalib.fluid.FluidRegistry;
 import net.danygames2014.nyalib.fluid.FluidStack;
 import net.danygames2014.nyalib.fluid.Fluids;
 import net.danygames2014.nyalib.fluid.block.ManagedFluidHandler;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -111,7 +109,9 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
                 if (powerHandler.useEnergy(10, 10, true) == 10) {
                     if (fluidToPump.fluid != Fluids.WATER || Config.MACHINE_CONFIG.pump.consumeWaterSources || numFluidBlocksFound < 9) {
                         index = getNextIndexToPump(true);
-                        drainBlock(world, index.x, index.y, index.z, true);
+                        if (index != null) {
+                            drainBlock(world, index.x, index.y, index.z, true);
+                        }
                     }
 
                     insertFluid(fluidToPump, 0, null);
@@ -353,6 +353,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
         }
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     private boolean isPumpableFluid(int x, int y, int z) {
         Fluid fluid = FluidRegistry.get(world.getBlockId(x, y, z));
 
@@ -381,6 +382,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
         }
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     private boolean isFluidAllowed(Fluid fluid) {
         if (Config.fluidBlacklistMap.containsKey(world.dimension.id) && Config.fluidBlacklistMap.get(world.dimension.id).contains(fluid)) {
             return false;

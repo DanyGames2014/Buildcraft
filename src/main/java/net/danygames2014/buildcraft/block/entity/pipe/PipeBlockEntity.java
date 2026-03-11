@@ -307,7 +307,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
     }
 
     public ArrayList<ItemStack> computeItemDrops() {
-        ArrayList<ItemStack> result = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> result = new ArrayList<>();
 
         for (PipeWire pipeWire : PipeWire.values()) {
             if (wireSet[pipeWire.ordinal()]) {
@@ -749,17 +749,17 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
             for (int i = 0; i < ForgeDirection.VALID_DIRECTIONS.length; i++) {
                 PipePluggable old = sideProperties.pluggables[i];
                 PipePluggable newer = newPluggables[i];
-                if (old == null && newer == null) {
-                    continue;
-                } else if (old != null && newer != null && old.getClass() == newer.getClass()) {
-                    if (newer.requiresRenderUpdate(old)) {
+                if (old != null || newer != null) {
+                    if (old != null && newer != null && old.getClass() == newer.getClass()) {
+                        if (newer.requiresRenderUpdate(old)) {
+                            world.setBlockDirty(x, y, z);
+                            break;
+                        }
+                    } else {
+                        // one of them is null but not the other, so update
                         world.setBlockDirty(x, y, z);
                         break;
                     }
-                } else {
-                    // one of them is null but not the other, so update
-                    world.setBlockDirty(x, y, z);
-                    break;
                 }
             }
             sideProperties.pluggables = newPluggables.clone();

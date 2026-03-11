@@ -70,6 +70,7 @@ public class ActionParameterSignal implements StatementParameter {
         return String.format(TranslationStorage.getInstance().get("gate.buildcraft.action.pipe.wire"), TranslationStorage.getInstance().get("color." + color.name().toLowerCase(Locale.ENGLISH)));
     }
 
+    @SuppressWarnings("NonStrictComparisonCanBeEquality")
     @Override
     public void click(StatementContainer source, Statement stmt, ItemStack stack, StatementMouseClick mouse) {
         int maxColor = 4;

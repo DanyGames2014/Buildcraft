@@ -66,6 +66,7 @@ public class TriggerParameterSignal implements StatementParameter {
         return String.format(TranslationStorage.getInstance().get("gate.buildcraft.trigger.pipe.wire." + (active ? "active" : "inactive")), TranslationStorage.getInstance().get("color.buildcraft." + color.name().toLowerCase(Locale.ENGLISH)));
     }
 
+    @SuppressWarnings("NonStrictComparisonCanBeEquality")
     @Override
     public void click(StatementContainer source, Statement stmt, ItemStack stack, StatementMouseClick mouse) {
         int maxColor = 4;

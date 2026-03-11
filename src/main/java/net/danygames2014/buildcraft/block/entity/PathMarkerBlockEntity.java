@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements PathProvider {
-    private static ArrayList<PathMarkerBlockEntity> availableMarkers = new ArrayList<>();
+    private static final ArrayList<PathMarkerBlockEntity> availableMarkers = new ArrayList<>();
 
     public int x0, y0, z0, x1, y1, z1;
     public boolean loadLink0 = false;

@@ -118,6 +118,7 @@ public class FloodGateBlockEntity extends SyncedBlockEntity implements ManagedFl
         return false;
     }
 
+    @SuppressWarnings("SameParameterValue")
     private BlockIndex getNextIndexToFill(boolean remove) {
         if (pumpLayerQueues.isEmpty()) {
             return null;

@@ -43,6 +43,7 @@ public class BlockIndex implements Comparable<BlockIndex> {
     }
 
 
+    @SuppressWarnings("UseCompareMethod")
     @Override
     public int compareTo(@NotNull BlockIndex o) {
         if (o.x < x) {

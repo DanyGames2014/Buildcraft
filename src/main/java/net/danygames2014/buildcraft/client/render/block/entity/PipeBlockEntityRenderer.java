@@ -283,6 +283,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         blockRenderManager.renderBlock(renderBlock, x, y, z);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private DisplayFluidList getDisplayFluidList(Fluid fluid, int skylight, int blocklight, int flags, World world) {
         if (fluid == null) {
             return null;
@@ -304,7 +305,8 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             block.baseBlock = Block.WATER;
         }
 
-        block.texture = fluid.getStillBlock().getTexture(0);
+        Block stillFluidBlock = fluid.getStillBlock();
+        block.texture = stillFluidBlock != null ? fluid.getStillBlock().getTexture(0) : 0;
         block.brightness = skylight << 16 | finalBlockLight;
 
         float size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;

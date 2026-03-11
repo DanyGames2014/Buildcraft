@@ -30,8 +30,8 @@ public class PipePluggableState implements Serializable {
     @Override
     public void writeData(DataOutputStream stream) throws IOException {
         this.pluggableMatrix.writeData(stream);
-        for(PipePluggable p : pluggables){
-            if(p != null){
+        for (PipePluggable p : pluggables) {
+            if (p != null) {
                 stream.writeUTF(PluggableRegistry.getIdentifier(p.getClass()).toString());
                 p.writeData(stream);
             }
@@ -41,15 +41,17 @@ public class PipePluggableState implements Serializable {
     @Override
     public void readData(DataInputStream stream) throws IOException {
         this.pluggableMatrix.readData(stream);
-        for(Direction dir : Direction.values()){
-            if(this.pluggableMatrix.isConnected(dir)){
+        for (Direction dir : Direction.values()) {
+            if (this.pluggableMatrix.isConnected(dir)) {
                 Identifier identifier = Identifier.tryParse(stream.readUTF());
-                pluggables[dir.ordinal()] = PluggableRegistry.getPluggableFactory(identifier).create();
-                if(pluggables[dir.ordinal()] != null){
-                    pluggables[dir.ordinal()].readData(stream);
+                PluggableRegistry.PluggableFactory pluggableFactory = PluggableRegistry.getPluggableFactory(identifier);
+                if (pluggableFactory != null) {
+                    pluggables[dir.ordinal()] = pluggableFactory.create();
+                    if (pluggables[dir.ordinal()] != null) {
+                        pluggables[dir.ordinal()].readData(stream);
+                    }
                 }
-            }
-            else {
+            } else {
                 pluggables[dir.ordinal()] = null;
             }
         }

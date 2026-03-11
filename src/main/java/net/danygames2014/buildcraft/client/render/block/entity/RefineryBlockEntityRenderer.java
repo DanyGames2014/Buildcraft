@@ -17,16 +17,9 @@ public class RefineryBlockEntityRenderer extends BlockEntityRenderer {
 
     private static final String TEXTURE = "/assets/buildcraft/stationapi/textures/block/refinery_magnet.png";
     private static final float pixel = (float) (1.0 / 16.0);
-    private final ModelPart tank;
     private final ModelPart[] magnet = new ModelPart[4];
 
     public RefineryBlockEntityRenderer() {
-        tank = new ModelPart(0, 0);
-        tank.addCuboid(-4F, -8F, -4F, 8, 16, 8);
-        tank.pivotX = 8;
-        tank.pivotY = 8;
-        tank.pivotZ = 8;
-
         for (int i = 0; i < 4; ++i) {
             magnet[i] = new ModelPart(32, i * 8);
             magnet[i].addCuboid(0, -8F, -8F, 8, 4, 4);

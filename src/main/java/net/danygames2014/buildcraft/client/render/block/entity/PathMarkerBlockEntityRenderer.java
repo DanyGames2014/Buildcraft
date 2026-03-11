@@ -6,7 +6,6 @@ import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.util.Constants;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import org.lwjgl.opengl.GL11;
 

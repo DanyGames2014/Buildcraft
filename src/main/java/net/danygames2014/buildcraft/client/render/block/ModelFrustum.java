@@ -24,11 +24,8 @@ public class ModelFrustum {
     /** Z vertex coordinate of upper box corner */
     public final float posZ2;
 
-    /** The (x,y,z) vertex positions and (u,v) texture coordinates for each of the 8 points on a cube */
-    private Vertex[] vertexPositions;
-
     /** An array of 6 TexturedQuads, one for each face of a cube */
-    private Quad[] quadList;
+    private final Quad[] quadList;
 
     public ModelFrustum(ModelPart par1ModelRenderer, int textureOffsetX, int textureOffsetY, float originXI, float originYI, float originZI,
                         int bottomWidth, int bottomDepth, int topWidth, int topDepth, int height, float scaleFactor) {
@@ -41,7 +38,6 @@ public class ModelFrustum {
         this.posY1 = originY;
         this.posZ1 = originZ;
 
-        this.vertexPositions = new Vertex[8];
         this.quadList = new Quad[6];
 
         float bottomDeltaX = bottomWidth > topWidth ? 0 : (topWidth - bottomWidth) / 2f;
@@ -71,49 +67,41 @@ public class ModelFrustum {
             originX = var14;
         }
 
-        Vertex var23 = new Vertex(originX + bottomDeltaX, originY, originZ + bottomDeltaZ, 0.0F, 0.0F);
-        Vertex var15 = new Vertex(targetX - bottomDeltaX, originY, originZ + bottomDeltaZ, 0.0F, 8.0F);
-        Vertex var16 = new Vertex(targetX - topDeltaX, targetY, originZ + topDeltaZ, 8.0F, 8.0F);
-        Vertex var17 = new Vertex(originX + topDeltaX, targetY, originZ + topDeltaZ, 8.0F, 0.0F);
+        Vertex v1 = new Vertex(originX + bottomDeltaX, originY, originZ + bottomDeltaZ, 0.0F, 0.0F);
+        Vertex v2 = new Vertex(targetX - bottomDeltaX, originY, originZ + bottomDeltaZ, 0.0F, 8.0F);
+        Vertex v3 = new Vertex(targetX - topDeltaX, targetY, originZ + topDeltaZ, 8.0F, 8.0F);
+        Vertex v4 = new Vertex(originX + topDeltaX, targetY, originZ + topDeltaZ, 8.0F, 0.0F);
 
-        Vertex var18 = new Vertex(originX + bottomDeltaX, originY, targetZ - bottomDeltaZ, 0.0F, 0.0F);
-        Vertex var19 = new Vertex(targetX - bottomDeltaX, originY, targetZ - bottomDeltaZ, 0.0F, 8.0F);
-        Vertex var20 = new Vertex(targetX - topDeltaX, targetY, targetZ - topDeltaZ, 8.0F, 8.0F);
-        Vertex var21 = new Vertex(originX + topDeltaX, targetY, targetZ - topDeltaZ, 8.0F, 0.0F);
-        this.vertexPositions[0] = var23;
-        this.vertexPositions[1] = var15;
-        this.vertexPositions[2] = var16;
-        this.vertexPositions[3] = var17;
-        this.vertexPositions[4] = var18;
-        this.vertexPositions[5] = var19;
-        this.vertexPositions[6] = var20;
-        this.vertexPositions[7] = var21;
+        Vertex v5 = new Vertex(originX + bottomDeltaX, originY, targetZ - bottomDeltaZ, 0.0F, 0.0F);
+        Vertex v6 = new Vertex(targetX - bottomDeltaX, originY, targetZ - bottomDeltaZ, 0.0F, 8.0F);
+        Vertex v7 = new Vertex(targetX - topDeltaX, targetY, targetZ - topDeltaZ, 8.0F, 8.0F);
+        Vertex v8 = new Vertex(originX + topDeltaX, targetY, targetZ - topDeltaZ, 8.0F, 0.0F);
 
         int depth = Math.max(bottomDepth, topDepth);
         int width = Math.max(bottomWidth, topWidth);
 
-        this.quadList[0] = new Quad(new Vertex[] { var19, var15, var16, var20 }, textureOffsetX + depth + width, textureOffsetY
+        this.quadList[0] = new Quad(new Vertex[] { v6, v2, v3, v7 }, textureOffsetX + depth + width, textureOffsetY
                                                                                                                                                 + depth, textureOffsetX + depth + width + depth, textureOffsetY + depth + height);
-        this.quadList[1] = new Quad(new Vertex[] { var23, var18, var21, var17 }, textureOffsetX, textureOffsetY + depth,
+        this.quadList[1] = new Quad(new Vertex[] { v1, v5, v8, v4 }, textureOffsetX, textureOffsetY + depth,
                 textureOffsetX + depth, textureOffsetY + depth + height);
-        this.quadList[2] = new Quad(new Vertex[] { var19, var18, var23, var15 }, textureOffsetX + depth, textureOffsetY,
+        this.quadList[2] = new Quad(new Vertex[] { v6, v5, v1, v2 }, textureOffsetX + depth, textureOffsetY,
                 textureOffsetX + depth + width, textureOffsetY + depth);
-        this.quadList[3] = new Quad(new Vertex[] { var16, var17, var21, var20 }, textureOffsetX + depth + width, textureOffsetY
+        this.quadList[3] = new Quad(new Vertex[] { v3, v4, v8, v7 }, textureOffsetX + depth + width, textureOffsetY
                                                                                                                                                 + depth, textureOffsetX + depth + width + width, textureOffsetY);
-        this.quadList[4] = new Quad(new Vertex[] { var15, var23, var17, var16 }, textureOffsetX + depth, textureOffsetY
+        this.quadList[4] = new Quad(new Vertex[] { v2, v1, v4, v3 }, textureOffsetX + depth, textureOffsetY
                                                                                                                                         + depth, textureOffsetX + depth + width, textureOffsetY + depth + height);
-        this.quadList[5] = new Quad(new Vertex[] { var18, var19, var20, var21 }, textureOffsetX + depth + width + depth,
+        this.quadList[5] = new Quad(new Vertex[] { v5, v6, v7, v8 }, textureOffsetX + depth + width + depth,
                 textureOffsetY + depth, textureOffsetX + depth + width + depth + width, textureOffsetY + depth + height);
         
-        this.quadList[1] = new Quad(new Vertex[] { var23, var18, var21, var17 }, textureOffsetX, textureOffsetY + depth,
+        this.quadList[1] = new Quad(new Vertex[] { v1, v5, v8, v4 }, textureOffsetX, textureOffsetY + depth,
                 textureOffsetX + depth, textureOffsetY + depth + height);
-        this.quadList[2] = new Quad(new Vertex[] { var19, var18, var23, var15 }, textureOffsetX + depth, textureOffsetY,
+        this.quadList[2] = new Quad(new Vertex[] { v6, v5, v1, v2 }, textureOffsetX + depth, textureOffsetY,
                 textureOffsetX + depth + width, textureOffsetY + depth);
-        this.quadList[3] = new Quad(new Vertex[] { var16, var17, var21, var20 }, textureOffsetX + depth + width, textureOffsetY
+        this.quadList[3] = new Quad(new Vertex[] { v3, v4, v8, v7 }, textureOffsetX + depth + width, textureOffsetY
                                                                                                                                                 + depth, textureOffsetX + depth + width + width, textureOffsetY);
-        this.quadList[4] = new Quad(new Vertex[] { var15, var23, var17, var16 }, textureOffsetX + depth, textureOffsetY
+        this.quadList[4] = new Quad(new Vertex[] { v2, v1, v4, v3 }, textureOffsetX + depth, textureOffsetY
                                                                                                                                         + depth, textureOffsetX + depth + width, textureOffsetY + depth + height);
-        this.quadList[5] = new Quad(new Vertex[] { var18, var19, var20, var21 }, textureOffsetX + depth + width + depth,
+        this.quadList[5] = new Quad(new Vertex[] { v5, v6, v7, v8 }, textureOffsetX + depth + width + depth,
                 textureOffsetY + depth, textureOffsetX + depth + width + depth + width, textureOffsetY + depth + height);
 
         if (par1ModelRenderer.mirror) {

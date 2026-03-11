@@ -95,7 +95,12 @@ public class FacadePluggable extends PipePluggable {
 
     @Override
     public void writeNbt(NbtCompound nbt) {
-        nbt.putString("blockid", BlockRegistry.INSTANCE.getId(block).toString());
+        Identifier blockId = BlockRegistry.INSTANCE.getId(block);
+        if (blockId == null) {
+            blockId = Identifier.of("minecraft:stone");
+        }
+        
+        nbt.putString("blockid", blockId.toString());
         nbt.putInt("meta", meta);
         nbt.putBoolean("hollow", hollow);
     }
@@ -112,7 +117,11 @@ public class FacadePluggable extends PipePluggable {
 
     @Override
     public void writeData(DataOutputStream stream) throws IOException {
-        stream.writeUTF(BlockRegistry.INSTANCE.getId(block).toString());
+        Identifier blockId = BlockRegistry.INSTANCE.getId(block);
+        if (blockId == null) {
+            blockId = Identifier.of("minecraft:stone");
+        }
+        stream.writeUTF(blockId.toString());
         stream.writeInt(meta);
         stream.writeBoolean(hollow);
     }

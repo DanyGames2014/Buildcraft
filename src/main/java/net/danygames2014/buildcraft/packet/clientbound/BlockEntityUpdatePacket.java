@@ -72,7 +72,7 @@ public class BlockEntityUpdatePacket extends UpdatePacket implements ManagedPack
     }
 
     public boolean targetExists(World world) {
-        return world.getBlockState(x, y, z) != States.AIR;
+        return world.getBlockState(x, y, z) != States.AIR.get();
     }
 
     public BlockEntity getTarget(World world) {

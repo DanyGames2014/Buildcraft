@@ -120,7 +120,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
                     return true;
                 }
             }
-        } catch (RuntimeException error) {
+        } catch (RuntimeException ignored) {
         }
 
         return false;
@@ -143,7 +143,7 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
                     expansions.add(ex);
                 }
             }
-        } catch (RuntimeException error) {
+        } catch (RuntimeException ignored) {
         }
 
         return expansions;
@@ -180,7 +180,9 @@ public class GateItem extends TemplateItem implements CustomTooltipProvider, Pip
         items.add(makeGateItem(this.gateMaterial, this.gateLogic));
         for (GateExpansion exp : GateExpansions.getExpansions()) {
             ItemStack stackExpansion = makeGateItem(this.gateMaterial, this.gateLogic);
-            addGateExpansion(stackExpansion, exp);
+            if (stackExpansion != null) {
+                addGateExpansion(stackExpansion, exp);
+            }
             items.add(stackExpansion);
         }
         

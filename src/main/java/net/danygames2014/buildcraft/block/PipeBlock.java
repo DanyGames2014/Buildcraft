@@ -175,6 +175,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             }
 
             if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+                //noinspection ConstantValue
                 return pipe.behavior.wrenchRightClick(pipe, stack, player, isSneaking, world, x,y,z,side, wrenchMode);
             }
         }

@@ -46,7 +46,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     private boolean isNetInitialized = false;
     private int lastTriggerState = 0;
 
-    public GateInterfaceScreenHandler(Inventory playerInventory, PipeBlockEntity pipe){
+    public GateInterfaceScreenHandler(Inventory playerInventory, PipeBlockEntity pipe) {
         Arrays.fill(actionsState, ActionActiveState.Deactivated);
 
         this.pipe = pipe;
@@ -131,9 +131,8 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         return gate != null;
     }
 
-    /**
-     * CLIENT SIDE *
-     */
+    // Clientside
+
     /**
      * Marks client side gate container as needing to be synchronized with the
      * server.
@@ -147,7 +146,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
      * (re-)requests the current selection on the gate if needed.
      */
     public void synchronize() {
-        if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT){
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
             if (!isNetInitialized && Minecraft.INSTANCE.world.isRemote) {
                 isNetInitialized = true;
                 PacketHelper.send(new CommandPacket(this, "initRequest", null));
@@ -203,8 +202,8 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
 
         if (state != lastTriggerState) {
 
-            for(int var1 = 0; var1 < this.listeners.size(); ++var1) {
-                ScreenHandlerListener var2 = (ScreenHandlerListener)this.listeners.get(var1);
+            for (Object listener : this.listeners) {
+                ScreenHandlerListener var2 = (ScreenHandlerListener) listener;
                 var2.onPropertyUpdate(this, 0 /* State update */, state);
             }
 
@@ -243,7 +242,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         if (gate == null) {
             return ActionActiveState.Deactivated;
         } else {
-            return gate.actionsState [i];
+            return gate.actionsState[i];
         }
     }
 
@@ -297,9 +296,8 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
         });
     }
 
-    public Packet getStatementParameterPacket(final String name, final int slot,
-                                              final int paramSlot, final StatementParameter parameter) {
-        final String parameterName = parameter != null ? parameter.getIdentifier().toString() : null;
+    public Packet getStatementParameterPacket(final String name, final int slot, final int paramSlot, final StatementParameter parameter) {
+        final String parameterName = parameter != null ? parameter.getIdentifier().toString() : "";
         final NbtCompound parameterNBT = new NbtCompound();
         if (parameter != null) {
             parameter.writeNBT(parameterNBT);
@@ -349,7 +347,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                                 for (String action : actionStrings) {
                                     data.writeUTF(action);
                                 }
-                            } catch (IOException e){
+                            } catch (IOException ignored) {
                             }
                         }
                     }));
@@ -375,8 +373,8 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                     int y = stream.readInt();
                     int z = stream.readInt();
 
-                    if(Minecraft.INSTANCE.player.world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe){
-                        this.pipe = pipe;
+                    if (Minecraft.INSTANCE.player.world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeEntity) {
+                        this.pipe = pipeEntity;
                     }
 
                     setGate(stream.readByte());
@@ -417,7 +415,7 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
                     }
                 }
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e.getCause());
         }
     }
@@ -484,13 +482,13 @@ public class GateInterfaceScreenHandler extends ScreenHandler implements Command
     /**
      * GATE INFORMATION *
      */
-    public String  getGateGuiFile() {
+    public String getGateGuiFile() {
         return "/assets/buildcraft/stationapi/textures/gui/" + gate.material.backgroundTexture;
     }
 
     @Environment(EnvType.CLIENT)
-    public void tick(){
-        if(!Minecraft.INSTANCE.world.isRemote){
+    public void tick() {
+        if (!Minecraft.INSTANCE.world.isRemote) {
             sendContentUpdates();
         }
     }

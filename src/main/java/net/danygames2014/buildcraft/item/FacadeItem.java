@@ -47,7 +47,13 @@ public class FacadeItem extends TemplateItem implements PipePluggableItem, Custo
 
     public static ItemStack createStack(Block block, int meta, boolean hollow){
         ItemStack stack = new ItemStack(Buildcraft.facade);
-        stack.getStationNbt().putString("id", BlockRegistry.INSTANCE.getId(block).toString());
+        
+        Identifier blockId = BlockRegistry.INSTANCE.getId(block);
+        if (blockId == null) {
+            blockId = Identifier.of("minecraft:stone");
+        }
+        
+        stack.getStationNbt().putString("id", blockId.toString());
         stack.getStationNbt().putInt("meta", meta);
         stack.getStationNbt().putBoolean("hollow", hollow);
         return stack;

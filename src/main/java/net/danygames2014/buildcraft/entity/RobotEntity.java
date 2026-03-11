@@ -26,7 +26,7 @@ public class RobotEntity extends Entity implements EntitySpawnDataProvider {
     private static final int LASER_TEXTURE_KEY = 4;
 
     private BlockPos areaWorkerPosition;
-    private MutableBlockPos destination;
+    private final MutableBlockPos destination;
 
     private AreaWorkerBlockEntity areaWorker;
 

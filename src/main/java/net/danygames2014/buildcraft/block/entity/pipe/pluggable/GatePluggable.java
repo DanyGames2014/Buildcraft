@@ -56,7 +56,9 @@ public class GatePluggable extends PipePluggable {
     public ItemStack[] getDropItems(PipeBlockEntity pipe) {
         ItemStack gate = GateItem.makeGateItem(material, logic);
         for (GateExpansion expansion : expansions) {
-            GateItem.addGateExpansion(gate, expansion);
+            if (gate != null) {
+                GateItem.addGateExpansion(gate, expansion);
+            }
         }
         return new ItemStack[] { gate };
     }
@@ -132,7 +134,7 @@ public class GatePluggable extends PipePluggable {
             }
             if(isPulsing != realGate.isGatePulsing()){
                 isPulsing = realGate.isGatePulsing();
-                update = true;;
+                update = true;
             }
             if(update){
                 pipe.scheduleRenderUpdate();

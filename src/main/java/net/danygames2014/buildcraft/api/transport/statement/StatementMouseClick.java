@@ -1,15 +1,16 @@
 package net.danygames2014.buildcraft.api.transport.statement;
 
+@SuppressWarnings("ClassCanBeRecord")
 public class StatementMouseClick {
-    private int button;
-    private boolean shift;
+    private final int button;
+    private final boolean shift;
 
     public StatementMouseClick(int button, boolean shift) {
         this.button = button;
         this.shift = shift;
     }
 
-    public boolean isShift() {
+    public boolean isShiftClick() {
         return shift;
     }
 

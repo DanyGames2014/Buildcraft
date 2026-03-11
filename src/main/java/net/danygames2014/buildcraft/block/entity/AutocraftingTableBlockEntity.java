@@ -334,7 +334,7 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
             }
 
             if (insertedStack == null) {
-                return insertedStack;
+                return null;
             }
         }
 

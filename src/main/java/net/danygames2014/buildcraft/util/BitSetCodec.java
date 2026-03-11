@@ -6,7 +6,7 @@ public class BitSetCodec {
     public byte encode(BitSet set) {
         byte result = 0;
         for (byte i = 0; i < 8; i++) {
-            result |= set.get(i) ? (1 << i) : 0;
+            result |= set.get(i) ? (byte) (1 << i) : 0;
         }
         return result;
     }

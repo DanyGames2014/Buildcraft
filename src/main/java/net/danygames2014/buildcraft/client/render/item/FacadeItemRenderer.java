@@ -13,6 +13,7 @@ import net.modificationstation.stationapi.api.client.StationRenderAPI;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
 
+@SuppressWarnings("SuspiciousNameCombination")
 public class FacadeItemRenderer {
 
     public static FacadeItemRenderer INSTANCE = new FacadeItemRenderer();

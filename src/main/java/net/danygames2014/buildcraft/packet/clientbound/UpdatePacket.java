@@ -1,7 +1,6 @@
 package net.danygames2014.buildcraft.packet.clientbound;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
-import net.minecraft.network.NetworkHandler;
 import net.minecraft.network.packet.Packet;
 
 import java.io.ByteArrayOutputStream;

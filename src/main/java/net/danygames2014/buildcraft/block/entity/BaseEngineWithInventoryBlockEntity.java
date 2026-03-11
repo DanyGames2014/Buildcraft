@@ -92,7 +92,7 @@ public abstract class BaseEngineWithInventoryBlockEntity extends BaseEngineBlock
         for (int i = 0; i < this.getItemSlots(side); ++i) {
             insertedStack = insertItem(insertedStack, i, side);
             if (insertedStack == null) {
-                return insertedStack;
+                return null;
             }
         }
 

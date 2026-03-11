@@ -9,7 +9,6 @@ import net.danygames2014.buildcraft.api.energy.ILaserTarget;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
-import net.danygames2014.buildcraft.client.render.LaserRenderer;
 import net.danygames2014.buildcraft.registry.ControlModeRegistry;
 import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.nyalib.block.BlockEntityInit;
@@ -205,6 +204,7 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
             case NORTH:
                 maxZ = z;
                 break;
+            //noinspection DefaultNotLastCaseInSwitch
             default:
             case SOUTH:
                 minZ = z;

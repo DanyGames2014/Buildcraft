@@ -14,6 +14,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+@SuppressWarnings("RedundantThrows")
 public class PlugPluggable extends PipePluggable {
 
     @Override

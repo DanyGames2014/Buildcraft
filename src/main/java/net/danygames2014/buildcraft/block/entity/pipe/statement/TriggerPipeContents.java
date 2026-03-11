@@ -29,7 +29,7 @@ public class TriggerPipeContents extends BCStatement implements TriggerInternal 
         public TriggerInternal trigger;
     }
 
-    private PipeContents kind;
+    private final PipeContents kind;
 
     public TriggerPipeContents(PipeContents kind) {
         super(Buildcraft.NAMESPACE.id("pipe.contents." + kind.name().toLowerCase(Locale.ENGLISH)));

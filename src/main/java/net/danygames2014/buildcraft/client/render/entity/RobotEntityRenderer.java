@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 public class RobotEntityRenderer extends EntityRenderer {
     public static RobotEntityRenderer INSTANCE = new RobotEntityRenderer();
-    private ModelPart box;
+    private final ModelPart box;
 
     public RobotEntityRenderer(){
         box = new ModelPart(0, 0);

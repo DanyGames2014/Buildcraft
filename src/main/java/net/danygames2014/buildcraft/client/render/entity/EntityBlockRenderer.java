@@ -12,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.client.StationRenderAPI;
-import net.modificationstation.stationapi.api.client.texture.TextureHelper;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import org.lwjgl.opengl.GL11;
 

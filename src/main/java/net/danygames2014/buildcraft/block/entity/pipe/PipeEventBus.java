@@ -77,6 +77,7 @@ public class PipeEventBus {
             if ("eventHandler".equals(m.getName())) {
                 Class<?>[] parameters = m.getParameterTypes();
                 if (parameters.length == 1 && PipeEvent.class.isAssignableFrom(parameters[0])) {
+                    @SuppressWarnings("unchecked") 
                     Class<? extends PipeEvent> eventType = (Class<? extends PipeEvent>) parameters[0];
                     List<EventHandler> eventHandlerList = getHandlerList(eventType);
                     eventHandlerList.add(new EventHandler(m, handler));
@@ -110,7 +111,7 @@ public class PipeEventBus {
         for (EventHandler eventHandler : getHandlerList(eventClass)) {
             try {
                 eventHandler.method.invoke(eventHandler.owner, event);
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }

@@ -76,9 +76,12 @@ public class PipeSideProperties {
             }
             NbtCompound pluggableData = nbt.getCompound(key);
             Identifier identifier = Identifier.tryParse(pluggableData.getString("id"));
-            PipePluggable pluggable = PluggableRegistry.getPluggableFactory(identifier).create();
-            pluggable.readNbt(pluggableData);
-            pluggables[i] = pluggable;
+            PluggableRegistry.PluggableFactory pluggableFactory = PluggableRegistry.getPluggableFactory(identifier);
+            if (pluggableFactory != null) {
+                PipePluggable pluggable = pluggableFactory.create();
+                pluggable.readNbt(pluggableData);
+                pluggables[i] = pluggable;
+            }
         }
     }
 }

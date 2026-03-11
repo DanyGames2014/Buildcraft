@@ -46,7 +46,7 @@ public abstract class BuildcraftScreen extends HandledScreen {
     }
 
     public class LedgerManager {
-        private BuildcraftScreen gui;
+        private final BuildcraftScreen gui;
         @SuppressWarnings("rawtypes")
         private static Class openedLedger;
         protected ArrayList<Ledger> ledgers = new ArrayList<>();

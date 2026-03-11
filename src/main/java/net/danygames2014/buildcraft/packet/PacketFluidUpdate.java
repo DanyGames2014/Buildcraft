@@ -194,7 +194,7 @@ public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFlu
         byte[] bytes = new byte[2];
         for (int i = 0; i < bits.length(); i++) {
             if (bits.get(i)) {
-                bytes[bytes.length - i / 8 - 1] |= 1 << (i % 8);
+                bytes[bytes.length - i / 8 - 1] |= (byte) (1 << (i % 8));
             }
         }
         return bytes;

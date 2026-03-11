@@ -38,6 +38,6 @@ public class XorShift128Random {
     }
 
     public double nextDouble() {
-        return (double) (long) (nextLong() & 0x1FFFFFFFFFFFFFL) * DOUBLE_UNIT;
+        return (double) (nextLong() & 0x1FFFFFFFFFFFFFL) * DOUBLE_UNIT;
     }
 }

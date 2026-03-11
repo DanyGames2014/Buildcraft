@@ -59,8 +59,8 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     public boolean isPulsing = false;
     private Direction direction;
 
-    private HashMultiset<Statement> statementCounts = HashMultiset.create();
-    private int[] actionGroups = new int [] {0, 1, 2, 3, 4, 5, 6, 7};
+    private final HashMultiset<Statement> statementCounts = HashMultiset.create();
+    private final int[] actionGroups = new int [] {0, 1, 2, 3, 4, 5, 6, 7};
 
     // / CONSTRUCTOR
     public Gate(PipeBlockEntity pipe, GateMaterial material, GateLogic logic, Direction direction) {

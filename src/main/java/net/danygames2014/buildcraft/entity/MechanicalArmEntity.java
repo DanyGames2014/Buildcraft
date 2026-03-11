@@ -155,7 +155,7 @@ public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvid
         armSizeX = x;
         xArm.setXSize((float) x);
         armSizeZ = z;
-        zArm.setZSize((float) z);;
+        zArm.setZSize((float) z);
         updatePosition();
     }
 

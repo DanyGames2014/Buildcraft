@@ -31,10 +31,10 @@ public class RefineryBlockEntity extends SyncedBlockEntity implements ManagedFlu
     public float animationSpeed = 1;
     private short animationStage = 0;
 
-    private SafeTimeTracker time = new SafeTimeTracker();
-    private SafeTimeTracker updateNetworkTime = new SafeTimeTracker(10);
+    private final SafeTimeTracker time = new SafeTimeTracker();
+    private final SafeTimeTracker updateNetworkTime = new SafeTimeTracker(10);
 
-    private PowerHandler powerHandler;
+    private final PowerHandler powerHandler;
     private boolean isActive;
 
     public RefineryBlockEntity() {
@@ -160,7 +160,7 @@ public class RefineryBlockEntity extends SyncedBlockEntity implements ManagedFlu
      */
     public void simpleAnimationIterate() {
         if (animationSpeed > 1) {
-            animationStage += animationSpeed;
+            animationStage += (short) animationSpeed;
 
             if (animationStage > 300) {
                 animationStage = 100;
@@ -174,10 +174,10 @@ public class RefineryBlockEntity extends SyncedBlockEntity implements ManagedFlu
         if (animationSpeed < 2) {
             animationSpeed = 2;
         } else if (animationSpeed <= 5) {
-            animationSpeed += 0.1;
+            animationSpeed += 0.1F;
         }
 
-        animationStage += animationSpeed;
+        animationStage += (short) animationSpeed;
 
         if (animationStage > 300) {
             animationStage = 100;
@@ -186,9 +186,9 @@ public class RefineryBlockEntity extends SyncedBlockEntity implements ManagedFlu
 
     public void decreaseAnimation() {
         if (animationSpeed >= 1) {
-            animationSpeed -= 0.1;
+            animationSpeed -= 0.1F;
 
-            animationStage += animationSpeed;
+            animationStage += (short) animationSpeed;
 
             if (animationStage > 300) {
                 animationStage = 100;

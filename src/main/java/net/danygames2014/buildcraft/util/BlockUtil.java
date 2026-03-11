@@ -1,7 +1,6 @@
 package net.danygames2014.buildcraft.util;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.danygames2014.nyalib.block.StillFluidBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.StillLiquidBlock;

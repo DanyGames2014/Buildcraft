@@ -4,8 +4,6 @@ import net.danygames2014.buildcraft.api.core.LaserKind;
 import net.danygames2014.buildcraft.api.core.Position;
 import net.danygames2014.buildcraft.entity.EntityBlock;
 import net.danygames2014.buildcraft.init.TextureListener;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 

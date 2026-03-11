@@ -1,6 +1,5 @@
 package net.danygames2014.buildcraft.api.transport.statement;
 
-import net.danygames2014.buildcraft.Buildcraft;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,8 +11,8 @@ import java.util.*;
 public class StatementManager {
     public static Map<Identifier, Statement> statements = new HashMap<>();
     public static Map<Identifier, StatementParameterFactory> parameters = new HashMap<>();
-    private static List<TriggerProvider> triggerProviders = new LinkedList<>();
-    private static List<ActionProvider> actionProviders = new LinkedList<>();
+    private static final List<TriggerProvider> triggerProviders = new LinkedList<>();
+    private static final List<ActionProvider> actionProviders = new LinkedList<>();
 
     /**
      * Deactivate constructor

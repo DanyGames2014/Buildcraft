@@ -8,7 +8,6 @@ import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.entity.EntityBlock;
 import net.danygames2014.buildcraft.util.LaserUtil;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import java.io.DataInputStream;
