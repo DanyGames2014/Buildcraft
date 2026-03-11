@@ -48,6 +48,9 @@
     ],
     "whatsthis": [
       "net.danygames2014.buildcraft.init.ProbeInfoProviderListener"
+    ],
+    "alwaysmoreitems:plugin": [
+      "net.danygames2014.buildcraft.compat.ami.BuildcraftAmiPlugin"
     ]
   },
   "mixins": [
