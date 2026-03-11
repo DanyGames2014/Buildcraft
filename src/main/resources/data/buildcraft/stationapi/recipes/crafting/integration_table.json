@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#R#",
+    "#B#",
+    "#H#"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:obsidian"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "B": {
+      "item": "buildcraft:redstone_chipset"
+    },
+    "H": {
+      "item": "buildcraft:diamond_gear"
+    }
+  },
+  "result": {
+    "item": "buildcraft:integration_table",
+    "count": 1
+  }
+}

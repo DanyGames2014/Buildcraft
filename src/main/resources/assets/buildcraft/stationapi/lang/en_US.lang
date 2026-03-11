@@ -86,6 +86,7 @@ tile.buildcraft.tank.name=Tank
 tile.buildcraft.refinery.name=Refinery
 tile.buildcraft.laser.name=Laser
 tile.buildcraft.assembly_table.name=Assembly Table
+tile.buildcraft.integration_table.name=Integration Table
 tile.buildcraft.filler.name=Filler
 tile.buildcraft.builder.name=Builder
 tile.buildcraft.architect_table.name=Architect Table

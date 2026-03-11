@@ -79,6 +79,7 @@ public class Buildcraft {
     public static Block refinery;
     public static Block laser;
     public static Block assemblyTable;
+    public static Block integrationTable;
     public static Block filler;
     public static Block builder;
     public static Block architectTable;
@@ -215,6 +216,7 @@ public class Buildcraft {
         refinery = new RefineryBlock(NAMESPACE.id("refinery"), Material.METAL).setTranslationKey(NAMESPACE, "refinery").setHardness(3.0F);
         laser = new LaserBlock(NAMESPACE.id("laser"), Material.METAL).setTranslationKey(NAMESPACE, "laser").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         assemblyTable = new AssemblyTableBlock(NAMESPACE.id("assembly_table"), Material.METAL).setTranslationKey(NAMESPACE, "assembly_table").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
+        integrationTable = new IntegrationTableBlock(NAMESPACE.id("integration_table"), Material.METAL).setTranslationKey(NAMESPACE, "integration_table").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         filler = new FillerBlock(NAMESPACE.id("filler"), Material.METAL).setTranslationKey(NAMESPACE, "filler").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         builder = new BuilderBlock(NAMESPACE.id("builder"), Material.METAL).setTranslationKey(NAMESPACE, "builder").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
         architectTable = new ArchitectTableBlock(NAMESPACE.id("architect_table"), Material.METAL).setTranslationKey(NAMESPACE, "architect_table").setHardness(3.0F).setSoundGroup(Block.METAL_SOUND_GROUP);
