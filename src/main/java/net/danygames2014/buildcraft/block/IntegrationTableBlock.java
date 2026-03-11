@@ -1,8 +1,8 @@
 package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.Buildcraft;
-import net.danygames2014.buildcraft.block.entity.AssemblyTableBlockEntity;
-import net.danygames2014.buildcraft.screen.handler.AssemblyTableScreenHandler;
+import net.danygames2014.buildcraft.block.entity.IntegrationTableBlockEntity;
+import net.danygames2014.buildcraft.screen.handler.IntegrationTableScreenHandler;
 import net.danygames2014.nyalib.block.DropInventoryOnBreak;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -19,14 +19,14 @@ public class IntegrationTableBlock extends TemplateMachineBlock implements DropI
 
     @Override
     protected BlockEntity createBlockEntity() {
-        return new AssemblyTableBlockEntity();
+        return new IntegrationTableBlockEntity();
     }
 
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (!world.isRemote) {
-            if (world.getBlockEntity(x, y, z) instanceof AssemblyTableBlockEntity table) {
-                GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("assembly_table"), table, new AssemblyTableScreenHandler(player, table));
+            if (world.getBlockEntity(x, y, z) instanceof IntegrationTableBlockEntity table) {
+                GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("integration_table"), table, new IntegrationTableScreenHandler(player, table));
                 return true;
             }
         }

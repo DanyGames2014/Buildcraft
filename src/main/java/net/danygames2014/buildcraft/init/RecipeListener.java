@@ -1,8 +1,11 @@
 package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.event.AssemblyTableRecipeRegisterEvent;
+import net.danygames2014.buildcraft.event.IntegrationTableRecipeRegisterEvent;
 import net.danygames2014.buildcraft.event.RefineryRecipeRegisterEvent;
+import net.danygames2014.buildcraft.recipe.integration.IntegrationTableRecipe;
 import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipe;
 import net.danygames2014.buildcraft.recipe.machine.input.ItemRecipeInput;
 import net.danygames2014.buildcraft.recipe.machine.output.RecipeOutput;
@@ -124,6 +127,18 @@ public class RecipeListener {
                             .addOutput(new RecipeOutput(new ItemStack(Buildcraft.filter[i], 2)))
             );
         }
+    }
+    
+    @EventListener
+    public void registerIntegrationTableRecipes(IntegrationTableRecipeRegisterEvent event) {
+        event.register(
+                NAMESPACE.id("autarchic_pulsar"),
+                new IntegrationTableRecipe(
+                        new ItemRecipeInput(Buildcraft.pulsatingChipset),
+                        GateExpansions.getExpansion(Buildcraft.NAMESPACE.id("pulsar")),
+                        2000
+                )
+        );
     }
     
     @EventListener

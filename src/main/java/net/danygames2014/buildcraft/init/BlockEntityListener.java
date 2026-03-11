@@ -28,6 +28,7 @@ public class BlockEntityListener {
         event.register(RefineryBlockEntity.class, NAMESPACE.id("refinery").toString());
         event.register(LaserBlockEntity.class, NAMESPACE.id("laser").toString());
         event.register(AssemblyTableBlockEntity.class, NAMESPACE.id("assembly_table").toString());
+        event.register(IntegrationTableBlockEntity.class, NAMESPACE.id("integration_table").toString());
         event.register(FillerBlockEntity.class, NAMESPACE.id("filler").toString());
         event.register(BuilderBlockEntity.class, NAMESPACE.id("builder").toString());
         event.register(ArchitectTableBlockEntity.class, NAMESPACE.id("architect_table").toString());

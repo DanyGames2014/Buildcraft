@@ -25,6 +25,7 @@ public class ScreenHandlerListener {
         event.register(NAMESPACE.id("combustion_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openCombustionEngineScreen, CombustionEngineBlockEntity::new));
         event.register(NAMESPACE.id("autocrafting_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAutocraftingTableScreen, AutocraftingTableBlockEntity::new));
         event.register(NAMESPACE.id("assembly_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAssemblyTableScreen, AssemblyTableBlockEntity::new));
+        event.register(NAMESPACE.id("integration_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openIntegrationTableScreen, IntegrationTableBlockEntity::new));
         event.register(NAMESPACE.id("gate"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openGateScreen, PipeBlockEntity::new));
         event.register(NAMESPACE.id("diamond_pipe"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openDiamondPipeScreen, DiamondPipeBlockEntity::new));
         event.register(NAMESPACE.id("architect_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openArchitectTableScreen, ArchitectTableBlockEntity::new));
@@ -66,6 +67,10 @@ public class ScreenHandlerListener {
     
     public Screen openAssemblyTableScreen(PlayerEntity playerEntity, Inventory inventory) {
         return new AssemblyTableScreen(playerEntity, (AssemblyTableBlockEntity) inventory);
+    }
+
+    private Screen openIntegrationTableScreen(PlayerEntity player, Inventory inventory) {
+        return new IntegrationTableScreen(player, (IntegrationTableBlockEntity) inventory);
     }
 
     public Screen openGateScreen(PlayerEntity playerEntity, Inventory inventory) {
