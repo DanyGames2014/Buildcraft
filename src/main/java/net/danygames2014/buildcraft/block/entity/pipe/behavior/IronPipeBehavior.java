@@ -3,15 +3,22 @@ package net.danygames2014.buildcraft.block.entity.pipe.behavior;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
+import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeConnectionType;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeType;
+import net.danygames2014.buildcraft.block.entity.pipe.statement.ActionPipeDirection;
 import net.danygames2014.buildcraft.entity.TravellingItemEntity;
+import net.danygames2014.buildcraft.init.StatementListener;
 import net.danygames2014.uniwrench.api.WrenchMode;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
+
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class IronPipeBehavior extends PipeBehavior {
     @Override
@@ -121,5 +128,40 @@ public class IronPipeBehavior extends PipeBehavior {
         }
         
         return true;
+    }
+
+    @Override
+    public void actionsActivated(PipeBlockEntity blockEntity, Collection<StatementSlot> actions) {
+        super.actionsActivated(blockEntity, actions);
+
+        for (StatementSlot action : actions) {
+            if (action.statement instanceof ActionPipeDirection) {
+                setDirection(blockEntity, ((ActionPipeDirection) action.statement).direction);
+                break;
+            }
+        }
+    }
+
+    public void setDirection(PipeBlockEntity blockEntity, Direction direction) {
+        for(Direction d : Direction.values()){
+            if(blockEntity.connections.get(d) == PipeConnectionType.NORMAL){
+                blockEntity.connections.put(d, PipeConnectionType.ALTERNATE);
+                break;
+            }
+        }
+        blockEntity.connections.put(direction, PipeConnectionType.NORMAL);
+        blockEntity.neighborUpdate();
+        blockEntity.world.blockUpdateEvent(blockEntity.x, blockEntity.y, blockEntity.z);
+    }
+
+    @Override
+    public LinkedList<ActionInternal> getActions(PipeBlockEntity blockEntity) {
+        LinkedList<ActionInternal> actions = super.getActions(blockEntity);
+        for(Direction direction : Direction.values()){
+            if(blockEntity.connections.get(direction) != PipeConnectionType.NONE){
+                actions.add(StatementListener.actionPipeDirection[direction.ordinal()]);
+            }
+        }
+        return actions;
     }
 }

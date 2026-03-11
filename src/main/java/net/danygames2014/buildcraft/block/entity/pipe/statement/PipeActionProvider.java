@@ -23,14 +23,14 @@ public class PipeActionProvider implements ActionProvider {
             if (container instanceof Gate) {
                 ((Gate) container).addActions(result);
             }
+
+            result.addAll(pipe.behavior.getActions(pipe));
         }
 
         //noinspection IfStatementWithIdenticalBranches
         if (pipe == null) {
             return result;
         }
-
-//        result.addAll(pipe.getActions());
 
         return result;
     }

@@ -22,4 +22,15 @@ public class DirectionUtil {
     public static @Nullable Direction getById(int id){
         return directionsWithInvalid[Math.max(0, Math.min(id, directionsWithInvalid.length - 1))];
     }
+
+    public static Direction getRealDirectionFromStapiDirection(Direction direction){
+        return switch (direction){
+            case UP -> Direction.UP;
+            case DOWN -> Direction.DOWN;
+            case NORTH -> Direction.EAST;
+            case SOUTH -> Direction.WEST;
+            case EAST -> Direction.NORTH;
+            case WEST -> Direction.SOUTH;
+        };
+    }
 }

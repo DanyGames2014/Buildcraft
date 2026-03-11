@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
+import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
+import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.event.ItemPipeEvent;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.ItemPipeTransporter;
@@ -23,7 +25,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 
 /**
  * This class governs the behavior of a pipe
@@ -185,5 +189,13 @@ public class PipeBehavior {
 
     public boolean wrenchRightClick(PipeBlockEntity blockEntity, ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         return false;            
+    }
+
+    public void actionsActivated(PipeBlockEntity blockEntity, Collection<StatementSlot> actions) {
+
+    }
+
+    public LinkedList<ActionInternal> getActions(PipeBlockEntity blockEntity) {
+        return new LinkedList<>();
     }
 }

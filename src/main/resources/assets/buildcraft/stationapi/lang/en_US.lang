@@ -185,6 +185,12 @@ gate.buildcraft.action.station.forbid_robot=Forbid Robot
 gate.buildcraft.action.station.force_robot=Force Robot
 gate.buildcraft.action.robot.filter=Filter
 gate.buildcraft.action.robot.filter_tool=Filter Tool
+gate.buildcraft.action.pipe_direction.down=Down Pipe Direction
+gate.buildcraft.action.pipe_direction.up=Up Pipe Direction
+gate.buildcraft.action.pipe_direction.north=South Pipe Direction
+gate.buildcraft.action.pipe_direction.east=North Pipe Direction
+gate.buildcraft.action.pipe_direction.south=West Pipe Direction
+gate.buildcraft.action.pipe_direction.west=East Pipe Direction
 
 gate.buildcraft.parameter.redstone.gateSideOnly=Gate Side Only
 

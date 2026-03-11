@@ -446,7 +446,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
             }
         }
 
-        pipe.actionsActivated(activeActions);
+        pipe.behavior.actionsActivated(pipe, activeActions);
 
         if (oldRedstoneOutput != redstoneOutput || oldRedstoneOutputSide != redstoneOutputSide) {
             pipe.updateNeighbors(true);

@@ -14,6 +14,7 @@ import net.danygames2014.buildcraft.event.StatementRegisterEvent;
 import net.mine_diver.unsafeevents.listener.EventListener;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
+import net.modificationstation.stationapi.api.util.math.Direction;
 
 public class StatementListener {
     @Entrypoint.Namespace
@@ -58,6 +59,7 @@ public class StatementListener {
     public static ActionInternal actionSingleEnergyPulse;
     public static ActionInternal actionRedstone;
     public static ActionInternal[] actionRedstoneLevel = new ActionInternal[15];
+    public static ActionInternal[] actionPipeDirection = new ActionInternal[16];
     
     @EventListener
     public void registerStatements(StatementRegisterEvent event) {
@@ -70,6 +72,10 @@ public class StatementListener {
         actionEnergyPulser = new ActionEnergyPulsar();
         actionSingleEnergyPulse = new ActionSingleEnergyPulse();
         actionRedstone = new ActionRedstoneOutput();
+
+        for(Direction direction : Direction.values()){
+            actionPipeDirection[direction.ordinal()] = new ActionPipeDirection(direction);
+        }
 
         for (TriggerPipeContents.PipeContents kind : TriggerPipeContents.PipeContents.values()) {
             triggerPipe[kind.ordinal()] = new TriggerPipeContents(kind);

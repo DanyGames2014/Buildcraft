@@ -272,9 +272,6 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         return PipeConnectionType.NONE;
     }
 
-    public void actionsActivated(Collection<StatementSlot> actions) {
-    }
-
     protected void notifyBlocksOfNeighborChange(Direction side) {
         world.notifyNeighbors(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), 0);
     }
