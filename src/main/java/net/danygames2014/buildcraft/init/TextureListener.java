@@ -176,6 +176,13 @@ public class TextureListener {
                     return stack.getStationNbt().getBoolean("written") ? 1 : 0;
                 }
         );
+        event.registry.register(
+                Buildcraft.gateCopier,
+                Buildcraft.NAMESPACE.id("full_gate_copier"),
+                (stack, world, entity, seed) -> {
+                    return stack.getStationNbt().contains("logic") ? 1 : 0;
+                }
+        );
     }
 
     @SuppressWarnings("Convert2Lambda")

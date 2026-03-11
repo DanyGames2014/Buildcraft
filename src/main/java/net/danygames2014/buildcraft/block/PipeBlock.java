@@ -11,6 +11,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.item.GateCopierItem;
 import net.danygames2014.buildcraft.item.PipeWireItem;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
@@ -468,6 +469,10 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 world.notifyNeighbors(x, y, z, id);
                 return true;
             }
+        }
+
+        if(stack != null && stack.getItem() instanceof GateCopierItem){
+            return false;
         }
 
         if (stack != null && stack.getItem() instanceof PipeWireItem pipeWireItem) {

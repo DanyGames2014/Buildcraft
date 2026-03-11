@@ -70,6 +70,7 @@ public class Buildcraft {
     public static Item facade;
 
     public static Item[] gates;
+    public static Item gateCopier;
 
     public static Material pipeMaterial;
 
@@ -300,6 +301,8 @@ public class Buildcraft {
                 gates[i + j] = new GateItem(GateMaterial.fromOrdinal(i), GateLogic.fromOrdinal(j)).setTranslationKey(NAMESPACE, GateItem.getIdentifier(GateMaterial.fromOrdinal(i), GateLogic.fromOrdinal(j)).path);
             }
         }
+
+        gateCopier = new GateCopierItem(NAMESPACE.id("gate_copier")).setTranslationKey(NAMESPACE, "gate_copier");
     }
 
     @EventListener
