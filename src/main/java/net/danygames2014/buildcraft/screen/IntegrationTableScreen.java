@@ -82,7 +82,6 @@ public class IntegrationTableScreen extends BuildcraftScreen {
             drawBackground(x, y);
             ScreenUtil.drawSprite(TextureListener.energySprite, x + 3, y + 4, 16, 16, zOffset);
 
-
             if (!isFullyOpened()) {
                 return;
             }
