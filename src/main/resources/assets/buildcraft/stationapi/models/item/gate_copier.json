@@ -1,0 +1,14 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "buildcraft:item/empty_gate_copier"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "buildcraft:full_gate_copier": 1
+      },
+      "model": "buildcraft:item/full_gate_copier"
+    }
+  ]
+}

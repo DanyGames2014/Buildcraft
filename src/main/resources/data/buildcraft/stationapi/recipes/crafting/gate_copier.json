@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "buildcraft:wrench"
+    },
+    {
+      "item": "buildcraft:redstone_chipset"
+    }
+  ],
+  "result": {
+    "item": "buildcraft:gate_copier"
+  }
+}

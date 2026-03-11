@@ -13,6 +13,8 @@ item.buildcraft.blue_pipe_wire.name=Blue Pipe Wire
 item.buildcraft.green_pipe_wire.name=Green Pipe Wire
 item.buildcraft.yellow_pipe_wire.name=Yellow Pipe Wire
 
+
+item.buildcraft.gate_copier.name=Gate Copier
 item.buildcraft.redstone_chipset.name=Redstone Chipset
 item.buildcraft.redstone_iron_chipset.name=Redstone Iron Chipset
 item.buildcraft.redstone_golden_chipset.name=Redstone Golden Chipset
@@ -257,3 +259,13 @@ gui.buildcraft.engine.stored=Stored
 gui.buildcraft.engine.heat=Heat
 
 chat.engine.creative.mode=Switched to %d MJ/t limit
+chat.buildcraft.gate_copier.clear=Gate information cleared.
+chat.buildcraft.gate_copier.gate_copied=Copied gate information to copier.
+chat.buildcraft.gate_copier.gate_pasted=Pasted copied data to gate.
+chat.buildcraft.gate_copier.no_gate=No gate found on this side!
+chat.buildcraft.gate_copier.no_information=No gate information stored!
+chat.buildcraft.gate_copier.warning.action_parameters=§6Warning: Target has less action parameters!
+chat.buildcraft.gate_copier.warning.logic=§6Warning: Target has different logic type!
+chat.buildcraft.gate_copier.warning.load=§6Warning: Gate triggers/actions might be missing!
+chat.buildcraft.gate_copier.warning.slots=§6Warning: Target has less slots!
+chat.buildcraft.gate_copier.warning.trigger_parameters=§6Warning: Target has less trigger parameters!
