@@ -8,7 +8,6 @@ import net.modificationstation.stationapi.api.server.entity.HasTrackingParameter
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.TriState;
 
-// TODO: Make this work properly on server
 @HasTrackingParameters(trackingDistance = 32, updatePeriod = 1, sendVelocity = TriState.TRUE)
 public class EntityBlockWithParent extends EntityBlock implements EntitySpawnDataProvider {
     public Entity parent;

@@ -3,9 +3,7 @@ package net.danygames2014.buildcraft.util;
 import java.util.Random;
 
 /**
- * Based on http://xorshift.di.unimi.it/xorshift128plus.c
- *
- * TODO: This thing ought to have tests!
+ * Based on <a href="http://xorshift.di.unimi.it/xorshift128plus.c">http://xorshift.di.unimi.it/xorshift128plus.c</a>
  */
 public class XorShift128Random {
     private static final Random seed = new Random();

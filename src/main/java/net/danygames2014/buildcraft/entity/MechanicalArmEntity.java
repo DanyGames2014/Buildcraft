@@ -3,8 +3,6 @@ package net.danygames2014.buildcraft.entity;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.QuarryBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -13,7 +11,6 @@ import net.modificationstation.stationapi.api.server.entity.HasTrackingParameter
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.TriState;
 
-// TODO: Make this work properly on server
 @HasTrackingParameters(trackingDistance = 32, updatePeriod = 1, sendVelocity = TriState.TRUE)
 public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvider {
     protected QuarryBlockEntity parent;
