@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.api.transport.gate.GateExpansionController;
 import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.init.StatementListener;
 import net.minecraft.block.entity.BlockEntity;
 
 import java.util.Arrays;
@@ -31,13 +32,13 @@ public class GateExpansionRedstoneFader extends GateExpansionBuildcraft implemen
         @Override
         public void addTriggers(List<TriggerInternal> list) {
             super.addTriggers(list);
-            list.addAll(Arrays.asList(Buildcraft.triggerRedstoneLevel));
+            list.addAll(Arrays.asList(StatementListener.triggerRedstoneLevel));
         }
 
         @Override
         public void addActions(List<ActionInternal> list) {
             super.addActions(list);
-            list.addAll(Arrays.asList(Buildcraft.actionRedstoneLevel));
+            list.addAll(Arrays.asList(StatementListener.actionRedstoneLevel));
         }
     }
 }

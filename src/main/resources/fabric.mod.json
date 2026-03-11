@@ -24,6 +24,7 @@
       "net.danygames2014.buildcraft.init.PluggableListener",
       "net.danygames2014.buildcraft.init.AfterBlockAndItemListener",
       "net.danygames2014.buildcraft.init.TranslationListener",
+      "net.danygames2014.buildcraft.init.StatementListener",
       "net.danygames2014.buildcraft.worldgen.ChunkDecorationListener"
     ],
     "stationapi:event_bus_client": [

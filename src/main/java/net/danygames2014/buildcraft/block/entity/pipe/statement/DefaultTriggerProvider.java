@@ -1,6 +1,5 @@
 package net.danygames2014.buildcraft.block.entity.pipe.statement;
 
-import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.blockentity.HasWork;
 import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerExternal;
@@ -9,6 +8,7 @@ import net.danygames2014.buildcraft.api.transport.statement.TriggerProvider;
 import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneStatementContainer;
 import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
+import net.danygames2014.buildcraft.init.StatementListener;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.energyhandler.EnergyStorageBlockCapability;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
@@ -25,8 +25,8 @@ public class DefaultTriggerProvider implements TriggerProvider {
         LinkedList<TriggerInternal> res = new LinkedList<>();
 
         if (container instanceof RedstoneStatementContainer) {
-            res.add(Buildcraft.triggerRedstoneActive);
-            res.add(Buildcraft.triggerRedstoneInactive);
+            res.add(StatementListener.triggerRedstoneActive);
+            res.add(StatementListener.triggerRedstoneInactive);
         }
 
         return res;
@@ -38,41 +38,41 @@ public class DefaultTriggerProvider implements TriggerProvider {
 
         // maybe have this check for the side
         if(blockEntity != null && !(blockEntity instanceof PipeBlockEntity) && CapabilityHelper.getCapability(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, ItemHandlerBlockCapability.class) != null){
-            res.add(Buildcraft.triggerEmptyInventory);
-            res.add(Buildcraft.triggerContainsInventory);
-            res.add(Buildcraft.triggerSpaceInventory);
-            res.add(Buildcraft.triggerFullInventory);
-            res.add(Buildcraft.triggerInventoryBelow25);
-            res.add(Buildcraft.triggerInventoryBelow50);
-            res.add(Buildcraft.triggerInventoryBelow75);
+            res.add(StatementListener.triggerEmptyInventory);
+            res.add(StatementListener.triggerContainsInventory);
+            res.add(StatementListener.triggerSpaceInventory);
+            res.add(StatementListener.triggerFullInventory);
+            res.add(StatementListener.triggerInventoryBelow25);
+            res.add(StatementListener.triggerInventoryBelow50);
+            res.add(StatementListener.triggerInventoryBelow75);
         }
 
         if(blockEntity != null && CapabilityHelper.getCapability(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, FluidHandlerBlockCapability.class) != null){
-            res.add(Buildcraft.triggerEmptyFluid);
-            res.add(Buildcraft.triggerContainsFluid);
-            res.add(Buildcraft.triggerSpaceFluid);
-            res.add(Buildcraft.triggerFullFluid);
-            res.add(Buildcraft.triggerFluidContainerBelow25);
-            res.add(Buildcraft.triggerFluidContainerBelow50);
-            res.add(Buildcraft.triggerFluidContainerBelow75);
+            res.add(StatementListener.triggerEmptyFluid);
+            res.add(StatementListener.triggerContainsFluid);
+            res.add(StatementListener.triggerSpaceFluid);
+            res.add(StatementListener.triggerFullFluid);
+            res.add(StatementListener.triggerFluidContainerBelow25);
+            res.add(StatementListener.triggerFluidContainerBelow50);
+            res.add(StatementListener.triggerFluidContainerBelow75);
         }
 
         if (blockEntity instanceof HasWork) {
-            res.add(Buildcraft.triggerMachineActive);
-            res.add(Buildcraft.triggerMachineInactive);
+            res.add(StatementListener.triggerMachineActive);
+            res.add(StatementListener.triggerMachineInactive);
         }
 
         if(blockEntity != null && CapabilityHelper.getCapability(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z, EnergyStorageBlockCapability.class) != null){
-            res.add(Buildcraft.triggerEnergyHigh);
-            res.add(Buildcraft.triggerEnergyLow);
+            res.add(StatementListener.triggerEnergyHigh);
+            res.add(StatementListener.triggerEnergyLow);
         }
 
         if(blockEntity instanceof BaseEngineBlockEntity){
-            res.add(Buildcraft.triggerBlueEngineHeat);
-            res.add(Buildcraft.triggerGreenEngineHeat);
-            res.add(Buildcraft.triggerYellowEngineHeat);
-            res.add(Buildcraft.triggerRedEngineHeat);
-            res.add(Buildcraft.triggerEngineOverheat);
+            res.add(StatementListener.triggerBlueEngineHeat);
+            res.add(StatementListener.triggerGreenEngineHeat);
+            res.add(StatementListener.triggerYellowEngineHeat);
+            res.add(StatementListener.triggerRedEngineHeat);
+            res.add(StatementListener.triggerEngineOverheat);
         }
 
         return res;

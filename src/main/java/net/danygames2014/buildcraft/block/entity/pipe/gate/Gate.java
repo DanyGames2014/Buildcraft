@@ -11,6 +11,7 @@ import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneSt
 import net.danygames2014.buildcraft.api.transport.statement.container.SidedStatementContainer;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.danygames2014.buildcraft.init.StatementListener;
 import net.danygames2014.buildcraft.item.GateItem;
 import net.danygames2014.buildcraft.screen.handler.GateInterfaceScreenHandler;
 import net.minecraft.block.entity.BlockEntity;
@@ -512,8 +513,8 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     public void addTriggers(List<TriggerInternal> list) {
         for (PipeWire wire : PipeWire.values()) {
             if (pipe.wireSet[wire.ordinal()] && wire.ordinal() < 4) {
-                list.add(Buildcraft.triggerPipeWireActive[wire.ordinal()]);
-                list.add(Buildcraft.triggerPipeWireInactive[wire.ordinal()]);
+                list.add(StatementListener.triggerPipeWireActive[wire.ordinal()]);
+                list.add(StatementListener.triggerPipeWireInactive[wire.ordinal()]);
             }
         }
 
@@ -538,7 +539,7 @@ public final class Gate implements net.danygames2014.buildcraft.api.transport.ga
     public void addActions(List<ActionInternal> list) {
         for (PipeWire wire : PipeWire.values()) {
             if (pipe.wireSet[wire.ordinal()] && wire.ordinal() < 4) {
-                list.add(Buildcraft.actionPipeWire[wire.ordinal()]);
+                list.add(StatementListener.actionPipeWire[wire.ordinal()]);
             }
         }
 

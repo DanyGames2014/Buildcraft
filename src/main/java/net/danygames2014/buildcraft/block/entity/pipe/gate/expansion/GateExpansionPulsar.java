@@ -11,6 +11,7 @@ import net.danygames2014.buildcraft.api.transport.statement.Statement;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.ActionEnergyPulsar;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.ActionSingleEnergyPulse;
+import net.danygames2014.buildcraft.init.StatementListener;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -70,8 +71,8 @@ public class GateExpansionPulsar extends GateExpansionBuildcraft implements Gate
         @Override
         public void addActions(List<ActionInternal> list) {
             super.addActions(list);
-            list.add(Buildcraft.actionEnergyPulser);
-            list.add(Buildcraft.actionSingleEnergyPulse);
+            list.add(StatementListener.actionEnergyPulser);
+            list.add(StatementListener.actionSingleEnergyPulse);
         }
 
         @Override

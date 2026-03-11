@@ -1,11 +1,11 @@
 package net.danygames2014.buildcraft.block.entity.pipe.statement;
 
-import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.transport.statement.ActionExternal;
 import net.danygames2014.buildcraft.api.transport.statement.ActionInternal;
 import net.danygames2014.buildcraft.api.transport.statement.ActionProvider;
 import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.container.RedstoneStatementContainer;
+import net.danygames2014.buildcraft.init.StatementListener;
 import net.minecraft.block.entity.BlockEntity;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
@@ -18,7 +18,7 @@ public class DefaultActionProvider implements ActionProvider {
         LinkedList<ActionInternal> res = new LinkedList<>();
 
         if (container instanceof RedstoneStatementContainer) {
-            res.add(Buildcraft.actionRedstone);
+            res.add(StatementListener.actionRedstone);
         }
 
         return res;

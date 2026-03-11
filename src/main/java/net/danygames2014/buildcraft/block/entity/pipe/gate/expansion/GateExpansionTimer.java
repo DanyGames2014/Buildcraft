@@ -9,6 +9,7 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.api.transport.statement.TriggerInternal;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.statement.TriggerClockTimer;
+import net.danygames2014.buildcraft.init.StatementListener;
 import net.minecraft.block.entity.BlockEntity;
 
 import java.util.List;
@@ -69,7 +70,7 @@ public class GateExpansionTimer extends GateExpansionBuildcraft implements GateE
         public void addTriggers(List<TriggerInternal> list) {
             super.addTriggers(list);
             for (TriggerClockTimer.Time time : TriggerClockTimer.Time.VALUES) {
-                list.add(Buildcraft.triggerTimer[time.ordinal()]);
+                list.add(StatementListener.triggerTimer[time.ordinal()]);
             }
         }
 
