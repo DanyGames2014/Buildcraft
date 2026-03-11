@@ -135,7 +135,6 @@ public class Buildcraft {
     public static Block goldenEnergyPipe;
     public static Block diamondEnergyPipe;
 
-    //TODO: figure out how to avoid registering the renderblock
     public static RenderBlock renderBlock;
 
     @EventListener

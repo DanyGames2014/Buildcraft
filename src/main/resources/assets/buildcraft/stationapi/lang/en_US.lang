@@ -137,6 +137,7 @@ facade.buildcraft.normal.name=Facade
 facade.buildcraft.hollow.name=Hollow Facade
 
 tooltip.buildcraft.gate.expansions=Installed Expansions:
+gate.buildcraft.expansion.light_sensor=Light Sensor
 gate.buildcraft.expansion.pulsar=Autarchic Pulsar
 gate.buildcraft.expansion.timer=Clock Timer
 gate.buildcraft.expansion.fader=Redstone Fader

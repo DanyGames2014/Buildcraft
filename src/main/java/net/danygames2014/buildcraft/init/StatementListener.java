@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansions;
 import net.danygames2014.buildcraft.api.transport.statement.*;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionLightSensor;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionPulsar;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionRedstoneFader;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.expansion.GateExpansionTimer;
@@ -25,6 +26,9 @@ public class StatementListener {
     public static TriggerInternal[] triggerPipe = new TriggerInternal[TriggerPipeContents.PipeContents.values().length];
     public static TriggerInternal[] triggerTimer = new TriggerInternal[TriggerClockTimer.Time.VALUES.length];
     public static TriggerInternal[] triggerRedstoneLevel = new TriggerInternal[15];
+    public static TriggerInternal triggerLightSensorBright;
+    public static TriggerInternal triggerLightSensorDark;
+
     public static TriggerExternal triggerEmptyInventory;
     public static TriggerExternal triggerContainsInventory;
     public static TriggerExternal triggerSpaceInventory;
@@ -83,6 +87,9 @@ public class StatementListener {
             actionRedstoneLevel[level] = new ActionRedstoneFaderOutput(level + 1);
         }
 
+        triggerLightSensorBright = new TriggerLightSensor(true);
+        triggerLightSensorDark = new TriggerLightSensor(false);
+
         triggerEmptyInventory = new TriggerInventory(TriggerInventory.State.Empty);
         triggerContainsInventory = new TriggerInventory(TriggerInventory.State.Contains);
         triggerSpaceInventory = new TriggerInventory(TriggerInventory.State.Space);
@@ -125,5 +132,6 @@ public class StatementListener {
         GateExpansions.registerExpansion(GateExpansionPulsar.INSTANCE);
         GateExpansions.registerExpansion(GateExpansionTimer.INSTANCE);
         GateExpansions.registerExpansion(GateExpansionRedstoneFader.INSTANCE);
+        GateExpansions.registerExpansion(GateExpansionLightSensor.INSTANCE);
     }
 }
