@@ -9,11 +9,11 @@ import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
-import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.entity.EntityBlockRenderer;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.RenderHelper;
 import net.danygames2014.buildcraft.util.TextureUtil;
@@ -100,7 +100,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         EntityBlockRenderer.RenderInfo block = new EntityBlockRenderer.RenderInfo();
         block.texture = TextureListener.energyCyanSprite.index;
 
-        float size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
+        float size = Constants.PIPE_MAX_POS - Constants.PIPE_MIN_POS;
 
         for (int s = 0; s < POWER_STAGES; ++s) {
             displayPowerList[s] = GL11.glGenLists(1);
@@ -213,15 +213,15 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         renderBox.texture = icon.index;
 
         float[][] zeroState = new float[3][2];
-        float min = PipeWorldRenderer.PIPE_MIN_POS + trim / 2F;
-        float max = PipeWorldRenderer.PIPE_MAX_POS - trim / 2F;
+        float min = Constants.PIPE_MIN_POS + trim / 2F;
+        float max = Constants.PIPE_MAX_POS - trim / 2F;
 
         // X START - END
         zeroState[0][0] = min;
         zeroState[0][1] = max;
         // Y START - END
-        zeroState[1][0] = PipeWorldRenderer.PIPE_MIN_POS - 0.10F - 0.001F * layer;
-        zeroState[1][1] = PipeWorldRenderer.PIPE_MIN_POS + 0.001F + 0.01F * layer + extraDepth;
+        zeroState[1][0] = Constants.PIPE_MIN_POS - 0.10F - 0.001F * layer;
+        zeroState[1][1] = Constants.PIPE_MIN_POS + 0.001F + 0.01F * layer + extraDepth;
         // Z START - END
         zeroState[2][0] = min;
         zeroState[2][1] = max;
@@ -262,15 +262,15 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         float trim = 0.1F;
         float[][] zeroState = new float[3][2];
-        float min = PipeWorldRenderer.PIPE_MIN_POS + trim / 2F;
-        float max = PipeWorldRenderer.PIPE_MAX_POS - trim / 2F;
+        float min = Constants.PIPE_MIN_POS + trim / 2F;
+        float max = Constants.PIPE_MAX_POS - trim / 2F;
 
         // X START - END
         zeroState[0][0] = min;
         zeroState[0][1] = max;
         // Y START - END
-        zeroState[1][0] = PipeWorldRenderer.PIPE_MIN_POS - 0.10F;
-        zeroState[1][1] = PipeWorldRenderer.PIPE_MIN_POS + 0.001F;
+        zeroState[1][0] = Constants.PIPE_MIN_POS - 0.10F;
+        zeroState[1][1] = Constants.PIPE_MIN_POS + 0.001F;
         // Z START - END
         zeroState[2][0] = min;
         zeroState[2][1] = max;
@@ -309,7 +309,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         block.texture = stillFluidBlock != null ? fluid.getStillBlock().getTexture(0) : 0;
         block.brightness = skylight << 16 | finalBlockLight;
 
-        float size = PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS;
+        float size = Constants.PIPE_MAX_POS - Constants.PIPE_MIN_POS;
 
         for (int s = 0; s < LIQUID_STAGES; ++s) {
             float ratio = (float) s / (float) LIQUID_STAGES;
@@ -320,12 +320,12 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             GL11.glNewList(d.sideHorizontal[s], GL11.GL_COMPILE);
 
             block.minX = 0.0F;
-            block.minZ = PipeWorldRenderer.PIPE_MIN_POS + 0.01F;
+            block.minZ = Constants.PIPE_MIN_POS + 0.01F;
 
             block.maxX = block.minX + size / 2F + 0.01F;
             block.maxZ = block.minZ + size - 0.02F;
 
-            block.minY = PipeWorldRenderer.PIPE_MIN_POS + 0.01F;
+            block.minY = Constants.PIPE_MIN_POS + 0.01F;
             block.maxY = block.minY + (size - 0.02F) * ratio;
 
             EntityBlockRenderer.INSTANCE.renderBlock(block);
@@ -337,7 +337,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             d.sideVertical[s] = GL11.glGenLists(1);
             GL11.glNewList(d.sideVertical[s], GL11.GL_COMPILE);
 
-            block.minY = (float) (PipeWorldRenderer.PIPE_MAX_POS - 0.01);
+            block.minY = (float) (Constants.PIPE_MAX_POS - 0.01);
             block.maxY = 1;
 
             block.minX = (float) (0.5 - (size / 2 - 0.01) * ratio);
@@ -355,13 +355,13 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             d.centerHorizontal[s] = GL11.glGenLists(1);
             GL11.glNewList(d.centerHorizontal[s], GL11.GL_COMPILE);
 
-            block.minX = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
-            block.minZ = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
+            block.minX = (float) (Constants.PIPE_MIN_POS + 0.01);
+            block.minZ = (float) (Constants.PIPE_MIN_POS + 0.01);
 
             block.maxX = (float) (block.minX + size - 0.02);
             block.maxZ = (float) (block.minZ + size - 0.02);
 
-            block.minY = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
+            block.minY = (float) (Constants.PIPE_MIN_POS + 0.01);
             block.maxY = block.minY + (size - 0.02F) * ratio;
 
             EntityBlockRenderer.INSTANCE.renderBlock(block);
@@ -373,8 +373,8 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
             d.centerVertical[s] = GL11.glGenLists(1);
             GL11.glNewList(d.centerVertical[s], GL11.GL_COMPILE);
 
-            block.minY = (float) (PipeWorldRenderer.PIPE_MIN_POS + 0.01);
-            block.maxY = (float) (PipeWorldRenderer.PIPE_MAX_POS - 0.01);
+            block.minY = (float) (Constants.PIPE_MIN_POS + 0.01);
+            block.maxY = (float) (Constants.PIPE_MAX_POS - 0.01);
 
             block.minX = (float) (0.5 - (size / 2 - 0.02) * ratio);
             block.maxX = (float) (0.5 + (size / 2 - 0.02) * ratio);
@@ -393,19 +393,19 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         PipeRenderState state = pipe.renderState;
 
         if (state.wireMatrix.hasWire(PipeWire.RED)) {
-            pipeWireRender(pipe, PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MAX_POS, PipeWorldRenderer.PIPE_MIN_POS, PipeWire.RED, x, y, z);
+            pipeWireRender(pipe, Constants.PIPE_MIN_POS, Constants.PIPE_MAX_POS, Constants.PIPE_MIN_POS, PipeWire.RED, x, y, z);
         }
 
         if (state.wireMatrix.hasWire(PipeWire.BLUE)) {
-            pipeWireRender(pipe, PipeWorldRenderer.PIPE_MAX_POS, PipeWorldRenderer.PIPE_MAX_POS, PipeWorldRenderer.PIPE_MAX_POS, PipeWire.BLUE, x, y, z);
+            pipeWireRender(pipe, Constants.PIPE_MAX_POS, Constants.PIPE_MAX_POS, Constants.PIPE_MAX_POS, PipeWire.BLUE, x, y, z);
         }
 
         if (state.wireMatrix.hasWire(PipeWire.GREEN)) {
-            pipeWireRender(pipe, PipeWorldRenderer.PIPE_MAX_POS, PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MIN_POS, PipeWire.GREEN, x, y, z);
+            pipeWireRender(pipe, Constants.PIPE_MAX_POS, Constants.PIPE_MIN_POS, Constants.PIPE_MIN_POS, PipeWire.GREEN, x, y, z);
         }
 
         if (state.wireMatrix.hasWire(PipeWire.YELLOW)) {
-            pipeWireRender(pipe, PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MAX_POS, PipeWire.YELLOW, x, y, z);
+            pipeWireRender(pipe, Constants.PIPE_MIN_POS, Constants.PIPE_MIN_POS, Constants.PIPE_MAX_POS, PipeWire.YELLOW, x, y, z);
         }
     }
 
@@ -413,13 +413,13 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         PipeRenderState state = pipe.renderState;
 
-        float minX = PipeWorldRenderer.PIPE_MIN_POS;
-        float minY = PipeWorldRenderer.PIPE_MIN_POS;
-        float minZ = PipeWorldRenderer.PIPE_MIN_POS;
+        float minX = Constants.PIPE_MIN_POS;
+        float minY = Constants.PIPE_MIN_POS;
+        float minZ = Constants.PIPE_MIN_POS;
 
-        float maxX = PipeWorldRenderer.PIPE_MAX_POS;
-        float maxY = PipeWorldRenderer.PIPE_MAX_POS;
-        float maxZ = PipeWorldRenderer.PIPE_MAX_POS;
+        float maxX = Constants.PIPE_MAX_POS;
+        float maxY = Constants.PIPE_MAX_POS;
+        float maxZ = Constants.PIPE_MAX_POS;
 
         boolean foundX = false, foundY = false, foundZ = false;
 
@@ -456,48 +456,48 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
         boolean center = false;
 
         if (minX == 0 && maxX != 1 && (foundY || foundZ)) {
-            if (cx == PipeWorldRenderer.PIPE_MIN_POS) {
-                maxX = PipeWorldRenderer.PIPE_MIN_POS;
+            if (cx == Constants.PIPE_MIN_POS) {
+                maxX = Constants.PIPE_MIN_POS;
             } else {
                 center = true;
             }
         }
 
         if (minX != 0 && maxX == 1 && (foundY || foundZ)) {
-            if (cx == PipeWorldRenderer.PIPE_MAX_POS) {
-                minX = PipeWorldRenderer.PIPE_MAX_POS;
+            if (cx == Constants.PIPE_MAX_POS) {
+                minX = Constants.PIPE_MAX_POS;
             } else {
                 center = true;
             }
         }
 
         if (minY == 0 && maxY != 1 && (foundX || foundZ)) {
-            if (cy == PipeWorldRenderer.PIPE_MIN_POS) {
-                maxY = PipeWorldRenderer.PIPE_MIN_POS;
+            if (cy == Constants.PIPE_MIN_POS) {
+                maxY = Constants.PIPE_MIN_POS;
             } else {
                 center = true;
             }
         }
 
         if (minY != 0 && maxY == 1 && (foundX || foundZ)) {
-            if (cy == PipeWorldRenderer.PIPE_MAX_POS) {
-                minY = PipeWorldRenderer.PIPE_MAX_POS;
+            if (cy == Constants.PIPE_MAX_POS) {
+                minY = Constants.PIPE_MAX_POS;
             } else {
                 center = true;
             }
         }
 
         if (minZ == 0 && maxZ != 1 && (foundX || foundY)) {
-            if (cz == PipeWorldRenderer.PIPE_MIN_POS) {
-                maxZ = PipeWorldRenderer.PIPE_MIN_POS;
+            if (cz == Constants.PIPE_MIN_POS) {
+                maxZ = Constants.PIPE_MIN_POS;
             } else {
                 center = true;
             }
         }
 
         if (minZ != 0 && maxZ == 1 && (foundX || foundY)) {
-            if (cz == PipeWorldRenderer.PIPE_MAX_POS) {
-                minZ = PipeWorldRenderer.PIPE_MAX_POS;
+            if (cz == Constants.PIPE_MAX_POS) {
+                minZ = Constants.PIPE_MAX_POS;
             } else {
                 center = true;
             }
@@ -524,31 +524,31 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
         // Z render
 
-        if (minZ != PipeWorldRenderer.PIPE_MIN_POS || maxZ != PipeWorldRenderer.PIPE_MAX_POS || !found) {
-            renderBox.setBounds(cx == PipeWorldRenderer.PIPE_MIN_POS ? cx - 0.05F : cx, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy - 0.05F : cy, minZ, cx == PipeWorldRenderer.PIPE_MIN_POS ? cx
-                    : cx + 0.05F, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy : cy + 0.05F, maxZ);
+        if (minZ != Constants.PIPE_MIN_POS || maxZ != Constants.PIPE_MAX_POS || !found) {
+            renderBox.setBounds(cx == Constants.PIPE_MIN_POS ? cx - 0.05F : cx, cy == Constants.PIPE_MIN_POS ? cy - 0.05F : cy, minZ, cx == Constants.PIPE_MIN_POS ? cx
+                    : cx + 0.05F, cy == Constants.PIPE_MIN_POS ? cy : cy + 0.05F, maxZ);
             renderLitBox(renderBox, isLit);
         }
 
         // X render
 
-        if (minX != PipeWorldRenderer.PIPE_MIN_POS || maxX != PipeWorldRenderer.PIPE_MAX_POS || !found) {
-            renderBox.setBounds(minX, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy - 0.05F : cy, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz - 0.05F : cz, maxX, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy
-                    : cy + 0.05F, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz : cz + 0.05F);
+        if (minX != Constants.PIPE_MIN_POS || maxX != Constants.PIPE_MAX_POS || !found) {
+            renderBox.setBounds(minX, cy == Constants.PIPE_MIN_POS ? cy - 0.05F : cy, cz == Constants.PIPE_MIN_POS ? cz - 0.05F : cz, maxX, cy == Constants.PIPE_MIN_POS ? cy
+                    : cy + 0.05F, cz == Constants.PIPE_MIN_POS ? cz : cz + 0.05F);
             renderLitBox(renderBox, isLit);
         }
 
         // Y render
 
-        if (minY != PipeWorldRenderer.PIPE_MIN_POS || maxY != PipeWorldRenderer.PIPE_MAX_POS || !found) {
-            renderBox.setBounds(cx == PipeWorldRenderer.PIPE_MIN_POS ? cx - 0.05F : cx, minY, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz - 0.05F : cz, cx == PipeWorldRenderer.PIPE_MIN_POS ? cx
-                    : cx + 0.05F, maxY, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz : cz + 0.05F);
+        if (minY != Constants.PIPE_MIN_POS || maxY != Constants.PIPE_MAX_POS || !found) {
+            renderBox.setBounds(cx == Constants.PIPE_MIN_POS ? cx - 0.05F : cx, minY, cz == Constants.PIPE_MIN_POS ? cz - 0.05F : cz, cx == Constants.PIPE_MIN_POS ? cx
+                    : cx + 0.05F, maxY, cz == Constants.PIPE_MIN_POS ? cz : cz + 0.05F);
             renderLitBox(renderBox, isLit);
         }
 
         if (center || !found) {
-            renderBox.setBounds(cx == PipeWorldRenderer.PIPE_MIN_POS ? cx - 0.05F : cx, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy - 0.05F : cy, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz - 0.05F : cz,
-                    cx == PipeWorldRenderer.PIPE_MIN_POS ? cx : cx + 0.05F, cy == PipeWorldRenderer.PIPE_MIN_POS ? cy : cy + 0.05F, cz == PipeWorldRenderer.PIPE_MIN_POS ? cz : cz + 0.05F);
+            renderBox.setBounds(cx == Constants.PIPE_MIN_POS ? cx - 0.05F : cx, cy == Constants.PIPE_MIN_POS ? cy - 0.05F : cy, cz == Constants.PIPE_MIN_POS ? cz - 0.05F : cz,
+                    cx == Constants.PIPE_MIN_POS ? cx : cx + 0.05F, cy == Constants.PIPE_MIN_POS ? cy : cy + 0.05F, cz == Constants.PIPE_MIN_POS ? cz : cz + 0.05F);
             renderLitBox(renderBox, isLit);
         }
 

@@ -7,7 +7,6 @@ import net.danygames2014.buildcraft.api.blockentity.ControlMode;
 import net.danygames2014.buildcraft.api.blockentity.Controllable;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
-import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.entity.MechanicalArmEntity;
 import net.danygames2014.buildcraft.util.BlockUtil;
 import net.danygames2014.buildcraft.util.Constants;
@@ -71,11 +70,11 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
     private void createArm() {
         world.spawnEntity(
                 new MechanicalArmEntity(world,
-                        workingArea.minX + PipeWorldRenderer.PIPE_MAX_POS,
-                        y + workingArea.sizeY() - 1 + PipeWorldRenderer.PIPE_MIN_POS,
-                        workingArea.minZ + PipeWorldRenderer.PIPE_MAX_POS,
-                        workingArea.sizeX() - 2 + PipeWorldRenderer.PIPE_MIN_POS * 2,
-                        workingArea.sizeZ() - 2 + PipeWorldRenderer.PIPE_MIN_POS * 2,
+                        workingArea.minX + Constants.PIPE_MAX_POS,
+                        y + workingArea.sizeY() - 1 + Constants.PIPE_MIN_POS,
+                        workingArea.minZ + Constants.PIPE_MAX_POS,
+                        workingArea.sizeX() - 2 + Constants.PIPE_MIN_POS * 2,
+                        workingArea.sizeZ() - 2 + Constants.PIPE_MIN_POS * 2,
                         this));
     }
 

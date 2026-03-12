@@ -1,9 +1,8 @@
 package net.danygames2014.buildcraft.client.render.item;
 
 import net.danygames2014.buildcraft.Buildcraft;
-import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.item.FacadeItem;
-import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
@@ -19,8 +18,8 @@ public class FacadeItemRenderer {
     public static FacadeItemRenderer INSTANCE = new FacadeItemRenderer();
 
     private void drawHollowCube(Tessellator tessellator, BlockRenderManager blockRenderManager, Block block, int meta) {
-        float width = 1 - FacadePluggable.FACADE_THICKNESS;
-        float cavity = (PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS) / 2F;
+        float width = 1 - Constants.FACADE_THICKNESS;
+        float cavity = (Constants.PIPE_MAX_POS - Constants.PIPE_MIN_POS) / 2F;
         double innerWidth = 1 - cavity;
 
         tessellator.startQuads();
@@ -90,7 +89,7 @@ public class FacadeItemRenderer {
             GL11.glTranslatef(translateX, translateY, translateZ);
             drawHollowCube(tessellator, blockRenderManager, block, decodedMeta);
         } else {
-            Buildcraft.renderBlock.setBoundingBox(0F, 0F, 1 - FacadePluggable.FACADE_THICKNESS, 1F, 1F, 1F);
+            Buildcraft.renderBlock.setBoundingBox(0F, 0F, 1 - Constants.FACADE_THICKNESS, 1F, 1F, 1F);
             GL11.glTranslatef(translateX, translateY, translateZ);
             RenderHelper.drawBlockItem(blockRenderManager, tessellator, Buildcraft.renderBlock, block.getTexture(0, decodedMeta));
         }
@@ -104,7 +103,7 @@ public class FacadeItemRenderer {
             block = Buildcraft.cobblestoneStructurePipe;
             int textureID = block.getTexture(0);
 
-            Buildcraft.renderBlock.setBoundingBox(PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MAX_POS, PipeWorldRenderer.PIPE_MAX_POS, PipeWorldRenderer.PIPE_MAX_POS - 1F / 16F);
+            Buildcraft.renderBlock.setBoundingBox(Constants.PIPE_MIN_POS, Constants.PIPE_MIN_POS, Constants.PIPE_MIN_POS, Constants.PIPE_MAX_POS, Constants.PIPE_MAX_POS, Constants.PIPE_MAX_POS - 1F / 16F);
             GL11.glTranslatef(translateX, translateY, translateZ + 0.25F);
 
             tessellator.startQuads();

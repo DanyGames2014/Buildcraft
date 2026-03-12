@@ -8,9 +8,9 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.GateLogic;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.client.render.PipePluggableDynamicRenderer;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
-import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.pluggable.GatePluggableRenderer;
 import net.danygames2014.buildcraft.item.GateItem;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -65,16 +65,16 @@ public class GatePluggable extends PipePluggable {
 
     @Override
     public Box getBoundingBox(Direction side) {
-        float min = PipeWorldRenderer.PIPE_MIN_POS + 0.05F;
-        float max = PipeWorldRenderer.PIPE_MAX_POS - 0.05F;
+        float min = Constants.PIPE_MIN_POS + 0.05F;
+        float max = Constants.PIPE_MAX_POS - 0.05F;
 
         float[][] bounds = new float[3][2];
         // X START - END
         bounds[0][0] = min;
         bounds[0][1] = max;
         // Y START - END
-        bounds[1][0] = PipeWorldRenderer.PIPE_MIN_POS - 0.10F;
-        bounds[1][1] = PipeWorldRenderer.PIPE_MIN_POS;
+        bounds[1][0] = Constants.PIPE_MIN_POS - 0.10F;
+        bounds[1][1] = Constants.PIPE_MIN_POS;
         // Z START - END
         bounds[2][0] = min;
         bounds[2][1] = max;

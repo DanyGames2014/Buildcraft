@@ -13,8 +13,8 @@ import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.item.GateCopierItem;
 import net.danygames2014.buildcraft.item.PipeWireItem;
-import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.raycast.PipeRaycastResult;
@@ -210,8 +210,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     }
 
     // Bounding Box and Collision Shape
-    private final float minOffset = PipeWorldRenderer.PIPE_MIN_POS;
-    private final float maxOffset = PipeWorldRenderer.PIPE_MAX_POS;
+    private final float minOffset = Constants.PIPE_MIN_POS;
+    private final float maxOffset = Constants.PIPE_MAX_POS;
 
     @Override
     public Box getBoundingBox(World world, int x, int y, int z) {
@@ -263,7 +263,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            float facadeThickness = FacadePluggable.FACADE_THICKNESS;
+            float facadeThickness = Constants.FACADE_THICKNESS;
 
             if (pipe.hasEnabledFacade(Direction.SOUTH)) {
                 setBoundingBox(1 - facadeThickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);

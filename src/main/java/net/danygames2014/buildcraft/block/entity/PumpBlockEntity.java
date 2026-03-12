@@ -8,10 +8,10 @@ import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.FluidPipeTransporter;
-import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.entity.EntityBlock;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.fluid.Fluid;
@@ -408,11 +408,11 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
 
     private void setTubePosition() {
         if (tube != null) {
-            tube.setXSize(PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS);
-            tube.setZSize(PipeWorldRenderer.PIPE_MAX_POS - PipeWorldRenderer.PIPE_MIN_POS);
+            tube.setXSize(Constants.PIPE_MAX_POS - Constants.PIPE_MIN_POS);
+            tube.setZSize(Constants.PIPE_MAX_POS - Constants.PIPE_MIN_POS);
             tube.setYSize((float) (this.y - tube.y));
 
-            tube.setPosition(this.x + PipeWorldRenderer.PIPE_MIN_POS, tubeY, this.z + PipeWorldRenderer.PIPE_MIN_POS);
+            tube.setPosition(this.x + Constants.PIPE_MIN_POS, tubeY, this.z + Constants.PIPE_MIN_POS);
         }
     }
 

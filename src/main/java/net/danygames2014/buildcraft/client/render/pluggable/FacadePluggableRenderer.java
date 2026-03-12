@@ -6,9 +6,9 @@ import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
-import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.danygames2014.buildcraft.util.TextureUtil;
 import net.minecraft.block.Block;
@@ -36,20 +36,20 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
         zeroStateFacade[0][1] = 1.0F;
         // Y START - END
         zeroStateFacade[1][0] = 0.0F;
-        zeroStateFacade[1][1] = FacadePluggable.FACADE_THICKNESS;
+        zeroStateFacade[1][1] = Constants.FACADE_THICKNESS;
         // Z START - END
         zeroStateFacade[2][0] = 0.0F;
         zeroStateFacade[2][1] = 1.0F;
 
         // X START - END
-        zeroStateSupport[0][0] = PipeWorldRenderer.PIPE_MIN_POS;
-        zeroStateSupport[0][1] = PipeWorldRenderer.PIPE_MAX_POS;
+        zeroStateSupport[0][0] = Constants.PIPE_MIN_POS;
+        zeroStateSupport[0][1] = Constants.PIPE_MAX_POS;
         // Y START - END
-        zeroStateSupport[1][0] = FacadePluggable.FACADE_THICKNESS;
-        zeroStateSupport[1][1] = PipeWorldRenderer.PIPE_MIN_POS;
+        zeroStateSupport[1][0] = Constants.FACADE_THICKNESS;
+        zeroStateSupport[1][1] = Constants.PIPE_MIN_POS;
         // Z START - END
-        zeroStateSupport[2][0] = PipeWorldRenderer.PIPE_MIN_POS;
-        zeroStateSupport[2][1] = PipeWorldRenderer.PIPE_MAX_POS;
+        zeroStateSupport[2][0] = Constants.PIPE_MIN_POS;
+        zeroStateSupport[2][1] = Constants.PIPE_MAX_POS;
 
         xOffsets[0] = zFightOffset;
         xOffsets[1] = zFightOffset;
@@ -121,31 +121,31 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
                 if(facadePluggable.isHollow()){
                     renderBlock.applyUVFix = true;
                     float[][] rotated = MatrixTransformation.deepClone(zeroStateFacade);
-                    rotated[0][0] = PipeWorldRenderer.PIPE_MIN_POS - zFightOffset * 4;
-                    rotated[0][1] = PipeWorldRenderer.PIPE_MAX_POS + zFightOffset * 4;
+                    rotated[0][0] = Constants.PIPE_MIN_POS - zFightOffset * 4;
+                    rotated[0][1] = Constants.PIPE_MAX_POS + zFightOffset * 4;
                     rotated[2][0] = 0.0F;
-                    rotated[2][1] = PipeWorldRenderer.PIPE_MIN_POS - zFightOffset * 2;
+                    rotated[2][1] = Constants.PIPE_MIN_POS - zFightOffset * 2;
                     MatrixTransformation.transform(rotated, side);
                     setRenderBounds(renderBlock, rotated, side);
                     blockRenderManager.renderFlat(renderBlock, x, y, z, r, g, b);
 
                     rotated = MatrixTransformation.deepClone(zeroStateFacade);
-                    rotated[0][0] = PipeWorldRenderer.PIPE_MIN_POS - zFightOffset * 4;
-                    rotated[0][1] = PipeWorldRenderer.PIPE_MAX_POS + zFightOffset * 4;
-                    rotated[2][0] = PipeWorldRenderer.PIPE_MAX_POS + zFightOffset * 2;
+                    rotated[0][0] = Constants.PIPE_MIN_POS - zFightOffset * 4;
+                    rotated[0][1] = Constants.PIPE_MAX_POS + zFightOffset * 4;
+                    rotated[2][0] = Constants.PIPE_MAX_POS + zFightOffset * 2;
                     MatrixTransformation.transform(rotated, side);
                     setRenderBounds(renderBlock, rotated, side);
                     blockRenderManager.renderFlat(renderBlock, x, y, z , r, g, b);
 
                     rotated = MatrixTransformation.deepClone(zeroStateFacade);
                     rotated[0][0] = 0.0F;
-                    rotated[0][1] = PipeWorldRenderer.PIPE_MIN_POS - zFightOffset * 2;
+                    rotated[0][1] = Constants.PIPE_MIN_POS - zFightOffset * 2;
                     MatrixTransformation.transform(rotated, side);
                     setRenderBounds(renderBlock, rotated, side);
                     blockRenderManager.renderFlat(renderBlock, x, y, z , r, g, b);
 
                     rotated = MatrixTransformation.deepClone(zeroStateFacade);
-                    rotated[0][0] = PipeWorldRenderer.PIPE_MAX_POS + zFightOffset * 2;
+                    rotated[0][0] = Constants.PIPE_MAX_POS + zFightOffset * 2;
                     rotated[0][1] = 1F;
                     MatrixTransformation.transform(rotated, side);
                     setRenderBounds(renderBlock, rotated, side);

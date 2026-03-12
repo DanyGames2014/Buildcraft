@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.client.render.PipePluggableRenderer;
 import net.danygames2014.buildcraft.client.render.pluggable.FacadePluggableRenderer;
 import net.danygames2014.buildcraft.item.FacadeItem;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -22,8 +23,6 @@ public class FacadePluggable extends PipePluggable {
     private int meta;
     private boolean transparent;
     private boolean hollow;
-
-    public static final float FACADE_THICKNESS = 2F / 16F;
 
     public FacadePluggable(ItemStack stack){
         block = FacadeItem.getBlock(stack);
@@ -71,7 +70,7 @@ public class FacadePluggable extends PipePluggable {
         bounds[0][1] = 1.0F;
         // Y START - END
         bounds[1][0] = 0.0F;
-        bounds[1][1] = FACADE_THICKNESS;
+        bounds[1][1] = Constants.FACADE_THICKNESS;
         // Z START - END
         bounds[2][0] = 0.0F;
         bounds[2][1] = 1.0F;

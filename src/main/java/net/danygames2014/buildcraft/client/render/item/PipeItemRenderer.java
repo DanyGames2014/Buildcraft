@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.client.render.item;
 
 import net.danygames2014.buildcraft.Buildcraft;
-import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
+import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.Tessellator;
@@ -19,7 +19,7 @@ public class PipeItemRenderer {
         Tessellator tessellator = Tessellator.INSTANCE;
 
         Block renderBlock = Buildcraft.renderBlock;
-        renderBlock.setBoundingBox(PipeWorldRenderer.PIPE_MIN_POS, 0.0F, PipeWorldRenderer.PIPE_MIN_POS, PipeWorldRenderer.PIPE_MAX_POS, 1.0F, PipeWorldRenderer.PIPE_MAX_POS);
+        renderBlock.setBoundingBox(Constants.PIPE_MIN_POS, 0.0F, Constants.PIPE_MIN_POS, Constants.PIPE_MAX_POS, 1.0F, Constants.PIPE_MAX_POS);
 
         GL11.glTranslatef(translateX, translateY, translateZ);
 

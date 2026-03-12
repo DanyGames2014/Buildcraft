@@ -11,6 +11,7 @@ import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.ColorUtil;
+import net.danygames2014.buildcraft.util.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -19,8 +20,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 
 
 public class PipeWorldRenderer {
-    public static final float PIPE_MIN_POS = 0.25F;
-    public static final float PIPE_MAX_POS = 0.75F;
     public static float zFightOffset = 1F / 4096F;
     public void renderPipe(BlockRenderManager blockRenderManager, BlockView blockView, PipeBlockEntity pipeBlockEntity, int x, int y, int z){
         PipeRenderState state = pipeBlockEntity.renderState;
@@ -59,8 +58,8 @@ public class PipeWorldRenderer {
 
                 resetToCenterDimensions(dim);
 
-                dim[dir / 2] = dir % 2 == 0 ? 0 : PIPE_MAX_POS;
-                dim[dir / 2 + 3] = dir % 2 == 0 ? PIPE_MIN_POS : 1;
+                dim[dir / 2] = dir % 2 == 0 ? 0 : Constants.PIPE_MAX_POS;
+                dim[dir / 2 + 3] = dir % 2 == 0 ? Constants.PIPE_MIN_POS : 1;
 
                 int renderMask = (3 << (dir & 0x6)) ^ 0x3f;
 
@@ -128,8 +127,8 @@ public class PipeWorldRenderer {
 
     private void resetToCenterDimensions(float[] dim){
         for (int i = 0; i < 3; i++) {
-            dim[i] = PIPE_MIN_POS;
-            dim[i + 3] = PIPE_MAX_POS;
+            dim[i] = Constants.PIPE_MIN_POS;
+            dim[i + 3] = Constants.PIPE_MAX_POS;
         }
     }
 
