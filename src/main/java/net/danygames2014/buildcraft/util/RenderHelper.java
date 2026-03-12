@@ -84,4 +84,19 @@ public class RenderHelper {
         float blue = (color & 255) / 255.0F;
         GL11.glColor4f(red, green, blue, 1.0F);
     }
+
+    public static void setGLColorFromIntWithBrightness(int color, float brightness){
+        float a = ((color >> 24) & 0xFF) / 255.0f;
+        float r = ((color >> 16) & 0xFF) / 255.0f;
+        float g = ((color >> 8) & 0xFF) / 255.0f;
+        float b = (color & 0xFF) / 255.0f;
+
+        if (a <= 0.0f) a = 1.0f;
+
+        r *= brightness;
+        g *= brightness;
+        b *= brightness;
+
+        GL11.glColor4f(r, g, b, a);
+    }
 }

@@ -127,6 +127,8 @@ public class RefineryBlockEntityRenderer extends BlockEntityRenderer {
 
             // fluid rendering
 
+            float brightness = blockEntity.world.dimension.lightLevelToLuminance[blockEntity.world.getLightLevel(blockEntity.x, blockEntity.y, blockEntity.z)];
+
             GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
             GL11.glEnable(GL11.GL_CULL_FACE);
             GL11.glDisable(GL11.GL_LIGHTING);
@@ -144,7 +146,7 @@ public class RefineryBlockEntityRenderer extends BlockEntityRenderer {
                 if (list1 != null) {
                     GL11.glPushMatrix();
                     GL11.glTranslatef(0, 0, 1);
-                    RenderHelper.setGLColorFromInt(color1);
+                    RenderHelper.setGLColorFromIntWithBrightness(color1, brightness);
                     GL11.glCallList(list1[getDisplayListIndex(refineryBlockEntity, 0)]);
                     GL11.glPopMatrix();
                 }
@@ -154,7 +156,7 @@ public class RefineryBlockEntityRenderer extends BlockEntityRenderer {
                 int[] list2 = FluidRenderer.getFluidDisplayLists(fluid2, blockEntity.world, false);
 
                 if (list2 != null) {
-                    RenderHelper.setGLColorFromInt(color2);
+                    RenderHelper.setGLColorFromIntWithBrightness(color2, brightness);
                     GL11.glCallList(list2[getDisplayListIndex(refineryBlockEntity, 1)]);
                 }
             }
@@ -166,7 +168,7 @@ public class RefineryBlockEntityRenderer extends BlockEntityRenderer {
                 if (list3 != null) {
                     GL11.glPushMatrix();
                     GL11.glTranslatef(1, 0, 0.5F);
-                    RenderHelper.setGLColorFromInt(colorResult);
+                    RenderHelper.setGLColorFromIntWithBrightness(colorResult, brightness);
                     GL11.glCallList(list3[getDisplayListIndex(refineryBlockEntity, 2)]);
                     GL11.glPopMatrix();
                 }
