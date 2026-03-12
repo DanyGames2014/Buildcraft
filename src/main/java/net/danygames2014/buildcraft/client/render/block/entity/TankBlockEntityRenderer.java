@@ -2,6 +2,8 @@ package net.danygames2014.buildcraft.client.render.block.entity;
 
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.TankBlockEntity;
+import net.danygames2014.buildcraft.client.render.FluidRenderer;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.Tessellator;
@@ -21,36 +23,42 @@ public class TankBlockEntityRenderer extends BlockEntityRenderer {
         if(tankBlockEntity.fluid == null || tankBlockEntity.fluid.amount <= 0){
             return;
         }
+
+        int[] displayList = FluidRenderer.getFluidDisplayLists(tankBlockEntity.fluid, blockEntity.world, false);
+        if (displayList == null) {
+            return;
+        }
+
+
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glPushMatrix();
-        BlockRenderManager blockRenderManager = Minecraft.INSTANCE.worldRenderer.blockRenderManager;
-        GL11.glTranslated(x, y, z);
-
-        float waterMaxY = (float) tankBlockEntity.fluid.amount / TankBlockEntity.CAPACITY;
-
-        Buildcraft.tank.setBoundingBox(0.126F, 0.01F, 0.126F, 0.874F, waterMaxY - 0.01F, 0.874F);
 
         StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
 
-        Tessellator tessellator = Tessellator.INSTANCE;
-        tessellator.startQuads();
+        float brightness = blockEntity.world.dimension.lightLevelToLuminance[blockEntity.world.getLightLevel(blockEntity.x, blockEntity.y, blockEntity.z)];
+        int colorMultiplier = tankBlockEntity.fluid.fluid.getColorMultiplier(blockEntity.world, blockEntity.x, blockEntity.y, blockEntity.z);
 
-        int fluidTextureIndex = tankBlockEntity.fluid.fluid.getStillBlock().getTexture(0);
+        float r = ((colorMultiplier >> 16) & 0xFF) / 255.0f;
+        float g = ((colorMultiplier >> 8) & 0xFF) / 255.0f;
+        float b = (colorMultiplier & 0xFF) / 255.0f;
 
-        blockRenderManager.renderTopFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);
-        blockRenderManager.renderNorthFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);
-        blockRenderManager.renderEastFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);
-        blockRenderManager.renderSouthFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);
-        blockRenderManager.renderWestFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);
-        blockRenderManager.renderBottomFace(Buildcraft.tank, 0, 0, 0, fluidTextureIndex);
-        tessellator.draw();
+        r *= brightness;
+        g *= brightness;
+        b *= brightness;
+
+        GL11.glColor3f(r, g, b);
+
+        GL11.glTranslatef((float) x + 0.125F, (float) y + 0.5F, (float) z + 0.125F);
+        GL11.glScalef(0.75F, 0.999F, 0.75F);
+        GL11.glTranslatef(0, -0.5F, 0);
+
+        GL11.glCallList(displayList[(int) ((float) tankBlockEntity.fluid.amount / (float) (TankBlockEntity.CAPACITY) * (FluidRenderer.DISPLAY_STAGES - 1))]);
+
+        GL11.glPopAttrib();
         GL11.glPopMatrix();
-
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
-
-        Buildcraft.tank.setBoundingBox(0.125F, 0F, 0.125F, 0.875F, 1F, 0.875F);
     }
 }
