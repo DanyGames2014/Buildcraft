@@ -3,6 +3,9 @@ package net.danygames2014.buildcraft.compat.ami;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.compat.ami.assemblytable.AssemblyTableRecipeCategory;
 import net.danygames2014.buildcraft.compat.ami.assemblytable.AssemblyTableRecipeHandler;
+import net.danygames2014.buildcraft.compat.ami.integrationtable.IntegrationTableRecipeCategory;
+import net.danygames2014.buildcraft.compat.ami.integrationtable.IntegrationTableRecipeHandler;
+import net.danygames2014.buildcraft.recipe.integration.IntegrationTableRecipeRegistry;
 import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipeRegistry;
 import net.glasslauncher.mods.alwaysmoreitems.api.*;
 import net.minecraft.item.ItemStack;
@@ -35,10 +38,13 @@ public class BuildcraftAmiPlugin implements ModPluginProvider {
     @Override
     public void register(ModRegistry registry) {
         registry.addRecipeCategories(new AssemblyTableRecipeCategory());
+        registry.addRecipeCategories(new IntegrationTableRecipeCategory());
 
         registry.addRecipeHandlers(new AssemblyTableRecipeHandler());
+        registry.addRecipeHandlers(new IntegrationTableRecipeHandler());
 
         registry.addRecipes(Arrays.asList(AssemblyTableRecipeRegistry.getInstance().registry.values().toArray()));
+        registry.addRecipes(Arrays.asList(IntegrationTableRecipeRegistry.getInstance().registry.values().toArray()));
     }
 
     @Override
