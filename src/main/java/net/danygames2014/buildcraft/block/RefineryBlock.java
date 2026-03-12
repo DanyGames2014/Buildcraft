@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.block;
 
 import net.danygames2014.buildcraft.block.entity.RefineryBlockEntity;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.danygames2014.buildcraft.util.raycast.IndexRaycastResult;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBucket;
@@ -165,12 +166,12 @@ public class RefineryBlock extends TemplateMachineBlock {
         }
 
         // TODO: move the constants to a common place
-        double playerX = player.prevX + (player.x - player.prevX) * (double) PipeBlock.tickDelta;
-        double playerY = player.prevY + (player.y - player.prevY) * (double) PipeBlock.tickDelta;
-        double playerZ = player.prevZ + (player.z - player.prevZ) * (double) PipeBlock.tickDelta;
+        double playerX = player.prevX + (player.x - player.prevX) * (double) RenderHelper.tickDelta;
+        double playerY = player.prevY + (player.y - player.prevY) * (double) RenderHelper.tickDelta;
+        double playerZ = player.prevZ + (player.z - player.prevZ) * (double) RenderHelper.tickDelta;
 
         Vec3d positionVector = Vec3d.create(playerX, playerY + eyeHeight, playerZ);
-        Vec3d lookVector = player.getLookVector(PipeBlock.tickDelta);
+        Vec3d lookVector = player.getLookVector(RenderHelper.tickDelta);
 
         Vec3d endVector = positionVector.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
 

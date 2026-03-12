@@ -1,6 +1,6 @@
 package net.danygames2014.buildcraft.mixin;
 
-import net.danygames2014.buildcraft.block.PipeBlock;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -14,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class WorldRendererMixin {
     @Inject(method = "renderBlockOutline", at =  @At("HEAD"))
     public void setTickDelta(PlayerEntity player, HitResult hitResult, int i, ItemStack stack, float tickDelta, CallbackInfo ci){
-        PipeBlock.tickDelta = tickDelta;
+        RenderHelper.tickDelta = tickDelta;
     }
 }

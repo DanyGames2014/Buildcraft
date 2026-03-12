@@ -17,6 +17,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.danygames2014.buildcraft.util.raycast.PipeRaycastResult;
 import net.danygames2014.nyalib.block.RedstoneLevelProvider;
 import net.danygames2014.uniwrench.api.WrenchMode;
@@ -56,8 +57,6 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     public final PipeBlockEntityFactory blockEntityFactory;
 
     public static int lastSideUsed;
-    public static float tickDelta;
-    public static int currentRenderPass = 0;
     @Environment(EnvType.CLIENT)
     private PipeWorldRenderer pipeWorldRenderer;
     @Environment(EnvType.CLIENT)
@@ -319,12 +318,12 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             eyeHeight = player.getEyeHeight();
         }
 
-        double playerX = player.prevX + (player.x - player.prevX) * (double) tickDelta;
-        double playerY = player.prevY + (player.y - player.prevY) * (double) tickDelta;
-        double playerZ = player.prevZ + (player.z - player.prevZ) * (double) tickDelta;
+        double playerX = player.prevX + (player.x - player.prevX) * (double) RenderHelper.tickDelta;
+        double playerY = player.prevY + (player.y - player.prevY) * (double) RenderHelper.tickDelta;
+        double playerZ = player.prevZ + (player.z - player.prevZ) * (double) RenderHelper.tickDelta;
 
         Vec3d positionVector = Vec3d.create(playerX, playerY + eyeHeight, playerZ);
-        Vec3d lookVector = player.getLookVector(tickDelta);
+        Vec3d lookVector = player.getLookVector(RenderHelper.tickDelta);
 
         Vec3d endVector = positionVector.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
 

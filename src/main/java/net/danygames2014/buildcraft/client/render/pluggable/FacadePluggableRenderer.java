@@ -1,7 +1,6 @@
 package net.danygames2014.buildcraft.client.render.pluggable;
 
 import net.danygames2014.buildcraft.Buildcraft;
-import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.RenderBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
@@ -10,6 +9,7 @@ import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.danygames2014.buildcraft.util.TextureUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -89,7 +89,7 @@ public class FacadePluggableRenderer implements PipePluggableRenderer {
 
     @Override
     public void renderPluggable(BlockRenderManager blockRenderManager, PipeBlockEntity pipe, Direction side, PipePluggable pluggable, int x, int y, int z) {
-        int renderPass = PipeBlock.currentRenderPass;
+        int renderPass = RenderHelper.currentRenderPass;
         FacadePluggable facadePluggable = (FacadePluggable)pluggable;
 
         Block block = facadePluggable.getBlock();

@@ -12,6 +12,7 @@ import net.danygames2014.buildcraft.config.Config;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.util.ColorUtil;
 import net.danygames2014.buildcraft.util.Constants;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -24,7 +25,7 @@ public class PipeWorldRenderer {
     public void renderPipe(BlockRenderManager blockRenderManager, BlockView blockView, PipeBlockEntity pipeBlockEntity, int x, int y, int z){
         PipeRenderState state = pipeBlockEntity.renderState;
         RenderBlock renderBlock = Buildcraft.renderBlock;
-        int renderPass = PipeBlock.currentRenderPass;
+        int renderPass = RenderHelper.currentRenderPass;
         int glassColor = pipeBlockEntity.getPipeColor();
 
         if(renderPass == 0 || (glassColor >= 0 && !(pipeBlockEntity.behavior instanceof StructurePipeBehavior))){
@@ -156,7 +157,7 @@ public class PipeWorldRenderer {
         stateHost.setBoundingBox(dim[2], dim[0], dim[1], dim[5], dim[3], dim[4]);
         blockRenderManager.renderFlat(stateHost, x, y, z, r, g, b);
 
-        if(Config.PIPE_CONFIG.renderInnerPipe && PipeBlock.currentRenderPass == 0){
+        if(Config.PIPE_CONFIG.renderInnerPipe && RenderHelper.currentRenderPass == 0){
             stateHost.setRenderMask((mask & 0x15) << 1 | (mask & 0x2a) >> 1); // pairwise swapped mask
             stateHost.setBoundingBox(dim[5], dim[3], dim[4], dim[2], dim[0], dim[1]);
             blockRenderManager.renderFlat(stateHost, x, y, z, r * 0.67f, g * 0.67f, b * 0.67f);

@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.danygames2014.buildcraft.block.PipeBlock;
+import net.danygames2014.buildcraft.util.RenderHelper;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.chunk.ChunkBuilder;
@@ -21,7 +22,7 @@ public class ChunkBuilderMixin {
         if(instance instanceof PipeBlock){
             renderLayerEmpty[var11] = false;
 
-            PipeBlock.currentRenderPass = var11;
+            RenderHelper.currentRenderPass = var11;
             var10.render(instance, var17, var15, var16);
         }
         return original.call(instance);

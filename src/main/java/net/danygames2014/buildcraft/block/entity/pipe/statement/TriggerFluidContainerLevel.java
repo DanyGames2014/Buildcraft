@@ -46,7 +46,6 @@ public class TriggerFluidContainerLevel extends BCStatement implements TriggerEx
     }
 
 
-    // TODO: check if this is correct
     @Override
     public boolean isTriggerActive(BlockEntity target, Direction side, StatementContainer source, StatementParameter[] parameters) {
         FluidHandlerBlockCapability capability = CapabilityHelper.getCapability(target.world, target.x, target.y, target.z, FluidHandlerBlockCapability.class);
