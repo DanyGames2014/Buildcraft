@@ -116,12 +116,12 @@ public class RecipeListener {
                         .addOutput(new RecipeOutput(new ItemStack(Buildcraft.yellowPipeWire, 8)))
         );
         
-//        event.register(
-//                NAMESPACE.id("pipe_plug"),
-//                (AssemblyTableRecipe) new AssemblyTableRecipe(1000)
-//                        .addInput(new ItemRecipeInput(Buildcraft.structurePipe))
-//                        .addOutput(new RecipeOutput(new ItemStack(Buildcraft.plug, 8)))
-//        );
+        event.register(
+                NAMESPACE.id("pipe_plug"),
+                (AssemblyTableRecipe) new AssemblyTableRecipe(1000)
+                        .addInput(new ItemRecipeInput(Buildcraft.cobblestoneStructurePipe.asItem()))
+                        .addOutput(new RecipeOutput(new ItemStack(Buildcraft.plug, 8)))
+        );
 
         for (int i = 0; i < 16; i++) {
             event.register(
