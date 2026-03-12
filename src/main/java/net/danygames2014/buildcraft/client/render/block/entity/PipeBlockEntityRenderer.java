@@ -557,6 +557,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
 
     private void renderFluids(PipeBlockEntity pipe, double x, double y, double z) {
         FluidPipeTransporter transporter = (FluidPipeTransporter) pipe.transporter;
+        float brightness = pipe.world.dimension.lightLevelToLuminance[pipe.world.getLightLevel(pipe.x, pipe.y, pipe.z)];
 
         boolean needsRender = false;
         for (var side : ForgeDirection.values()) {
@@ -633,7 +634,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 default:
             }
             StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
-            RenderHelper.setGLColorFromInt(transporter.fluidType.getColor());
+            RenderHelper.setGLColorFromIntWithBrightness(transporter.fluidType.getColor(), brightness);
             GL11.glCallList(list);
             GL11.glPopMatrix();
         }
@@ -646,7 +647,7 @@ public class PipeBlockEntityRenderer extends BlockEntityRenderer {
                 int stage = (int) ((float) transporter.getSideFillLevel(ForgeDirection.UNKNOWN) / (float) (transporter.getCapacity()) * (LIQUID_STAGES - 1));
 
                 StationRenderAPI.getBakedModelManager().getAtlas(Atlases.GAME_ATLAS_TEXTURE).bindTexture();
-                RenderHelper.setGLColorFromInt(transporter.fluidType.getColor());
+                RenderHelper.setGLColorFromIntWithBrightness(transporter.fluidType.getColor(), brightness);
 
                 if (above) {
                     GL11.glCallList(d.centerVertical[stage]);
