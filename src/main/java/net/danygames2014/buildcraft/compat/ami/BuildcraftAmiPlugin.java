@@ -1,10 +1,15 @@
 package net.danygames2014.buildcraft.compat.ami;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.compat.ami.assemblytable.AssemblyTableRecipeCategory;
+import net.danygames2014.buildcraft.compat.ami.assemblytable.AssemblyTableRecipeHandler;
+import net.danygames2014.buildcraft.recipe.machine.AssemblyTableRecipeRegistry;
 import net.glasslauncher.mods.alwaysmoreitems.api.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.Identifier;
+
+import java.util.Arrays;
 
 public class BuildcraftAmiPlugin implements ModPluginProvider {
     @Override
@@ -29,7 +34,11 @@ public class BuildcraftAmiPlugin implements ModPluginProvider {
 
     @Override
     public void register(ModRegistry registry) {
+        registry.addRecipeCategories(new AssemblyTableRecipeCategory());
 
+        registry.addRecipeHandlers(new AssemblyTableRecipeHandler());
+
+        registry.addRecipes(Arrays.asList(AssemblyTableRecipeRegistry.getInstance().registry.values().toArray()));
     }
 
     @Override

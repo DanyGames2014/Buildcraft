@@ -2,7 +2,12 @@ package net.danygames2014.buildcraft.recipe.machine.input;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.registry.ItemRegistry;
+import net.modificationstation.stationapi.api.registry.RegistryEntryList;
 import net.modificationstation.stationapi.api.tag.TagKey;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Recipe Input which compares to a Item TagKey
@@ -41,5 +46,21 @@ public class TagRecipeInput extends RecipeInput {
                 "itemTag=" + itemTag +
                 ", count=" + count +
                 '}';
+    }
+
+    @Override
+    public List<ItemStack> getRepresentingStacks() {
+        var entryListO = ItemRegistry.INSTANCE.getEntryList(itemTag);
+        if (entryListO.isEmpty()) {
+            return List.of(new ItemStack[0]);
+        }
+
+        RegistryEntryList.Named<Item> entryList = entryListO.get();
+        ArrayList<ItemStack> out = new ArrayList<>();
+        for (var entry : entryList) {
+            out.add(new ItemStack(entry.value(), count, 0));
+        }
+
+        return out;
     }
 }

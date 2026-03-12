@@ -2,6 +2,8 @@ package net.danygames2014.buildcraft.recipe.machine.input;
 
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 /**
  * Recipe Input which compares to a stack using the ItemStack.equals method
  */
@@ -27,5 +29,10 @@ public class StackRecipeInput extends RecipeInput{
         return "StackRecipeInput{" +
                 "stack=" + stack +
                 '}';
+    }
+
+    @Override
+    public List<ItemStack> getRepresentingStacks() {
+        return List.of(new ItemStack[]{stack});
     }
 }

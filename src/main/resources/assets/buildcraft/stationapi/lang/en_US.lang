@@ -285,3 +285,5 @@ chat.buildcraft.gate_copier.warning.logic=§6Warning: Target has different logic
 chat.buildcraft.gate_copier.warning.load=§6Warning: Gate triggers/actions might be missing!
 chat.buildcraft.gate_copier.warning.slots=§6Warning: Target has less slots!
 chat.buildcraft.gate_copier.warning.trigger_parameters=§6Warning: Target has less trigger parameters!
+
+category.buildcraft.assembly_table=Assembly Table

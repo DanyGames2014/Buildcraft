@@ -3,6 +3,8 @@ package net.danygames2014.buildcraft.recipe.machine.input;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 public class ItemRecipeInput extends RecipeInput {
     /**
      * The item required
@@ -55,6 +57,11 @@ public class ItemRecipeInput extends RecipeInput {
     @Override
     public int getRequiredAmount() {
         return count;
+    }
+
+    @Override
+    public List<ItemStack> getRepresentingStacks() {
+        return List.of(new ItemStack(item, count, meta));
     }
 
     @Override
