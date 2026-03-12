@@ -65,12 +65,28 @@ public class RecipeListener {
         );
 
         event.register(
-                NAMESPACE.id("red_pipe_wire"),
-                (AssemblyTableRecipe) new AssemblyTableRecipe(500)
+                NAMESPACE.id("emerald_chipset"),
+                (AssemblyTableRecipe) new AssemblyTableRecipe(120000)
                         .addInput(new ItemRecipeInput(Item.REDSTONE))
-                        .addInput(new ItemRecipeInput(Item.IRON_INGOT))
-                        .addInput(new ItemRecipeInput(Item.DYE, 1, 1))
-                        .addOutput(new RecipeOutput(new ItemStack(Buildcraft.redPipeWire, 8)))
+                        .addInput(new ItemRecipeInput(Item.DIAMOND))
+                        .addInput(new ItemRecipeInput(Item.DYE, 1, 10))
+                        .addOutput(new RecipeOutput(new ItemStack(Buildcraft.redstoneEmeraldChipset, 1)))
+        );
+
+        event.register(
+                NAMESPACE.id("glowstone_chipset"),
+                (AssemblyTableRecipe) new AssemblyTableRecipe(60000)
+                                              .addInput(new ItemRecipeInput(Item.REDSTONE))
+                                              .addInput(new ItemRecipeInput(Item.GLOWSTONE_DUST))
+                                              .addOutput(new RecipeOutput(new ItemStack(Buildcraft.redstoneGlowstoneChipset, 1)))
+        );
+
+        event.register(
+                NAMESPACE.id("comp_chipset"),
+                (AssemblyTableRecipe) new AssemblyTableRecipe(60000)
+                                              .addInput(new ItemRecipeInput(Item.REDSTONE))
+                                              .addInput(new ItemRecipeInput(Item.REPEATER))
+                                              .addOutput(new RecipeOutput(new ItemStack(Buildcraft.redstoneCompChipset, 1)))
         );
 
         event.register(
@@ -136,6 +152,30 @@ public class RecipeListener {
                 new IntegrationTableRecipe(
                         new ItemRecipeInput(Buildcraft.pulsatingChipset),
                         GateExpansions.getExpansion(Buildcraft.NAMESPACE.id("pulsar")),
+                        2000
+                )
+        );
+        event.register(
+                NAMESPACE.id("redstone_fader"),
+                new IntegrationTableRecipe(
+                        new ItemRecipeInput(Buildcraft.redstoneCompChipset),
+                        GateExpansions.getExpansion(Buildcraft.NAMESPACE.id("fader")),
+                        2000
+                )
+        );
+        event.register(
+                NAMESPACE.id("timer"),
+                new IntegrationTableRecipe(
+                        new ItemRecipeInput(Buildcraft.redstoneGlowstoneChipset),
+                        GateExpansions.getExpansion(Buildcraft.NAMESPACE.id("timer")),
+                        2000
+                )
+        );
+        event.register(
+                NAMESPACE.id("light_sensor"),
+                new IntegrationTableRecipe(
+                        new ItemRecipeInput(Block.TORCH.asItem()),
+                        GateExpansions.getExpansion(Buildcraft.NAMESPACE.id("light_sensor")),
                         2000
                 )
         );

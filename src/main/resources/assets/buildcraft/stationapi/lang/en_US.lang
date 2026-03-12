@@ -19,6 +19,9 @@ item.buildcraft.redstone_chipset.name=Redstone Chipset
 item.buildcraft.redstone_iron_chipset.name=Redstone Iron Chipset
 item.buildcraft.redstone_golden_chipset.name=Redstone Golden Chipset
 item.buildcraft.redstone_diamond_chipset.name=Redstone Diamond Chipset
+item.buildcraft.redstone_emerald_chipset.name=Redstone Emerald Chipset
+item.buildcraft.redstone_glowstone_chipset.name=Redstone Glowstone Chipset
+item.buildcraft.redstone_comp_chipset.name=Redstone Comp Chipset
 item.buildcraft.pulsating_chipset.name=Pulsating Chipset
 
 item.buildcraft.clean_paintbrush.name=Clean Paintbrush

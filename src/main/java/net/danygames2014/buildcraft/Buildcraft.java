@@ -52,7 +52,10 @@ public class Buildcraft {
     public static Item redstoneIronChipset;
     public static Item redstoneGoldenChipset;
     public static Item redstoneDiamondChipset;
+    public static Item redstoneEmeraldChipset;
+    public static Item redstoneGlowstoneChipset;
     public static Item pulsatingChipset;
+    public static Item redstoneCompChipset;
 
     public static Item paintbrush;
     public static Item[] paintbrushes = new Item[16];
@@ -159,7 +162,10 @@ public class Buildcraft {
         redstoneIronChipset = new TemplateItem(NAMESPACE.id("redstone_iron_chipset")).setTranslationKey(NAMESPACE, "redstone_iron_chipset");
         redstoneGoldenChipset = new TemplateItem(NAMESPACE.id("redstone_golden_chipset")).setTranslationKey(NAMESPACE, "redstone_golden_chipset");
         redstoneDiamondChipset = new TemplateItem(NAMESPACE.id("redstone_diamond_chipset")).setTranslationKey(NAMESPACE, "redstone_diamond_chipset");
+        redstoneEmeraldChipset = new TemplateItem(NAMESPACE.id("redstone_emerald_chipset")).setTranslationKey(NAMESPACE, "redstone_emerald_chipset");
+        redstoneGlowstoneChipset = new TemplateItem(NAMESPACE.id("redstone_glowstone_chipset")).setTranslationKey(NAMESPACE, "redstone_glowstone_chipset");
         pulsatingChipset = new TemplateItem(NAMESPACE.id("pulsating_chipset")).setTranslationKey(NAMESPACE, "pulsating_chipset");
+        redstoneCompChipset = new TemplateItem(NAMESPACE.id("redstone_comp_chipset")).setTranslationKey(NAMESPACE, "redstone_comp_chipset");
 
         paintbrush = new PaintBrushItem(NAMESPACE.id("clean_paintbrush"), -1).setTranslationKey(NAMESPACE, "clean_paintbrush");
         for (int i = 0; i < ColorUtil.colors.length; i++) {
