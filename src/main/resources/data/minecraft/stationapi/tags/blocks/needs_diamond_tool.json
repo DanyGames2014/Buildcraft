@@ -1,6 +1,7 @@
 {
   "values": [
     "buildcraft:laser",
-    "buildcraft:assembly_table"
+    "buildcraft:assembly_table",
+    "buildcraft:integration_table"
   ]
 }
