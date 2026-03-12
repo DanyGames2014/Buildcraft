@@ -57,10 +57,21 @@ public class TriggerInventory extends BCStatement implements TriggerExternal {
 
             for (ItemStack stack : inventory) {
                 // TODO: check if buildcraft also tests if the items fit together count wise or if it only checks item type
-                foundItems |= stack != null && (searchedStack == null || searchedStack.isItemEqual(stack));
+                if (stack != null) {
+                    if (searchedStack == null || searchedStack.isItemEqual(stack)) {
+                        foundItems = true;
+                    }
+                }
 
-                // TODO: this should also check if the item is valid for the slot
-                foundSpace |= (stack == null || ((searchedStack != null && stack.isItemEqual(searchedStack)) && stack.count < stack.getMaxCount())) && (searchedStack == null);
+                if (searchedStack == null) {
+                    if (stack == null || stack.count < stack.getMaxCount()) {
+                        foundSpace = true;
+                    }
+                } else {
+                    if (stack == null || (stack.isItemEqual(searchedStack) && stack.count < stack.getMaxCount())) {
+                        foundSpace = true;
+                    }
+                }
             }
 
             if (!hasSlots) {

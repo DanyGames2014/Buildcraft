@@ -165,7 +165,6 @@ public class RefineryBlock extends TemplateMachineBlock {
             eyeHeight = player.getEyeHeight();
         }
 
-        // TODO: move the constants to a common place
         double playerX = player.prevX + (player.x - player.prevX) * (double) RenderHelper.tickDelta;
         double playerY = player.prevY + (player.y - player.prevY) * (double) RenderHelper.tickDelta;
         double playerZ = player.prevZ + (player.z - player.prevZ) * (double) RenderHelper.tickDelta;
