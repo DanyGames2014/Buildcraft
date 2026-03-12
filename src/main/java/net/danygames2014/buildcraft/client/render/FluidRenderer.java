@@ -16,7 +16,6 @@ public final class FluidRenderer {
     private static final Map<Fluid, int[]> stillRenderCache = new HashMap<>();
     private static final EntityBlockRenderer.RenderInfo liquidBlock = new EntityBlockRenderer.RenderInfo();
 
-    // TODO: run this when stapi reloads resources
     public static void onTextureReload(){
         for (int[] ia : flowingRenderCache.values()) {
             for (int i : ia) {
