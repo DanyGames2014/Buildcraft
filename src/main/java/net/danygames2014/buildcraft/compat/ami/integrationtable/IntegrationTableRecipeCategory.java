@@ -74,9 +74,9 @@ public class IntegrationTableRecipeCategory implements RecipeCategory {
         }
 
         guiItemStacks.init(0, true, 3, 0);
-        guiItemStacks.setFromRecipe(0, new ItemStack(GateItem.getGateItem(GateMaterial.REDSTONE, GateLogic.AND)));
+        guiItemStacks.setFromRecipe(0, recipeWrapper.getInputs().get(0));
         guiItemStacks.init(1, true, 39, 0);
-        guiItemStacks.setFromRecipe(1, recipeWrapper.getInputs().get(0));
+        guiItemStacks.setFromRecipe(1, recipeWrapper.getInputs().get(1));
         guiItemStacks.init(2, false, 102, 16);
         guiItemStacks.setFromRecipe(2, recipeWrapper.getOutputs().get(0));
         guiItemStacks.init(3, false, 129, 16);

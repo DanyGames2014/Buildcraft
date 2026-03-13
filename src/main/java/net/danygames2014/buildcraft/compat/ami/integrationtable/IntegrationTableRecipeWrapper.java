@@ -25,15 +25,30 @@ public class IntegrationTableRecipeWrapper implements RecipeWrapper {
 
     @Override
     public List<?> getInputs() {
-        return recipe.input.getRepresentingStacks();
+        ArrayList<Object> items = new ArrayList<>();
+        ArrayList<ItemStack> allGates = new ArrayList<>();
+        for(GateItem gate : GateItem.gateItems.values()){
+            allGates.add(new ItemStack(gate));
+        }
+        items.add(allGates);
+
+        items.addAll(recipe.input.getRepresentingStacks());
+
+        return items;
     }
 
     @Override
     public List<?> getOutputs() {
-        ItemStack output = new ItemStack(GateItem.getGateItem(GateMaterial.REDSTONE, GateLogic.AND));
-        GateItem.addGateExpansion(output, recipe.expansion);
+        ArrayList<Object> items = new ArrayList<>();
+        ArrayList<ItemStack> allGates = new ArrayList<>();
+        for(GateItem gate : GateItem.gateItems.values()){
+            ItemStack g = new ItemStack(gate);
+            GateItem.addGateExpansion(g, recipe.expansion);
+            allGates.add(g);
+        }
+        items.add(allGates);
 
-        return List.of(output);
+        return items;
     }
 
     @Override
