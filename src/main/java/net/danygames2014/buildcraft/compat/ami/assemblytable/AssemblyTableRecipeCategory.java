@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class AssemblyTableRecipeCategory implements RecipeCategory {
 
 
-    private TickTimer tickTimer = new net.glasslauncher.mods.alwaysmoreitems.util.TickTimer(20, 70, true);;
+    private TickTimer tickTimer = new net.glasslauncher.mods.alwaysmoreitems.util.TickTimer(20, 70, true);
     @NotNull
     private final AMIDrawable background = DrawableHelper.createDrawable("/assets/buildcraft/stationapi/textures/gui/assembly_table.png", 7, 35, 162, 72);
 

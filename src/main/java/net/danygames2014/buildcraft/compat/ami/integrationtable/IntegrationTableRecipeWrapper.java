@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.gate.GateMaterial;
 import net.danygames2014.buildcraft.item.GateItem;
 import net.danygames2014.buildcraft.recipe.integration.IntegrationTableRecipe;
 import net.glasslauncher.mods.alwaysmoreitems.api.recipe.RecipeWrapper;
+import net.glasslauncher.mods.alwaysmoreitems.util.HoverChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IntegrationTableRecipeWrapper implements RecipeWrapper {
+    private final HoverChecker hoverChecker = new HoverChecker(23, 27, 0, 97);
     private final IntegrationTableRecipe recipe;
 
     public IntegrationTableRecipeWrapper(IntegrationTableRecipe recipe){
@@ -46,11 +48,20 @@ public class IntegrationTableRecipeWrapper implements RecipeWrapper {
 
     @Override
     public @Nullable ArrayList<Object> getTooltip(int mouseX, int mouseY) {
+        if(hoverChecker.isOver(mouseX, mouseY)){
+            return new ArrayList<>() {
+                {add(recipe.recipeTime + " MJ");}
+            };
+        }
         return null;
     }
 
     @Override
     public boolean handleClick(@NotNull Minecraft minecraft, int mouseX, int mouseY, int mouseButton) {
         return false;
+    }
+
+    public int getRecipeTime(){
+        return recipe.recipeTime;
     }
 }
