@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.screen.handler;
 
 import net.danygames2014.buildcraft.block.entity.IntegrationTableBlockEntity;
+import net.danygames2014.buildcraft.packet.IntegrationTablePreviewS2CPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerListener;
 import net.minecraft.screen.slot.Slot;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
 public class IntegrationTableScreenHandler extends ScreenHandler {
     public PlayerEntity player;
@@ -46,8 +48,9 @@ public class IntegrationTableScreenHandler extends ScreenHandler {
         this.addSlot(new Slot(blockEntity, 2, 143, 44));
     }
 
+    @Environment(EnvType.SERVER)
     public void sendTableUpdatePacket() {
-        // TODO: send the preview stack here
+        PacketHelper.sendTo(player, new IntegrationTablePreviewS2CPacket(blockEntity.previewStack));
     }
 
     @Environment(EnvType.SERVER)

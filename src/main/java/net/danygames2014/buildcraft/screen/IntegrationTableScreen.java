@@ -4,19 +4,16 @@ import net.danygames2014.buildcraft.block.entity.IntegrationTableBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.screen.handler.IntegrationTableScreenHandler;
 import net.danygames2014.buildcraft.util.ScreenUtil;
-import net.minecraft.block.Block;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.modificationstation.stationapi.api.client.item.CustomTooltipProvider;
 import org.lwjgl.opengl.GL11;
 
 public class IntegrationTableScreen extends BuildcraftScreen {
     IntegrationTableBlockEntity blockEntity;
     ItemRenderer itemRenderer;
     PlayerEntity player;
-
-    ItemStack previewStack;
 
     public IntegrationTableScreen(PlayerEntity player, IntegrationTableBlockEntity blockEntity) {
         super(new IntegrationTableScreenHandler(player, blockEntity), blockEntity);
@@ -25,9 +22,17 @@ public class IntegrationTableScreen extends BuildcraftScreen {
         this.backgroundWidth = 175;
         this.itemRenderer = new ItemRenderer();
 
-        this.previewStack = new ItemStack(Block.STONE);
-
         ledgerManager.add(new IntegrationTableLedger(blockEntity));
+    }
+
+    int mouseX = 0;
+    int mouseY = 0;
+    
+    @Override
+    public void render(int mouseX, int mouseY, float delta) {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+        super.render(mouseX, mouseY, delta);
     }
 
     @Override
@@ -37,9 +42,51 @@ public class IntegrationTableScreen extends BuildcraftScreen {
 
         if (blockEntity.previewStack != null) {
             itemRenderer.renderGuiItem(this.textRenderer, this.minecraft.textureManager, blockEntity.previewStack, 116, 44);
+
+            int screenX = (this.width - this.backgroundWidth) / 2;
+            int screenY = (this.height - this.backgroundHeight) / 2;
+            
+            mouseX -= screenX;
+            mouseY -= screenY;
+            
+            if (mouseX >= 116 && mouseY >= 44 && mouseX < 116 + 16 && mouseY < 44 + 16) {
+                mouseX += screenX;
+                mouseY += screenY;
+                
+                String[] tooltip;
+                String originalTooltip = (TranslationStorage.getInstance().getClientTranslation(blockEntity.previewStack.getTranslationKey())).trim();
+                if (blockEntity.previewStack.getItem() instanceof CustomTooltipProvider tooltipProvider) {
+                    tooltip = tooltipProvider.getTooltip(blockEntity.previewStack, originalTooltip);
+                } else {
+                    tooltip = new String[]{originalTooltip};
+                }
+
+                // Calculate the tooltip length according to the longest line
+                int textWidth = -1;
+                for (String line : tooltip) {
+                    int lineWidth = this.textRenderer.getWidth(line);
+                    if (lineWidth > textWidth) {
+                        textWidth = lineWidth;
+                    }
+                }
+
+                int textHeight = tooltip.length * 10;
+                
+                int x = (mouseX - screenX + 12);
+                int y = (mouseY - screenY - 12);
+                this.fillGradient(x - 3, y - 3, x + textWidth + 3, y + textHeight + 5, -1073741824, -1073741824);
+
+                for (int i = 0; i < tooltip.length; i++) {
+                    String line = tooltip[i];
+
+                    if (line != null && !line.isEmpty()) {
+                        this.textRenderer.drawWithShadow(line, x, y + (i * 12), -1);
+                    }
+                }
+            }
         }
     }
-
+    
     float colorSwitch = 0.0F;
     boolean otherColor = false;
 

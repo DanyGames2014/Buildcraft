@@ -24,6 +24,7 @@ public class PacketTypeListener {
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("update_blockentity"), BlockEntityUpdatePacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("select_assembly_recipe"), SelectAssemblyRecipeC2SPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("assembly_table_recipes_update"), AssemblyTableUpdateS2CPacket.TYPE);
+        Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("integration_table_preview"), IntegrationTablePreviewS2CPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("command"), CommandPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("toggle_diamond_pipe_filter"), ToggleDiamondPipeFilterC2SPacket.TYPE);
         Registry.register(PacketTypeRegistry.INSTANCE, NAMESPACE.id("architect_table_name_field"), ArchitectTableNameFieldPacket.TYPE);
