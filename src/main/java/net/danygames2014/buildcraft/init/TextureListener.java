@@ -70,6 +70,9 @@ public class TextureListener {
     public static Identifier drill = Buildcraft.NAMESPACE.id("block/drill");
     public static Identifier drillHead = Buildcraft.NAMESPACE.id("block/drill_head");
 
+    public static Identifier frame = Buildcraft.NAMESPACE.id("block/frame");
+    public static Atlas.Sprite frameSprite;
+
     public static Identifier pumpTube = Buildcraft.NAMESPACE.id("block/pump_tube");
 
     public static final Identifier missingTexture = Buildcraft.NAMESPACE.id("block/missing_texture");
@@ -129,6 +132,8 @@ public class TextureListener {
 
         Atlases.getTerrain().addTexture(drill);
         Atlases.getTerrain().addTexture(drillHead);
+
+        frameSprite = Atlases.getTerrain().addTexture(frame);
 
         Atlases.getTerrain().addTexture(pumpTube);
 

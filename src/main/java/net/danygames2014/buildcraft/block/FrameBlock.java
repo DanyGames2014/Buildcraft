@@ -1,12 +1,24 @@
 package net.danygames2014.buildcraft.block;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.Buildcraft;
+import net.danygames2014.buildcraft.client.render.block.FrameWorldRenderer;
+import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.nyalib.block.voxelshape.HasVoxelShape;
+import net.danygames2014.nyalib.block.voxelshape.VoxelBox;
+import net.danygames2014.nyalib.block.voxelshape.VoxelData;
+import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.render.block.BlockRenderManager;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
 import net.modificationstation.stationapi.api.block.States;
+import net.modificationstation.stationapi.api.client.model.block.BlockWithWorldRenderer;
 import net.modificationstation.stationapi.api.item.ItemPlacementContext;
 import net.modificationstation.stationapi.api.state.StateManager;
 import net.modificationstation.stationapi.api.state.property.BooleanProperty;
@@ -14,14 +26,18 @@ import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
-public class FrameBlock extends TemplateBlock {
+public class FrameBlock extends TemplateBlock implements BlockWithWorldRenderer {
     public static final HashMap<Direction, BooleanProperty> PROPERTY_LOOKUP = new HashMap<>();
     private final Random random = new Random();
+
+    private final FrameWorldRenderer worldRenderer = new FrameWorldRenderer();
 
     static {
         PROPERTY_LOOKUP.put(Direction.UP, Properties.UP);
@@ -150,6 +166,9 @@ public class FrameBlock extends TemplateBlock {
     public void addIntersectingBoundingBox(World world, int x, int y, int z, Box box, ArrayList boxes) {
         BlockState state = world.getBlockState(x, y, z);
 
+        this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
+        super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
+
         if (state.get(Properties.UP)) {
             this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, 1.0F, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
@@ -183,6 +202,31 @@ public class FrameBlock extends TemplateBlock {
         this.setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
+    @Override
+    public HitResult raycast(World world, int x, int y, int z, Vec3d startPos, Vec3d endPos) {
+        ArrayList<Box> boxes = new ArrayList<>();
+
+        addIntersectingBoundingBox(world, x, y, z, Box.create(0f, 0f, 0f, 1f, 1f,1f).offset(x, y, z), boxes);
+
+        HitResult closest = null;
+        for (Box box : boxes) {
+            HitResult mop = box.raycast(startPos, endPos);
+            if (mop != null) {
+                if (closest != null && mop.pos.distanceTo(startPos) < closest.pos.distanceTo(startPos)) {
+                    closest = mop;
+                } else {
+                    closest = mop;
+                }
+            }
+        }
+        if (closest != null) {
+            closest.blockX = x;
+            closest.blockY = y;
+            closest.blockZ = z;
+        }
+        return closest;
+    }
+
     // Rendering
     @Override
     public boolean isFullCube() {
@@ -192,5 +236,19 @@ public class FrameBlock extends TemplateBlock {
     @Override
     public boolean isOpaque() {
         return false;
+    }
+
+    @Override
+    public int getTexture(int side) {
+        if(TextureListener.frameSprite == null){
+            return 0;
+        }
+        return TextureListener.frameSprite.index;
+    }
+
+    @Override
+    public boolean renderWorld(BlockRenderManager tileRenderer, BlockView tileView, int x, int y, int z) {
+        worldRenderer.renderFrame(tileRenderer, tileView, x, y, z, this.id, TextureListener.frame);
+        return true;
     }
 }
