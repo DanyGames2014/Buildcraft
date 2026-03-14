@@ -56,7 +56,6 @@ public class TriggerInventory extends BCStatement implements TriggerExternal {
             ItemStack[] inventory = capability.getInventory(side.getOpposite());
 
             for (ItemStack stack : inventory) {
-                // TODO: check if buildcraft also tests if the items fit together count wise or if it only checks item type
                 if (stack != null) {
                     if (searchedStack == null || searchedStack.isItemEqual(stack)) {
                         foundItems = true;
