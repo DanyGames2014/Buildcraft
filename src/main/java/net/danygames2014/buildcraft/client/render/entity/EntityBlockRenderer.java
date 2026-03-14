@@ -145,16 +145,23 @@ public class EntityBlockRenderer extends EntityRenderer {
                     double remainY = entity.getYSize() - yBase;
                     double remainZ = entity.getZSize() - zBase;
 
+                    float height = (float) (Math.min(remainY, 1.0));
+                    float yOffset = 1.0F - height;
+
+                    util.minX = 0;
+                    util.minZ = 0;
+                    util.minY = yOffset;
+
                     util.maxX = (float) (Math.min(remainX, 1.0));
-                    util.maxY = (float) (Math.min(remainY, 1.0));
                     util.maxZ = (float) (Math.min(remainZ, 1.0));
+                    util.maxY = 1.0F;
 
                     GL11.glPushMatrix();
                     GL11.glTranslatef((float) x, (float) y, (float) z);
                     GL11.glRotatef(entity.pitch, 1, 0, 0);
                     GL11.glRotatef(entity.yaw, 0, 1, 0);
                     GL11.glRotatef(entity.roll, 0, 0, 1);
-                    GL11.glTranslatef(xBase, yBase, zBase);
+                    GL11.glTranslatef(xBase, yBase - yOffset, zBase);
 
                     renderBlock(util);
 
