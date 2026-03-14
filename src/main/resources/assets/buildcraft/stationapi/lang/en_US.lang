@@ -274,6 +274,10 @@ gui.buildcraft.engine.current_output=Current output
 gui.buildcraft.engine.stored=Stored
 gui.buildcraft.engine.heat=Heat
 
+gui.buildcraft.engine_fuel.power_per_cycle=Power per cycle
+gui.buildcraft.engine_fuel.burn_time=Burn time
+gui.buildcraft.engine_coolant.degrees_cooled_per_mb=Degrees cooled per mB
+
 chat.engine.creative.mode=Switched to %d MJ/t limit
 chat.buildcraft.gate_copier.clear=Gate information cleared.
 chat.buildcraft.gate_copier.gate_copied=Copied gate information to copier.
@@ -289,3 +293,5 @@ chat.buildcraft.gate_copier.warning.trigger_parameters=§6Warning: Target has le
 category.buildcraft.assembly_table=Assembly Table
 category.buildcraft.integration_table=Integration Table
 category.buildcraft.refinery=Refinery
+category.buildcraft.engine_fuel=Engine Fuel
+category.buildcraft.engine_coolant=Engine Coolant

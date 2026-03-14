@@ -39,7 +39,7 @@ public class FluidListener {
     @EventListener
     public void afterFluidRegister(AfterFluidRegistryEvent event) {
         // Engine Coolants and Fuels
-        EngineCoolantRegistry.register(Fluids.WATER, new EngineCoolant(0.023F));
+        EngineCoolantRegistry.register(Fluids.WATER, new EngineCoolant(Fluids.WATER, 0.023F));
         EngineFuelRegistry.register(oil, new EngineFuel(oil, 3, (int) (25000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
         EngineFuelRegistry.register(fuel, new EngineFuel(fuel, 6, (int) (25000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
         
