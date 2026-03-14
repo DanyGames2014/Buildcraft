@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b",
+    "t",
+    "m"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:bucket"
+    },
+    "t": {
+      "item": "buildcraft:tank"
+    },
+    "m": {
+      "item": "buildcraft:mining_well"
+    }
+  },
+  "result": {
+    "item": "buildcraft:flood_gate"
+  }
+}
