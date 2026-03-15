@@ -8,6 +8,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -105,7 +108,7 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
         // Allow the user to stop the path marker from searching for new path markers to connect
         tryingToConnect = !tryingToConnect;
 
-        //sendNetworkUpdate();
+        sendNetworkUpdate();
     }
 
     @Override
@@ -124,7 +127,7 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
 
             tryingToConnect = false;
 
-            //sendNetworkUpdate();
+            sendNetworkUpdate();
             world.setBlocksDirty(x, y, z,
                     x, y, z);
         }
@@ -184,7 +187,7 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
             loadLink1 = false;
         }
 
-        //sendNetworkUpdate();
+        sendNetworkUpdate();
     }
 
     private void unlink(PathMarkerBlockEntity tile) {
@@ -202,7 +205,7 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
             availableMarkers.add(this);
         }
 
-        //sendNetworkUpdate();
+        sendNetworkUpdate();
     }
 
     @Override
@@ -250,6 +253,43 @@ public class PathMarkerBlockEntity extends LandMarkerBlockEntity implements Path
             nbt.putInt("x1", links[1].x);
             nbt.putInt("y1", links[1].y);
             nbt.putInt("z1", links[1].z);
+        }
+    }
+
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        boolean previousState = tryingToConnect;
+
+        int flags = stream.readUnsignedByte();
+        if ((flags & 1) != 0) {
+            lasers[0] = new LaserData();
+            lasers[0].readData(stream);
+        } else {
+            lasers[0] = null;
+        }
+        if ((flags & 2) != 0) {
+            lasers[1] = new LaserData();
+            lasers[1].readData(stream);
+        } else {
+            lasers[1] = null;
+        }
+        tryingToConnect = (flags & 4) != 0;
+
+        if (previousState != tryingToConnect) {
+            world.setBlockDirty(x, y, z);
+        }
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        int flags = (lasers[0] != null ? 1 : 0) | (lasers[1] != null ? 2 : 0) | (tryingToConnect ? 4 : 0);
+        stream.writeByte(flags);
+        if (lasers[0] != null) {
+            lasers[0].writeData(stream);
+        }
+        if (lasers[1] != null) {
+            lasers[1].writeData(stream);
         }
     }
 
