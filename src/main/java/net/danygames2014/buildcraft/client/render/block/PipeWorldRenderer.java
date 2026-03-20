@@ -40,7 +40,7 @@ public class PipeWorldRenderer {
                 resetToCenterDimensions(dim);
 
                 if(renderPass == 0){
-                    renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(Direction.UP));
+                    renderBlock.setTextureIdentifier(state.textureMatrix.getTextureIdentifier(null));
                 } else {
                     renderBlock.setTextureIdentifier(TextureListener.pipeStainedOverlay);
                 }

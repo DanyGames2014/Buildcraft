@@ -32,11 +32,11 @@ public class DiamondPipeBlock extends PipeBlock {
     }
 
     @Override
-    public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
+    public Identifier getTextureIdentifierForSide(PipeBlockEntity pipe, @Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
         if (direction != null) {
             return Buildcraft.NAMESPACE.id("block/pipe/diamond_" + type.name + "_pipe_" + direction.getName());
         }
         
-        return super.getTextureIdentifierForSide(null, connectionType);
+        return super.getTextureIdentifierForSide(pipe, null, connectionType);
     }
 }

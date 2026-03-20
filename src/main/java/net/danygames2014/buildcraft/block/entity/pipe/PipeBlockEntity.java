@@ -650,7 +650,7 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
 
         for (int i = 0; i < 7; i++) {
             Direction direction = DirectionUtil.getById(i);
-            renderState.textureMatrix.setTextureIdentifier(direction, pipeBlock.getTextureIdentifierForSide(direction, direction != null ? this.canConnectTo(x, y, z, direction) : null));
+            renderState.textureMatrix.setTextureIdentifier(direction, pipeBlock.getTextureIdentifierForSide(this, direction, direction != null ? this.canConnectTo(x, y, z, direction) : null));
         }
 
         for(PipeWire color : PipeWire.values()){

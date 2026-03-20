@@ -195,7 +195,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return 0;
     }
 
-    public Identifier getTextureIdentifierForSide(@Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
+    public Identifier getTextureIdentifierForSide(PipeBlockEntity pipe, @Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
         if (direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE) {
             return alternativeTexture;
         }
