@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.util.FuelUtil;
 import net.danygames2014.buildcraft.util.MathUtil;
+import net.danygames2014.nyalib.fluid.FluidBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
@@ -34,12 +35,17 @@ public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntit
         }
 
         if (burnTime == 0 && isRedstonePowered) {
-            burnTime = maxBurnTime = FuelUtil.getEngineFuelTime(getStack(0));
+            ItemStack fuelStack = getStack(0);
+            burnTime = maxBurnTime = FuelUtil.getEngineFuelTime(fuelStack);
 
             if (burnTime > 0) {
-                getStack(0).count--;
-                if (getStack(0).count == 0) {
-                    setStack(0, null);
+                if (fuelStack.count == 1 && fuelStack.getItem() instanceof FluidBucket fluidBucket) {
+                    setStack(0, new ItemStack(fluidBucket.getEmptyBucketItem()));
+                } else {
+                    fuelStack.count--;
+                    if (fuelStack.count == 0) {
+                        setStack(0, null);
+                    }
                 }
             }
         }
