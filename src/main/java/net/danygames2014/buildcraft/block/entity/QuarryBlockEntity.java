@@ -12,6 +12,7 @@ import net.danygames2014.buildcraft.util.BlockUtil;
 import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.nyalib.item.block.ManagedItemHandler;
+import net.minecraft.block.Block;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -165,7 +166,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
                 if (workingArea != null && !workingArea.lasers.isEmpty()) {
                     workingArea.clearLasers();
                 }
-                
+
                 break;
         }
 
@@ -520,12 +521,13 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
 
     public boolean clearBlock(BlockPos pos) {
         BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
 
-        if (state.isAir()) {
+        if (block == null || state.isAir()) {
             return false;
         }
 
-        if (state.getBlock().getHardness() > 100F) {
+        if (block.getHardness(state, world, new BlockPos(x, y, z)) > 100F || block.getHardness(state, world, new BlockPos(x, y, z)) < 0) {
             return false;
         }
 
