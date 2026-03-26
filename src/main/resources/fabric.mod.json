@@ -54,6 +54,7 @@
       "net.danygames2014.buildcraft.compat.ami.BuildcraftAmiPlugin"
     ]
   },
+  "accessWidener": "buildcraft.accesswidener",
   "mixins": [
     "buildcraft.mixins.json"
   ],

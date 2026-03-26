@@ -1,0 +1,1 @@
+* Fix a crash when rendering facades
