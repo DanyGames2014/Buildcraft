@@ -6,6 +6,8 @@ import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.MiningWellBlock;
 import net.danygames2014.buildcraft.config.Config;
+import net.danygames2014.buildcraft.util.ItemUtil;
+import net.danygames2014.nyalib.item.block.ManagedItemHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor {
+public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor, ManagedItemHandler {
     private static final Random RANDOM = new Random();
     private static final ObjectArrayList<Vec3i> SEARCH_OFFSETS = new ObjectArrayList<>();
 
@@ -181,9 +183,8 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
                 }
             }
 
-            for (var stack : drops) {
-                ItemEntity itemEntity = new ItemEntity(world, this.x + 0.5D, this.y + 1.5D, this.z + 0.5D, stack);
-                world.spawnEntity(itemEntity);
+            for (ItemStack stack : drops) {
+                mineStack(stack);
             }
 
             world.setBlockStateWithNotify(x, y, z, States.AIR.get());
@@ -191,6 +192,37 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         }
 
         return false;
+    }
+
+    private void mineStack(ItemStack stack) {
+        // First, try to add to a nearby chest
+        stack = ItemUtil.addToRandomInventory(stack, world, x, y, z);
+        if (stack == null) {
+            return;
+        }
+
+        // Second, try to add to adjacent pipes
+        stack = ItemUtil.addToRandomPipeEntry(this, stack);
+        if (stack == null) {
+            return;
+        }
+
+        // Lastly, throw the object away
+        if (stack.count > 0) {
+            float xOffset = world.random.nextFloat() * 0.8F + 0.1F;
+            float yOffset = world.random.nextFloat() * 0.8F + 0.1F;
+            float zOffset = world.random.nextFloat() * 0.8F + 0.1F;
+
+            ItemEntity itemEntity = new ItemEntity(world, x + xOffset, y + yOffset + 0.5F, z + zOffset, stack);
+
+            itemEntity.pickupDelay = 10;
+
+            float baseVelocity = 0.05F;
+            itemEntity.velocityX = (float) world.random.nextGaussian() * baseVelocity;
+            itemEntity.velocityY = (float) world.random.nextGaussian() * baseVelocity + 1.0F;
+            itemEntity.velocityZ = (float) world.random.nextGaussian() * baseVelocity;
+            world.spawnEntity(itemEntity);
+        }
     }
 
     public boolean canHarvest(Block block) {
