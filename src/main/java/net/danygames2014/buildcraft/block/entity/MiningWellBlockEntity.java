@@ -6,6 +6,7 @@ import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.MiningWellBlock;
 import net.danygames2014.buildcraft.config.Config;
+import net.danygames2014.buildcraft.util.BlockUtil;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.nyalib.item.block.ManagedItemHandler;
 import net.minecraft.block.Block;
@@ -169,24 +170,18 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         }
 
         if (canHarvest(state.getBlock())) {
-            int meta = world.getBlockMeta(x, y, z);
+            List<ItemStack> drops = BlockUtil.getStacksFromBlock(world, x, y, z);
 
-            List<ItemStack> drops = state.getBlock().getDropList(world, x, y, z, state, meta);
-
-            if (drops == null) {
-                drops = new ArrayList<>();
-                int itemId = state.getBlock().getDroppedItemId(meta, RANDOM);
-                int count = state.getBlock().getDroppedItemCount(RANDOM);
-                
-                if (itemId != 0 && count > 0) {
-                    drops.add(new ItemStack(itemId, count, 0));
+            if (drops != null) {
+                for (ItemStack s : drops) {
+                    if (s != null) {
+                        mineStack(s);
+                    }
                 }
             }
 
-            for (ItemStack stack : drops) {
-                mineStack(stack);
-            }
-
+            int blockId = world.getBlockId(x, y, z);
+            world.worldEvent(null, 2001, x, y, z, blockId + (world.getBlockMeta(x, y, z) << 28));
             world.setBlockStateWithNotify(x, y, z, States.AIR.get());
             return true;
         }
