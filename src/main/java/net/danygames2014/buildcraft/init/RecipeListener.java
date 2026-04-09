@@ -93,6 +93,15 @@ public class RecipeListener {
         );
 
         event.register(
+                NAMESPACE.id("red_pipe_wire"),
+                (AssemblyTableRecipe) new AssemblyTableRecipe(500)
+                        .addInput(new ItemRecipeInput(Item.REDSTONE))
+                        .addInput(new ItemRecipeInput(Item.IRON_INGOT))
+                        .addInput(new ItemRecipeInput(Item.DYE, 1, 1))
+                        .addOutput(new RecipeOutput(new ItemStack(Buildcraft.redPipeWire, 8)))
+        );
+        
+        event.register(
                 NAMESPACE.id("blue_pipe_wire"),
                 (AssemblyTableRecipe) new AssemblyTableRecipe(500)
                         .addInput(new ItemRecipeInput(Item.REDSTONE))
