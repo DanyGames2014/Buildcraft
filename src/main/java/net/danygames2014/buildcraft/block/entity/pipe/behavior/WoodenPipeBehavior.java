@@ -1,5 +1,6 @@
 package net.danygames2014.buildcraft.block.entity.pipe.behavior;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
@@ -11,7 +12,9 @@ import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.capability.block.itemhandler.ItemHandlerBlockCapability;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.uniwrench.api.WrenchMode;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -172,5 +175,50 @@ public class WoodenPipeBehavior extends PipeBehavior implements IPipeTransportPo
         }
         
         return 0;
+    }
+
+    @Override
+    public boolean wrenchRightClick(PipeBlockEntity blockEntity, ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
+        Object2ObjectOpenHashMap<Direction, PipeConnectionType> connections = blockEntity.connections;
+
+        // Find the current normal side
+        Direction currentAlternate = null;
+        for (var entry : connections.object2ObjectEntrySet()) {
+            if (entry.getValue() == PipeConnectionType.ALTERNATE) {
+                currentAlternate = entry.getKey();
+                break;
+            }
+        }
+
+        // If there is none, return
+        if (currentAlternate == null) {
+            return true;
+        }
+
+        // Find a next normal side
+        Direction[] dirs = Direction.values();
+        Direction nextSide = null;
+
+        int startOffset = currentAlternate.ordinal() + 1;
+
+        for (int i = 0; i < dirs.length; i++) {
+            Direction candidate = dirs[(startOffset + i) % dirs.length];
+
+            if (connections.get(candidate) == PipeConnectionType.NORMAL) {
+                nextSide = candidate;
+                break;
+            }
+        }
+
+        // Switch to the new side
+        if (nextSide != null) {
+            connections.put(currentAlternate, PipeConnectionType.NORMAL);
+            connections.put(nextSide, PipeConnectionType.ALTERNATE);
+
+            blockEntity.neighborUpdate();
+            world.blockUpdateEvent(x, y, z);
+        }
+
+        return true;
     }
 }
