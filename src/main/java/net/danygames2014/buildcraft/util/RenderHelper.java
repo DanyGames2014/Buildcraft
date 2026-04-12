@@ -11,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderHelper {
     public static final ItemRenderer itemRenderer = new ItemRenderer();
-    public static float tickDelta;
     public static int currentRenderPass = 0;
 
     public static void bindTexture(String texturePath) {

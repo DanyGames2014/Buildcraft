@@ -41,7 +41,7 @@ public class TextureMatrix implements Serializable {
         for(int i = 0; i < textureIndexes.length; i++){
             String identifierString = stream.readUTF();
             Identifier identifier = !identifierString.isEmpty() ? Identifier.tryParse(identifierString) : null;
-            if(textureIndexes[i] != identifier){
+            if(textureIndexes[i] != identifier && identifier != null){
                 textureIndexes[i] = identifier;
                 dirty = true;
             }

@@ -98,6 +98,12 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         scheduleRenderUpdate();
     }
 
+    public void setDefaultTexturesForClient(PipeBlock block){
+        for(int i = 0; i < DirectionUtil.directionsWithInvalid.length; i++) {
+            renderState.textureMatrix.setTextureIdentifier(DirectionUtil.directionsWithInvalid[i], block.getTextureIdentifierForSide(null, DirectionUtil.directionsWithInvalid[i], PipeConnectionType.NORMAL));
+        }
+    }
+
     // Tick
     @Override
     public void tick() {

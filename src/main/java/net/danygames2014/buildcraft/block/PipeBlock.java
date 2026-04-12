@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.block;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.core.Debuggable;
 import net.danygames2014.buildcraft.api.core.PaintableBlock;
 import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
@@ -17,7 +18,6 @@ import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
-import net.danygames2014.buildcraft.util.RenderHelper;
 import net.danygames2014.buildcraft.util.raycast.PipeRaycastResult;
 import net.danygames2014.nyalib.block.RedstoneLevelProvider;
 import net.danygames2014.uniwrench.api.WrenchMode;
@@ -134,6 +134,10 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
         if (!world.isRemote) {
             updateConnections(world, x, y, z);
+        } else {
+            if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
+                pipe.setDefaultTexturesForClient(this);
+            }
         }
     }
 
@@ -195,7 +199,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         return 0;
     }
 
-    public Identifier getTextureIdentifierForSide(PipeBlockEntity pipe, @Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
+    public Identifier getTextureIdentifierForSide(@Nullable PipeBlockEntity pipe, @Nullable Direction direction, @Nullable PipeConnectionType connectionType) {
         if (direction != null && alternativeTexture != null && connectionType == PipeConnectionType.ALTERNATE) {
             return alternativeTexture;
         }
@@ -319,12 +323,12 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         }
 
         // TODO: Fix crashing on server
-        double playerX = player.prevX + (player.x - player.prevX) * (double) RenderHelper.tickDelta;
-        double playerY = player.prevY + (player.y - player.prevY) * (double) RenderHelper.tickDelta;
-        double playerZ = player.prevZ + (player.z - player.prevZ) * (double) RenderHelper.tickDelta;
+        double playerX = player.prevX + (player.x - player.prevX) * (double) Buildcraft.tickDelta;
+        double playerY = player.prevY + (player.y - player.prevY) * (double) Buildcraft.tickDelta;
+        double playerZ = player.prevZ + (player.z - player.prevZ) * (double) Buildcraft.tickDelta;
 
         Vec3d positionVector = Vec3d.create(playerX, playerY + eyeHeight, playerZ);
-        Vec3d lookVector = player.getLookVector(RenderHelper.tickDelta);
+        Vec3d lookVector = player.getLookVector(Buildcraft.tickDelta);
 
         Vec3d endVector = positionVector.add(lookVector.x * distance, lookVector.y * distance, lookVector.z * distance);
 

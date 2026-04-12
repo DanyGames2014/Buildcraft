@@ -140,6 +140,7 @@ public class Buildcraft {
     public static Block diamondEnergyPipe;
 
     public static RenderBlock renderBlock;
+    public static float tickDelta;
 
     @EventListener
     public void registerItems(ItemRegistryEvent event) {
