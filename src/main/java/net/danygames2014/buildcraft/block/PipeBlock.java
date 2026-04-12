@@ -8,13 +8,13 @@ import net.danygames2014.buildcraft.api.transport.PipePluggableItem;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
 import net.danygames2014.buildcraft.block.entity.pipe.gate.Gate;
+import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.client.render.block.PipeWorldRenderer;
 import net.danygames2014.buildcraft.client.render.item.PipeItemRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
 import net.danygames2014.buildcraft.item.GateCopierItem;
 import net.danygames2014.buildcraft.item.PipeWireItem;
-import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.util.Constants;
 import net.danygames2014.buildcraft.util.ItemUtil;
 import net.danygames2014.buildcraft.util.MatrixTransformation;
@@ -48,6 +48,7 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer, PaintableBlock, RedstoneLevelProvider {
@@ -94,12 +95,29 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
     // Connecting Logic
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
-        super.neighborUpdate(world, x, y, z, id);
-
         if (world.isRemote) {
             return;
         }
 
+        // Thanks Notch
+        if (id == 61 || id == 62) {
+            world.scheduleBlockUpdate(x, y, z, id, 1);
+            return;
+        }
+        
+        update(world, x, y, z);
+    }
+
+    @Override
+    public void onTick(World world, int x, int y, int z, Random random) {
+        update(world, x, y, z);        
+    }
+    
+    private void update(World world, int x, int y, int z) {
+        if (world.isRemote) {
+            return;
+        }
+        
         updateConnections(world, x, y, z);
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
             pipeBlockEntity.neighborUpdate();
@@ -119,8 +137,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         BlockPos offset = blockPos.offset(d);
         boolean power = world.isPoweringSide(offset.getX(), offset.getY(), offset.getZ(), d.ordinal());
         BlockState blockState = world.getBlockState(offset);
-        if(power) {
-            if(blockState.getBlock() == PipeBlock.REDSTONE_WIRE){
+        if (power) {
+            if (blockState.getBlock() == PipeBlock.REDSTONE_WIRE) {
                 return world.getBlockMeta(offset.getX(), offset.getY(), offset.getZ());
             }
             return 15;
@@ -168,7 +186,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (world.isRemote) {
             return true;
         }
-        
+
         // Wrench + Sneaking = Disassemble
         if (wrenchMode == WrenchMode.MODE_WRENCH) {
             if (isSneaking) {
@@ -179,9 +197,9 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             }
 
         }
-        
+
         if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe) {
-            return pipe.behavior.wrenchRightClick(pipe, stack, player, isSneaking, world, x,y,z,side, wrenchMode);
+            return pipe.behavior.wrenchRightClick(pipe, stack, player, isSneaking, world, x, y, z, side, wrenchMode);
         }
 
         return false;
@@ -465,7 +483,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (!(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipe)) {
             return false;
         }
-        
+
         ItemStack stack = player.getHand();
         if (stack == null && player.isSneaking()) {
             if (stripEquipment(world, x, y, z, player, pipe, Direction.byId(lastSideUsed))) {
@@ -475,7 +493,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             }
         }
 
-        if(stack != null && stack.getItem() instanceof GateCopierItem){
+        if (stack != null && stack.getItem() instanceof GateCopierItem) {
             return false;
         }
 
@@ -486,7 +504,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 return true;
             }
         }
-        
+
         if (stack != null && stack.getItem() instanceof PipePluggableItem) {
             if (addOrStripPipePluggable(world, x, y, z, stack, player, Direction.byId(lastSideUsed), pipe)) {
                 world.notifyNeighbors(x, y, z, id);
@@ -503,7 +521,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 && pipe.getPipePluggable(raycastResult.sideHit) instanceof GatePluggable) {
             clickedGate = pipe.gates[raycastResult.sideHit.ordinal()];
         }
-        
+
         if (clickedGate != null) {
             clickedGate.openGui(player, pipe);
             return true;
@@ -644,8 +662,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public boolean recolorBlock(World world, int x, int y, int z, Direction side, int color) {
-        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
-            if(!pipeBlockEntity.hasBlockingPluggable(side)) {
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
+            if (!pipeBlockEntity.hasBlockingPluggable(side)) {
                 return pipeBlockEntity.setPipeColor(color);
             }
         }
@@ -654,8 +672,8 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public boolean canRemoveColor(World world, int x, int y, int z, Direction side) {
-        if(world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
-            if(!pipeBlockEntity.hasBlockingPluggable(side)) {
+        if (world.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
+            if (!pipeBlockEntity.hasBlockingPluggable(side)) {
                 return pipeBlockEntity.setPipeColor(-1);
             }
         }
@@ -669,7 +687,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
 
     @Override
     public int getSidePowerLevel(BlockView blockView, int x, int y, int z, int side) {
-        if(blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity){
+        if (blockView.getBlockEntity(x, y, z) instanceof PipeBlockEntity pipeBlockEntity) {
             return pipeBlockEntity.isPoweringTo(side);
         }
         return 0;
