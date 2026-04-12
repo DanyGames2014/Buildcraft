@@ -16,8 +16,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BuilderCommandPacket extends Packet implements ManagedPacket<BuilderCommandPacket> {
-    public static final PacketType<BuilderCommandPacket> TYPE = PacketType.builder(false, true, BuilderCommandPacket::new).build();
+public class BuilderCommandC2SPacket extends Packet implements ManagedPacket<BuilderCommandC2SPacket> {
+    public static final PacketType<BuilderCommandC2SPacket> TYPE = PacketType.builder(false, true, BuilderCommandC2SPacket::new).build();
 
     /**
      * <p><bold>Client -> Server</bold>
@@ -27,10 +27,10 @@ public class BuilderCommandPacket extends Packet implements ManagedPacket<Builde
      */
     public int data;
     
-    public BuilderCommandPacket() {
+    public BuilderCommandC2SPacket() {
     }
 
-    public BuilderCommandPacket(int data) {
+    public BuilderCommandC2SPacket(int data) {
         this.data = data;
     }
 
@@ -83,7 +83,7 @@ public class BuilderCommandPacket extends Packet implements ManagedPacket<Builde
     }
 
     @Override
-    public @NotNull PacketType<BuilderCommandPacket> getType() {
+    public @NotNull PacketType<BuilderCommandC2SPacket> getType() {
         return TYPE;
     }
 }

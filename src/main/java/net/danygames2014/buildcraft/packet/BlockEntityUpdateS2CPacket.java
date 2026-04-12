@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.packet.clientbound;
+package net.danygames2014.buildcraft.packet;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,21 +16,26 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class BlockEntityUpdatePacket extends UpdatePacket implements ManagedPacket<BlockEntityUpdatePacket> {
+public class BlockEntityUpdateS2CPacket extends UpdatePacket implements ManagedPacket<BlockEntityUpdateS2CPacket> {
+    public static final PacketType<BlockEntityUpdateS2CPacket> TYPE = PacketType.builder(true, false, BlockEntityUpdateS2CPacket::new).build();
+    
     public int x;
     public int y;
     public int z;
 
-    public static final PacketType<BlockEntityUpdatePacket> TYPE = PacketType.builder(true, false, BlockEntityUpdatePacket::new).build();
-
-    public BlockEntityUpdatePacket(){}
-    public BlockEntityUpdatePacket(Serializable serializable){
+    public BlockEntityUpdateS2CPacket(){
+        
+    }
+    
+    public BlockEntityUpdateS2CPacket(Serializable serializable){
         super(serializable);
+        this.worldPacket = true;
         BlockEntity blockEntity = (BlockEntity) serializable;
         x = blockEntity.x;
         y = blockEntity.y;
         z = blockEntity.z;
     }
+    
     @Override
     public void readIdentificationData(DataInputStream stream) {
         try {
@@ -67,7 +72,7 @@ public class BlockEntityUpdatePacket extends UpdatePacket implements ManagedPack
     }
 
     @Override
-    public @NotNull PacketType<BlockEntityUpdatePacket> getType() {
+    public @NotNull PacketType<BlockEntityUpdateS2CPacket> getType() {
         return TYPE;
     }
 

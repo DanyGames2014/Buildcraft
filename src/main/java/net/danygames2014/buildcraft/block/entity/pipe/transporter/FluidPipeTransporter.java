@@ -7,7 +7,7 @@ import net.danygames2014.buildcraft.api.core.SafeTimeTracker;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.config.Config;
-import net.danygames2014.buildcraft.packet.PacketFluidUpdate;
+import net.danygames2014.buildcraft.packet.FluidUpdateS2CPacket;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.block.fluidhandler.FluidHandlerBlockCapability;
 import net.danygames2014.nyalib.fluid.Fluid;
@@ -282,7 +282,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                     clientSyncCounter = 0;
                     init = true;
                 }
-                PacketFluidUpdate packet = computeFluidUpdate(init, true);
+                FluidUpdateS2CPacket packet = computeFluidUpdate(init, true);
 
                 if (packet != null) {
                     for (var playerO : world.players) {
@@ -506,7 +506,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
      * @param persistChange The render cache change is persisted
      * @return PacketFluidUpdate liquid update packet
      */
-    private PacketFluidUpdate computeFluidUpdate(boolean initPacket, boolean persistChange) {
+    private FluidUpdateS2CPacket computeFluidUpdate(boolean initPacket, boolean persistChange) {
         boolean changed = false;
         BitSet delta = new BitSet(8);
 
@@ -540,7 +540,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
         }
 
         if (changed || initPacket) {
-            PacketFluidUpdate packet = new PacketFluidUpdate(blockEntity.x, blockEntity.y, blockEntity.z, initPacket);
+            FluidUpdateS2CPacket packet = new FluidUpdateS2CPacket(blockEntity.x, blockEntity.y, blockEntity.z, initPacket);
             packet.renderCache = renderCacheCopy;
             packet.delta = delta;
             return packet;
@@ -560,7 +560,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
     @Environment(EnvType.SERVER)
     @Override
     public void onBlockEntityUpdatePacket(ServerPlayerEntity player) {
-        PacketFluidUpdate updatePacket = computeFluidUpdate(true, true);
+        FluidUpdateS2CPacket updatePacket = computeFluidUpdate(true, true);
         
         if (updatePacket != null) {
             PacketHelper.sendTo(player, updatePacket);

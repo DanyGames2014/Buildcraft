@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.BuilderBlockEntity;
-import net.danygames2014.buildcraft.packet.BuilderCommandPacket;
+import net.danygames2014.buildcraft.packet.BuilderCommandC2SPacket;
 import net.danygames2014.buildcraft.screen.handler.BuilderScreenHandler;
 import net.danygames2014.buildcraft.screen.widget.CustomButtonWidget;
 import net.minecraft.client.Minecraft;
@@ -74,7 +74,7 @@ public class BuilderScreen extends HandledScreen {
         switch (button.id) {
             case 100 -> {
                 if (player.world.isRemote) {
-                    PacketHelper.send(new BuilderCommandPacket(0));
+                    PacketHelper.send(new BuilderCommandC2SPacket(0));
                 } else {
                     blockEntity.startConstruction();
                 }
@@ -82,7 +82,7 @@ public class BuilderScreen extends HandledScreen {
             
             case 101 -> {
                 if (player.world.isRemote) {
-                    PacketHelper.send(new BuilderCommandPacket(1));
+                    PacketHelper.send(new BuilderCommandC2SPacket(1));
                 } else {
                     blockEntity.pauseConstruction();
                 }
@@ -90,7 +90,7 @@ public class BuilderScreen extends HandledScreen {
             
             case 102 -> {
                 if (player.world.isRemote) {
-                    PacketHelper.send(new BuilderCommandPacket(2));
+                    PacketHelper.send(new BuilderCommandC2SPacket(2));
                 } else {
                     blockEntity.stopConstruction();
                 }

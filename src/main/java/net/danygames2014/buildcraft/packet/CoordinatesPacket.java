@@ -12,7 +12,9 @@ public class CoordinatesPacket extends Packet {
     public int y;
     public int z;
 
-    public CoordinatesPacket(){}
+    public CoordinatesPacket(){
+        
+    }
 
     public CoordinatesPacket(int x, int y, int z){
         this.x = x;

@@ -19,8 +19,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class PacketPowerUpdate extends Packet implements ManagedPacket<PacketPowerUpdate> {
-    public static final PacketType<PacketPowerUpdate> TYPE = PacketType.builder(true, false, PacketPowerUpdate::new).build();
+public class PowerUpdateS2CPacket extends Packet implements ManagedPacket<PowerUpdateS2CPacket> {
+    public static final PacketType<PowerUpdateS2CPacket> TYPE = PacketType.builder(true, false, PowerUpdateS2CPacket::new).build();
 
     public int x;
     public int y;
@@ -29,10 +29,11 @@ public class PacketPowerUpdate extends Packet implements ManagedPacket<PacketPow
     public boolean overload;
     public short[] displayPower;
 
-    public PacketPowerUpdate() {
+    public PowerUpdateS2CPacket() {
+        
     }
 
-    public PacketPowerUpdate(int x, int y, int z) {
+    public PowerUpdateS2CPacket(int x, int y, int z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -91,7 +92,7 @@ public class PacketPowerUpdate extends Packet implements ManagedPacket<PacketPow
     }
 
     @Override
-    public @NotNull PacketType<PacketPowerUpdate> getType() {
+    public @NotNull PacketType<PowerUpdateS2CPacket> getType() {
         return TYPE;
     }
 }

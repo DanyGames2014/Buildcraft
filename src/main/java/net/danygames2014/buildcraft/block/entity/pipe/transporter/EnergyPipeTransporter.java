@@ -7,7 +7,7 @@ import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
 import net.danygames2014.buildcraft.api.energy.PowerHandler;
 import net.danygames2014.buildcraft.block.entity.pipe.*;
 import net.danygames2014.buildcraft.config.Config;
-import net.danygames2014.buildcraft.packet.PacketPowerUpdate;
+import net.danygames2014.buildcraft.packet.PowerUpdateS2CPacket;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -247,7 +247,7 @@ public class EnergyPipeTransporter extends PipeTransporter {
         }
 
         if (tracker.markTimeIfDelay(world, 10)) {
-            PacketPowerUpdate packet = new PacketPowerUpdate(x,y,z);
+            PowerUpdateS2CPacket packet = new PowerUpdateS2CPacket(x,y,z);
 
             double displayFactor = MAX_DISPLAY / 1024.0;
             for (int i = 0; i < clientDisplayPower.length; i++) {
@@ -363,7 +363,7 @@ public class EnergyPipeTransporter extends PipeTransporter {
     /**
      * Client-side handler for receiving power updates from the server;
      */
-    public void handlePowerPacket(PacketPowerUpdate packetPower) {
+    public void handlePowerPacket(PowerUpdateS2CPacket packetPower) {
         clientDisplayPower = packetPower.displayPower;
         overload = packetPower.overload ? OVERLOAD_TICKS : 0;
     }

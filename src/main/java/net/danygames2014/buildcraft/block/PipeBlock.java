@@ -318,6 +318,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
             eyeHeight = player.getEyeHeight();
         }
 
+        // TODO: Fix crashing on server
         double playerX = player.prevX + (player.x - player.prevX) * (double) RenderHelper.tickDelta;
         double playerY = player.prevY + (player.y - player.prevY) * (double) RenderHelper.tickDelta;
         double playerZ = player.prevZ + (player.z - player.prevZ) * (double) RenderHelper.tickDelta;

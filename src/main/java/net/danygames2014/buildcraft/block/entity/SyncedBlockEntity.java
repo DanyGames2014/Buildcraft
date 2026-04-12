@@ -1,7 +1,7 @@
 package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
-import net.danygames2014.buildcraft.packet.clientbound.BlockEntityUpdatePacket;
+import net.danygames2014.buildcraft.packet.BlockEntityUpdateS2CPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -13,7 +13,7 @@ import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
 public abstract class SyncedBlockEntity extends BlockEntity implements Serializable, DelayedBlockEntityUpdate {
     public Packet getUpdatePacket(){
-        return new BlockEntityUpdatePacket(this);
+        return new BlockEntityUpdateS2CPacket(this);
     }
 
     public void sendNetworkUpdate(){

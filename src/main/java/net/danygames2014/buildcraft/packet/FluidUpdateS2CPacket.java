@@ -24,8 +24,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.BitSet;
 
-public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFluidUpdate> {
-    public static final PacketType<PacketFluidUpdate> TYPE = PacketType.builder(true, false, PacketFluidUpdate::new).build();
+public class FluidUpdateS2CPacket extends Packet implements ManagedPacket<FluidUpdateS2CPacket> {
+    public static final PacketType<FluidUpdateS2CPacket> TYPE = PacketType.builder(true, false, FluidUpdateS2CPacket::new).build();
 
     public static int FLUID_ID_BIT = 0;
     public static int FLUID_AMOUNT_BIT = 1;
@@ -36,22 +36,17 @@ public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFlu
     int x;
     int y;
     int z;
-    boolean isChunkDataPacket;
+    private int packetSize = 0;
 
-    public PacketFluidUpdate(int xCoord, int yCoord, int zCoord) {
+    public FluidUpdateS2CPacket() {
+        
+    }
+
+    public FluidUpdateS2CPacket(int xCoord, int yCoord, int zCoord, boolean worldPacket) {
         this.x = xCoord;
         this.y = yCoord;
         this.z = zCoord;
-    }
-
-    public PacketFluidUpdate(int xCoord, int yCoord, int zCoord, boolean chunkPacket) {
-        this.x = xCoord;
-        this.y = yCoord;
-        this.z = zCoord;
-        this.isChunkDataPacket = chunkPacket;
-    }
-
-    public PacketFluidUpdate() {
+        this.worldPacket = worldPacket;
     }
 
     @Override
@@ -60,7 +55,6 @@ public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFlu
             this.x = stream.readInt();
             this.y = stream.readInt();
             this.z = stream.readInt();
-            this.isChunkDataPacket = stream.readBoolean();
             
             int deltaLength = stream.readInt();
             byte[] deltaBytes = new byte[deltaLength];
@@ -100,13 +94,13 @@ public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFlu
 
     @Override
     public void write(DataOutputStream stream) {
-        byte[] deltaBytes = toByteArray(delta);
-        // System.out.printf("write %d, %d, %d = %s, %s%n", posX, posY, posZ, Arrays.toString(deltaBytes), delta);
         try {
+            int initialStreamSize = stream.size();
+            
+            byte[] deltaBytes = toByteArray(delta);
             stream.writeInt(x);
             stream.writeInt(y);
             stream.writeInt(z);
-            stream.writeBoolean(isChunkDataPacket);
             
             stream.writeInt(deltaBytes.length);
             stream.write(deltaBytes);
@@ -138,7 +132,8 @@ public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFlu
                     stream.writeBoolean(false);
                 }
             }
-
+            
+            packetSize = stream.size() - initialStreamSize;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -172,11 +167,11 @@ public class PacketFluidUpdate extends Packet implements ManagedPacket<PacketFlu
 
     @Override
     public int size() {
-        return 0;
+        return packetSize;
     }
 
     @Override
-    public @NotNull PacketType<PacketFluidUpdate> getType() {
+    public @NotNull PacketType<FluidUpdateS2CPacket> getType() {
         return TYPE;
     }
 

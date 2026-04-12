@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.api.core.SynchedBlockEntity;
 import net.danygames2014.buildcraft.api.transport.gate.GateExpansion;
-import net.danygames2014.buildcraft.api.transport.statement.StatementSlot;
 import net.danygames2014.buildcraft.block.PipeBlock;
 import net.danygames2014.buildcraft.block.entity.DelayedBlockEntityUpdate;
 import net.danygames2014.buildcraft.block.entity.pipe.behavior.PipeBehavior;
@@ -16,7 +15,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.pluggable.PipePluggable;
 import net.danygames2014.buildcraft.client.render.PipeRenderState;
 import net.danygames2014.buildcraft.client.render.block.PipePluggableState;
 import net.danygames2014.buildcraft.init.TextureListener;
-import net.danygames2014.buildcraft.packet.clientbound.BlockEntityStateUpdatePacket;
+import net.danygames2014.buildcraft.packet.BlockEntityStateUpdateS2CPacket;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.FacadePluggable;
 import net.danygames2014.buildcraft.block.entity.pipe.pluggable.GatePluggable;
 import net.danygames2014.buildcraft.registry.StateRegistry;
@@ -42,7 +41,6 @@ import net.modificationstation.stationapi.api.util.math.Direction;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Random;
 
@@ -694,14 +692,19 @@ public class PipeBlockEntity extends BlockEntity implements SynchedBlockEntity, 
         updateSignalState();
     }
 
+    @Override
+    public Packet createUpdatePacket() {
+        return getBlockEntityUpdatePacket();
+    }
+
     @Environment(EnvType.SERVER)
     public void onBlockEntityUpdatePacket(ServerPlayerEntity player) {
-        PacketHelper.sendTo(player, getBlockEntityUpdatePacket());
+        //PacketHelper.sendTo(player, getBlockEntityUpdatePacket());
         transporter.onBlockEntityUpdatePacket(player);
     }
 
-    public BlockEntityStateUpdatePacket getBlockEntityUpdatePacket(){
-        BlockEntityStateUpdatePacket packet = new BlockEntityStateUpdatePacket(x, y, z);
+    public BlockEntityStateUpdateS2CPacket getBlockEntityUpdatePacket() {
+        BlockEntityStateUpdateS2CPacket packet = new BlockEntityStateUpdateS2CPacket(x, y, z);
         packet.addStateForSerialization(renderState);
         packet.addStateForSerialization(pluggableState);
         return packet;

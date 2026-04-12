@@ -1,4 +1,4 @@
-package net.danygames2014.buildcraft.packet.clientbound;
+package net.danygames2014.buildcraft.packet;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.minecraft.network.packet.Packet;

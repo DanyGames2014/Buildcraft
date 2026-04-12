@@ -1,8 +1,7 @@
-package net.danygames2014.buildcraft.packet.clientbound;
+package net.danygames2014.buildcraft.packet;
 
 import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.api.core.SynchedBlockEntity;
-import net.danygames2014.buildcraft.packet.CoordinatesPacket;
 import net.danygames2014.buildcraft.registry.StateRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.NetworkHandler;
@@ -15,19 +14,20 @@ import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BlockEntityStateUpdatePacket extends CoordinatesPacket implements ManagedPacket<BlockEntityStateUpdatePacket> {
-    public static final PacketType<BlockEntityStateUpdatePacket> TYPE = PacketType.builder(true, false, BlockEntityStateUpdatePacket::new).build();
+public class BlockEntityStateUpdateS2CPacket extends CoordinatesPacket implements ManagedPacket<BlockEntityStateUpdateS2CPacket> {
+    public static final PacketType<BlockEntityStateUpdateS2CPacket> TYPE = PacketType.builder(true, false, BlockEntityStateUpdateS2CPacket::new).build();
 
     private final List<Serializable> stateList = new LinkedList<>();
 
     int stateCount;
     public byte[] dataBuffer;
 
-    public BlockEntityStateUpdatePacket(){
+    public BlockEntityStateUpdateS2CPacket() {
     }
 
-    public BlockEntityStateUpdatePacket(int x, int y, int z){
+    public BlockEntityStateUpdateS2CPacket(int x, int y, int z){
         super(x, y, z);
+        this.worldPacket = true;
     }
 
     public void addStateForSerialization(Serializable state){
@@ -102,7 +102,7 @@ public class BlockEntityStateUpdatePacket extends CoordinatesPacket implements M
     }
 
     @Override
-    public @NotNull PacketType<BlockEntityStateUpdatePacket> getType() {
+    public @NotNull PacketType<BlockEntityStateUpdateS2CPacket> getType() {
         return TYPE;
     }
 }
