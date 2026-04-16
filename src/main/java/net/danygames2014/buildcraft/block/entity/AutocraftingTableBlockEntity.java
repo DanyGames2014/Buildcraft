@@ -282,7 +282,7 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
             return null;
         }
 
-        return autoCraft();
+        return inventory.removeStack(slot, amount);
     }
 
     @Override
@@ -362,12 +362,14 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
 
     @Override
     public int getItemSlots(@Nullable Direction side) {
-        return inventory.size();
+        return inventory.size() - 1;
     }
 
     @Override
     public ItemStack[] getInventory(@Nullable Direction side) {
-        return inventory.stacks;
+        ItemStack[] stacks = new ItemStack[inventory.stacks.length - 1];
+        System.arraycopy(inventory.stacks, 0, stacks, 0, stacks.length);
+        return stacks;
     }
 
     @Override
