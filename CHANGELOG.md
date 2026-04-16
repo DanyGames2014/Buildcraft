@@ -1,5 +1,4 @@
-* Fixed mining well ignoring dropped item meta
-* Fix wooden pipe side switching with wrench
-* Add missing red pipe wire recipe
-* Make the wrench model handheld
-* Allow passing in all wrench modes in the pipe behavior
+* Improve packet behavior in multiplayer
+* Pipes in multiplayer will now show their texture instead of missing texture during initialization
+* Fix crash when a furnace next to a pipe starts or stops smelting
+* Fix autocrafting table allowing the extraction of the visual result stack
