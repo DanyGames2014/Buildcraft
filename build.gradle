@@ -266,6 +266,8 @@ modrinth {
     dependencies {
         required.project "stationapi"
         required.project "glass-config-api"
+        required.project "nyalib"
+        required.project "uniwrench"
     }
 }
 
