@@ -323,19 +323,56 @@ public class AutocraftingTableBlockEntity extends BlockEntity implements Invento
     @Override
     public ItemStack insertItem(ItemStack stack, @Nullable Direction side) {
         ItemStack insertedStack = stack.copy();
+        
+        // Insert items one by one if the stack is larger
+        if (insertedStack.count > 1) {
+            int insertionCount = insertedStack.count;
+            for (int i = 0; i < insertionCount; ++i) {
+                ItemStack splitStack = insertedStack.split(1);
+                splitStack = insertItem(splitStack, side);
+                
+                if (splitStack != null) {
+                    insertedStack.count++;
+                    break;
+                }
+            }
 
-        for (int i = 0; i < this.getItemSlots(side); ++i) {
-            if (getItem(i, side) == null) {
+            if (insertedStack.count == 0) {
+                return null;
+            }
+            
+            return insertedStack;
+        }
+        
+        // If its only one item, we try to find the slot with the fewest items and insert into that
+        int candidateSlot = -1;
+        
+        for (int slot = 0; slot < this.getItemSlots(side); ++slot) {
+            ItemStack slotStack = getItem(slot, side);
+            if (slotStack == null) {
                 continue;
             }
             
-            if (insertedStack.isItemEqual(getItem(i, side))) {
-                insertedStack = insertItem(insertedStack, i, side);
+            // Check if the slot contains the same item and it isnt full
+            if (insertedStack.isItemEqual(slotStack) && slotStack.count < insertedStack.getMaxCount()) {
+                // If we dont have any candidate slot yet, mark the first found one as candidate
+                if (candidateSlot == -1) {
+                    candidateSlot = slot;
+                    continue;
+                }
+                
+                // If we already have a candidate slot, check if the current stack has less items than the current candidate
+                ItemStack candidateStack = getItem(candidateSlot, side);
+                if (slotStack.count < candidateStack.count) {
+                    candidateSlot = slot;
+                }
             }
-
-            if (insertedStack == null) {
-                return null;
-            }
+        }
+        
+        // If the candidate slot is not -1 it means we found a valid candidate slot
+        if (candidateSlot != -1) {
+            // Try inserting into the candidate slot
+            insertedStack = insertItem(insertedStack, candidateSlot, side);
         }
 
         return insertedStack;
