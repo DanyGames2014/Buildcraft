@@ -158,10 +158,15 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         return (int) (((float) getBurnTime() / (float) getMaxBurnTime()) * scale);
     }
 
-    // TODO: these are crashing the game when removing an engine with the debug pickaxe on server
     // Blockstate Wrappers
     public boolean isPumping() {
-        return world.getBlockState(x, y, z).get(BaseEngineBlock.PUMPING_PROPERTY);
+        BlockState state = world.getBlockState(x, y, z);
+        
+        if (state.contains(BaseEngineBlock.PUMPING_PROPERTY)) {
+            return world.getBlockState(x, y, z).get(BaseEngineBlock.PUMPING_PROPERTY);
+        }
+        
+        return false;
     }
 
     public void setPumping(boolean pumping) {
@@ -173,7 +178,13 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     }
 
     public Direction getFacing() {
-        return world.getBlockState(x, y, z).get(Properties.FACING);
+        BlockState state = world.getBlockState(x, y, z);
+        
+        if (state.contains(Properties.FACING)) {
+            return world.getBlockState(x, y, z).get(Properties.FACING);
+        }
+        
+        return Direction.UP;
     }
 
     public void setFacing(Direction facing) {
