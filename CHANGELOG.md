@@ -1,4 +1,5 @@
-* Improve packet behavior in multiplayer
-* Pipes in multiplayer will now show their texture instead of missing texture during initialization
-* Fix crash when a furnace next to a pipe starts or stops smelting
-* Fix autocrafting table allowing the extraction of the visual result stack
+* Specify dependencies in fabric.mod.json
+* Update to NyaLib 0.20.0
+* Improve the auto-workbench insertion logic
+  * It will now auto balance items as they come in
+* Fix a crash that could happen when breaking engines
