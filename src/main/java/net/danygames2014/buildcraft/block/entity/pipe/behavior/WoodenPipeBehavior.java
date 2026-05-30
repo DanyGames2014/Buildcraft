@@ -20,6 +20,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import static net.modificationstation.stationapi.api.util.math.MathHelper.*;
+
 public class WoodenPipeBehavior extends PipeBehavior implements IPipeTransportPowerHook {
     @Override
     public PipeConnectionType canConnectToPipe(PipeBlockEntity blockEntity, PipeBlockEntity otherBlockEntity, PipeBehavior otherPipeBehavior, Direction side) {
@@ -142,20 +144,25 @@ public class WoodenPipeBehavior extends PipeBehavior implements IPipeTransportPo
                         continue;
                     }
                     
-                    int avalibleCapacity = fluidTransporter.getSideRemainingCapacity(ForgeDirection.fromDirection(side));
+                    int avalibleCapacity = fluidTransporter.getSideMaxFillRate(ForgeDirection.fromDirection(side));
                     if (avalibleCapacity <= 0) {
                         return;
                     }
+                    
+                    int fluidPerEnergy = 32;
 
-                    int energyAvalible = MathHelper.floor(powerHandler.useEnergy(1, Math.min(avalibleCapacity, 5), false));
+                    int energyAvalible = MathHelper.floor(powerHandler.useEnergy(0, ceil((float) avalibleCapacity / fluidPerEnergy), false));
                     if (energyAvalible <= 0) {
                         return;
                     }
 
-                    FluidStack extractedStack = cap.extractFluid(energyAvalible * 4, side.getOpposite());
+                    int extractAmount = Math.min(energyAvalible * fluidPerEnergy, avalibleCapacity);
+                    
+                    FluidStack extractedStack = cap.extractFluid(extractAmount, side.getOpposite());
 
                     if (extractedStack != null) {
-                        powerHandler.useEnergy(extractedStack.amount, extractedStack.amount, true);
+                        int usedEnergy = ceil((float) extractedStack.amount / fluidPerEnergy);
+                        powerHandler.useEnergy(usedEnergy, usedEnergy, true);
                         fluidTransporter.injectFluid(extractedStack, ForgeDirection.fromDirection(side));
                     }
                 }
