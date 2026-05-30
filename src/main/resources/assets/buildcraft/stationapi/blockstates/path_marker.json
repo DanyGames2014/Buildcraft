@@ -1,20 +1,20 @@
 {
   "variants": {
-    "active=false,facing=east": {
+    "active=false,facing=north": {
       "model": "buildcraft:block/path_marker",
       "x": 90
     },
-    "active=false,facing=south": {
+    "active=false,facing=east": {
       "model": "buildcraft:block/path_marker",
       "x": 90,
       "y": 90
     },
-    "active=false,facing=west": {
+    "active=false,facing=south": {
       "model": "buildcraft:block/path_marker",
       "x": 90,
       "y": 180
     },
-    "active=false,facing=north": {
+    "active=false,facing=west": {
       "model": "buildcraft:block/path_marker",
       "x": 90,
       "y": 270
@@ -26,21 +26,21 @@
       "model": "buildcraft:block/path_marker",
       "x": 180
     },
-    "active=true,facing=east": {
+    "active=true,facing=north": {
       "model": "buildcraft:block/path_marker_active",
       "x": 90
     },
-    "active=true,facing=south": {
+    "active=true,facing=east": {
       "model": "buildcraft:block/path_marker_active",
       "x": 90,
       "y": 90
     },
-    "active=true,facing=west": {
+    "active=true,facing=south": {
       "model": "buildcraft:block/path_marker_active",
       "x": 90,
       "y": 180
     },
-    "active=true,facing=north": {
+    "active=true,facing=west": {
       "model": "buildcraft:block/path_marker_active",
       "x": 90,
       "y": 270

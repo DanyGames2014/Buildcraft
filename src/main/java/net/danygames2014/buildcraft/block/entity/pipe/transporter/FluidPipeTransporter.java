@@ -65,6 +65,10 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
     private static final ForgeDirection[] directions = ForgeDirection.VALID_DIRECTIONS;
     private static final ForgeDirection[] orientations = ForgeDirection.values();
 
+    public int getSideMaxFillRate(ForgeDirection direction) {
+        return sections[direction.ordinal()].getMaxFillRate();
+    }
+    
     public int getSideRemainingCapacity(ForgeDirection direction) {
         return capacity - sections[direction.ordinal()].amount;
     }
@@ -335,7 +339,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                     } else {
                         FluidHandlerBlockCapability cap = CapabilityHelper.getCapability(world, x + o.offsetX, y + o.offsetY, z + o.offsetZ, FluidHandlerBlockCapability.class);
 
-                        if (cap == null) {
+                        if (cap == null && !(getBlockEntityOnSide(o) instanceof PipeBlockEntity)) {
                             continue;
                         }
 
@@ -346,7 +350,7 @@ public class FluidPipeTransporter extends PipeTransporter implements FluidHandle
                             int originalAmount = liquidToPush.amount;
                             FluidStack resultStack = cap.insertFluid(liquidToPush, o.getOpposite().getDirection());
                             int filled = resultStack == null ? originalAmount : originalAmount - resultStack.amount;
-
+                            
                             if (filled <= 0) {
                                 outputTTL[o.ordinal()]--;
                             } else {

@@ -191,7 +191,7 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
         if (wrenchMode == WrenchMode.MODE_WRENCH) {
             if (isSneaking) {
                 int meta = world.getBlockMeta(x, y, z);
-                world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+                world.setBlockState(x, y, z, States.AIR.get());
                 this.dropStacks(world, x, y, z, meta);
                 return true;
             }

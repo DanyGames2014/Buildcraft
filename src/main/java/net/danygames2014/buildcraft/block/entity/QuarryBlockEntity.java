@@ -208,7 +208,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
             }
 
             if (powerHandler.useEnergy(frameCost, frameCost, false) >= frameCost) {
-                world.setBlockStateWithNotify(peek, Buildcraft.frame.getDefaultState());
+                world.setBlockState(peek, Buildcraft.frame.getDefaultState());
                 powerHandler.useEnergy(frameCost, frameCost, true);
                 currentJob.pop();
             }
@@ -531,7 +531,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
             return false;
         }
 
-        world.setBlockStateWithNotify(pos, States.AIR.get());
+        world.setBlockState(pos, States.AIR.get());
         return true;
     }
 

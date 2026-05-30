@@ -61,11 +61,11 @@ public class TankBlock extends TemplateBlockWithEntity {
 
         if (world.getBlockState(x, y - 1, z).isOf(this)) {
             if (!state.get(STACKED)) {
-                world.setBlockStateWithNotify(x, y, z, state.with(STACKED, true));
+                world.setBlockState(x, y, z, state.with(STACKED, true));
             }
         } else {
             if (state.get(STACKED)) {
-                world.setBlockStateWithNotify(x, y, z, state.with(STACKED, false));
+                world.setBlockState(x, y, z, state.with(STACKED, false));
             }
         }
     }

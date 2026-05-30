@@ -82,7 +82,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         BlockState state = world.getBlockState(x,y, z);
 
         if (state.isOf(Buildcraft.miningWell)) {
-            world.setBlockStateWithNotify(x, y, z, state.with(MiningWellBlock.ACTIVE, active));
+            world.setBlockState(x, y, z, state.with(MiningWellBlock.ACTIVE, active));
             
             if (active) {
                 powerHandler.configure(Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);        
@@ -146,7 +146,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
 
         // Try to mine the next block
         if (mineBlock(x, currentY, z)) {
-            world.setBlockStateWithNotify(x, currentY, z, Buildcraft.miningPipe.getDefaultState());
+            world.setBlockState(x, currentY, z, Buildcraft.miningPipe.getDefaultState());
             findBlocks(x, currentY, z);
             return true;
         }
@@ -182,7 +182,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
 
             int blockId = world.getBlockId(x, y, z);
             world.worldEvent(null, 2001, x, y, z, blockId + (world.getBlockMeta(x, y, z) << 28));
-            world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+            world.setBlockState(x, y, z, States.AIR.get());
             return true;
         }
 
@@ -280,7 +280,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         // Loop down the pipes until we get to the bottom of them
         while (world.getBlockState(x, currentY, z).isOf(Buildcraft.miningPipe)) {
             if (!world.getBlockState(x, currentY - 1, z).isOf(Buildcraft.miningPipe)) {
-                world.setBlockStateWithNotify(x, currentY, z, States.AIR.get());
+                world.setBlockState(x, currentY, z, States.AIR.get());
                 return;
             }
             currentY--;

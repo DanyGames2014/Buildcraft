@@ -136,28 +136,28 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
                     return; // NYI
                 } else {
                     switch (builderFacing.getOpposite()) {
-                        case EAST -> {
+                        case NORTH -> {
                             minX = x;
                             minZ = z - blueprint.sizeZ;
                             maxX = x + (blueprint.sizeX - 1);
                             maxZ = z - 1;
                         }
                         
-                        case WEST -> {
+                        case SOUTH -> {
                             minX = x - (blueprint.sizeX - 1);
                             minZ = z + 1;
                             maxX = x;
                             maxZ = z + blueprint.sizeZ;
                         }
                         
-                        case NORTH -> {
+                        case WEST -> {
                             minX = x - blueprint.sizeX;
                             minZ = z - (blueprint.sizeZ - 1);
                             maxX = x - 1;
                             maxZ = z;
                         }
                         
-                        case SOUTH -> {
+                        case EAST -> {
                             minX = x + 1;
                             minZ = z;
                             maxX = x + blueprint.sizeX;

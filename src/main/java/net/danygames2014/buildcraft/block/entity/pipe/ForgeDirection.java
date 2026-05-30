@@ -86,16 +86,16 @@ public enum ForgeDirection {
                 return Direction.UP;
             }
             case NORTH -> {
-                return Direction.NORTH;
-            }
-            case SOUTH -> {
-                return Direction.SOUTH;
-            }
-            case WEST -> {
                 return Direction.WEST;
             }
-            case EAST -> {
+            case SOUTH -> {
                 return Direction.EAST;
+            }
+            case WEST -> {
+                return Direction.SOUTH;
+            }
+            case EAST -> {
+                return Direction.NORTH;
             }
         }
         
@@ -110,16 +110,16 @@ public enum ForgeDirection {
             case UP -> {
                 return UP;
             }
-            case NORTH -> {
+            case WEST -> {
                 return NORTH;
             }
-            case SOUTH -> {
+            case EAST -> {
                 return SOUTH;
             }
-            case WEST -> {
+            case SOUTH -> {
                 return WEST;
             }
-            case EAST -> {
+            case NORTH -> {
                 return EAST;
             }
         }

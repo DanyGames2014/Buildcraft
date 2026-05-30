@@ -126,7 +126,7 @@ public class OilSpringFeature {
                             int distance = poolX * poolX + poolY * poolY + poolZ * poolZ;
 
                             if (distance <= radiusSq) {
-                                world.setBlockStateWithNotify(poolX + wellX, poolY + wellY, poolZ + wellZ, FluidListener.oil.getStillBlock().getDefaultState());
+                                world.setBlockState(poolX + wellX, poolY + wellY, poolZ + wellZ, FluidListener.oil.getStillBlock().getDefaultState());
                             }
                         }
                     }
@@ -150,15 +150,15 @@ public class OilSpringFeature {
                 }
 
                 for (int y = baseY + 1; y <= maxHeight; ++y) {
-                    world.setBlockStateWithNotify(wellX, y, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
+                    world.setBlockState(wellX, y, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
                 }
 
                 if (type == GenType.LARGE) {
                     for (int y = wellY; y <= maxHeight - wellHeight / 2; ++y) {
-                        world.setBlockStateWithNotify(wellX + 1, y, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
-                        world.setBlockStateWithNotify(wellX - 1, y, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
-                        world.setBlockStateWithNotify(wellX, y, wellZ + 1, FluidListener.oil.getStillBlock().getDefaultState());
-                        world.setBlockStateWithNotify(wellX, y, wellZ - 1, FluidListener.oil.getStillBlock().getDefaultState());
+                        world.setBlockState(wellX + 1, y, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
+                        world.setBlockState(wellX - 1, y, wellZ, FluidListener.oil.getStillBlock().getDefaultState());
+                        world.setBlockState(wellX, y, wellZ + 1, FluidListener.oil.getStillBlock().getDefaultState());
+                        world.setBlockState(wellX, y, wellZ - 1, FluidListener.oil.getStillBlock().getDefaultState());
                     }
                 }
             }
@@ -307,7 +307,7 @@ public class OilSpringFeature {
             }
 
             if (isOilOrWater(world, x, y, z) || isBlockSolidOnSide(world, x, y - 1, z, Direction.UP)) {
-                world.setBlockStateWithNotify(x, y, z, FluidListener.oil.getStillBlock().getDefaultState());
+                world.setBlockState(x, y, z, FluidListener.oil.getStillBlock().getDefaultState());
             } else {
                 return;
             }
@@ -320,7 +320,7 @@ public class OilSpringFeature {
                 if (isOilOrWater(world, x, y - d, z) || !isBlockSolidOnSide(world, x, y - d - 1, z, Direction.UP)) {
                     return;
                 }
-                world.setBlockStateWithNotify(x, y - d, z, FluidListener.oil.getStillBlock().getDefaultState());
+                world.setBlockState(x, y - d, z, FluidListener.oil.getStillBlock().getDefaultState());
             }
         }
     }

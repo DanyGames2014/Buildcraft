@@ -1,13 +1,8 @@
 package net.danygames2014.buildcraft.block;
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.client.render.block.FrameWorldRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
-import net.danygames2014.nyalib.block.voxelshape.HasVoxelShape;
-import net.danygames2014.nyalib.block.voxelshape.VoxelBox;
-import net.danygames2014.nyalib.block.voxelshape.VoxelData;
-import net.danygames2014.nyalib.block.voxelshape.VoxelShape;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -26,11 +21,9 @@ import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.template.block.TemplateBlock;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class FrameBlock extends TemplateBlock implements BlockWithWorldRenderer {
@@ -88,7 +81,7 @@ public class FrameBlock extends TemplateBlock implements BlockWithWorldRenderer 
         
         // Check for decay
         if (world.getBlockMeta(x, y, z) == 1 && random.nextInt(2) == 0) {
-            world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+            world.setBlockState(x, y, z, States.AIR.get());
         }
     }
 

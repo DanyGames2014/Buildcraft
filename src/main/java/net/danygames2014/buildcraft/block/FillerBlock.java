@@ -42,7 +42,7 @@ public class FillerBlock extends TemplateMachineBlock implements Debuggable {
     public void debug(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side) {
         BlockState state = world.getBlockState(x,y,z);
         
-        world.setBlockStateWithNotify(x,y,z, state.cycle(FILLER_PATTERN));
+        world.setBlockState(x,y,z, state.cycle(FILLER_PATTERN));
     }
 
     public enum FillerPattern implements StringIdentifiable {

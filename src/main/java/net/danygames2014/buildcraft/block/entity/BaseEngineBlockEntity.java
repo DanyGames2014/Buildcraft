@@ -174,7 +174,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             return;
         }
 
-        world.setBlockStateWithNotify(x, y, z, world.getBlockState(x, y, z).with(BaseEngineBlock.PUMPING_PROPERTY, pumping));
+        world.setBlockState(x, y, z, world.getBlockState(x, y, z).with(BaseEngineBlock.PUMPING_PROPERTY, pumping));
     }
 
     public Direction getFacing() {
@@ -188,7 +188,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     }
 
     public void setFacing(Direction facing) {
-        world.setBlockStateWithNotify(x, y, z, world.getBlockState(x, y, z).with(Properties.FACING, facing));
+        world.setBlockState(x, y, z, world.getBlockState(x, y, z).with(Properties.FACING, facing));
         this.facing = facing;
     }
 
@@ -323,7 +323,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             EnergyStage newStage = calculateEnergyStage();
 
             if (newStage != energyStage) {
-                world.setBlockStateWithNotify(x, y, z, world.getBlockState(x, y, z).with(BaseEngineBlock.ENERGY_STAGE_PROPERTY, newStage));
+                world.setBlockState(x, y, z, world.getBlockState(x, y, z).with(BaseEngineBlock.ENERGY_STAGE_PROPERTY, newStage));
             }
         }
 
@@ -336,7 +336,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
         if (getEnergyStage() == EnergyStage.OVERHEAT) {
             world.createExplosion(null, x, y, z, getExplosionRange(), true);
-            world.setBlockStateWithNotify(x, y, z, States.AIR.get());
+            world.setBlockState(x, y, z, States.AIR.get());
         }
 
         if (energy > getMaxEnergy()) {

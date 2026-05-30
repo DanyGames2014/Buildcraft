@@ -2,7 +2,7 @@ package net.danygames2014.buildcraft.init;
 
 import net.danygames2014.buildcraft.entity.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
-import net.modificationstation.stationapi.api.event.entity.EntityRegister;
+import net.modificationstation.stationapi.api.event.entity.EntityRegisterEvent;
 import net.modificationstation.stationapi.api.event.registry.EntityHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
 import net.modificationstation.stationapi.api.util.Namespace;
@@ -13,12 +13,12 @@ public class EntityListener {
     public static Namespace NAMESPACE;
 
     @EventListener
-    public void registerEntities(EntityRegister event){
-        event.register(EntityBlock.class, NAMESPACE.id("block").toString());
-        event.register(EntityBlockWithParent.class, NAMESPACE.id("block_with_parent").toString());
-        event.register(TravellingItemEntity.class, NAMESPACE.id("travelling_item").toString());
-        event.register(MechanicalArmEntity.class, NAMESPACE.id("mechanical_arm").toString());
-        event.register(RobotEntity.class, NAMESPACE.id("robot").toString());
+    public void registerEntities(EntityRegisterEvent event){
+        event.register(NAMESPACE.id("block"), EntityBlock.class);
+        event.register(NAMESPACE.id("block_with_parent"), EntityBlockWithParent.class);
+        event.register(NAMESPACE.id("travelling_item"), TravellingItemEntity.class);
+        event.register(NAMESPACE.id("mechanical_arm"), MechanicalArmEntity.class);
+        event.register(NAMESPACE.id("robot"), RobotEntity.class);
     }
     
     @EventListener
