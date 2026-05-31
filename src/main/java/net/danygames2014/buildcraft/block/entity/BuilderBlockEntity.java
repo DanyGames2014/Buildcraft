@@ -289,7 +289,7 @@ public class BuilderBlockEntity extends AreaWorkerBlockEntity implements Invento
         }
         
         if (findAndConsume(targetState, entry.meta)) {
-            world.setBlockStateWithMetadataWithNotify(workingArea.minX + entry.x, workingArea.minY + entry.y, workingArea.minZ + entry.z, targetState, entry.meta);
+            world.setBlockState(workingArea.minX + entry.x, workingArea.minY + entry.y, workingArea.minZ + entry.z, targetState, entry.meta);
             removeNeededBlock(targetBlock, entry.meta);
         } else {
             return PlaceResult.MISSING_RESOURCE;

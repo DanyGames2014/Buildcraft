@@ -105,7 +105,7 @@ public class FrameBlock extends TemplateBlock implements BlockWithWorldRenderer 
             state = state.with(PROPERTY_LOOKUP.get(side), this.canConnectTo(world, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
         }
 
-        world.setBlockStateWithMetadata(x, y, z, state, world.getBlockMeta(x, y, z));
+        world.setBlockState(x, y, z, state, world.getBlockMeta(x, y, z));
     }
 
     public boolean canConnectTo(World world, int x, int y, int z) {
