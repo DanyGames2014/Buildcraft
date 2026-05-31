@@ -23,16 +23,16 @@ public class MatrixTransformation {
 
     public static void transformHorizontalFacing(float[][] matrix, Direction direction){
         switch (direction){
-            case NORTH -> {
+            case WEST -> {
                 rotateYClockwise(matrix);
+                rotateYClockwise(matrix);
+                rotateYClockwise(matrix);
+            }
+            case NORTH -> {
                 rotateYClockwise(matrix);
                 rotateYClockwise(matrix);
             }
             case EAST -> {
-                rotateYClockwise(matrix);
-                rotateYClockwise(matrix);
-            }
-            case SOUTH -> {
                 rotateYClockwise(matrix);
             }
         }

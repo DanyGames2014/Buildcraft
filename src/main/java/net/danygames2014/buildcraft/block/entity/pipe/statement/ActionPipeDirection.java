@@ -29,7 +29,7 @@ public class ActionPipeDirection extends BCStatement implements ActionInternal {
 
     @Override
     public void registerTextures() {
-        icon = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/action_direction_" + DirectionUtil.getRealDirectionFromStapiDirection(direction).name().toLowerCase(Locale.ENGLISH)));
+        icon = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/action_direction_" + direction.name().toLowerCase(Locale.ENGLISH)));
     }
 
     @Override
@@ -39,6 +39,6 @@ public class ActionPipeDirection extends BCStatement implements ActionInternal {
 
     @Override
     public String getDescription() {
-        return TranslationStorage.INSTANCE.get("gate.buildcraft.action.pipe_direction." + DirectionUtil.getRealDirectionFromStapiDirection(direction).name().toLowerCase(Locale.ENGLISH));
+        return TranslationStorage.INSTANCE.get("gate.buildcraft.action.pipe_direction." + direction.name().toLowerCase(Locale.ENGLISH));
     }
 }
