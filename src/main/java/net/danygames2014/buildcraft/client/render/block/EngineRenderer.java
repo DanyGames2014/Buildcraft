@@ -19,12 +19,12 @@ public class EngineRenderer {
     private static final float[] angleMap = new float[6];
 
     static {
-        angleMap[Direction.EAST.ordinal()] = (float) -Math.PI / 2;
-        angleMap[Direction.WEST.ordinal()] = (float) Math.PI / 2;
+        angleMap[Direction.NORTH.ordinal()] = (float) -Math.PI / 2;
+        angleMap[Direction.SOUTH.ordinal()] = (float) Math.PI / 2;
         angleMap[Direction.UP.ordinal()] = 0;
         angleMap[Direction.DOWN.ordinal()] = (float) Math.PI;
-        angleMap[Direction.SOUTH.ordinal()] = (float) Math.PI / 2;
-        angleMap[Direction.NORTH.ordinal()] = (float) -Math.PI / 2;
+        angleMap[Direction.EAST.ordinal()] = (float) Math.PI / 2;
+        angleMap[Direction.WEST.ordinal()] = (float) -Math.PI / 2;
     }
 
     public EngineRenderer(){
@@ -76,13 +76,13 @@ public class EngineRenderer {
         float[] translate = {renderFacing.getOffsetX(), renderFacing.getOffsetY(), -renderFacing.getOffsetZ()};
 
         switch (renderFacing) {
-            case EAST:
-            case WEST:
+            case NORTH:
+            case SOUTH:
             case DOWN:
                 angle[2] = angleMap[renderFacing.ordinal()];
                 break;
-            case SOUTH:
-            case NORTH:
+            case EAST:
+            case WEST:
                 angle[0] = angleMap[renderFacing.ordinal()];
             default:
 

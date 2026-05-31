@@ -57,9 +57,9 @@ public class RefineryBlockEntityRenderer extends BlockEntityRenderer {
             anim = refineryBlockEntity.getAnimationStage();
 
             angle = switch(refineryBlockEntity.facing){
-                case NORTH -> 180;
-                case EAST -> 90;
-                case WEST -> 270;
+                case WEST -> 180;
+                case NORTH -> 90;
+                case SOUTH -> 270;
                 default -> 0;
             };
 
