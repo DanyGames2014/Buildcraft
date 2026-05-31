@@ -264,34 +264,34 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.WEST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.WEST)) {
+            if (!world.isRemote ? connections.get(Direction.SOUTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.WEST)) {
                 this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, 1.0F);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.EAST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.EAST)) {
+            if (!world.isRemote ? connections.get(Direction.NORTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.EAST)) {
                 this.setBoundingBox(minOffset, minOffset, 0.0F, maxOffset, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.SOUTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.SOUTH)) {
+            if (!world.isRemote ? connections.get(Direction.EAST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.SOUTH)) {
                 this.setBoundingBox(minOffset, minOffset, minOffset, 1.0F, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.NORTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.NORTH)) {
+            if (!world.isRemote ? connections.get(Direction.WEST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.NORTH)) {
                 this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
             float facadeThickness = Constants.FACADE_THICKNESS;
 
-            if (pipe.hasEnabledFacade(Direction.SOUTH)) {
+            if (pipe.hasEnabledFacade(Direction.EAST)) {
                 setBoundingBox(1 - facadeThickness, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (pipe.hasEnabledFacade(Direction.NORTH)) {
+            if (pipe.hasEnabledFacade(Direction.WEST)) {
                 setBoundingBox(0.0F, 0.0F, 0.0F, facadeThickness, 1.0F, 1.0F);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
@@ -306,12 +306,12 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (pipe.hasEnabledFacade(Direction.WEST)) {
+            if (pipe.hasEnabledFacade(Direction.SOUTH)) {
                 setBoundingBox(0.0F, 0.0F, 1 - facadeThickness, 1.0F, 1.0F, 1.0F);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (pipe.hasEnabledFacade(Direction.EAST)) {
+            if (pipe.hasEnabledFacade(Direction.NORTH)) {
                 setBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, facadeThickness);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }

@@ -57,9 +57,9 @@ public abstract class MarkerBlock extends TemplateBlockWithEntity {
         return switch (facing) {
             case DOWN -> Box.createCached(0.5F - w, 1F - h, 0.5F - w, 0.5F + w, 1F, 0.5F + w);
             case UP -> Box.createCached(0.5F - w, 0F, 0.5F - w, 0.5F + w, h, 0.5F + w);
-            case WEST -> Box.createCached(0.5F - w, 0.5F - w, 0F, 0.5F + w, 0.5F + w, h);
-            case EAST -> Box.createCached(0.5F - w, 0.5F - w, 1 - h, 0.5F + w, 0.5F + w, 1);
-            case SOUTH -> Box.createCached(0F, 0.5F - w, 0.5F - w, h, 0.5F + w, 0.5F + w);
+            case SOUTH -> Box.createCached(0.5F - w, 0.5F - w, 0F, 0.5F + w, 0.5F + w, h);
+            case NORTH -> Box.createCached(0.5F - w, 0.5F - w, 1 - h, 0.5F + w, 0.5F + w, 1);
+            case EAST -> Box.createCached(0F, 0.5F - w, 0.5F - w, h, 0.5F + w, 0.5F + w);
             default -> Box.createCached(1 - h, 0.5F - w, 0.5F - w, 1F, 0.5F + w, 0.5F + w);
         };
     }
