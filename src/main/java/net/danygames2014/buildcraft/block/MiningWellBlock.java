@@ -43,6 +43,10 @@ public class MiningWellBlock extends TemplateMachineBlock implements Wrenchable 
     @Override
     public boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
         if (wrenchMode == WrenchMode.MODE_WRENCH) {
+            if (isSneaking) {
+                return super.wrenchRightClick(stack, player, isSneaking, world, x, y, z, side, wrenchMode);
+            }
+            
             if (world.getBlockEntity(x, y, z) instanceof MiningWellBlockEntity miningWell) {
                 miningWell.setActive(!miningWell.isActive());
                 return true;

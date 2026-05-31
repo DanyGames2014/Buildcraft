@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.util.Identifier;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
-public class FloodGateBlock extends TemplateMachineBlock{
+public class FloodGateBlock extends TemplateMachineBlock {
     public FloodGateBlock(Identifier identifier, Material material) {
         super(identifier, material);
     }
@@ -22,20 +22,27 @@ public class FloodGateBlock extends TemplateMachineBlock{
 
     @Override
     public boolean wrenchRightClick(ItemStack stack, PlayerEntity player, boolean isSneaking, World world, int x, int y, int z, int side, WrenchMode wrenchMode) {
-        if(world.getBlockEntity(x, y, z) instanceof FloodGateBlockEntity blockEntity){
-            if(side == 1){
-                blockEntity.rebuildQueue();
-            } else {
-                blockEntity.switchSide(Direction.byId(side));
+        if (wrenchMode == WrenchMode.MODE_WRENCH) {
+            if (isSneaking) {
+                return super.wrenchRightClick(stack, player, isSneaking, world, x, y, z, side, wrenchMode);
             }
-            return true;
+            
+            if (world.getBlockEntity(x, y, z) instanceof FloodGateBlockEntity blockEntity) {
+                if (side == 1) {
+                    blockEntity.rebuildQueue();
+                } else {
+                    blockEntity.switchSide(Direction.byId(side));
+                }
+                return true;
+            }
         }
-        return false;
+        
+        return super.wrenchRightClick(stack, player, isSneaking, world, x, y, z, side, wrenchMode);
     }
 
     @Override
     public void neighborUpdate(World world, int x, int y, int z, int id) {
-        if(world.getBlockEntity(x, y, z) instanceof FloodGateBlockEntity blockEntity){
+        if (world.getBlockEntity(x, y, z) instanceof FloodGateBlockEntity blockEntity) {
             blockEntity.neighborUpdate();
         }
     }
