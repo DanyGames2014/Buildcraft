@@ -189,10 +189,10 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
         int maxZ = z + 5;
 
         switch (getFacing().rotateCounterclockwise(Direction.Axis.Y)) {
-            case WEST:
+            case SOUTH:
                 maxX = x;
                 break;
-            case EAST:
+            case NORTH:
                 minX = x;
                 break;
             case DOWN:
@@ -201,12 +201,12 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
             case UP:
                 minY = y;
                 break;
-            case NORTH:
+            case WEST:
                 maxZ = z;
                 break;
             //noinspection DefaultNotLastCaseInSwitch
             default:
-            case SOUTH:
+            case EAST:
                 minZ = z;
                 break;
         }
@@ -246,10 +246,10 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
 
         switch (getFacing().rotateCounterclockwise(Direction.Axis.Y)) {
 
-            case WEST:
+            case SOUTH:
                 px = -LASER_OFFSET;
                 break;
-            case EAST:
+            case NORTH:
                 px = LASER_OFFSET;
                 break;
             case DOWN:
@@ -258,10 +258,10 @@ public class LaserBlockEntity extends BlockEntity implements IPowerReceptor, Con
             case UP:
                 py = LASER_OFFSET;
                 break;
-            case NORTH:
+            case WEST:
                 pz = -LASER_OFFSET;
                 break;
-            case SOUTH:
+            case EAST:
             default:
                 pz = LASER_OFFSET;
                 break;
