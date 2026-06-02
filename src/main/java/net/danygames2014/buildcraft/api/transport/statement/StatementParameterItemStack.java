@@ -1,6 +1,8 @@
 package net.danygames2014.buildcraft.api.transport.statement;
 
 import net.danygames2014.buildcraft.Buildcraft;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -8,7 +10,6 @@ import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class StatementParameterItemStack implements StatementParameter {
-
     protected ItemStack stack;
 
     @Override
@@ -16,6 +17,7 @@ public class StatementParameterItemStack implements StatementParameter {
         return Buildcraft.NAMESPACE.id("stack");
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public Atlas.Sprite getSprite() {
         return null;
@@ -26,6 +28,7 @@ public class StatementParameterItemStack implements StatementParameter {
         return stack;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void registerTextures() {
 

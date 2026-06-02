@@ -5,6 +5,8 @@ import net.danygames2014.buildcraft.api.transport.statement.Statement;
 import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.StatementMouseClick;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -13,7 +15,7 @@ import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
 
 public class StatementParameterRedstoneGateSideOnly implements StatementParameter {
-
+    @Environment(EnvType.CLIENT)
     private static Atlas.Sprite icon;
     public boolean isOn = false;
 
@@ -22,6 +24,7 @@ public class StatementParameterRedstoneGateSideOnly implements StatementParamete
         return Buildcraft.NAMESPACE.id("redstoneGateSideOnly");
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public Atlas.Sprite getSprite() {
         if (!isOn) {
@@ -36,6 +39,7 @@ public class StatementParameterRedstoneGateSideOnly implements StatementParamete
         return null;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void registerTextures() {
         icon = Atlases.getGuiItems().addTexture(Buildcraft.NAMESPACE.id("item/trigger/redstone_gate_side_only"));

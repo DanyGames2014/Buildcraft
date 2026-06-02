@@ -24,6 +24,8 @@ import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
+import net.fabricmc.api.EnvironmentInterfaces;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -51,6 +53,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
+@EnvironmentInterfaces({
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithWorldRenderer.class),
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithInventoryRenderer.class),
+})
 public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, Debuggable, BlockWithWorldRenderer, BlockWithInventoryRenderer, PaintableBlock, RedstoneLevelProvider {
     public final PipeType type;
     public final PipeBehavior behavior;

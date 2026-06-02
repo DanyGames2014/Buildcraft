@@ -8,6 +8,8 @@ import net.danygames2014.uniwrench.api.WrenchMode;
 import net.danygames2014.uniwrench.api.Wrenchable;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
+import net.fabricmc.api.EnvironmentInterfaces;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -35,6 +37,10 @@ import org.lwjgl.opengl.GL11;
 import java.util.Random;
 
 @SuppressWarnings("deprecation")
+@EnvironmentInterfaces({
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithWorldRenderer.class),
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithInventoryRenderer.class),
+})
 public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements BlockWithInventoryRenderer, BlockWithWorldRenderer, Wrenchable, Debuggable {
     public static final EnumProperty<EnergyStage> ENERGY_STAGE_PROPERTY = EnumProperty.of("energy_stage", EnergyStage.class);
     public static final BooleanProperty PUMPING_PROPERTY = BooleanProperty.of("pumping");

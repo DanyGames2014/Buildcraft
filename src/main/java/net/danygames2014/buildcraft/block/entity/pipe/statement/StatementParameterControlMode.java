@@ -7,6 +7,8 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.StatementMouseClick;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.registry.ControlModeRegistry;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
@@ -14,7 +16,6 @@ import net.modificationstation.stationapi.api.util.Identifier;
 
 // TODO: finish implementing
 public class StatementParameterControlMode implements StatementParameter {
-
     private ControlMode controlMode;
 
     @Override
@@ -22,6 +23,7 @@ public class StatementParameterControlMode implements StatementParameter {
         return Buildcraft.NAMESPACE.id("control_mode");
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public Atlas.Sprite getSprite() {
         return controlMode.sprite;
@@ -32,6 +34,7 @@ public class StatementParameterControlMode implements StatementParameter {
         return null;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void registerTextures() {
 

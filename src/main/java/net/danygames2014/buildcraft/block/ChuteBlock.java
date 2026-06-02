@@ -7,6 +7,8 @@ import net.danygames2014.buildcraft.screen.handler.ChuteScreenHandler;
 import net.danygames2014.nyalib.block.DropInventoryOnBreak;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.api.EnvironmentInterface;
+import net.fabricmc.api.EnvironmentInterfaces;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -24,6 +26,10 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import org.lwjgl.opengl.GL11;
 
 @SuppressWarnings("deprecation")
+@EnvironmentInterfaces({
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithWorldRenderer.class),
+        @EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithInventoryRenderer.class),
+})
 public class ChuteBlock extends TemplateMachineBlock implements BlockWithWorldRenderer, BlockWithInventoryRenderer, DropInventoryOnBreak {
     @Environment(EnvType.CLIENT)
     protected ChuteRenderer chuteRenderer;

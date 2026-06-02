@@ -3,6 +3,8 @@ package net.danygames2014.buildcraft.block;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.client.render.block.FrameWorldRenderer;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.EnvironmentInterface;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.render.block.BlockRenderManager;
@@ -26,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
+@EnvironmentInterface(value = EnvType.CLIENT, itf = BlockWithWorldRenderer.class)
 public class FrameBlock extends TemplateBlock implements BlockWithWorldRenderer {
     public static final HashMap<Direction, BooleanProperty> PROPERTY_LOOKUP = new HashMap<>();
     private final Random random = new Random();

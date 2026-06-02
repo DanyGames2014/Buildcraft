@@ -6,22 +6,29 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.StatementMouseClick;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlas;
 import net.modificationstation.stationapi.api.client.texture.atlas.Atlases;
 import net.modificationstation.stationapi.api.util.Identifier;
+import net.modificationstation.stationapi.api.util.SideUtil;
 
 import java.util.Locale;
 
 public class TriggerParameterSignal implements StatementParameter {
-    public static Atlas.Sprite[] sprites = new Atlas.Sprite[8];
+    @Environment(EnvType.CLIENT)
+    public static Atlas.Sprite[] sprites;
 
     public boolean active = false;
     public PipeWire color = null;
 
-    public TriggerParameterSignal(){
+    public TriggerParameterSignal() {
+        SideUtil.run(() -> {
+            sprites = new Atlas.Sprite[8];
+        }, () -> {});
 
     }
 
@@ -30,6 +37,7 @@ public class TriggerParameterSignal implements StatementParameter {
         return Buildcraft.NAMESPACE.id("pipeWireTrigger");
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public Atlas.Sprite getSprite() {
         if (color == null) {
@@ -44,6 +52,7 @@ public class TriggerParameterSignal implements StatementParameter {
         return null;
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void registerTextures() {
         sprites = new Atlas.Sprite[]{

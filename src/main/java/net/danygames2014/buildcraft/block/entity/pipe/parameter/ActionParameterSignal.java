@@ -6,6 +6,8 @@ import net.danygames2014.buildcraft.api.transport.statement.StatementContainer;
 import net.danygames2014.buildcraft.api.transport.statement.StatementMouseClick;
 import net.danygames2014.buildcraft.api.transport.statement.StatementParameter;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeWire;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -16,6 +18,7 @@ import net.modificationstation.stationapi.api.util.Identifier;
 import java.util.Locale;
 
 public class ActionParameterSignal implements StatementParameter {
+    @Environment(EnvType.CLIENT)
     private static Atlas.Sprite[] icons;
 
     public PipeWire color = null;
@@ -29,6 +32,7 @@ public class ActionParameterSignal implements StatementParameter {
         return Buildcraft.NAMESPACE.id("pipe_wire_action");
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public Atlas.Sprite getSprite() {
         if (color == null) {
@@ -52,6 +56,7 @@ public class ActionParameterSignal implements StatementParameter {
         }
     }
 
+    @Environment(EnvType.CLIENT)
     @Override
     public void registerTextures() {
         icons = new Atlas.Sprite[] {
