@@ -16,6 +16,10 @@ public abstract class AreaWorkerBlock extends TemplateMachineBlock {
     public void onPlaced(World world, int x, int y, int z) {
         super.onPlaced(world, x, y, z);
 
+        if (world.isRemote) {
+            return;
+        }
+        
         if (world.getBlockEntity(x, y, z) instanceof AreaWorkerBlockEntity areaWorker) {
             constructWorkingArea(world, x, y, z, areaWorker);
         }
