@@ -24,28 +24,29 @@ public class FluidListener {
     public static Fluid fuel;
 
     @EventListener
-    public void registerFluids(FluidRegistryEvent event){
+    public void registerFluids(FluidRegistryEvent event) {
         event.register(oil = new FluidBuilder(NAMESPACE.id("oil"), NAMESPACE.id("block/oil_still"), NAMESPACE.id("block/oil_flowing"))
-                               .color(0x000000)
-                               .tickRate(20)
-                               .build()
+                .color(0x000000)
+                .tickRate(20)
+                .movementSpeedMultiplier(0.2F)
+                .build()
         );
         event.register(fuel = new FluidBuilder(NAMESPACE.id("fuel"), NAMESPACE.id("block/fuel_still"), NAMESPACE.id("block/fuel_flowing"))
-                               .color(0xC4C00E)
-                               .build()
+                .color(0xC4C00E)
+                .build()
         );
     }
-    
+
     @EventListener
     public void afterFluidRegister(AfterFluidRegistryEvent event) {
         // Engine Coolants and Fuels
         EngineCoolantRegistry.register(Fluids.WATER, new EngineCoolant(Fluids.WATER, 0.023F));
         EngineFuelRegistry.register(oil, new EngineFuel(oil, 3, (int) (25000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
         EngineFuelRegistry.register(fuel, new EngineFuel(fuel, 6, (int) (25000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
-        
+
         // Refinery Recipes
         StationAPI.EVENT_BUS.post(new RefineryRecipeRegisterEvent());
-        
+
         // Pump Blacklist
         Config.initPumpBlacklist();
     }
