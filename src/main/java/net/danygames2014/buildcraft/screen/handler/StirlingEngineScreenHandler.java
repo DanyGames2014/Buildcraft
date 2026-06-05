@@ -17,7 +17,7 @@ public class StirlingEngineScreenHandler extends ScreenHandler {
     
     private final StirlingEngineBlockEntity engine;
     
-    private int burnTime;
+    public int scaledBurnTime;
 
     public StirlingEngineScreenHandler(PlayerEntity player, StirlingEngineBlockEntity engine) {
         this.player = player;
@@ -67,7 +67,7 @@ public class StirlingEngineScreenHandler extends ScreenHandler {
     @Override
     public void addListener(ScreenHandlerListener listener) {
         super.addListener(listener);
-        listener.onPropertyUpdate(this, 0, this.engine.getBurnTime());
+        listener.onPropertyUpdate(this, 0, this.engine.getScaledBurnTime(12));
     }
 
     @Override
@@ -76,9 +76,9 @@ public class StirlingEngineScreenHandler extends ScreenHandler {
 
         for (var listenerO : this.listeners) {
             if (listenerO instanceof ScreenHandlerListener listener) {
-                if (this.burnTime != this.engine.getBurnTime()) {
-                    this.burnTime = this.engine.getBurnTime();
-                    listener.onPropertyUpdate(this, 0, this.burnTime);
+                if (this.scaledBurnTime != this.engine.getScaledBurnTime(12)) {
+                    this.scaledBurnTime = this.engine.getScaledBurnTime(12);
+                    listener.onPropertyUpdate(this, 0, this.scaledBurnTime);
                 }
             }
         }
@@ -89,7 +89,7 @@ public class StirlingEngineScreenHandler extends ScreenHandler {
     public void setProperty(int id, int value) {
         switch (id) {
             case 0 -> {
-                this.burnTime = value;
+                this.scaledBurnTime = value;
             }
         }
     }
