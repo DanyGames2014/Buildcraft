@@ -28,8 +28,17 @@ public class StirlingEngineScreen extends EngineScreen {
         int y = (height - backgroundHeight) / 2;
         drawTexture(x, y, 0, 0, backgroundWidth, backgroundHeight);
 
-        if (engine.getScaledBurnTime(12) > 0) {
-            int scaledBurnTime = engine.getScaledBurnTime(12);
+        int scaledBurnTime = engine.getScaledBurnTime(12);
+        
+        if (this.minecraft.world != null && this.minecraft.world.isRemote) {
+            if (this.handler instanceof StirlingEngineScreenHandler stirlingEngineScreenHandler) {
+                scaledBurnTime = stirlingEngineScreenHandler.scaledBurnTime;
+            }
+        } else {
+            scaledBurnTime = engine.getScaledBurnTime(12);
+        }
+        
+        if (scaledBurnTime > 0) {
             drawTexture(x + 80, (y + 24 + 12) - scaledBurnTime, 176, 12 - scaledBurnTime, 14, scaledBurnTime + 2);
         }
     }
