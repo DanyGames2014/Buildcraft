@@ -17,3 +17,4 @@ accessible field net/minecraft/client/resource/language/TranslationStorage INSTA
 accessible field net/minecraft/client/resource/language/TranslationStorage translations Ljava/util/Properties;
 accessible field net/minecraft/client/render/item/ItemRenderer random Ljava/util/Random;
 accessible method net/minecraft/block/Block getDroppedItemMeta (I)I
+accessible field net/minecraft/world/biome/source/BiomeSource temperatureSampler Lnet/minecraft/util/math/noise/OctaveSimplexNoiseSampler;

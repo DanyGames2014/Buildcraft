@@ -12,6 +12,7 @@ import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.transporter.EnergyPipeTransporter;
 import net.danygames2014.nyalib.block.BlockEntityInit;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import net.modificationstation.stationapi.api.block.BlockState;
@@ -19,9 +20,12 @@ import net.modificationstation.stationapi.api.block.States;
 import net.modificationstation.stationapi.api.state.property.Properties;
 import net.modificationstation.stationapi.api.util.math.Direction;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 
-public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowerReceptor, IPowerEmitter, BlockEntityInit {
+public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements IPowerReceptor, IPowerEmitter, BlockEntityInit {
     // Constants
     public static final float MIN_HEAT = 20.0F;
     public static final float IDEAL_HEAT = 100.0F;
@@ -512,6 +516,23 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         progress = nbt.getFloat("progress");
         energy = nbt.getDouble("energy");
         heat = nbt.getFloat("heat");
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        stream.writeDouble(energy);
+        stream.writeFloat(heat);
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        energy = stream.readDouble();
+        heat = stream.readFloat();
+    }
+
+    @Override
+    public void onBlockEntityUpdatePacket(ServerPlayerEntity player) {
+
     }
 
     @Override

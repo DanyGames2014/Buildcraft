@@ -5,12 +5,14 @@ import net.danygames2014.buildcraft.block.entity.pipe.DiamondPipeBlockEntity;
 import net.danygames2014.buildcraft.block.entity.pipe.PipeBlockEntity;
 import net.danygames2014.buildcraft.screen.*;
 import net.mine_diver.unsafeevents.listener.EventListener;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.modificationstation.stationapi.api.client.gui.screen.GuiHandler;
 import net.modificationstation.stationapi.api.event.registry.GuiHandlerRegistryEvent;
 import net.modificationstation.stationapi.api.mod.entrypoint.Entrypoint;
+import net.modificationstation.stationapi.api.network.packet.MessagePacket;
 import net.modificationstation.stationapi.api.util.Namespace;
 
 public class ScreenHandlerListener {
@@ -21,8 +23,8 @@ public class ScreenHandlerListener {
     @EventListener
     public void registerScreenHandlers(GuiHandlerRegistryEvent event) {
         event.register(NAMESPACE.id("chute_screen"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openChuteScreen, ChuteBlockEntity::new));
-        event.register(NAMESPACE.id("stirling_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openStirlingEngineScreen, StirlingEngineBlockEntity::new));
-        event.register(NAMESPACE.id("combustion_engine"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openCombustionEngineScreen, CombustionEngineBlockEntity::new));
+        event.register(NAMESPACE.id("stirling_engine"), new GuiHandler(this::openStirlingEngineScreen, StirlingEngineBlockEntity::new));
+        event.register(NAMESPACE.id("combustion_engine"), new GuiHandler(this::openCombustionEngineScreen, CombustionEngineBlockEntity::new));
         event.register(NAMESPACE.id("autocrafting_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAutocraftingTableScreen, AutocraftingTableBlockEntity::new));
         event.register(NAMESPACE.id("assembly_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openAssemblyTableScreen, AssemblyTableBlockEntity::new));
         event.register(NAMESPACE.id("integration_table"), new GuiHandler((GuiHandler.ScreenFactoryNoMessage) this::openIntegrationTableScreen, IntegrationTableBlockEntity::new));
@@ -53,12 +55,20 @@ public class ScreenHandlerListener {
         return new ChuteScreen(playerEntity.inventory, (ChuteBlockEntity) inventory);
     }
 
-    public Screen openStirlingEngineScreen(PlayerEntity playerEntity, Inventory inventory) {
-        return new StirlingEngineScreen(playerEntity, (StirlingEngineBlockEntity) inventory);
+    public Screen openStirlingEngineScreen(PlayerEntity playerEntity, Inventory inventory, MessagePacket message) {
+        BlockEntity blockEntity = playerEntity.world.getBlockEntity(message.ints[1], message.ints[2], message.ints[3]);
+        if(blockEntity instanceof StirlingEngineBlockEntity engine) {
+            return new StirlingEngineScreen(playerEntity, engine);
+        }
+        return null;
     }
 
-    public Screen openCombustionEngineScreen(PlayerEntity playerEntity, Inventory inventory) {
-        return new CombustionEngineScreen(playerEntity, (CombustionEngineBlockEntity) inventory);
+    public Screen openCombustionEngineScreen(PlayerEntity playerEntity, Inventory inventory,  MessagePacket message) {
+        BlockEntity blockEntity = playerEntity.world.getBlockEntity(message.ints[1], message.ints[2], message.ints[3]);
+        if(blockEntity instanceof CombustionEngineBlockEntity engine) {
+            return new CombustionEngineScreen(playerEntity, engine);
+        }
+        return null;
     }
     
     public Screen openAutocraftingTableScreen(PlayerEntity playerEntity, Inventory inventory) {

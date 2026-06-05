@@ -28,7 +28,9 @@ public class CombustionEngineBlock extends BaseEngineBlock implements DropInvent
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (world.getBlockEntity(x, y, z) instanceof CombustionEngineBlockEntity engine) {
-            GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("combustion_engine"), engine, new CombustionEngineScreenHandler(player, engine));
+            GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("combustion_engine"), engine, new CombustionEngineScreenHandler(player, engine), (messagePacket -> {
+                messagePacket.ints = new int[]{messagePacket.ints != null ? messagePacket.ints[0] : 0, x, y, z};
+            }));
             return true;
         }
 

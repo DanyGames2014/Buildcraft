@@ -28,7 +28,9 @@ public class StirlingEngineBlock extends BaseEngineBlock implements DropInventor
     @Override
     public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
         if (world.getBlockEntity(x, y, z) instanceof StirlingEngineBlockEntity engine) {
-            GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("stirling_engine"), engine, new StirlingEngineScreenHandler(player, engine));
+            GuiHelper.openGUI(player, Buildcraft.NAMESPACE.id("stirling_engine"), engine, new StirlingEngineScreenHandler(player, engine), (messagePacket -> {
+                messagePacket.ints = new int[]{messagePacket.ints != null ? messagePacket.ints[0] : 0, x, y, z};
+            }));
             return true;
         }
         

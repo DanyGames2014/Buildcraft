@@ -8,6 +8,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntity {
     final float MAX_OUTPUT = 1f;
     final float MIN_OUTPUT = MAX_OUTPUT / 3;
@@ -118,5 +122,17 @@ public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntit
         super.writeNbt(nbt);
         nbt.putInt("burnTime", burnTime);
         nbt.putInt("totalBurnTime", maxBurnTime);
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        super.readData(stream);
+        esum = stream.readDouble();
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        super.writeData(stream);
+        stream.writeDouble(esum);
     }
 }

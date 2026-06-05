@@ -2,10 +2,13 @@ package net.danygames2014.buildcraft.screen;
 
 import net.danygames2014.buildcraft.block.entity.BaseEngineBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.danygames2014.buildcraft.packet.RequestSyncedBlockEntityUpdateC2SPacket;
 import net.danygames2014.buildcraft.util.ScreenUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resource.language.TranslationStorage;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.screen.ScreenHandler;
+import net.modificationstation.stationapi.api.network.packet.PacketHelper;
 
 public abstract class EngineScreen extends BuildcraftScreen{
     public EngineScreen(ScreenHandler container, Inventory inventory) {
@@ -31,6 +34,11 @@ public abstract class EngineScreen extends BuildcraftScreen{
 
         @Override
         public void draw(int x, int y) {
+
+            if(Minecraft.INSTANCE.world != null && Minecraft.INSTANCE.world.isRemote && Minecraft.INSTANCE.world.getTime() % 10 == 0){
+                PacketHelper.send(new RequestSyncedBlockEntityUpdateC2SPacket(blockEntity.x, blockEntity.y, blockEntity.z));
+            }
+
             drawBackground(x, y);
             ScreenUtil.drawSprite(TextureListener.energySprite, x + 3, y + 4, 16, 16, zOffset);
 
@@ -47,7 +55,7 @@ public abstract class EngineScreen extends BuildcraftScreen{
             textRenderer.drawWithShadow(translationStorage.get("gui.buildcraft.engine.stored") + ":", x + 22, y + 44, subheaderColor);
             textRenderer.draw(String.format("%.1f MJ", engine.getEnergyStored()), x + 22, y + 56, textColor);
             textRenderer.drawWithShadow(translationStorage.get("gui.buildcraft.engine.heat") + ":", x + 22, y + 68, subheaderColor);
-            textRenderer.draw(String.format("%.2f °C", (engine.getHeat() / 100.0) + 20.0), x + 22, y + 80, textColor);
+            textRenderer.draw(String.format("%.2f °C", engine.getHeat()), x + 22, y + 80, textColor);
         }
 
         @Override

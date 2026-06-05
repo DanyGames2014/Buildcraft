@@ -6,6 +6,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class CreativeEngineBlockEntity  extends BaseEngineBlockEntity{
     private PowerMode powerMode = PowerMode.M2;
 
@@ -91,5 +95,17 @@ public class CreativeEngineBlockEntity  extends BaseEngineBlockEntity{
             TranslationStorage translationStorage = TranslationStorage.getInstance();
             player.sendMessage(String.format(translationStorage.get("chat.engine.creative.mode"), powerMode.maxPower));
         }
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        super.readData(stream);
+        powerMode = PowerMode.values()[stream.readInt()];
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        super.writeData(stream);
+        stream.writeInt(powerMode.ordinal());
     }
 }

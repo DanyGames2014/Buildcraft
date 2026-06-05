@@ -14,6 +14,10 @@ import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEntity implements FluidHandler {
     // Constants
     public static final int FLUID_CAPACITY = 10000;
@@ -235,13 +239,18 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
 
     private float getBiomeTempScalar() {
         if (biomeTemperature == -1) {
-            biomeTemperature = (float) world.method_1781().getTemperature(x, z);
+            biomeTemperature = (float) getTemperature();
         }
 
         float tempScalar = biomeTemperature - 1.0F;
         tempScalar *= 0.5F;
         tempScalar += 1.0F;
         return tempScalar;
+    }
+
+    private double getTemperature() {
+        world.method_1781().temperatureMap = world.method_1781().temperatureSampler.sample(world.method_1781().temperatureMap, x, z, 1, 1, 0.025F, 0.025F, 0.5F);
+        return world.method_1781().temperatureMap[0];
     }
 
     // FluidHandler
@@ -380,5 +389,26 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         }
         
         return super.insertItem(stack, slot, side);
+    }
+
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        super.writeData(stream);
+        if(currentFuel == null) {
+            stream.writeInt(-1);
+        } else {
+            stream.writeInt(1);
+            currentFuel.writeData(stream);
+        }
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        super.readData(stream);
+        if(stream.readInt() == 1) {
+            currentFuel = EngineFuel.fromDataInputStream(stream);
+        } else {
+            currentFuel = null;
+        }
     }
 }
