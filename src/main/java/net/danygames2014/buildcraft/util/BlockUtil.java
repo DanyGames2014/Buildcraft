@@ -1,6 +1,9 @@
 package net.danygames2014.buildcraft.util;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.danygames2014.buildcraft.init.FluidListener;
+import net.danygames2014.nyalib.fluid.FluidRegistry;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.LiquidBlock;
 import net.minecraft.block.StillLiquidBlock;
@@ -29,7 +32,9 @@ public class BlockUtil {
         }
 
         if (block instanceof LiquidBlock) {
-            return false;
+            if (FluidRegistry.get(block.id) == Fluids.LAVA || FluidRegistry.get(block.id) == FluidListener.oil) {
+                return false;
+            }
         }
 
         return true;
