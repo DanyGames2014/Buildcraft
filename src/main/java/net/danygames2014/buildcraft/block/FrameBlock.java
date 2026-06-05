@@ -140,19 +140,19 @@ public class FrameBlock extends TemplateBlock implements BlockWithWorldRenderer 
             minY = 0.0F;
         }
 
-        if (state.get(Properties.WEST)) {
+        if (state.get(Properties.SOUTH)) {
             maxZ = 1.0F;
         }
 
-        if (state.get(Properties.EAST)) {
+        if (state.get(Properties.NORTH)) {
             minZ = 0.0F;
         }
 
-        if (state.get(Properties.NORTH)) {
+        if (state.get(Properties.WEST)) {
             minX = 0.0F;
         }
 
-        if (state.get(Properties.SOUTH)) {
+        if (state.get(Properties.EAST)) {
             maxX = 1.0F;
         }
 
@@ -176,22 +176,22 @@ public class FrameBlock extends TemplateBlock implements BlockWithWorldRenderer 
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(Properties.WEST)) {
+        if (state.get(Properties.SOUTH)) {
             this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, 1.0F);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(Properties.EAST)) {
+        if (state.get(Properties.NORTH)) {
             this.setBoundingBox(minOffset, minOffset, 0.0F, maxOffset, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(Properties.SOUTH)) {
+        if (state.get(Properties.EAST)) {
             this.setBoundingBox(minOffset, minOffset, minOffset, 1.0F, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
 
-        if (state.get(Properties.NORTH)) {
+        if (state.get(Properties.WEST)) {
             this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
             super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
         }
