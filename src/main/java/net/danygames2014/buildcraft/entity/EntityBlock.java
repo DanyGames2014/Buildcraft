@@ -142,4 +142,9 @@ public class EntityBlock extends Entity implements EntitySpawnDataProvider {
     public Identifier getHandlerIdentifier() {
         return Buildcraft.NAMESPACE.id("entity_block");
     }
+
+    @Override
+    public boolean syncTrackerAtSpawn() {
+        return true;
+    }
 }

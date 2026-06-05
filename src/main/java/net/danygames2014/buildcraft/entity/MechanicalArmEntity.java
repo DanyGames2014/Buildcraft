@@ -3,6 +3,7 @@ package net.danygames2014.buildcraft.entity;
 import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.block.entity.QuarryBlockEntity;
 import net.danygames2014.buildcraft.init.TextureListener;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
@@ -55,7 +56,6 @@ public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvid
 
     @Override
     protected void initDataTracker() {
-
     }
 
     @Override
@@ -80,6 +80,7 @@ public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvid
 
     @Override
     public void tick() {
+        if(world.isRemote)return;
         if(!initialized && parent != null) {
             setPositionAndAngles(parent.x, parent.y, parent.z, 0, 0);
             setArmSize(armSizeX, armSizeZ);
@@ -98,7 +99,7 @@ public class MechanicalArmEntity extends Entity implements EntitySpawnDataProvid
             findAndJoinQuarry();
         }
 
-        if (parent == null || parent.isRemoved()) {
+        if (parent == null|| parent.isRemoved()) {
             markDead();
         }
     }
