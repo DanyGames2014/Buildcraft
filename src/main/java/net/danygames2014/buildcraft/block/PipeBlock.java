@@ -270,22 +270,22 @@ public class PipeBlock extends TemplateBlockWithEntity implements Wrenchable, De
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.SOUTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.WEST)) {
+            if (!world.isRemote ? connections.get(Direction.SOUTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.SOUTH)) {
                 this.setBoundingBox(minOffset, minOffset, minOffset, maxOffset, maxOffset, 1.0F);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.NORTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.EAST)) {
+            if (!world.isRemote ? connections.get(Direction.NORTH) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.NORTH)) {
                 this.setBoundingBox(minOffset, minOffset, 0.0F, maxOffset, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.EAST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.SOUTH)) {
+            if (!world.isRemote ? connections.get(Direction.EAST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.EAST)) {
                 this.setBoundingBox(minOffset, minOffset, minOffset, 1.0F, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
 
-            if (!world.isRemote ? connections.get(Direction.WEST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.NORTH)) {
+            if (!world.isRemote ? connections.get(Direction.WEST) != PipeConnectionType.NONE : pipe.renderState.pipeConnectionMatrix.isConnected(Direction.WEST)) {
                 this.setBoundingBox(0.0F, minOffset, minOffset, maxOffset, maxOffset, maxOffset);
                 super.addIntersectingBoundingBox(world, x, y, z, box, boxes);
             }
