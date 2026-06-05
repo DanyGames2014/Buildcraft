@@ -169,4 +169,9 @@ public class RobotEntity extends Entity implements EntitySpawnDataProvider {
     public Identifier getHandlerIdentifier() {
         return Buildcraft.NAMESPACE.id("robot");
     }
+
+    @Override
+    public boolean syncTrackerAtSpawn() {
+        return true;
+    }
 }
