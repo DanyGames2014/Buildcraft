@@ -1,6 +1,7 @@
 package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.api.core.Position;
+import net.danygames2014.buildcraft.api.core.Serializable;
 import net.danygames2014.buildcraft.block.entity.pipe.LaserData;
 import net.danygames2014.buildcraft.entity.RobotEntity;
 import net.danygames2014.buildcraft.util.Constants;
@@ -10,9 +11,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-public abstract class AreaWorkerBlockEntity extends BlockEntity {
+public abstract class AreaWorkerBlockEntity extends SyncedBlockEntity {
     public WorkingArea workingArea;
     public RobotEntity robot;
     public int minHeight = 1;
@@ -30,6 +34,7 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
     
     public void constructWorkingArea(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         workingArea = new WorkingArea(this, minX, minY, minZ, maxX, maxY, maxZ);
+        sendNetworkUpdate();
     }
     
     public void destroyWorkingArea() {
@@ -96,13 +101,27 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
         return Constants.LASER_TEXTURES[4];
     }
 
-    public static class WorkingArea {
+    @Override
+    public void writeData(DataOutputStream stream) throws IOException {
+        workingArea.writeData(stream);
+    }
+
+    @Override
+    public void readData(DataInputStream stream) throws IOException {
+        if(workingArea == null) {
+            workingArea = new WorkingArea();
+        }
+        workingArea.readData(stream);
+    }
+
+    public static class WorkingArea implements Serializable {
         public int minX;
         public int minY;
         public int minZ;
         public int maxX;
         public int maxY;
         public int maxZ;
+        public boolean hasLasers = false;
         public final ArrayList<LaserData> lasers = new ArrayList<>();
 
         public WorkingArea() {
@@ -147,10 +166,12 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
 
         public void addLaser(int startX, int startY, int startZ, int endX, int endY, int endZ) {
             lasers.add(new LaserData(new Position(startX, startY, startZ), new Position(endX, endY, endZ)));
+            hasLasers = true;
         }
         
         public void clearLasers() {
             lasers.clear();
+            hasLasers = false;
         }
         
         public void writeNbt(NbtCompound nbt) {
@@ -183,6 +204,34 @@ public abstract class AreaWorkerBlockEntity extends BlockEntity {
 
         public int sizeZ() {
             return maxZ - minZ + 1;
+        }
+
+        @Override
+        public void writeData(DataOutputStream stream) throws IOException {
+            stream.writeInt(minX);
+            stream.writeInt(minY);
+            stream.writeInt(minZ);
+            stream.writeInt(maxX);
+            stream.writeInt(maxY);
+            stream.writeInt(maxZ);
+            stream.writeBoolean(hasLasers);
+        }
+
+        @Override
+        public void readData(DataInputStream stream) throws IOException {
+            minX = stream.readInt();
+            minY = stream.readInt();
+            minZ = stream.readInt();
+            maxX = stream.readInt();
+            maxY = stream.readInt();
+            maxZ = stream.readInt();
+            hasLasers = stream.readBoolean();
+
+            if(hasLasers) {
+                constructLasers();
+            } else {
+                clearLasers();
+            }
         }
     }
 }

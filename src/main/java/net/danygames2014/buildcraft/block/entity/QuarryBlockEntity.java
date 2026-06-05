@@ -140,6 +140,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
                                 setHead(workingArea.minX + 1, this.y + 2, workingArea.minZ + 1);
                             }
                             workingArea.clearLasers();
+                            sendNetworkUpdate();
                         }
                     }
                     break;
@@ -156,6 +157,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
 
                     if (!workingArea.lasers.isEmpty()) {
                         workingArea.clearLasers();
+                        sendNetworkUpdate();
                     }
                 }
 
@@ -165,6 +167,7 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
             case FINISHED:
                 if (workingArea != null && !workingArea.lasers.isEmpty()) {
                     workingArea.clearLasers();
+                    sendNetworkUpdate();
                 }
 
                 break;
