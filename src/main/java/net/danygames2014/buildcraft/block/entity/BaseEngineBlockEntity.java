@@ -99,13 +99,16 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             progress += getPistonSpeed();
 
             if (progress > 0.5 && stage == EngineStage.EXTENDING) {
+                // finished extending, send power and retract
                 stage = EngineStage.RETRACTING;
-                sendPower(); // Comment out for constant power
+                sendPower();
             } else if (progress >= 1) {
+                // finished retracting, reset progress
                 progress = 0;
                 stage = EngineStage.RETRACTED;
             }
         } else if (isRedstonePowered && isActive()) {
+            // fully retracted, check if we can start over
             if (isPoweredTile(tile, facing)) {
                 if (getPowerToExtract() > 0) {
                     stage = EngineStage.EXTENDING;
@@ -120,7 +123,9 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             setPumping(false);
         }
 
-        burnFuel();
+        if (getRequestedPowerByReceptor()) {
+            burnFuel();
+        }
     }
 
     protected void engineUpdate() {
@@ -129,6 +134,10 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
                 energy -= 1;
             } else if (energy < 1) {
                 energy = 0;
+            }
+        } else {
+            if (world.getTime() % 10 == 0 && !getRequestedPowerByReceptor()) {
+                addEnergy(-1);
             }
         }
 
@@ -161,11 +170,11 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
     // Blockstate Wrappers
     public boolean isPumping() {
         BlockState state = world.getBlockState(x, y, z);
-        
+
         if (state.contains(BaseEngineBlock.PUMPING_PROPERTY)) {
             return world.getBlockState(x, y, z).get(BaseEngineBlock.PUMPING_PROPERTY);
         }
-        
+
         return false;
     }
 
@@ -179,11 +188,11 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
 
     public Direction getFacing() {
         BlockState state = world.getBlockState(x, y, z);
-        
+
         if (state.contains(Properties.FACING)) {
             return world.getBlockState(x, y, z).get(Properties.FACING);
         }
-        
+
         return Direction.UP;
     }
 
@@ -219,7 +228,7 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
                 possibleRotations.add(direction);
             }
         }
-        
+
         loopedDirections.addAll(Arrays.asList(Direction.values()));
         loopedDirections.addAll(Arrays.asList(Direction.values()));
 
@@ -227,17 +236,17 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
             case 0 -> {
                 return false;
             }
-            
+
             case 1 -> {
                 setFacing(possibleRotations.get(0));
                 return true;
             }
-            
+
             default -> {
                 ObjectListIterator<Direction> dirs = loopedDirections.listIterator(0);
                 while (dirs.hasNext()) {
                     Direction dir = dirs.next();
-                    
+
                     if (getFacing() == dir) {
                         if (dirs.hasNext()) {
                             Direction next;
@@ -342,6 +351,10 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         if (energy > getMaxEnergy()) {
             energy = getMaxEnergy();
         }
+
+        if (energy < 0) {
+            energy = 0;
+        }
     }
 
     public double extractEnergy(double requestedMin, double requestedMax, boolean doExtract) {
@@ -389,6 +402,21 @@ public abstract class BaseEngineBlockEntity extends BlockEntity implements IPowe
         BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
         PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
         return extractEnergy(receptor.getMinEnergyReceived(), receptor.getMaxEnergyReceived(), false);
+    }
+
+    protected boolean getRequestedPowerByReceptor() {
+        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+
+        if (tile instanceof PipeBlockEntity pipe && pipe.transporter instanceof EnergyPipeTransporter energyTransporter) {
+            return true;
+        }
+
+        if (isPoweredTile(tile, getFacing())) {
+            PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
+            return receptor.powerRequest() > 0.0D;
+        }
+
+        return false;
     }
 
     private void sendPower() {

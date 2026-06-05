@@ -42,7 +42,7 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         // Top and Bottom
         SEARCH_OFFSETS.add(new Vec3i(0, 1, 0));
         SEARCH_OFFSETS.add(new Vec3i(0, -1, 0));
-        
+
         // Sides
         SEARCH_OFFSETS.add(new Vec3i(1, 0, 0));
         SEARCH_OFFSETS.add(new Vec3i(-1, 0, 0));
@@ -56,9 +56,16 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         SEARCH_OFFSETS.add(new Vec3i(-1, 0, -1));
     }
 
+    public MiningWellBlockEntity() {
+        powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
+
+        powerHandler.configure(Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
+    }
+
     @Override
     public void tick() {
         super.tick();
+        
         if (isActive()) {
             powerHandler.update();
         } else {
@@ -66,36 +73,37 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
                 retract();
             }
         }
-    }
-    
-    public boolean isActive() {
-        BlockState state = world.getBlockState(x,y, z);
         
+        if (world.getTime() % 20 == 0) {
+            reconfigurePowerHandler();
+        }
+    }
+
+    public boolean isActive() {
+        BlockState state = world.getBlockState(x, y, z);
+
         if (state.isOf(Buildcraft.miningWell)) {
             return state.get(MiningWellBlock.ACTIVE);
         }
-        
+
         return false;
     }
-    
+
     public void setActive(boolean active) {
-        BlockState state = world.getBlockState(x,y, z);
+        BlockState state = world.getBlockState(x, y, z);
 
         if (state.isOf(Buildcraft.miningWell)) {
             world.setBlockState(x, y, z, state.with(MiningWellBlock.ACTIVE, active));
-            
-            if (active) {
-                powerHandler.configure(Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);        
-            } else {
-                powerHandler.configure(0, 0, Integer.MAX_VALUE, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
-            }
+            reconfigurePowerHandler();
         }
     }
 
-    public MiningWellBlockEntity() {
-        powerHandler = new PowerHandler(this, PowerHandler.Type.MACHINE);
-
-        powerHandler.configure(Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
+    public void reconfigurePowerHandler() {
+        if (isActive()) {
+            powerHandler.configure(Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 2, Config.MACHINE_CONFIG.miningWell.mjPerBlock, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
+        } else {
+            powerHandler.configure(0, 0, Integer.MAX_VALUE, Config.MACHINE_CONFIG.miningWell.mjPerBlock * 10);
+        }
     }
 
     @Override
@@ -160,11 +168,11 @@ public class MiningWellBlockEntity extends BlockEntity implements IPowerReceptor
         if (state.isAir()) {
             return true;
         }
-        
+
         if (state.isOf(Buildcraft.miningPipe)) {
             return false;
         }
-        
+
         if (state.getBlock() instanceof LiquidBlock) {
             return true;
         }

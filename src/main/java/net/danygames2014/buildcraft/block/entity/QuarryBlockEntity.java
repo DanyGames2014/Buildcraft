@@ -182,6 +182,24 @@ public class QuarryBlockEntity extends AreaWorkerBlockEntity implements IPowerRe
                 destroyRobot();
             }
         }
+        
+        reconfigurePowerHandler();
+    }
+    
+    public void reconfigurePowerHandler() {
+        switch (status) {
+            case CLEARING_AREA, BUILDING_FRAME -> {
+                this.powerHandler.configure(25, 200, 25, 10000);
+            }
+            
+            case MINING -> {
+                powerHandler.configure(100, 500, miningCost, 15000);
+            }
+            
+            case IDLE, FINISHED -> {
+                this.powerHandler.configure(0, 0, 25, 10000);
+            }
+        }
     }
 
     public void performClearing() {

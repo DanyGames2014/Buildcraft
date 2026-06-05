@@ -36,9 +36,9 @@ public class RedstoneEngineBlockEntity extends BaseEngineBlockEntity {
     public void engineUpdate() {
         super.engineUpdate();
 
-        if (isRedstonePowered) {
-            if (world.getTime() % 16 == 0) {
-                addEnergy(1);
+        if (world.getTime() % 16 == 0) {
+            if (isRedstonePowered && getRequestedPowerByReceptor()) {
+                addEnergy(1);       
             }
         }
     }
