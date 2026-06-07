@@ -287,6 +287,9 @@ public class LandMarkerBlockEntity extends SyncedBlockEntity implements BlockEnt
     }
 
     private void createLasers() {
+        if(world.isRemote){
+            return;
+        }
         if (lasers != null) {
             for (EntityBlock entity : lasers) {
                 if (entity != null) {
