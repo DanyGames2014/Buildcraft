@@ -7,10 +7,10 @@
   ],
   "key": {
     "c": {
-      "item": "minecraft:cobblestone"
+      "tag": "c:cobblestones/normal"
     },
     "g": {
-      "item": "buildcraft:wooden_gear"
+      "tag": "c:gears/wooden"
     }
   },
   "result": {

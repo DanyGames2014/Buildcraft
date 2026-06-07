@@ -9,10 +9,10 @@
       "damage": 0
     },
     "g": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks/colorless"
     },
     "r": {
-      "item": "minecraft:redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "result": {

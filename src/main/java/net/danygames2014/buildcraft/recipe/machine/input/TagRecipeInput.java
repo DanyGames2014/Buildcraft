@@ -1,10 +1,10 @@
 package net.danygames2014.buildcraft.recipe.machine.input;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.modificationstation.stationapi.api.registry.ItemRegistry;
 import net.modificationstation.stationapi.api.registry.RegistryEntryList;
 import net.modificationstation.stationapi.api.tag.TagKey;
+import net.modificationstation.stationapi.api.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,14 @@ public class TagRecipeInput extends RecipeInput {
     }
     
     public TagRecipeInput(TagKey<Item> itemTag) {
+        this(itemTag, 1);
+    }
+    
+    public TagRecipeInput(String itemTag, int count) {
+        this(TagKey.of(ItemRegistry.KEY, Identifier.of(itemTag)), count);
+    }
+    
+    public TagRecipeInput(String itemTag) {
         this(itemTag, 1);
     }
 

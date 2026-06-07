@@ -7,16 +7,16 @@
   ],
   "key": {
     "o": {
-      "item": "minecraft:obsidian"
+      "tag": "c:obsidians/normal"
     },
     "r": {
-      "item": "minecraft:redstone"
+      "tag": "c:dusts/redstone"
     },
     "d": {
-      "item": "minecraft:diamond"
+      "tag": "c:gems/diamond"
     },
     "g": {
-      "item": "buildcraft:diamond_gear"
+      "tag": "c:gears/diamond"
     }
   },
   "result": {

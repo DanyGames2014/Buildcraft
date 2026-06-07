@@ -5,10 +5,10 @@
   ],
   "key": {
     "s": {
-      "item": "minecraft:sandstone"
+      "tag": "c:sandstone/blocks"
     },
     "g": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks/colorless"
     }
   },
   "result": {

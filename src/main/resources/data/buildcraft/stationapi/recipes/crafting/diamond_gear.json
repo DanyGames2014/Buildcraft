@@ -7,10 +7,10 @@
   ],
   "key": {
     "d": {
-      "item": "minecraft:diamond"
+      "tag": "c:gems/diamond"
     },
     "g": {
-      "item": "buildcraft:golden_gear"
+      "tag": "c:gears/gold"
     }
   },
   "result": {

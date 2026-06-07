@@ -8,7 +8,7 @@
       "item": "minecraft:diamond"
     },
     "g": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks/colorless"
     }
   },
   "result": {

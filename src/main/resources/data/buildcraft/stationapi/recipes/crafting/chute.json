@@ -10,10 +10,10 @@
       "item": "minecraft:iron_ingot"
     },
     "c": {
-      "item": "minecraft:chest"
+      "tag": "c:chests/wooden"
     },
     "g": {
-      "item": "buildcraft:stone_gear"
+      "tag": "c:gears/stone"
     }
   },
   "result": {

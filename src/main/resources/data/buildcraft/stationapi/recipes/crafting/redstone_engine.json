@@ -7,13 +7,13 @@
   ],
   "key": {
     "w": {
-      "tag": "minecraft:planks"
+      "tag": "c:planks"
     },
     "s": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks/colorless"
     },
     "g": {
-      "item": "buildcraft:wooden_gear"
+      "tag": "c:gears/wooden"
     },
     "p": {
       "item": "minecraft:piston"

@@ -20,7 +20,7 @@
       "item": "minecraft:crafting_table"
     },
     "g": {
-      "item": "buildcraft:diamond_gear"
+      "tag": "c:gears/diamond"
     },
     "t": {
       "item": "buildcraft:template"

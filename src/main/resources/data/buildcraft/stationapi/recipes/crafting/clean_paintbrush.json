@@ -10,13 +10,13 @@
       "item": "minecraft:wool"
     },
     "g": {
-      "item": "buildcraft:wooden_gear"
+      "tag": "c:gears/wooden"
     },
     "t": {
-      "item": "minecraft:stick"
+      "tag": "c:sticks/wooden"
     },
     "s": {
-      "item": "minecraft:string"
+      "tag": "c:strings"
     }
   },
   "result": {

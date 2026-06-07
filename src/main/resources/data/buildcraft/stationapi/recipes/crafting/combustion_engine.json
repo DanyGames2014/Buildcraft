@@ -10,10 +10,10 @@
       "item": "minecraft:iron_ingot"
     },
     "s": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks/colorless"
     },
     "g": {
-      "item": "buildcraft:iron_gear"
+      "tag": "c:gears/iron"
     },
     "p": {
       "item": "minecraft:piston"

@@ -8,7 +8,7 @@
       "item": "buildcraft:diamond_item_pipe"
     },
     "r": {
-      "item": "minecraft:redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "result": {

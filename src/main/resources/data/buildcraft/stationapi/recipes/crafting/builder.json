@@ -20,10 +20,10 @@
       "item": "minecraft:crafting_table"
     },
     "g": {
-      "item": "buildcraft:diamond_gear"
+      "tag": "c:gears/diamond"
     },
     "c": {
-      "item": "minecraft:chest"
+      "tag": "c:chests/wooden"
     }
   },
   "result": {

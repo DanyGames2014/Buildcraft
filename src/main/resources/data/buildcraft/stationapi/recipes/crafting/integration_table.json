@@ -7,16 +7,16 @@
   ],
   "key": {
     "#": {
-      "item": "minecraft:obsidian"
+      "tag": "c:obsidians/normal"
     },
     "R": {
-      "item": "minecraft:redstone"
+      "tag": "c:dusts/redstone"
     },
     "B": {
       "item": "buildcraft:redstone_chipset"
     },
     "H": {
-      "item": "buildcraft:diamond_gear"
+      "tag": "c:gears/diamond"
     }
   },
   "result": {

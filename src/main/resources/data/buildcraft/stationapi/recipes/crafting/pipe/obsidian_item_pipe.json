@@ -5,10 +5,10 @@
   ],
   "key": {
     "o": {
-      "item": "minecraft:obsidian"
+      "tag": "c:obsidians/normal"
     },
     "g": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks/colorless"
     }
   },
   "result": {

@@ -7,16 +7,16 @@
   ],
   "key": {
     "i": {
-      "item": "minecraft:iron_ingot"
+      "tag": "c:ingots/iron"
     },
     "r": {
-      "item": "minecraft:redstone"
+      "tag": "c:dusts/redstone"
     },
     "g": {
-      "item": "buildcraft:iron_gear"
+      "tag": "c:gears/iron"
     },
     "p": {
-      "item": "minecraft:iron_pickaxe"
+      "tag": "c:tools/pickaxes/iron"
     }
   },
   "result": {

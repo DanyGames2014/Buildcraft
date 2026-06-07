@@ -5,10 +5,10 @@
   ],
   "key": {
     "w": {
-      "tag": "minecraft:planks"
+      "tag": "c:planks"
     },
     "g": {
-      "item": "minecraft:glass"
+      "tag": "c:glass_blocks/colorless"
     }
   },
   "result": {

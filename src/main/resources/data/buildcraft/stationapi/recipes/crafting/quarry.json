@@ -7,19 +7,19 @@
   ],
   "key": {
     "i": {
-      "item": "buildcraft:iron_gear"
+      "tag": "c:gears/iron"
     },
     "r": {
-      "item": "minecraft:redstone"
+      "tag": "c:dusts/redstone"
     },
     "g": {
-      "item": "buildcraft:golden_gear"
+      "tag": "c:gears/gold"
     },
     "d": {
-      "item": "buildcraft:diamond_gear"
+      "tag": "c:gears/diamond"
     },
     "p": {
-      "item": "minecraft:diamond_pickaxe"
+      "tag": "c:tools/pickaxes/diamond"
     }
   },
   "result": {

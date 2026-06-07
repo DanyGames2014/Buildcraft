@@ -10,7 +10,7 @@
       "item": "minecraft:crafting_table"
     },
     "g": {
-      "item": "buildcraft:wooden_gear"
+      "tag": "c:gears/wooden"
     }
   },
   "result": {

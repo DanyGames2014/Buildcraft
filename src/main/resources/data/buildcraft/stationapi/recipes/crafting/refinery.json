@@ -6,13 +6,13 @@
   ],
   "key": {
     "r": {
-      "item": "minecraft:redstone_torch"
+      "item": "minecraft:redstone_torch_lit"
     },
     "t": {
       "item": "buildcraft:tank"
     },
     "g": {
-      "item": "buildcraft:diamond_gear"
+      "tag": "c:gears/diamond"
     }
   },
   "result": {
