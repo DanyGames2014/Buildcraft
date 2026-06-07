@@ -37,7 +37,7 @@ public class RedstoneEngineBlockEntity extends BaseEngineBlockEntity {
         super.engineUpdate();
 
         if (world.getTime() % 16 == 0) {
-            if (isRedstonePowered && getRequestedPowerByReceptor()) {
+            if (isRedstonePowered && getRequestedPowerByReceptor(world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ()))) {
                 addEnergy(1);       
             }
         }
@@ -60,7 +60,7 @@ public class RedstoneEngineBlockEntity extends BaseEngineBlockEntity {
 
     @Override
     public double getMaxEnergyExtracted() {
-        return 1 + PowerHandler.PerditionCalculator.MIN_POWERLOSS;
+        return 1 + PowerHandler.PerditionCalculator.MIN_POWERLOSS + 0.01D;
     }
 
     @Override
@@ -72,7 +72,12 @@ public class RedstoneEngineBlockEntity extends BaseEngineBlockEntity {
     public float getExplosionRange() {
         return 1.0F;
     }
-    
+
+    @Override
+    public boolean allowPoweringPipes() {
+        return false;
+    }
+
     // State
     @Override
     public boolean isBurning() {

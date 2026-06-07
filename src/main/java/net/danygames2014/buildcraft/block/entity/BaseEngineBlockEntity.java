@@ -2,6 +2,7 @@ package net.danygames2014.buildcraft.block.entity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
+import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.energy.EnergyStage;
 import net.danygames2014.buildcraft.api.energy.IPowerEmitter;
 import net.danygames2014.buildcraft.api.energy.IPowerReceptor;
@@ -49,7 +50,6 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
     @Override
     public void init(BlockState blockState) {
         if (!world.isRemote) {
-
             powerHandler.configure(getMinEnergyReceived(), getMaxEnergyReceived(), 1, getMaxEnergy());
         }
     }
@@ -75,7 +75,8 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
             } else if (this.isPumping()) {
                 stage = EngineStage.EXTENDING;
             }
-
+            
+            energyStage = getEnergyStage();
             return;
         }
 
@@ -97,7 +98,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
         energyStage = getEnergyStage();
         engineUpdate();
 
-        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+        BlockEntity facingTile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
 
         if (stage != EngineStage.RETRACTED) {
             progress += getPistonSpeed();
@@ -105,7 +106,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
             if (progress > 0.5 && stage == EngineStage.EXTENDING) {
                 // finished extending, send power and retract
                 stage = EngineStage.RETRACTING;
-                sendPower();
+                sendPower(facingTile);
             } else if (progress >= 1) {
                 // finished retracting, reset progress
                 progress = 0;
@@ -113,8 +114,8 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
             }
         } else if (isRedstonePowered && isActive()) {
             // fully retracted, check if we can start over
-            if (isPoweredTile(tile, facing)) {
-                if (getPowerToExtract() > 0) {
+            if (isPoweredTile(facingTile, facing)) {
+                if (getPowerToExtract(facingTile) > 0) {
                     stage = EngineStage.EXTENDING;
                     setPumping(true);
                 } else {
@@ -127,7 +128,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
             setPumping(false);
         }
 
-        if (getRequestedPowerByReceptor()) {
+        if (getRequestedPowerByReceptor(facingTile)) {
             burnFuel();
         }
     }
@@ -140,7 +141,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
                 energy = 0;
             }
         } else {
-            if (world.getTime() % 10 == 0 && !getRequestedPowerByReceptor()) {
+            if (world.getTime() % 10 == 0 && !getRequestedPowerByReceptor(world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ()))) {
                 addEnergy(-1);
             }
         }
@@ -330,9 +331,6 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
         EnergyStage energyStage = world.getBlockState(x, y, z).get(BaseEngineBlock.ENERGY_STAGE_PROPERTY);
 
         if (!world.isRemote) {
-            if (energyStage == EnergyStage.OVERHEAT) {
-                return energyStage;
-            }
             EnergyStage newStage = calculateEnergyStage();
 
             if (newStage != energyStage) {
@@ -402,16 +400,13 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
 
     public abstract double getCurrentEnergyOutput();
 
-    private double getPowerToExtract() {
-        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
+    private double getPowerToExtract(BlockEntity tile) {
         PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
         return extractEnergy(receptor.getMinEnergyReceived(), receptor.getMaxEnergyReceived(), false);
     }
 
-    protected boolean getRequestedPowerByReceptor() {
-        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
-
-        if (tile instanceof PipeBlockEntity pipe && pipe.transporter instanceof EnergyPipeTransporter energyTransporter) {
+    protected boolean getRequestedPowerByReceptor(BlockEntity tile) {
+        if (allowPoweringPipes() && tile instanceof PipeBlockEntity pipe && pipe.behavior == Buildcraft.woodenPipeBehavior && pipe.transporter instanceof EnergyPipeTransporter) {
             return true;
         }
 
@@ -423,13 +418,11 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
         return false;
     }
 
-    private void sendPower() {
-        BlockEntity tile = world.getBlockEntity(x + facing.getOffsetX(), y + facing.getOffsetY(), z + facing.getOffsetZ());
-
-        if (tile instanceof PipeBlockEntity pipe && pipe.transporter instanceof EnergyPipeTransporter energyTransporter) {
-            float extracted = (float) getPowerToExtract();
+    private void sendPower(BlockEntity tile) {
+        if (allowPoweringPipes() && tile instanceof PipeBlockEntity pipe && pipe.behavior == Buildcraft.woodenPipeBehavior && pipe.transporter instanceof EnergyPipeTransporter energyTransporter) {
+            double extracted = getPowerToExtract(tile);
             if (extracted > 0) {
-                double needed = energyTransporter.receiveEnergy(ForgeDirection.fromDirection(getFacing().getOpposite()), extracted);
+                double needed = energyTransporter.receiveEnergy(ForgeDirection.fromDirection(getFacing().getOpposite()), (float) extracted);
                 extractEnergy(0, needed, true);
             }
             return;
@@ -438,15 +431,23 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
         if (isPoweredTile(tile, getFacing())) {
             PowerHandler.PowerReceiver receptor = ((IPowerReceptor) tile).getPowerReceiver(getFacing().getOpposite());
 
-            double extracted = getPowerToExtract();
+            double extracted = getPowerToExtract(tile);
             if (extracted > 0) {
                 double needed = receptor.receiveEnergy(PowerHandler.Type.ENGINE, extracted, getFacing().getOpposite());
                 extractEnergy(receptor.getMinEnergyReceived(), needed, true);
             }
         }
     }
+    
+    public boolean allowPoweringPipes() {
+        return true;
+    }
 
     public boolean isPoweredTile(BlockEntity tile, Direction side) {
+        if (tile instanceof PipeBlockEntity pipe && pipe.behavior != Buildcraft.woodenPipeBehavior) {
+            return false;
+        }
+        
         if (tile instanceof IPowerReceptor powerReceptor) {
             return powerReceptor.getPowerReceiver(side.getOpposite()) != null;
         } else {
