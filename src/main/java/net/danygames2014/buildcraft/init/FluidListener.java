@@ -40,9 +40,9 @@ public class FluidListener {
     @EventListener
     public void afterFluidRegister(AfterFluidRegistryEvent event) {
         // Engine Coolants and Fuels
-        EngineCoolantRegistry.register(Fluids.WATER, new EngineCoolant(Fluids.WATER, 0.023F));
-        EngineFuelRegistry.register(oil, new EngineFuel(oil, 3, (int) (25000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
-        EngineFuelRegistry.register(fuel, new EngineFuel(fuel, 6, (int) (25000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
+        EngineCoolantRegistry.register(Fluids.WATER, new EngineCoolant(Fluids.WATER, 0.0023f));
+        EngineFuelRegistry.register(oil, new EngineFuel(oil, 6, (int) (10000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
+        EngineFuelRegistry.register(fuel, new EngineFuel(fuel, 12, (int) (50000 * Config.MACHINE_CONFIG.engine.fuelBurnTimeMultiplier)));
 
         // Refinery Recipes
         StationAPI.EVENT_BUS.post(new RefineryRecipeRegisterEvent());

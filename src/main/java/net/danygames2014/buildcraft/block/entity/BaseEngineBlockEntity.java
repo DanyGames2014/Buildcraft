@@ -88,7 +88,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
             }
         }
 
-        if (!isRedstonePowered) {
+        if (!isBurning()) {
             if (energy > 1) {
                 energy--;
             }
@@ -112,7 +112,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
                 progress = 0;
                 stage = EngineStage.RETRACTED;
             }
-        } else if (isRedstonePowered && isActive()) {
+        } else if (isBurning()) {
             // fully retracted, check if we can start over
             if (isPoweredTile(facingTile, facing)) {
                 if (getPowerToExtract(facingTile) > 0) {
@@ -147,10 +147,6 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
         }
 
         powerHandler.update();
-    }
-
-    public boolean isActive() {
-        return true;
     }
 
     // Burn Fuel

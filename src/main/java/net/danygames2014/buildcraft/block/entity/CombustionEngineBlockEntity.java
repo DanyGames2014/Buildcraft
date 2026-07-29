@@ -1,16 +1,17 @@
 package net.danygames2014.buildcraft.block.entity;
 
 import net.danygames2014.buildcraft.Buildcraft;
-import net.danygames2014.buildcraft.api.energy.EngineCoolant;
-import net.danygames2014.buildcraft.api.energy.EngineCoolantRegistry;
-import net.danygames2014.buildcraft.api.energy.EngineFuel;
-import net.danygames2014.buildcraft.api.energy.EngineFuelRegistry;
+import net.danygames2014.buildcraft.api.energy.*;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.item.fluidhandler.FluidHandlerItemCapability;
-import net.danygames2014.nyalib.fluid.*;
+import net.danygames2014.nyalib.fluid.Fluid;
+import net.danygames2014.nyalib.fluid.FluidBucket;
+import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.FluidTankInfoProvider;
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.modificationstation.stationapi.api.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,10 +19,10 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEntity implements FluidHandler {
+public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEntity implements FluidHandler, FluidTankInfoProvider {
     // Constants
     public static final int FLUID_CAPACITY = 10000;
-    public static float HEAT_PER_MJ = 0.0023F;
+    public static float HEAT_PER_MJ = 0.00023F;
     public static float COOLDOWN_RATE = 0.05F;
     public static int MAX_COOLANT_PER_TICK = 40;
 
@@ -34,6 +35,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     FluidStack[] fluidInventory;
     EngineFuel currentFuel = null;
     int penaltyCooling = 0;
+    float coolingBuffer = 0.0f;
     boolean lastPowered = false;
 
     float biomeTemperature = -1;
@@ -77,7 +79,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         // Cooling the engine
         if (heat > MIN_HEAT && (penaltyCooling > 0 || !isRedstonePowered)) {
             heat -= COOLDOWN_RATE;
-            coolEngine(MIN_HEAT);
+            //coolEngine(MIN_HEAT);
             getEnergyStage();
         } else if (heat > IDEAL_HEAT) {
             coolEngine(IDEAL_HEAT);
@@ -97,6 +99,21 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     private void coolEngine(float idealHeat) {
         float extraHeat = heat - idealHeat;
 
+        if (coolingBuffer < extraHeat) {
+            fillCoolingBuffer();
+        }
+
+        if (coolingBuffer >= extraHeat) {
+            coolingBuffer -= extraHeat;
+            heat -= extraHeat;
+            return;
+        }
+
+        heat -= coolingBuffer;
+        coolingBuffer = 0.0f;
+    }
+
+    private void fillCoolingBuffer() {
         FluidStack coolant = fluidInventory[0];
         if (coolant == null) {
             return;
@@ -107,32 +124,24 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         if (currentCoolant != null) {
             float cooling = currentCoolant.getDegreesCooledPerMb(heat);
             cooling /= getBiomeTempScalar();
-            if (coolantAmount * cooling > extraHeat) {
-                this.extractFluid(0, Math.round(extraHeat / cooling), null);
-                heat -= extraHeat;
-            } else {
-                this.extractFluid(0, coolantAmount, null);
-                heat -= coolantAmount * cooling;
-            }
+            coolingBuffer += coolantAmount * cooling;
+            this.extractFluid(0, coolantAmount, null);
         }
     }
 
     @Override
     public void updateHeatLevel() {
-        // Do nothing. Heat is handled differently for the combustion engine.
-    }
-
-    @Override
-    public boolean isActive() {
-        return penaltyCooling <= 0;
+        if (energyStage == EnergyStage.OVERHEAT && heat > MIN_HEAT) {
+            heat -= COOLDOWN_RATE;
+        }
     }
 
     // Fuel & Coolant
     @Override
     public void burnFuel() {
-        FluidStack fuelStack = this.fluidInventory[1];
-        if (currentFuel == null && fuelStack != null) {
-            currentFuel = EngineFuelRegistry.get(fuelStack.fluid);
+        FluidStack fuel = this.fluidInventory[1];
+        if (currentFuel == null && fuel != null) {
+            currentFuel = EngineFuelRegistry.get(fuel.fluid);
         }
 
         if (currentFuel == null) {
@@ -140,17 +149,23 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         }
 
         if (penaltyCooling <= 0 && isRedstonePowered) {
-
             lastPowered = true;
 
-            if (burnTime > 0 || (fuelStack != null && fuelStack.amount > 0)) {
+//            if (heat < 99.8F) {
+//                heat += 0.1F;
+//            }
+
+            if (burnTime > 0 || (fuel != null && fuel.amount > 0)) {
                 if (burnTime > 0) {
                     burnTime--;
                 }
+                
                 if (burnTime <= 0) {
-                    if (fuelStack != null) {
-                        if (--fuelStack.amount <= 0) {
+                    if (fuel != null) {
+                        if (fuel.amount-- <= 0) {
                             setFluid(1, null, null);
+                            currentFuel = null;
+                            return;
                         }
                         burnTime = currentFuel.burnTime / currentFuel.fluid.getBucketSize();
                     } else {
@@ -164,7 +179,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         } else if (penaltyCooling <= 0) {
             if (lastPowered) {
                 lastPowered = false;
-                penaltyCooling = 30 * 20; // 30 second penalty cooling
+                penaltyCooling = 10;
             }
         }
     }
@@ -181,7 +196,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     @Override
     public boolean isBurning() {
         FluidStack fuel = fluidInventory[1];
-        return fuel != null && fuel.amount > 0 && penaltyCooling == 0 && isRedstonePowered;
+        return fuel != null && fuel.amount > 0 && penaltyCooling <= 0 && isRedstonePowered;
     }
 
     @Override
@@ -256,12 +271,30 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     // FluidHandler
     @Override
     public boolean canExtractFluid(@Nullable Direction direction) {
-        return false;
+        return direction == null;
     }
 
     @Override
-    public FluidStack extractFluid(int i, int i1, @Nullable Direction direction) {
-        return null;
+    public FluidStack extractFluid(int slot, int amount, @Nullable Direction direction) {
+        if (!canExtractFluid(direction)) {
+            return null;
+        }
+
+        FluidStack currentStack = getFluid(slot, direction);
+
+        if (currentStack == null) {
+            return null;
+        }
+
+        FluidStack extractedStack = new FluidStack(currentStack.fluid, Math.min(amount, currentStack.amount));
+
+        currentStack.amount -= extractedStack.amount;
+
+        if (currentStack.amount <= 0) {
+            setFluid(slot, null, direction);
+        }
+
+        return extractedStack;
     }
 
     @Override
@@ -333,14 +366,10 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
 
     @Override
     public boolean setFluid(int slot, FluidStack fluidStack, @Nullable Direction direction) {
-        if (fluidStack == null) {
-            return false;
-        }
-        
         switch (slot) {
             // Coolant
             case 0 -> {
-                if (!isValidCoolant(fluidStack.fluid)) {
+                if (fluidStack != null && !isValidCoolant(fluidStack.fluid)) {
                     return false;
                 }
                 fluidInventory[slot] = fluidStack;
@@ -348,7 +377,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
 
             // Fuel
             case 1 -> {
-                if (!isValidFuel(fluidStack.fluid)) {
+                if (fluidStack != null && !isValidFuel(fluidStack.fluid)) {
                     return false;
                 }
                 fluidInventory[slot] = fluidStack;
@@ -358,6 +387,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
                 return false;
             }
         }
+        
         return true;
     }
 
@@ -392,6 +422,42 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     }
 
     @Override
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        nbt.putInt("penaltyCooling", penaltyCooling);
+        nbt.putFloat("coolingBuffer", coolingBuffer);
+        
+        if (fluidInventory[0] != null) {
+            NbtCompound fluidNbt = new NbtCompound();
+            fluidInventory[0].writeNbt(fluidNbt);
+            nbt.put("coolant", fluidNbt);
+        }
+        
+        if (fluidInventory[1] != null) {
+            NbtCompound fluidNbt = new NbtCompound();
+            fluidInventory[1].writeNbt(fluidNbt);
+            nbt.put("fuel", fluidNbt);
+        }
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        penaltyCooling = nbt.getInt("penaltyCooling");
+        coolingBuffer = nbt.getFloat("coolingBuffer");
+        
+        if (nbt.contains("coolant")) {
+            NbtCompound fluidNbt = nbt.getCompound("coolant");
+            fluidInventory[0] = new FluidStack(fluidNbt);
+        }
+        
+        if (nbt.contains("fuel")) {
+            NbtCompound fluidNbt = nbt.getCompound("fuel");
+            fluidInventory[1] = new FluidStack(fluidNbt);
+        }
+    }
+
+    @Override
     public void writeData(DataOutputStream stream) throws IOException {
         super.writeData(stream);
         if(currentFuel == null) {
@@ -409,6 +475,21 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
             currentFuel = EngineFuel.fromDataInputStream(stream);
         } else {
             currentFuel = null;
+        }
+    }
+
+    @Override
+    public String getFluidTankName(int slot) {
+        switch (slot) {
+            case 0 -> {
+                return "Coolant Tank";
+            }
+            case 1 -> {
+                return "Fuel Tank";
+            }
+            default -> {
+                return "Tank";
+            }
         }
     }
 }

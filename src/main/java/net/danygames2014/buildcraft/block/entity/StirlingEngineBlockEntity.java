@@ -57,7 +57,7 @@ public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntit
 
     @Override
     public boolean isBurning() {
-        return burnTime > 0;
+        return burnTime > 0 && isRedstonePowered;
     }
 
     @Override
