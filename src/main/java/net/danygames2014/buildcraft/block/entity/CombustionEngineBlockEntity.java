@@ -4,10 +4,7 @@ import net.danygames2014.buildcraft.Buildcraft;
 import net.danygames2014.buildcraft.api.energy.*;
 import net.danygames2014.nyalib.capability.CapabilityHelper;
 import net.danygames2014.nyalib.capability.item.fluidhandler.FluidHandlerItemCapability;
-import net.danygames2014.nyalib.fluid.Fluid;
-import net.danygames2014.nyalib.fluid.FluidBucket;
-import net.danygames2014.nyalib.fluid.FluidStack;
-import net.danygames2014.nyalib.fluid.FluidTankInfoProvider;
+import net.danygames2014.nyalib.fluid.*;
 import net.danygames2014.nyalib.fluid.block.FluidHandler;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
@@ -55,7 +52,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
             Fluid fluid = bucketItem.getFluid();
 
             if (fluid != null) {
-                int bucketSize = fluid.getBucketSize();
+                int bucketSize = Fluids.BUCKET_SIZE;
                 FluidStack remainder = new FluidStack(fluid, bucketSize);
                 
                 if (isValidCoolant(fluid)) {
@@ -167,7 +164,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
                             currentFuel = null;
                             return;
                         }
-                        burnTime = currentFuel.burnTime / currentFuel.fluid.getBucketSize();
+                        burnTime = currentFuel.burnTime / Fluids.BUCKET_SIZE;
                     } else {
                         currentFuel = null;
                         return;

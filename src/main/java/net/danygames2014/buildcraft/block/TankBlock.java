@@ -4,6 +4,7 @@ import net.danygames2014.buildcraft.block.entity.TankBlockEntity;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBucket;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.material.Material;
@@ -110,7 +111,7 @@ public class TankBlock extends TemplateBlockWithEntity {
                 if(hand.getItem() instanceof FluidBucket fluidBucket){
                     Fluid bucketFluid = fluidBucket.getFluid();
                     if(bucketFluid != null){
-                        FluidStack bucketStack = new FluidStack(bucketFluid, bucketFluid.getBucketSize());
+                        FluidStack bucketStack = new FluidStack(bucketFluid, Fluids.BUCKET_SIZE);
                         if(blockEntity.insertFluid(0, bucketStack, false).amount == 0){
                             if(!world.isRemote){
                                 blockEntity.insertFluid(0, bucketStack, true);
@@ -122,10 +123,10 @@ public class TankBlock extends TemplateBlockWithEntity {
                     if(bucketFluid == null){
                         FluidStack tankStack = blockEntity.getFluid(0, null);
                         if(tankStack != null){
-                            FluidStack result = blockEntity.extractFluid(0, tankStack.fluid.getBucketSize(), false);
-                            if(result != null && result.amount == tankStack.fluid.getBucketSize()){
+                            FluidStack result = blockEntity.extractFluid(0, Fluids.BUCKET_SIZE, false);
+                            if(result != null && result.amount == Fluids.BUCKET_SIZE){
                                 if(!world.isRemote){
-                                    blockEntity.extractFluid(0, tankStack.fluid.getBucketSize(), true);
+                                    blockEntity.extractFluid(0, Fluids.BUCKET_SIZE, true);
                                     player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
                                 }
                                 return true;

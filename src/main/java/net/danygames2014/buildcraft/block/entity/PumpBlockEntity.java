@@ -453,7 +453,7 @@ public class PumpBlockEntity extends SyncedBlockEntity implements ManagedFluidHa
                 world.setBlock(x, y, z, 0);
             }
 
-            return new FluidStack(fluid, fluid.getBucketSize());
+            return new FluidStack(fluid, Fluids.BUCKET_SIZE);
         } else {
             return null;
         }

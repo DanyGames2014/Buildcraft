@@ -7,6 +7,7 @@ import net.danygames2014.buildcraft.util.raycast.IndexRaycastResult;
 import net.danygames2014.nyalib.fluid.Fluid;
 import net.danygames2014.nyalib.fluid.FluidBucket;
 import net.danygames2014.nyalib.fluid.FluidStack;
+import net.danygames2014.nyalib.fluid.Fluids;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.block.Block;
@@ -99,9 +100,9 @@ public class RefineryBlock extends TemplateMachineBlock {
                 if(hand.getItem() instanceof FluidBucket fluidBucket){
                     Fluid bucketFluid = fluidBucket.getFluid();
                     if(bucketFluid != null && raycastResult.index != 2){
-                        if((tankStack == null || tankStack.fluid == bucketFluid) && remainingCapacity >= bucketFluid.getBucketSize()){
+                        if((tankStack == null || tankStack.fluid == bucketFluid) && remainingCapacity >= Fluids.BUCKET_SIZE){
                             if(!world.isRemote){
-                                blockEntity.insertFluid(new FluidStack(bucketFluid, bucketFluid.getBucketSize()), raycastResult.index, null);
+                                blockEntity.insertFluid(new FluidStack(bucketFluid, Fluids.BUCKET_SIZE), raycastResult.index, null);
                                 player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;
                                 if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
                                     blockEntity.sendNetworkUpdate();
@@ -111,9 +112,9 @@ public class RefineryBlock extends TemplateMachineBlock {
                         }
                     }
                     if(bucketFluid == null){
-                        if(tankStack != null && tankStack.amount >= tankStack.fluid.getBucketSize()){
+                        if(tankStack != null && tankStack.amount >= Fluids.BUCKET_SIZE){
                             if(!world.isRemote){
-                                blockEntity.extractFluid(raycastResult.index, tankStack.fluid.getBucketSize(), null);
+                                blockEntity.extractFluid(raycastResult.index, Fluids.BUCKET_SIZE, null);
                                 player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
                                 if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
                                     blockEntity.sendNetworkUpdate();

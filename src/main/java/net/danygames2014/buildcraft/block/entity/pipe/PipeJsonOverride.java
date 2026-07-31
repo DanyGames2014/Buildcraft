@@ -1,6 +1,6 @@
 package net.danygames2014.buildcraft.block.entity.pipe;
 
-import net.danygames2014.nyalib.block.JsonOverrideRegistry;
+import net.danygames2014.nyalib.registry.JsonOverrideRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.modificationstation.stationapi.api.util.Identifier;
