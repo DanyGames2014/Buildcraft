@@ -71,7 +71,7 @@ public class ChuteBlockEntity extends BlockEntity implements Inventory {
                         stacks[i] = stack.copy();
                         break;
                     }
-                } else if (stacks[i].count < getMaxCountPerStack()) {
+                } else if (stacks[i].count < getMaxCountPerStack() && stacks[i].count < stacks[i].getMaxCount()) {
                     ItemStack stack = capability.extractItem(stacks[i].getItem(), 1, Direction.DOWN);
                     if (stack != null) {
                         stacks[i].count++;
