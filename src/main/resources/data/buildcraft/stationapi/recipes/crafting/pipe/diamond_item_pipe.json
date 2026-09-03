@@ -5,7 +5,7 @@
   ],
   "key": {
     "d": {
-      "item": "minecraft:diamond"
+      "tag": "c:gems/diamond"
     },
     "g": {
       "tag": "c:glass_blocks/colorless"
