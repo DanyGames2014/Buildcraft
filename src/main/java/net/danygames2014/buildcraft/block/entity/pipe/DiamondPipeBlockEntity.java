@@ -77,7 +77,7 @@ public class DiamondPipeBlockEntity extends PipeBlockEntity implements Inventory
                 ItemStack filterStack = filterInventory[i];
                 
                 if (filterStack.getItem() instanceof FluidBucket fluidBucket) {
-                    if (fluidBucket.getFluid() == fluid) {
+                    if (fluidBucket.getFluid(filterStack) == fluid) {
                         return true;
                     }
                 }

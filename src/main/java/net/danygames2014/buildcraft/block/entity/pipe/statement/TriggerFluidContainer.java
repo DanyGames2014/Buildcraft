@@ -47,7 +47,7 @@ public class TriggerFluidContainer extends BCStatement implements TriggerExterna
 
             if (parameters != null && parameters.length >= 1 && parameters[0] != null && parameters[0].getItemStack() != null) {
                 if(parameters[0].getItemStack().getItem() instanceof FluidBucket bucket){
-                    searchedFluid = new FluidStack(bucket.getFluid());
+                    searchedFluid = new FluidStack(bucket.getFluid(parameters[0].getItemStack()));
                 }
 
             }

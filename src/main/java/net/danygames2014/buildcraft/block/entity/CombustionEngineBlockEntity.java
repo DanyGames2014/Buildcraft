@@ -49,7 +49,7 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
         // Inserting Fluid into tanks
         ItemStack fuelStack = getStack(0);
         if (fuelStack != null && fuelStack.getItem() instanceof FluidBucket bucketItem) {
-            Fluid fluid = bucketItem.getFluid();
+            Fluid fluid = bucketItem.getFluid(fuelStack);
 
             if (fluid != null) {
                 int bucketSize = Fluids.BUCKET_SIZE;
