@@ -119,15 +119,6 @@ public abstract class BaseEngineBlock extends TemplateBlockWithEntity implements
         return super.isSolidFace(blockView, x, y, z, face);
     }
 
-    @Override
-    public boolean onUse(World world, int x, int y, int z, PlayerEntity player) {
-        if (world.getBlockEntity(x, y, z) instanceof BaseEngineBlockEntity engine) {
-            player.sendMessage("Energy:" + engine.energy + ", Heat: " + engine.heat + ", RS:" + engine.isRedstonePowered + ", Prog:" + engine.progress);
-        }
-
-        return super.onUse(world, x, y, z, player);
-    }
-
     // Rendering
     @Override
     public boolean isOpaque() {
