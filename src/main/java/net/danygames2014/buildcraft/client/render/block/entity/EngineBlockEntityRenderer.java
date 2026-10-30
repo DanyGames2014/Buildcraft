@@ -26,7 +26,8 @@ public class EngineBlockEntityRenderer extends BlockEntityRenderer {
     @Override
     public void render(BlockEntity blockEntity, double x, double y, double z, float tickDelta) {
         if(blockEntity instanceof BaseEngineBlockEntity baseEngineBlockEntity){
-            engineRenderer.render(Minecraft.INSTANCE.textureManager, baseEngineBlockEntity.energyStage, baseEngineBlockEntity.progress, baseEngineBlockEntity.facing, baseTexturePath, chamberTexturePath, trunkTexturePath, x, y, z);
+            float interpolatedProgress = baseEngineBlockEntity.prevProgress + ((baseEngineBlockEntity.progress - baseEngineBlockEntity.prevProgress) * tickDelta);
+            engineRenderer.render(Minecraft.INSTANCE.textureManager, baseEngineBlockEntity.energyStage, interpolatedProgress, baseEngineBlockEntity.facing, baseTexturePath, chamberTexturePath, trunkTexturePath, x, y, z);
         }
     }
 }

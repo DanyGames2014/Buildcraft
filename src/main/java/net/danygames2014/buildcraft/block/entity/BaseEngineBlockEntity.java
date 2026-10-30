@@ -36,6 +36,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
     protected PowerHandler powerHandler;
     public boolean isRedstonePowered = false;
     public float progress = 0;
+    public float prevProgress = 0;
     public double energy = 0;
     public float heat = MIN_HEAT;
     public EnergyStage energyStage = EnergyStage.BLUE;
@@ -64,6 +65,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
         facing = getFacing();
 
         // Client side
+        prevProgress = progress;
         if (world.isRemote) {
             if (stage != EngineStage.RETRACTED) {
                 progress += getPistonSpeed();
@@ -71,6 +73,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
                 if (progress > 1) {
                     stage = EngineStage.RETRACTED;
                     progress = 0;
+                    prevProgress = 0;
                 }
             } else if (this.isPumping()) {
                 stage = EngineStage.EXTENDING;
@@ -110,6 +113,7 @@ public abstract class BaseEngineBlockEntity extends SyncedBlockEntity implements
             } else if (progress >= 1) {
                 // finished retracting, reset progress
                 progress = 0;
+                prevProgress = 0;
                 stage = EngineStage.RETRACTED;
             }
         } else if (isBurning()) {
