@@ -82,7 +82,7 @@ public class TriggerPipeContents extends BCStatement implements TriggerInternal 
                 if (parameter != null && parameter.getItemStack() != null) {
                     FluidStack searchedFluid = null;
                     if(parameter.getItemStack().getItem() instanceof FluidBucket fluidBucket){
-                        searchedFluid = new FluidStack(fluidBucket.getFluid());
+                        searchedFluid = new FluidStack(fluidBucket.getFluid(parameter.getItemStack()));
                     }
 
                     if (searchedFluid != null) {
