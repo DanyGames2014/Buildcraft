@@ -98,12 +98,12 @@ public class RefineryBlock extends TemplateMachineBlock {
             if(player.getHand() != null){
                 ItemStack hand = player.getHand();
                 if(hand.getItem() instanceof FluidBucket fluidBucket){
-                    Fluid bucketFluid = fluidBucket.getFluid();
+                    Fluid bucketFluid = fluidBucket.getFluid(hand);
                     if(bucketFluid != null && raycastResult.index != 2){
                         if((tankStack == null || tankStack.fluid == bucketFluid) && remainingCapacity >= Fluids.BUCKET_SIZE){
                             if(!world.isRemote){
                                 blockEntity.insertFluid(new FluidStack(bucketFluid, Fluids.BUCKET_SIZE), raycastResult.index, null);
-                                player.getHand().itemId = fluidBucket.getEmptyBucketItem().id;
+                                player.getHand().itemId = fluidBucket.getEmptyBucketItem(hand).id;
                                 if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
                                     blockEntity.sendNetworkUpdate();
                                 }
@@ -115,7 +115,7 @@ public class RefineryBlock extends TemplateMachineBlock {
                         if(tankStack != null && tankStack.amount >= Fluids.BUCKET_SIZE){
                             if(!world.isRemote){
                                 blockEntity.extractFluid(raycastResult.index, Fluids.BUCKET_SIZE, null);
-                                player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid).id;
+                                player.getHand().itemId = fluidBucket.getFullBucketItem(tankStack.fluid, hand).id;
                                 if(FabricLoader.getInstance().getEnvironmentType() == EnvType.SERVER){
                                     blockEntity.sendNetworkUpdate();
                                 }

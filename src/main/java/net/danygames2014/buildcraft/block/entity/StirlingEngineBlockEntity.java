@@ -44,7 +44,7 @@ public class StirlingEngineBlockEntity extends BaseEngineWithInventoryBlockEntit
 
             if (burnTime > 0) {
                 if (fuelStack.count == 1 && fuelStack.getItem() instanceof FluidBucket fluidBucket) {
-                    setStack(0, new ItemStack(fluidBucket.getEmptyBucketItem()));
+                    setStack(0, new ItemStack(fluidBucket.getEmptyBucketItem(fuelStack)));
                 } else {
                     fuelStack.count--;
                     if (fuelStack.count == 0) {
