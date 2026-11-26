@@ -261,6 +261,10 @@ public class CombustionEngineBlockEntity extends BaseEngineWithInventoryBlockEnt
     }
 
     private double getTemperature() {
+        if (world.method_1781().temperatureMap == null) {
+            return 1.0D;
+        }
+        
         world.method_1781().temperatureMap = world.method_1781().temperatureSampler.sample(world.method_1781().temperatureMap, x, z, 1, 1, 0.025F, 0.025F, 0.5F);
         return world.method_1781().temperatureMap[0];
     }
